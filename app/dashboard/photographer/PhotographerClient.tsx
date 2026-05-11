@@ -171,7 +171,7 @@ export function PhotographerClient() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
                     <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno'].map(h => (
+                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galéria'].map(h => (
                         <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
                       ))}
                     </tr>
@@ -187,6 +187,11 @@ export function PhotographerClient() {
                           {g.email_sent_at
                             ? <span style={{ color: '#16a34a', fontSize: 12 }}>✓ {new Date(g.email_sent_at).toLocaleDateString('cs-CZ')}</span>
                             : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>}
+                        </td>
+                        <td style={{ padding: '10px 16px' }}>
+                          {g.gallery_token
+                            ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otvoriť →</a>
+                            : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
                         </td>
                       </tr>
                     ))}

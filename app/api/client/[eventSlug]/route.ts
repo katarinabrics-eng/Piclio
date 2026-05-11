@@ -18,7 +18,7 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
   ] = await Promise.all([
     supabaseAdmin
       .from('guests')
-      .select('id, email, name, badge_number, photo_count, email_sent_at, registered_at')
+      .select('id, email, name, badge_number, gallery_token, photo_count, email_sent_at, registered_at')
       .eq('event_id', event.id)
       .order('badge_number', { ascending: true }),
     supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id),
