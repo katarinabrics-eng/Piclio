@@ -1,0 +1,193 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import { createBrowserClient } from '@supabase/ssr'
+
+interface SlideshowPhoto {
+  id: string
+  url: string
+  filename: string
+  uploaded_at: string
+}
+
+interface SlideshowEvent {
+  id: string
+  name: string
+}
+
+interface Props {
+  eventSlug: string
+  initialEvent: SlideshowEvent
+  initialPhotos: SlideshowPhoto[]
+}
+
+export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Props) {
+  const [photos, setPhotos] = useState<SlideshowPhoto[]>(initialPhotos)
+  const [newPhotoIds, setNewPhotoIds] = useState<Set<string>>(new Set())
+  const photosRef = useRef(photos)
+
+  useEffect(() => { photosRef.current = photos }, [photos])
+
+  const supabase = useRef(
+    createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  ).current
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`slideshow-${eventSlug}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'photo_guests' },
+        async () => {
+          const res = await fetch(`/api/slideshow/${eventSlug}`)
+          const data = await res.json()
+          if (!data.photos) return
+
+          const fresh = data.photos as SlideshowPhoto[]
+          const currentIds = new Set(photosRef.current.map(p => p.id))
+          const addedIds = new Set(fresh.filter(p => !currentIds.has(p.id)).map(p => p.id))
+          setPhotos(fresh)
+          if (addedIds.size > 0) {
+            setNewPhotoIds(addedIds)
+            setTimeout(() => setNewPhotoIds(new Set()), 1500)
+          }
+        }
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [eventSlug, supabase])
+
+  const featured = photos.slice(0, 2)
+  const older = photos.slice(2)
+
+  return (
+    <div style={{
+      height: '100vh',
+      background: '#0a0812',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 14,
+        padding: '13px 24px',
+        flexShrink: 0,
+      }}>
+        <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 17, letterSpacing: '0.15em' }}>
+          PICLIO
+        </span>
+        <span style={{ color: 'rgba(183,233,76,0.3)', fontSize: 18, lineHeight: 1 }}>·</span>
+        <span style={{ color: '#b7e94c', fontSize: 14, fontWeight: 500, opacity: 0.8, letterSpacing: '0.05em' }}>
+          {initialEvent.name}
+        </span>
+      </div>
+
+      {/* Photos */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, padding: '0 8px 8px', minHeight: 0 }}>
+        {photos.length === 0 ? (
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'rgba(183,233,76,0.2)',
+            fontSize: 16,
+            letterSpacing: '0.1em',
+          }}>
+            Čaká sa na prvé fotky…
+          </div>
+        ) : (
+          <>
+            {/* Featured — 2 large photos */}
+            <div style={{
+              display: 'flex',
+              gap: 6,
+              flex: older.length > 0 ? '0 0 63vh' : '1 1 auto',
+            }}>
+              {featured.map((photo, idx) => (
+                <PhotoSlot
+                  key={photo.id}
+                  photo={photo}
+                  isNew={newPhotoIds.has(photo.id)}
+                  style={{ flex: idx === 0 ? 3 : 2 }}
+                  large
+                />
+              ))}
+              {/* Placeholder when only 1 photo */}
+              {featured.length === 1 && (
+                <div style={{ flex: 2, borderRadius: 10, background: 'rgba(255,255,255,0.03)' }} />
+              )}
+            </div>
+
+            {/* Older photos strip */}
+            {older.length > 0 && (
+              <div style={{ display: 'flex', gap: 6, flex: 1, minHeight: 0 }}>
+                {older.map(photo => (
+                  <PhotoSlot
+                    key={photo.id}
+                    photo={photo}
+                    isNew={newPhotoIds.has(photo.id)}
+                    style={{ flex: 1, minWidth: 0 }}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      <style>{`
+        @keyframes slideFadeIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+    </div>
+  )
+}
+
+function PhotoSlot({
+  photo,
+  isNew,
+  style,
+  large,
+}: {
+  photo: SlideshowPhoto
+  isNew: boolean
+  style?: React.CSSProperties
+  large?: boolean
+}) {
+  return (
+    <div style={{
+      ...style,
+      position: 'relative',
+      borderRadius: large ? 10 : 7,
+      overflow: 'hidden',
+      animation: isNew ? 'slideFadeIn 0.7s ease forwards' : 'none',
+    }}>
+      <img
+        src={photo.url}
+        alt={photo.filename}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+      {isNew && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          boxShadow: 'inset 0 0 0 3px #b7e94c',
+          borderRadius: 'inherit',
+          pointerEvents: 'none',
+        }} />
+      )}
+    </div>
+  )
+}
