@@ -18,15 +18,21 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     .eq('id', guest.event_id)
     .single()
 
+  if (!event) {
+    return NextResponse.json({ error: 'Event nenalezen' }, { status: 404 })
+  }
+
   const { data: photoGuests } = await supabaseAdmin
     .from('photo_guests')
     .select('photos(id, filename, storage_path, taken_at, uploaded_at)')
     .eq('guest_id', guest.id)
 
   const photos = (photoGuests ?? [])
-    .map(pg => pg.photos as any)
-    .filter(Boolean)
-    .flat()
+    .flatMap(pg => {
+      const p = pg.photos as any
+      if (!p) return []
+      return Array.isArray(p) ? p : [p]
+    })
 
   if (photos.length === 0) {
     return NextResponse.json({ guest, event, photos: [] })
@@ -37,9 +43,13 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     .from('photos')
     .createSignedUrls(paths, 172800) // 48h
 
-  const photosWithUrls = photos.map((p: any, i: number) => ({
+  const urlMap = Object.fromEntries(
+    (signedUrls ?? []).map(s => [s.path, s.signedUrl])
+  )
+
+  const photosWithUrls = photos.map((p: any) => ({
     id: p.id,
-    url: signedUrls?.[i]?.signedUrl ?? '',
+    url: urlMap[p.storage_path] ?? '',
     filename: p.filename,
     taken_at: p.taken_at,
     uploaded_at: p.uploaded_at,
