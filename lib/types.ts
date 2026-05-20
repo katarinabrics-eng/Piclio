@@ -11,6 +11,11 @@ export interface PiclioEvent {
   client_name: string | null
   client_logo_url: string | null
   brand_color: string
+  slideshow_pin: string | null
+  slideshow_playlist: string[]
+  public_gallery: boolean
+  overlay_approved: boolean
+  overlay_notes: string | null
 }
 
 export interface Guest {
@@ -49,4 +54,12 @@ export interface UnmatchedPhoto {
   ocr_number: number | null
   event_id: string
   status: string
+}
+
+export interface PlaylistPhoto {
+  id: string
+  url: string
+  filename: string
+  storage_path: string
+  uploaded_at: string
 }

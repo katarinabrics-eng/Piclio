@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_logo_url, brand_color')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_notes')
     .eq('slug', params.eventSlug)
     .single()
 
@@ -26,6 +26,23 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
     supabaseAdmin.from('guests').select('*', { count: 'exact', head: true }).eq('event_id', event.id).not('email_sent_at', 'is', null),
   ])
 
+  // Extended stats
+  const guestList = guests ?? []
+  const totalPhotos = photoCount ?? 0
+  const guestCount = guestList.length
+  const avgPhotosPerGuest = guestCount > 0 ? +(totalPhotos / guestCount).toFixed(1) : 0
+  const galleryOpenedCount = guestList.filter(g => g.email_sent_at).length
+
+  // All matched photos for playlist tab (up to 100)
+  const { data: allPhotos } = await supabaseAdmin
+    .from('photos')
+    .select('id, filename, storage_path, uploaded_at')
+    .eq('event_id', event.id)
+    .eq('status', 'matched')
+    .order('uploaded_at', { ascending: false })
+    .limit(100)
+
+  // Unmatched photos
   const { data: unmatchedPhotos } = await supabaseAdmin
     .from('photos')
     .select('id, filename, storage_path, uploaded_at, ocr_number, status')
@@ -34,27 +51,45 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
     .order('uploaded_at', { ascending: false })
     .limit(20)
 
-  const paths = (unmatchedPhotos ?? []).map(p => p.storage_path)
-  let unmatchedWithUrls: any[] = []
-  if (paths.length > 0) {
-    const { data: signedUrls } = await supabaseAdmin.storage
-      .from('photos')
-      .createSignedUrls(paths, 3600)
-    unmatchedWithUrls = (unmatchedPhotos ?? []).map((p, i) => ({
-      ...p,
-      url: signedUrls?.[i]?.signedUrl ?? '',
-    }))
-  }
+  // Sign URLs in parallel
+  const [unmatchedWithUrls, allPhotosWithUrls] = await Promise.all([
+    signPhotos(unmatchedPhotos ?? [], 3600),
+    signPhotos(allPhotos ?? [], 172800),
+  ])
+
+  // Count public gallery photos (all matched = public when enabled)
+  const publicPhotoCount = totalPhotos - (unmatchedCount ?? 0)
 
   return NextResponse.json({
-    event,
-    guests: guests ?? [],
+    event: {
+      ...event,
+      slideshow_playlist: event.slideshow_playlist ?? [],
+      public_gallery: event.public_gallery ?? false,
+      overlay_approved: event.overlay_approved ?? false,
+    },
+    guests: guestList,
     stats: {
-      guestCount: guests?.length ?? 0,
-      photoCount: photoCount ?? 0,
+      guestCount,
+      photoCount: totalPhotos,
       unmatchedCount: unmatchedCount ?? 0,
       deliveredCount: deliveredCount ?? 0,
+      avgPhotosPerGuest,
+      galleryOpenedCount,
+      publicPhotoCount,
     },
     unmatchedPhotos: unmatchedWithUrls,
+    allPhotos: allPhotosWithUrls,
   })
+}
+
+async function signPhotos(photos: any[], expiresIn: number): Promise<any[]> {
+  if (photos.length === 0) return []
+  const paths = photos.map(p => p.storage_path)
+  const { data: signedUrls } = await supabaseAdmin.storage
+    .from('photos')
+    .createSignedUrls(paths, expiresIn)
+  return photos.map((p, i) => ({
+    ...p,
+    url: signedUrls?.[i]?.signedUrl ?? '',
+  }))
 }

@@ -22,6 +22,8 @@ export default async function ClientDashboardPage({ params }: Props) {
       guests={data.guests}
       stats={data.stats}
       unmatchedPhotos={data.unmatchedPhotos}
+      allPhotos={data.allPhotos ?? []}
+      eventSlug={params.eventSlug}
     />
   )
 }
