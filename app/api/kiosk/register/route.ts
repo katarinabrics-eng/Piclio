@@ -7,7 +7,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.vercel.app'
 
 async function sendRegistrationEmail(
@@ -18,6 +17,7 @@ async function sendRegistrationEmail(
 ): Promise<void> {
   const galleryUrl = `${APP_URL}/gallery/${galleryToken}`
   try {
+    const resend = new Resend(process.env.RESEND_API_KEY)
     await resend.emails.send({
       from: 'Piclio <onboarding@resend.dev>',
       to: [email],
