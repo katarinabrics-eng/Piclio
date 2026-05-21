@@ -4,8 +4,9 @@ import { useEffect, useState } from 'react'
 import type { EventWithStats, Guest, UnmatchedPhoto } from '@/lib/types'
 import { StatCard } from '@/components/piclio/StatCard'
 import { Logo } from '@/components/piclio/Logo'
+import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
-type Tab = 'events' | 'guests' | 'unmatched'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload'
 
 export function PhotographerClient() {
   const [events, setEvents] = useState<EventWithStats[]>([])
@@ -16,6 +17,7 @@ export function PhotographerClient() {
   const [loading, setLoading] = useState(true)
   const [assigningPhoto, setAssigningPhoto] = useState<string | null>(null)
   const [assignTarget, setAssignTarget] = useState<Record<string, string>>({})
+  const [uploadedCount, setUploadedCount] = useState(0)
 
   useEffect(() => {
     fetch('/api/photographer/events')
@@ -148,19 +150,23 @@ export function PhotographerClient() {
             </div>
 
             {/* Tab nav */}
-            <div style={{ display: 'flex', gap: 4, marginBottom: 20 }}>
-              {(['guests', 'unmatched'] as Tab[]).map(t => (
+            <div style={{ display: 'flex', gap: 4, marginBottom: 20, flexWrap: 'wrap' }}>
+              {([
+                { key: 'guests',   label: `Hosté (${guests.length})` },
+                { key: 'unmatched', label: `Nespárované (${unmatched.length})` },
+                { key: 'upload',   label: uploadedCount > 0 ? `Upload (${uploadedCount})` : 'Upload' },
+              ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
-                  key={t}
-                  onClick={() => setTab(t)}
+                  key={key}
+                  onClick={() => setTab(key)}
                   style={{
                     padding: '7px 16px', borderRadius: 8, border: 'none',
                     cursor: 'pointer', fontSize: 14, fontWeight: 600,
-                    background: tab === t ? '#111827' : '#e5e7eb',
-                    color: tab === t ? '#fff' : '#374151',
+                    background: tab === key ? '#111827' : '#e5e7eb',
+                    color: tab === key ? '#fff' : '#374151',
                   }}
                 >
-                  {t === 'guests' ? `Hosté (${guests.length})` : `Nespárované (${unmatched.length})`}
+                  {label}
                 </button>
               ))}
             </div>
@@ -246,6 +252,24 @@ export function PhotographerClient() {
                     ))}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Upload tab */}
+            {tab === 'upload' && (
+              <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                <div style={{ marginBottom: 20 }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>
+                    Nahrát fotky
+                  </h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+                    Fotky se nahrají na server a OCR automaticky přiřadí hosty podle čísla odznaku.
+                  </p>
+                </div>
+                <PhotoUploader
+                  eventId={selectedEvent.id}
+                  onUploadComplete={(count) => setUploadedCount(count)}
+                />
               </div>
             )}
           </>
