@@ -108,6 +108,13 @@ export default function LoginPage() {
           </button>
         </form>
       </div>
+
+      <a href="/login" style={{
+        fontSize: 13, color: '#9ca3af', textDecoration: 'none',
+        display: 'flex', alignItems: 'center', gap: 4,
+      }}>
+        ← Zpět na přihlášení
+      </a>
     </div>
   )
 }
