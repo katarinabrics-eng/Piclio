@@ -36,6 +36,10 @@ export function PhotographerClient() {
   const [overlayLandscape, setOverlayLandscape] = useState<{ file: File; preview: string } | null>(null)
   const [overlayPortraitError, setOverlayPortraitError] = useState('')
   const [overlayLandscapeError, setOverlayLandscapeError] = useState('')
+  const [overlayPortraitUrl, setOverlayPortraitUrl] = useState('')
+  const [overlayLandscapeUrl, setOverlayLandscapeUrl] = useState('')
+  const [overlayPortraitUploading, setOverlayPortraitUploading] = useState(false)
+  const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -103,6 +107,39 @@ export function PhotographerClient() {
       setData({ file, preview: url })
     }
     img.src = url
+  }
+
+  async function handleOverlayUpload(orientation: 'portrait' | 'landscape') {
+    if (!selectedEvent) return
+    const source = orientation === 'portrait' ? overlayPortrait : overlayLandscape
+    if (!source) return
+
+    const setUploading = orientation === 'portrait' ? setOverlayPortraitUploading : setOverlayLandscapeUploading
+    const setUrl = orientation === 'portrait' ? setOverlayPortraitUrl : setOverlayLandscapeUrl
+    const setError = orientation === 'portrait' ? setOverlayPortraitError : setOverlayLandscapeError
+
+    setUploading(true)
+    setError('')
+
+    try {
+      const fd = new FormData()
+      fd.append('eventId', selectedEvent.id)
+      fd.append('orientation', orientation)
+      fd.append('file', source.file)
+
+      const res = await fetch('/api/photographer/events/overlay', { method: 'POST', body: fd })
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error ?? 'Nahrávanie zlyhalo')
+      } else {
+        setUrl(data.url)
+      }
+    } catch {
+      setError('Chyba pripojenia')
+    } finally {
+      setUploading(false)
+    }
   }
 
   async function handleSaveEdit(e: React.FormEvent) {
@@ -453,26 +490,66 @@ export function PhotographerClient() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
 
                   {/* Portrait */}
-                  <OverlayZone
-                    label="Portrét"
-                    description="PNG · pomer 2 : 3 · min 1000 × 1500 px · max 8 MB"
-                    aspectLabel="2:3"
-                    value={overlayPortrait}
-                    error={overlayPortraitError}
-                    onChange={e => handleOverlaySelect('portrait', e)}
-                    onRemove={() => { setOverlayPortrait(null); setOverlayPortraitError('') }}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <OverlayZone
+                      label="Portrét"
+                      description="PNG · pomer 2 : 3 · min 1000 × 1500 px · max 8 MB"
+                      aspectLabel="2:3"
+                      value={overlayPortrait}
+                      error={overlayPortraitError}
+                      onChange={e => handleOverlaySelect('portrait', e)}
+                      onRemove={() => { setOverlayPortrait(null); setOverlayPortraitError(''); setOverlayPortraitUrl('') }}
+                    />
+                    <button
+                      onClick={() => handleOverlayUpload('portrait')}
+                      disabled={!overlayPortrait || !!overlayPortraitError || overlayPortraitUploading}
+                      style={{
+                        background: overlayPortrait && !overlayPortraitError ? '#b7e94c' : '#e5e7eb',
+                        color: overlayPortrait && !overlayPortraitError ? '#1a1225' : '#9ca3af',
+                        border: 'none', borderRadius: 8, padding: '10px',
+                        fontSize: 13, fontWeight: 700, cursor: overlayPortrait && !overlayPortraitError ? 'pointer' : 'not-allowed',
+                        transition: 'background 0.15s',
+                      }}
+                    >
+                      {overlayPortraitUploading ? 'Nahrávam…' : overlayPortraitUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
+                    </button>
+                    {overlayPortraitUrl && (
+                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>
+                        {overlayPortraitUrl}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Landscape */}
-                  <OverlayZone
-                    label="Krajina"
-                    description="PNG · pomer 3 : 2 · min 1500 × 1000 px · max 8 MB"
-                    aspectLabel="3:2"
-                    value={overlayLandscape}
-                    error={overlayLandscapeError}
-                    onChange={e => handleOverlaySelect('landscape', e)}
-                    onRemove={() => { setOverlayLandscape(null); setOverlayLandscapeError('') }}
-                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <OverlayZone
+                      label="Krajina"
+                      description="PNG · pomer 3 : 2 · min 1500 × 1000 px · max 8 MB"
+                      aspectLabel="3:2"
+                      value={overlayLandscape}
+                      error={overlayLandscapeError}
+                      onChange={e => handleOverlaySelect('landscape', e)}
+                      onRemove={() => { setOverlayLandscape(null); setOverlayLandscapeError(''); setOverlayLandscapeUrl('') }}
+                    />
+                    <button
+                      onClick={() => handleOverlayUpload('landscape')}
+                      disabled={!overlayLandscape || !!overlayLandscapeError || overlayLandscapeUploading}
+                      style={{
+                        background: overlayLandscape && !overlayLandscapeError ? '#b7e94c' : '#e5e7eb',
+                        color: overlayLandscape && !overlayLandscapeError ? '#1a1225' : '#9ca3af',
+                        border: 'none', borderRadius: 8, padding: '10px',
+                        fontSize: 13, fontWeight: 700, cursor: overlayLandscape && !overlayLandscapeError ? 'pointer' : 'not-allowed',
+                        transition: 'background 0.15s',
+                      }}
+                    >
+                      {overlayLandscapeUploading ? 'Nahrávam…' : overlayLandscapeUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
+                    </button>
+                    {overlayLandscapeUrl && (
+                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>
+                        {overlayLandscapeUrl}
+                      </div>
+                    )}
+                  </div>
 
                 </div>
               </div>
