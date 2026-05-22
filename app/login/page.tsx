@@ -112,7 +112,7 @@ export default function LoginPage() {
 
       {/* Logo */}
       <div style={{ marginBottom: 48, textAlign: 'center' }}>
-        <Image src="/logo02.png" alt="Piclio" width={140} height={47} priority />
+        <Image src="/logo01.png" alt="Piclio" width={140} height={47} priority />
       </div>
 
       <div className="login-grid">
