@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Logo } from '@/components/piclio/Logo'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -42,7 +42,7 @@ export default function LoginPage() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Logo size="lg" />
+          <Image src="/logo02.png" alt="Piclio" width={120} height={40} priority />
           <div style={{ marginTop: 8, color: '#6b7280', fontSize: 14 }}>Přihlášení fotografa</div>
         </div>
 
