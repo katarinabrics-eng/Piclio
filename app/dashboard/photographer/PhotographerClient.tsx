@@ -41,6 +41,7 @@ export function PhotographerClient() {
   const [overlayPortraitUploading, setOverlayPortraitUploading] = useState(false)
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
   const [overlayFullscreen, setOverlayFullscreen] = useState<string | null>(null)
+  const [overlayStatus, setOverlayStatus] = useState<'pending_client' | 'approved_by_photographer' | 'approved_by_client' | null>(null)
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -580,32 +581,58 @@ export function PhotographerClient() {
 
                 </div>
 
-                {/* Send for approval */}
-                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: '#111827', marginBottom: 3 }}>Odeslat ke schválení</div>
-                      <div style={{ fontSize: 12, color: '#6b7280' }}>
-                        {overlayPortraitUrl && overlayLandscapeUrl
-                          ? 'Oba overlay súbory sú nahrané a pripravené na schválenie.'
-                          : `Čaká sa na: ${[!overlayPortraitUrl && 'portrét', !overlayLandscapeUrl && 'krajina'].filter(Boolean).join(', ')}.`}
+                {/* Approval */}
+                {(() => {
+                  const bothReady = !!(overlayPortraitUrl && overlayLandscapeUrl)
+                  const btnBase: React.CSSProperties = {
+                    border: 'none', borderRadius: 8, padding: '10px 18px',
+                    fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap',
+                    transition: 'background 0.15s',
+                    cursor: bothReady ? 'pointer' : 'not-allowed',
+                  }
+                  const statusMap: Record<string, { text: string; color: string; bg: string }> = {
+                    pending_client:           { text: 'Odesláno zadavateli — čeká na vyjádření', color: '#92400e', bg: '#fef3c7' },
+                    approved_by_photographer: { text: 'Schváleno fotografem — overlay aktivní. Zadavatel může přidat komentář.', color: '#065f46', bg: '#d1fae5' },
+                    approved_by_client:       { text: 'Schváleno zadavatelem — overlay aktivní', color: '#065f46', bg: '#d1fae5' },
+                  }
+                  const status = overlayStatus ? statusMap[overlayStatus] : null
+
+                  return (
+                    <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: '#111827' }}>Schválení overlaye</div>
+
+                      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                        <button
+                          disabled={!bothReady}
+                          onClick={() => setOverlayStatus('pending_client')}
+                          style={{ ...btnBase, background: bothReady ? '#111827' : '#e5e7eb', color: bothReady ? '#fff' : '#9ca3af' }}
+                        >
+                          Odeslat ke schválení →
+                        </button>
+                        <button
+                          disabled={!bothReady}
+                          onClick={() => setOverlayStatus('approved_by_photographer')}
+                          style={{ ...btnBase, background: bothReady ? '#b7e94c' : '#e5e7eb', color: bothReady ? '#1a1225' : '#9ca3af' }}
+                        >
+                          Schválit sám →
+                        </button>
                       </div>
+
+                      {status ? (
+                        <div style={{ fontSize: 13, color: status.color, background: status.bg, borderRadius: 8, padding: '10px 14px' }}>
+                          {status.text}
+                        </div>
+                      ) : (
+                        <div style={{ fontSize: 12, color: '#9ca3af' }}>
+                          {bothReady
+                            ? 'Overlay je pripravený — vyberte spôsob schválenia.'
+                            : `Čeká na: ${[!overlayPortraitUrl && 'portrét', !overlayLandscapeUrl && 'krajina'].filter(Boolean).join(', ')}.`}
+                        </div>
+                      )}
                     </div>
-                    <button
-                      disabled={!overlayPortraitUrl || !overlayLandscapeUrl}
-                      style={{
-                        background: overlayPortraitUrl && overlayLandscapeUrl ? '#111827' : '#e5e7eb',
-                        color: overlayPortraitUrl && overlayLandscapeUrl ? '#fff' : '#9ca3af',
-                        border: 'none', borderRadius: 8, padding: '10px 20px',
-                        fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0,
-                        cursor: overlayPortraitUrl && overlayLandscapeUrl ? 'pointer' : 'not-allowed',
-                        transition: 'background 0.15s',
-                      }}
-                    >
-                      Odeslat ke schválení →
-                    </button>
-                  </div>
-                </div>
+                  )
+                })()}
+
 
               </div>
             )}
