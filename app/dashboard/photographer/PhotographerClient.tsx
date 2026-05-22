@@ -142,6 +142,13 @@ export function PhotographerClient() {
         setError(data.error ?? 'Nahrávanie zlyhalo')
       } else {
         setUrl(data.url)
+        // Persist URL to DB
+        const patchField = orientation === 'portrait' ? 'overlayPortraitUrl' : 'overlayLandscapeUrl'
+        await fetch('/api/photographer/events', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: selectedEvent.id, [patchField]: data.url }),
+        })
       }
     } catch {
       setError('Chyba pripojenia')
@@ -529,8 +536,8 @@ export function PhotographerClient() {
                     )}
                     {/* Composite preview */}
                     {overlayPortrait && (
-                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative' }}>
-                        <img src="/sample-portrait.jpeg" alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', display: 'inline-block', height: 300 }}>
+                        <img src="/sample-portrait.jpeg" alt="" style={{ height: 300, width: 'auto', display: 'block' }} />
                         <img src={overlayPortrait.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
@@ -569,8 +576,8 @@ export function PhotographerClient() {
                     )}
                     {/* Composite preview */}
                     {overlayLandscape && (
-                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative' }}>
-                        <img src="/sample-landscape.jpg" alt="" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', display: 'inline-block', height: 300 }}>
+                        <img src="/sample-landscape.jpg" alt="" style={{ height: 300, width: 'auto', display: 'block' }} />
                         <img src={overlayLandscape.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
