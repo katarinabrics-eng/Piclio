@@ -9,6 +9,7 @@ export interface PiclioEvent {
   status: EventStatus
   max_guests: number
   client_name: string | null
+  client_email: string | null
   client_logo_url: string | null
   brand_color: string
   slideshow_pin: string | null

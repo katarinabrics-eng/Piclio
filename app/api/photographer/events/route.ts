@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })
@@ -96,6 +96,38 @@ export async function GET(req: NextRequest) {
   }))
 
   return NextResponse.json({ events: eventsWithStats })
+}
+
+export async function PATCH(req: NextRequest) {
+  if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const body = await req.json()
+  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor } = body
+
+  if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
+
+  const updatePayload: Record<string, unknown> = {}
+  if (name !== undefined) { updatePayload.name = name; updatePayload.slug = toSlug(name) }
+  if (date !== undefined) updatePayload.date = date
+  if (location !== undefined) updatePayload.location = location
+  if (maxGuests !== undefined) updatePayload.max_guests = maxGuests
+  if (clientName !== undefined) updatePayload.client_name = clientName
+  if (clientEmail !== undefined) updatePayload.client_email = clientEmail
+  if (brandColor !== undefined) updatePayload.brand_color = brandColor
+
+  const { data: event, error } = await supabaseAdmin
+    .from('events')
+    .update(updatePayload)
+    .eq('id', id)
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email')
+    .single()
+
+  if (error || !event) {
+    console.error('Update event error:', error)
+    return NextResponse.json({ error: 'Nepodařilo se aktualizovat event', detail: error?.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ event })
 }
 
 export async function POST(req: NextRequest) {

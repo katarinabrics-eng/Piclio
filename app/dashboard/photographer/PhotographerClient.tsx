@@ -25,9 +25,57 @@ export function PhotographerClient() {
     name: '', date: '', location: '', maxGuests: '100',
     clientName: '', clientEmail: '', brandColor: '#b7e94c',
   })
+  const [editingEvent, setEditingEvent] = useState<EventWithStats | null>(null)
+  const [editForm, setEditForm] = useState({
+    name: '', date: '', location: '', maxGuests: '100',
+    clientName: '', clientEmail: '', brandColor: '#b7e94c',
+  })
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
+  }
+
+  function openEdit(event: EventWithStats) {
+    setEditingEvent(event)
+    setEditForm({
+      name: event.name ?? '',
+      date: event.date ? event.date.slice(0, 10) : '',
+      location: event.location ?? '',
+      maxGuests: String(event.max_guests ?? 100),
+      clientName: event.client_name ?? '',
+      clientEmail: event.client_email ?? '',
+      brandColor: event.brand_color ?? '#b7e94c',
+    })
+    setSaveError('')
+  }
+
+  async function handleSaveEdit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!editingEvent) return
+    setSaving(true); setSaveError('')
+    try {
+      const res = await fetch('/api/photographer/events', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingEvent.id,
+          name: editForm.name,
+          date: editForm.date,
+          location: editForm.location,
+          maxGuests: parseInt(editForm.maxGuests) || 100,
+          clientName: editForm.clientName,
+          clientEmail: editForm.clientEmail,
+          brandColor: editForm.brandColor,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setSaveError(data.error ?? 'Chyba'); setSaving(false); return }
+      setEvents(prev => prev.map(ev => ev.id === editingEvent.id ? { ...ev, ...data.event } : ev))
+      setEditingEvent(null)
+    } catch { setSaveError('Chyba připojení') }
+    setSaving(false)
   }
 
   async function handleCreateEvent(e: React.FormEvent) {
@@ -188,6 +236,17 @@ export function PhotographerClient() {
                     >
                       Kiosk URL
                     </button>
+                    <button
+                      onClick={e => { e.stopPropagation(); openEdit(event) }}
+                      title="Upravit event"
+                      style={{
+                        background: 'transparent', border: '1px solid #e5e7eb',
+                        borderRadius: 8, padding: '6px 10px', fontSize: 14,
+                        color: '#6b7280', cursor: 'pointer', flexShrink: 0,
+                      }}
+                    >
+                      ✎
+                    </button>
                     <div style={{ color: '#9ca3af', fontSize: 20 }}>›</div>
                   </div>
                 ))}
@@ -343,6 +402,126 @@ export function PhotographerClient() {
           </>
         )}
       </div>
+
+      {/* Edit event modal */}
+      {editingEvent && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1000, padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setEditingEvent(null) }}
+        >
+          <div style={{
+            background: '#fff', borderRadius: 16, width: '100%', maxWidth: 520,
+            boxShadow: '0 24px 64px rgba(0,0,0,0.3)', overflow: 'hidden',
+          }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '20px 24px', borderBottom: '1px solid #f3f4f6',
+            }}>
+              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>
+                Upravit event
+              </h2>
+              <button
+                onClick={() => setEditingEvent(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 22, lineHeight: 1 }}
+              >×</button>
+            </div>
+
+            <form onSubmit={handleSaveEdit} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <label style={labelStyle}>
+                Název eventu *
+                <input
+                  required value={editForm.name}
+                  onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))}
+                  style={inputStyle}
+                />
+              </label>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <label style={labelStyle}>
+                  Datum
+                  <input
+                    type="date" value={editForm.date}
+                    onChange={e => setEditForm(p => ({ ...p, date: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  Místo konání
+                  <input
+                    value={editForm.location}
+                    onChange={e => setEditForm(p => ({ ...p, location: e.target.value }))}
+                    style={inputStyle}
+                  />
+                </label>
+              </div>
+
+              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 4 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+                  Zadavatel
+                </div>
+              </div>
+
+              <label style={labelStyle}>
+                Jméno zadavatele
+                <input
+                  value={editForm.clientName}
+                  onChange={e => setEditForm(p => ({ ...p, clientName: e.target.value }))}
+                  placeholder="Jan Novák"
+                  style={inputStyle}
+                />
+              </label>
+
+              <label style={labelStyle}>
+                Email zadavatele
+                <input
+                  type="email" value={editForm.clientEmail}
+                  onChange={e => setEditForm(p => ({ ...p, clientEmail: e.target.value }))}
+                  placeholder="jan@firma.cz"
+                  style={inputStyle}
+                />
+              </label>
+
+              {saveError && (
+                <div style={{
+                  background: '#fef2f2', border: '1px solid #fecaca',
+                  color: '#dc2626', borderRadius: 8, padding: '10px 14px', fontSize: 13,
+                }}>
+                  {saveError}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                <button
+                  type="button"
+                  onClick={() => setEditingEvent(null)}
+                  style={{
+                    flex: 1, padding: '11px', border: '1px solid #d1d5db',
+                    borderRadius: 10, background: '#fff', color: '#374151',
+                    fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                  }}
+                >
+                  Zrušit
+                </button>
+                <button
+                  type="submit"
+                  disabled={saving}
+                  style={{
+                    flex: 2, padding: '11px', border: 'none',
+                    borderRadius: 10, background: saving ? '#e5e7eb' : '#b7e94c',
+                    color: saving ? '#9ca3af' : '#1a1225',
+                    fontSize: 14, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {saving ? 'Ukládám…' : 'Uložit změny →'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* New event modal */}
       {showNewEvent && (
