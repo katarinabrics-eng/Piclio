@@ -140,13 +140,8 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
             </div>
           )}
 
-          {/* 5. Limetkové tečky */}
-          <div style={{ color: '#b7e94c', fontSize: 24, letterSpacing: 8, textAlign: 'center', marginTop: 16 }}>
-            • • •
-          </div>
         </div>
 
-        {/* 6. Mezera */}
         <div style={{ height: 8 }} />
 
         {/* Progress dots (step indicator) */}
