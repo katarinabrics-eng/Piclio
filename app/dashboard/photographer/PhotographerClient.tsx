@@ -18,6 +18,46 @@ export function PhotographerClient() {
   const [assigningPhoto, setAssigningPhoto] = useState<string | null>(null)
   const [assignTarget, setAssignTarget] = useState<Record<string, string>>({})
   const [uploadedCount, setUploadedCount] = useState(0)
+  const [showNewEvent, setShowNewEvent] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [createError, setCreateError] = useState('')
+  const [form, setForm] = useState({
+    name: '', date: '', location: '', maxGuests: '100',
+    clientName: '', clientEmail: '', brandColor: '#b7e94c',
+  })
+
+  function updateForm(key: string, value: string) {
+    setForm(prev => ({ ...prev, [key]: value }))
+  }
+
+  async function handleCreateEvent(e: React.FormEvent) {
+    e.preventDefault()
+    setCreating(true)
+    setCreateError('')
+    try {
+      const res = await fetch('/api/photographer/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          date: form.date,
+          location: form.location,
+          maxGuests: parseInt(form.maxGuests) || 100,
+          clientName: form.clientName,
+          clientEmail: form.clientEmail,
+          brandColor: form.brandColor,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setCreateError(data.error ?? 'Chyba'); setCreating(false); return }
+      setEvents(prev => [data.event, ...prev])
+      setShowNewEvent(false)
+      setForm({ name: '', date: '', location: '', maxGuests: '100', clientName: '', clientEmail: '', brandColor: '#b7e94c' })
+    } catch {
+      setCreateError('Chyba připojení')
+    }
+    setCreating(false)
+  }
 
   useEffect(() => {
     fetch('/api/photographer/events')
@@ -85,9 +125,21 @@ export function PhotographerClient() {
         {/* Event list */}
         {!selectedEvent ? (
           <>
-            <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 24, color: '#111827' }}>
-              Události
-            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111827', margin: 0 }}>
+                Události
+              </h1>
+              <button
+                onClick={() => { setShowNewEvent(true); setCreateError('') }}
+                style={{
+                  background: '#b7e94c', color: '#1a1225', border: 'none',
+                  borderRadius: 10, padding: '9px 18px', fontWeight: 700,
+                  fontSize: 14, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                }}
+              >
+                <span style={{ fontSize: 18, lineHeight: 1 }}>＋</span> Nový event
+              </button>
+            </div>
             {events.length === 0 ? (
               <div style={{ color: '#9ca3af', textAlign: 'center', padding: 60 }}>Žádné události</div>
             ) : (
@@ -275,8 +327,171 @@ export function PhotographerClient() {
           </>
         )}
       </div>
+
+      {/* New event modal */}
+      {showNewEvent && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1000, padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowNewEvent(false) }}
+        >
+          <div style={{
+            background: '#fff', borderRadius: 16, width: '100%', maxWidth: 520,
+            boxShadow: '0 24px 64px rgba(0,0,0,0.3)', overflow: 'hidden',
+          }}>
+            {/* Modal header */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '20px 24px', borderBottom: '1px solid #f3f4f6',
+            }}>
+              <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>Nový event</h2>
+              <button
+                onClick={() => setShowNewEvent(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 22, lineHeight: 1 }}
+              >×</button>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleCreateEvent} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {/* Název */}
+              <label style={labelStyle}>
+                Název eventu *
+                <input
+                  required value={form.name}
+                  onChange={e => updateForm('name', e.target.value)}
+                  placeholder="Voděrádky 2026"
+                  style={inputStyle}
+                />
+              </label>
+
+              {/* Datum + Místo */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <label style={labelStyle}>
+                  Datum *
+                  <input
+                    type="date" required value={form.date}
+                    onChange={e => updateForm('date', e.target.value)}
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  Místo konání *
+                  <input
+                    required value={form.location}
+                    onChange={e => updateForm('location', e.target.value)}
+                    placeholder="Praha, hotel XY"
+                    style={inputStyle}
+                  />
+                </label>
+              </div>
+
+              {/* Max hostů + Barva */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <label style={labelStyle}>
+                  Max. počet hostů
+                  <input
+                    type="number" min={1} max={9999} value={form.maxGuests}
+                    onChange={e => updateForm('maxGuests', e.target.value)}
+                    style={inputStyle}
+                  />
+                </label>
+                <label style={labelStyle}>
+                  Barva brandingu
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6 }}>
+                    <input
+                      type="color" value={form.brandColor}
+                      onChange={e => updateForm('brandColor', e.target.value)}
+                      style={{ width: 42, height: 38, border: '1px solid #d1d5db', borderRadius: 8, cursor: 'pointer', padding: 2 }}
+                    />
+                    <span style={{ fontSize: 13, color: '#374151', fontFamily: 'monospace' }}>{form.brandColor}</span>
+                  </div>
+                </label>
+              </div>
+
+              {/* Divider */}
+              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 4 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+                  Zadavatel (obdrží pozvánku)
+                </div>
+              </div>
+
+              {/* Jméno zadavatele */}
+              <label style={labelStyle}>
+                Jméno zadavatele *
+                <input
+                  required value={form.clientName}
+                  onChange={e => updateForm('clientName', e.target.value)}
+                  placeholder="Jan Novák"
+                  style={inputStyle}
+                />
+              </label>
+
+              {/* Email zadavatele */}
+              <label style={labelStyle}>
+                Email zadavatele *
+                <input
+                  type="email" required value={form.clientEmail}
+                  onChange={e => updateForm('clientEmail', e.target.value)}
+                  placeholder="jan@firma.cz"
+                  style={inputStyle}
+                />
+              </label>
+
+              {/* Error */}
+              {createError && (
+                <div style={{
+                  background: '#fef2f2', border: '1px solid #fecaca',
+                  color: '#dc2626', borderRadius: 8, padding: '10px 14px', fontSize: 13,
+                }}>
+                  {createError}
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
+                <button
+                  type="button"
+                  onClick={() => setShowNewEvent(false)}
+                  style={{
+                    flex: 1, padding: '11px', border: '1px solid #d1d5db',
+                    borderRadius: 10, background: '#fff', color: '#374151',
+                    fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                  }}
+                >
+                  Zrušit
+                </button>
+                <button
+                  type="submit"
+                  disabled={creating}
+                  style={{
+                    flex: 2, padding: '11px', border: 'none',
+                    borderRadius: 10, background: creating ? '#e5e7eb' : '#b7e94c',
+                    color: creating ? '#9ca3af' : '#1a1225',
+                    fontSize: 14, fontWeight: 700, cursor: creating ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  {creating ? 'Vytvářím…' : 'Vytvořit event →'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
+}
+
+const labelStyle: React.CSSProperties = {
+  display: 'flex', flexDirection: 'column', gap: 5,
+  fontSize: 13, fontWeight: 600, color: '#374151',
+}
+
+const inputStyle: React.CSSProperties = {
+  padding: '9px 12px', border: '1px solid #d1d5db', borderRadius: 8,
+  fontSize: 14, color: '#111827', background: '#fff', outline: 'none',
+  marginTop: 2,
 }
 
 function Stat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
