@@ -5,7 +5,7 @@ import { PhotographerClient } from './PhotographerClient'
 export default function PhotographerDashboardPage() {
   const token = cookies().get('photographer_token')?.value
   if (token !== process.env.PHOTOGRAPHER_TOKEN) {
-    redirect('/admin/login')
+    redirect('/login')
   }
 
   return <PhotographerClient />
