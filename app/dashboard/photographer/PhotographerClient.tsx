@@ -6,7 +6,7 @@ import { StatCard } from '@/components/piclio/StatCard'
 import { Logo } from '@/components/piclio/Logo'
 import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
-type Tab = 'events' | 'guests' | 'unmatched' | 'upload'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'settings'
 
 export function PhotographerClient() {
   const [events, setEvents] = useState<EventWithStats[]>([])
@@ -282,6 +282,7 @@ export function PhotographerClient() {
                 { key: 'guests',   label: `Hosté (${guests.length})` },
                 { key: 'unmatched', label: `Nespárované (${unmatched.length})` },
                 { key: 'upload',   label: uploadedCount > 0 ? `Upload (${uploadedCount})` : 'Upload' },
+                { key: 'settings', label: 'Nastavení' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -379,6 +380,15 @@ export function PhotographerClient() {
                     ))}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Settings tab */}
+            {tab === 'settings' && (
+              <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                <p style={{ color: '#9ca3af', fontSize: 14, margin: 0 }}>
+                  Overlay a nastavenia — pripravujeme
+                </p>
               </div>
             )}
 
