@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, overlay_portrait_url, overlay_landscape_url')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })

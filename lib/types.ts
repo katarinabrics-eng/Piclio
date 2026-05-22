@@ -17,6 +17,8 @@ export interface PiclioEvent {
   public_gallery: boolean
   overlay_approved: boolean
   overlay_notes: string | null
+  overlay_portrait_url: string | null
+  overlay_landscape_url: string | null
 }
 
 export interface Guest {
