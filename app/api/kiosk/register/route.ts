@@ -73,20 +73,35 @@ async function sendRegistrationEmail(
 }
 
 export async function POST(req: NextRequest) {
-  const { email, faceImageBase64 } = await req.json()
+  const { email, faceImageBase64, eventId } = await req.json()
 
   if (!email || !email.includes('@')) {
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
   }
 
-  // Find active event (first by date), fallback to draft
-  let { data: activeEvent } = await supabase
-    .from('events')
-    .select('id, max_guests')
-    .eq('status', 'active')
-    .order('date', { ascending: true })
-    .limit(1)
-    .single()
+  // If eventId provided directly, use it; otherwise find active/draft event
+  let activeEvent: { id: string; max_guests: number } | null = null
+
+  if (eventId) {
+    const { data } = await supabase
+      .from('events')
+      .select('id, max_guests')
+      .eq('id', eventId)
+      .single()
+    activeEvent = data
+  }
+
+  if (!activeEvent) {
+    // Find active event (first by date), fallback to draft
+    const { data: active } = await supabase
+      .from('events')
+      .select('id, max_guests')
+      .eq('status', 'active')
+      .order('date', { ascending: true })
+      .limit(1)
+      .single()
+    activeEvent = active
+  }
 
   if (!activeEvent) {
     const { data: draftEvent } = await supabase

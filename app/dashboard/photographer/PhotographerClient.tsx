@@ -172,6 +172,22 @@ export function PhotographerClient() {
                       <Stat label="Nespárované" value={event.unmatchedCount} warn={event.unmatchedCount > 0} />
                       <Stat label="Doručeno" value={event.deliveredCount} />
                     </div>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation()
+                        navigator.clipboard.writeText(`https://piclio.vercel.app/kiosk/${event.slug}`)
+                          .then(() => alert(`Zkopírováno: /kiosk/${event.slug}`))
+                      }}
+                      title={`piclio.vercel.app/kiosk/${event.slug}`}
+                      style={{
+                        background: '#f3f4f6', border: '1px solid #e5e7eb',
+                        borderRadius: 8, padding: '6px 12px', fontSize: 12,
+                        fontWeight: 600, color: '#374151', cursor: 'pointer',
+                        whiteSpace: 'nowrap', flexShrink: 0,
+                      }}
+                    >
+                      Kiosk URL
+                    </button>
                     <div style={{ color: '#9ca3af', fontSize: 20 }}>›</div>
                   </div>
                 ))}
