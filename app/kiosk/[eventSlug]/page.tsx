@@ -8,7 +8,7 @@ interface Props {
 export default async function PerEventKioskPage({ params }: Props) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, status')
+    .select('id, name, status, date')
     .eq('slug', params.eventSlug)
     .single()
 
@@ -28,7 +28,7 @@ export default async function PerEventKioskPage({ params }: Props) {
     )
   }
 
-  return <KioskClient eventId={event.id} eventName={event.name} />
+  return <KioskClient eventId={event.id} eventName={event.name} eventDate={event.date ?? null} />
 }
 
 export const dynamic = 'force-dynamic'

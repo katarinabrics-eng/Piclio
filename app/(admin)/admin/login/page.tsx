@@ -33,18 +33,21 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center',
-      justifyContent: 'center', background: '#f9fafb',
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', background: '#f9fafb',
+      gap: 32,
     }}>
+      {/* Logo — centered above card */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        <Image src="/logo02.png" alt="Piclio" width={140} height={47} priority />
+        <div style={{ color: '#9ca3af', fontSize: 13 }}>Přihlášení fotografa</div>
+      </div>
+
       <div style={{
         background: '#fff', borderRadius: 16, padding: '40px 36px',
         width: '100%', maxWidth: 380,
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <Image src="/logo02.png" alt="Piclio" width={120} height={40} priority />
-          <div style={{ marginTop: 8, color: '#6b7280', fontSize: 14 }}>Přihlášení fotografa</div>
-        </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>

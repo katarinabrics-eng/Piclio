@@ -6,9 +6,16 @@ import Image from 'next/image'
 interface Props {
   eventId: string
   eventName: string
+  eventDate: string | null
 }
 
-export function KioskClient({ eventId, eventName }: Props) {
+function formatDate(dateStr: string | null): string {
+  if (!dateStr) return ''
+  const d = new Date(dateStr)
+  return d.toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+export function KioskClient({ eventId, eventName, eventDate }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -111,11 +118,25 @@ export function KioskClient({ eventId, eventName }: Props) {
         maxWidth: 480, margin: '0 auto', padding: '24px 20px',
         minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       }}>
-        {/* Logo + event name */}
+        {/* Logo + event info */}
         <div style={{ textAlign: 'center', paddingTop: 8 }}>
-          <Image src="/logo01.png" alt="Piclio" width={120} height={40} priority />
-          <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 6, fontWeight: 500 }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Image src="/logo01.png" alt="Piclio" width={120} height={40} priority />
+          </div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: '#ffffff', marginTop: 20, lineHeight: 1.2 }}>
             {eventName}
+          </div>
+          {eventDate && (
+            <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', marginTop: 6, fontWeight: 500 }}>
+              {formatDate(eventDate)}
+            </div>
+          )}
+          <div style={{
+            fontSize: 14, color: 'rgba(255,255,255,0.4)', marginTop: 14,
+            lineHeight: 1.6, maxWidth: 340, margin: '14px auto 0',
+          }}>
+            Vítejte! Zaregistrujte se a během večera dostanete
+            všechny své fotografie přímo do e-mailu.
           </div>
         </div>
 
