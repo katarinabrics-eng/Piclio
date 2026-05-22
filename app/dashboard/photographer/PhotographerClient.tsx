@@ -40,6 +40,7 @@ export function PhotographerClient() {
   const [overlayLandscapeUrl, setOverlayLandscapeUrl] = useState('')
   const [overlayPortraitUploading, setOverlayPortraitUploading] = useState(false)
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
+  const [overlayFullscreen, setOverlayFullscreen] = useState<string | null>(null)
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -499,6 +500,7 @@ export function PhotographerClient() {
                       error={overlayPortraitError}
                       onChange={e => handleOverlaySelect('portrait', e)}
                       onRemove={() => { setOverlayPortrait(null); setOverlayPortraitError(''); setOverlayPortraitUrl('') }}
+                      onExpand={() => overlayPortrait && setOverlayFullscreen(overlayPortrait.preview)}
                     />
                     <button
                       onClick={() => handleOverlayUpload('portrait')}
@@ -514,8 +516,16 @@ export function PhotographerClient() {
                       {overlayPortraitUploading ? 'Nahrávam…' : overlayPortraitUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
                     </button>
                     {overlayPortraitUrl && (
-                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>
-                        {overlayPortraitUrl}
+                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>{overlayPortraitUrl}</div>
+                    )}
+                    {/* Composite preview */}
+                    {overlayPortrait && (
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', aspectRatio: '2/3', maxHeight: 240, background: '#000' }}>
+                        <img src="/sample-portrait.jpeg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        <img src={overlayPortrait.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'normal', display: 'block' }} />
+                        <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
+                          Náhľad kompozitu
+                        </div>
                       </div>
                     )}
                   </div>
@@ -530,6 +540,7 @@ export function PhotographerClient() {
                       error={overlayLandscapeError}
                       onChange={e => handleOverlaySelect('landscape', e)}
                       onRemove={() => { setOverlayLandscape(null); setOverlayLandscapeError(''); setOverlayLandscapeUrl('') }}
+                      onExpand={() => overlayLandscape && setOverlayFullscreen(overlayLandscape.preview)}
                     />
                     <button
                       onClick={() => handleOverlayUpload('landscape')}
@@ -545,13 +556,49 @@ export function PhotographerClient() {
                       {overlayLandscapeUploading ? 'Nahrávam…' : overlayLandscapeUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
                     </button>
                     {overlayLandscapeUrl && (
-                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>
-                        {overlayLandscapeUrl}
+                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>{overlayLandscapeUrl}</div>
+                    )}
+                    {/* Composite preview */}
+                    {overlayLandscape && (
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', aspectRatio: '3/2', maxHeight: 240, background: '#000' }}>
+                        <img src="/sample-landscape.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        <img src={overlayLandscape.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'normal', display: 'block' }} />
+                        <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
+                          Náhľad kompozitu
+                        </div>
                       </div>
                     )}
                   </div>
 
                 </div>
+
+                {/* Send for approval */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: 14, color: '#111827', marginBottom: 3 }}>Odeslat ke schválení</div>
+                      <div style={{ fontSize: 12, color: '#6b7280' }}>
+                        {overlayPortraitUrl && overlayLandscapeUrl
+                          ? 'Oba overlay súbory sú nahrané a pripravené na schválenie.'
+                          : `Čaká sa na: ${[!overlayPortraitUrl && 'portrét', !overlayLandscapeUrl && 'krajina'].filter(Boolean).join(', ')}.`}
+                      </div>
+                    </div>
+                    <button
+                      disabled={!overlayPortraitUrl || !overlayLandscapeUrl}
+                      style={{
+                        background: overlayPortraitUrl && overlayLandscapeUrl ? '#111827' : '#e5e7eb',
+                        color: overlayPortraitUrl && overlayLandscapeUrl ? '#fff' : '#9ca3af',
+                        border: 'none', borderRadius: 8, padding: '10px 20px',
+                        fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', flexShrink: 0,
+                        cursor: overlayPortraitUrl && overlayLandscapeUrl ? 'pointer' : 'not-allowed',
+                        transition: 'background 0.15s',
+                      }}
+                    >
+                      Odeslat ke schválení →
+                    </button>
+                  </div>
+                </div>
+
               </div>
             )}
 
@@ -575,6 +622,40 @@ export function PhotographerClient() {
           </>
         )}
       </div>
+
+      {/* Overlay fullscreen preview */}
+      {overlayFullscreen && (
+        <div
+          onClick={() => setOverlayFullscreen(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 2000,
+            background: 'rgba(0,0,0,0.92)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 24, cursor: 'zoom-out',
+          }}
+        >
+          <img
+            src={overlayFullscreen}
+            alt="Overlay fullscreen"
+            style={{
+              maxWidth: '100%', maxHeight: '100%',
+              objectFit: 'contain', borderRadius: 8,
+              background: 'repeating-conic-gradient(#444 0% 25%, #222 0% 50%) 0 0 / 20px 20px',
+              boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
+            }}
+          />
+          <button
+            onClick={() => setOverlayFullscreen(null)}
+            style={{
+              position: 'fixed', top: 20, right: 24,
+              background: 'rgba(255,255,255,0.15)', color: '#fff',
+              border: 'none', borderRadius: 8, width: 36, height: 36,
+              fontSize: 20, cursor: 'pointer', lineHeight: 1,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >×</button>
+        </div>
+      )}
 
       {/* Edit event modal */}
       {editingEvent && (
@@ -870,9 +951,10 @@ interface OverlayZoneProps {
   error: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onRemove: () => void
+  onExpand: () => void
 }
 
-function OverlayZone({ label, description, aspectLabel, value, error, onChange, onRemove }: OverlayZoneProps) {
+function OverlayZone({ label, description, aspectLabel, value, error, onChange, onRemove, onExpand }: OverlayZoneProps) {
   const inputId = `overlay-${label}`
   return (
     <div style={{
@@ -887,31 +969,39 @@ function OverlayZone({ label, description, aspectLabel, value, error, onChange, 
 
       {/* Preview or drop zone */}
       {value ? (
-        <div style={{ position: 'relative' }}>
-          <img
-            src={value.preview}
-            alt={`${label} overlay náhľad`}
-            style={{
-              width: '100%',
-              aspectRatio: aspectLabel === '2:3' ? '2/3' : '3/2',
-              objectFit: 'contain',
-              borderRadius: 8,
-              background: 'repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 0 0 / 16px 16px',
-              display: 'block',
-            }}
-          />
-          <button
-            onClick={onRemove}
-            title="Odstraniť"
-            style={{
-              position: 'absolute', top: 6, right: 6,
-              background: 'rgba(0,0,0,0.55)', color: '#fff',
-              border: 'none', borderRadius: 6, width: 28, height: 28,
-              fontSize: 16, cursor: 'pointer', lineHeight: 1,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >×</button>
-          <div style={{ fontSize: 12, color: '#6b7280', marginTop: 6, wordBreak: 'break-all' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <img
+              src={value.preview}
+              alt={`${label} overlay náhľad`}
+              onClick={onExpand}
+              title="Kliknúť pre celý náhľad"
+              style={{
+                maxHeight: 200,
+                width: 'auto',
+                objectFit: 'contain',
+                borderRadius: 8,
+                background: 'repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 0 0 / 16px 16px',
+                display: 'block',
+                cursor: 'zoom-in',
+              }}
+            />
+            <button
+              onClick={onRemove}
+              title="Odstraniť"
+              style={{
+                position: 'absolute', top: 6, right: 6,
+                background: 'rgba(0,0,0,0.55)', color: '#fff',
+                border: 'none', borderRadius: 6, width: 28, height: 28,
+                fontSize: 16, cursor: 'pointer', lineHeight: 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >×</button>
+            <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 10, color: 'rgba(255,255,255,0.85)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 5px', pointerEvents: 'none' }}>
+              🔍 celý náhľad
+            </div>
+          </div>
+          <div style={{ fontSize: 12, color: '#6b7280', wordBreak: 'break-all' }}>
             {value.file.name} · {(value.file.size / 1024 / 1024).toFixed(2)} MB
           </div>
         </div>
