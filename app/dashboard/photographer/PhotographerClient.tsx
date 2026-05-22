@@ -32,6 +32,10 @@ export function PhotographerClient() {
   })
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState('')
+  const [overlayPortrait, setOverlayPortrait] = useState<{ file: File; preview: string } | null>(null)
+  const [overlayLandscape, setOverlayLandscape] = useState<{ file: File; preview: string } | null>(null)
+  const [overlayPortraitError, setOverlayPortraitError] = useState('')
+  const [overlayLandscapeError, setOverlayLandscapeError] = useState('')
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -49,6 +53,56 @@ export function PhotographerClient() {
       brandColor: event.brand_color ?? '#b7e94c',
     })
     setSaveError('')
+  }
+
+  function handleOverlaySelect(
+    orientation: 'portrait' | 'landscape',
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const setData = orientation === 'portrait' ? setOverlayPortrait : setOverlayLandscape
+    const setError = orientation === 'portrait' ? setOverlayPortraitError : setOverlayLandscapeError
+    const expectedRatio = orientation === 'portrait' ? 2 / 3 : 3 / 2
+    const minW = orientation === 'portrait' ? 1000 : 1500
+    const minH = orientation === 'portrait' ? 1500 : 1000
+
+    setError('')
+    setData(null)
+
+    if (file.size > 8 * 1024 * 1024) {
+      setError('Súbor je príliš veľký (max 8 MB)')
+      e.target.value = ''
+      return
+    }
+
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      const ratio = img.naturalWidth / img.naturalHeight
+      const tolerance = 0.02
+      if (Math.abs(ratio - expectedRatio) > tolerance) {
+        setError(
+          `Nesprávny pomer strán (${img.naturalWidth}×${img.naturalHeight}). ` +
+          `Očakáva sa ${orientation === 'portrait' ? '2:3' : '3:2'}.`
+        )
+        URL.revokeObjectURL(url)
+        e.target.value = ''
+        return
+      }
+      if (img.naturalWidth < minW || img.naturalHeight < minH) {
+        setError(
+          `Príliš malé rozmery (${img.naturalWidth}×${img.naturalHeight}). ` +
+          `Minimum je ${minW}×${minH} px.`
+        )
+        URL.revokeObjectURL(url)
+        e.target.value = ''
+        return
+      }
+      setData({ file, preview: url })
+    }
+    img.src = url
   }
 
   async function handleSaveEdit(e: React.FormEvent) {
@@ -385,10 +439,42 @@ export function PhotographerClient() {
 
             {/* Settings tab */}
             {tab === 'settings' && (
-              <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                <p style={{ color: '#9ca3af', fontSize: 14, margin: 0 }}>
-                  Overlay a nastavenia — pripravujeme
-                </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+                {/* Section header */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay</h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+                    Nahrajte PNG overlay vrstvené cez fotografie hostí. Každá orientácia vyžaduje samostatný súbor.
+                  </p>
+                </div>
+
+                {/* Two upload zones */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+
+                  {/* Portrait */}
+                  <OverlayZone
+                    label="Portrét"
+                    description="PNG · pomer 2 : 3 · min 1000 × 1500 px · max 8 MB"
+                    aspectLabel="2:3"
+                    value={overlayPortrait}
+                    error={overlayPortraitError}
+                    onChange={e => handleOverlaySelect('portrait', e)}
+                    onRemove={() => { setOverlayPortrait(null); setOverlayPortraitError('') }}
+                  />
+
+                  {/* Landscape */}
+                  <OverlayZone
+                    label="Krajina"
+                    description="PNG · pomer 3 : 2 · min 1500 × 1000 px · max 8 MB"
+                    aspectLabel="3:2"
+                    value={overlayLandscape}
+                    error={overlayLandscapeError}
+                    onChange={e => handleOverlaySelect('landscape', e)}
+                    onRemove={() => { setOverlayLandscape(null); setOverlayLandscapeError('') }}
+                  />
+
+                </div>
               </div>
             )}
 
@@ -697,6 +783,97 @@ const inputStyle: React.CSSProperties = {
   padding: '9px 12px', border: '1px solid #d1d5db', borderRadius: 8,
   fontSize: 14, color: '#111827', background: '#fff', outline: 'none',
   marginTop: 2,
+}
+
+interface OverlayZoneProps {
+  label: string
+  description: string
+  aspectLabel: string
+  value: { file: File; preview: string } | null
+  error: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onRemove: () => void
+}
+
+function OverlayZone({ label, description, aspectLabel, value, error, onChange, onRemove }: OverlayZoneProps) {
+  const inputId = `overlay-${label}`
+  return (
+    <div style={{
+      background: '#fff', borderRadius: 12, padding: 20,
+      boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+      display: 'flex', flexDirection: 'column', gap: 12,
+    }}>
+      <div>
+        <div style={{ fontWeight: 700, fontSize: 15, color: '#111827', marginBottom: 4 }}>{label}</div>
+        <div style={{ fontSize: 12, color: '#6b7280' }}>{description}</div>
+      </div>
+
+      {/* Preview or drop zone */}
+      {value ? (
+        <div style={{ position: 'relative' }}>
+          <img
+            src={value.preview}
+            alt={`${label} overlay náhľad`}
+            style={{
+              width: '100%',
+              aspectRatio: aspectLabel === '2:3' ? '2/3' : '3/2',
+              objectFit: 'contain',
+              borderRadius: 8,
+              background: 'repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 0 0 / 16px 16px',
+              display: 'block',
+            }}
+          />
+          <button
+            onClick={onRemove}
+            title="Odstraniť"
+            style={{
+              position: 'absolute', top: 6, right: 6,
+              background: 'rgba(0,0,0,0.55)', color: '#fff',
+              border: 'none', borderRadius: 6, width: 28, height: 28,
+              fontSize: 16, cursor: 'pointer', lineHeight: 1,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >×</button>
+          <div style={{ fontSize: 12, color: '#6b7280', marginTop: 6, wordBreak: 'break-all' }}>
+            {value.file.name} · {(value.file.size / 1024 / 1024).toFixed(2)} MB
+          </div>
+        </div>
+      ) : (
+        <label
+          htmlFor={inputId}
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            gap: 8, border: `2px dashed ${error ? '#fca5a5' : '#d1d5db'}`,
+            borderRadius: 10, padding: '28px 16px', cursor: 'pointer',
+            background: error ? '#fef2f2' : '#f9fafb',
+            transition: 'border-color 0.15s',
+          }}
+        >
+          <span style={{ fontSize: 28, lineHeight: 1 }}>🖼</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Vybrať PNG súbor</span>
+          <span style={{ fontSize: 12, color: '#9ca3af' }}>{aspectLabel} · max 8 MB</span>
+        </label>
+      )}
+
+      <input
+        id={inputId}
+        type="file"
+        accept="image/png"
+        onChange={onChange}
+        style={{ display: 'none' }}
+      />
+
+      {error && (
+        <div style={{
+          fontSize: 12, color: '#dc2626',
+          background: '#fef2f2', border: '1px solid #fecaca',
+          borderRadius: 6, padding: '8px 10px',
+        }}>
+          {error}
+        </div>
+      )}
+    </div>
+  )
 }
 
 function Stat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
