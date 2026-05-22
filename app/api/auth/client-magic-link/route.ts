@@ -31,14 +31,11 @@ export async function POST(req: NextRequest) {
   const dashboardUrl = `${APP_URL}/dashboard/client/${event.slug}?token=${token}`
 
   // Try to save token — best-effort (column may not exist yet)
-  try {
-    await supabaseAdmin
-      .from('events')
-      .update({ client_access_token: token })
-      .eq('id', event.id)
-  } catch {
-    console.warn('client_access_token column missing — sending link without token persistence')
-  }
+  const { error: tokenError } = await supabaseAdmin
+    .from('events')
+    .update({ client_access_token: token })
+    .eq('id', event.id)
+  if (tokenError) console.warn('client_access_token update failed:', tokenError.message)
 
   // Send magic link email via Resend
   try {
