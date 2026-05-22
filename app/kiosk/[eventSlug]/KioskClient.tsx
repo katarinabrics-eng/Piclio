@@ -118,30 +118,39 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
         maxWidth: 480, margin: '0 auto', padding: '24px 20px',
         minHeight: '100dvh', display: 'flex', flexDirection: 'column',
       }}>
-        {/* Logo + event info */}
+        {/* Header */}
         <div style={{ textAlign: 'center', paddingTop: 8 }}>
+          {/* 1. Logo */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Image src="/logo01.png" alt="Piclio" width={120} height={40} priority />
           </div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: '#ffffff', marginTop: 20, lineHeight: 1.2 }}>
+
+          {/* 2. Mezera */}
+          <div style={{ height: 20 }} />
+
+          {/* 3. Název eventu */}
+          <div style={{ fontSize: 22, fontWeight: 500, color: '#ffffff' }}>
             {eventName}
           </div>
+
+          {/* 4. Datum */}
           {eventDate && (
-            <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', marginTop: 6, fontWeight: 500 }}>
-              {formatDate(eventDate)}
+            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+              Datum konání: {formatDate(eventDate)}
             </div>
           )}
-          <div style={{
-            fontSize: 14, color: 'rgba(255,255,255,0.4)', marginTop: 14,
-            lineHeight: 1.6, maxWidth: 340, margin: '14px auto 0',
-          }}>
-            Vítejte! Zaregistrujte se a během večera dostanete
-            všechny své fotografie přímo do e-mailu.
+
+          {/* 5. Limetkové tečky */}
+          <div style={{ color: '#b7e94c', fontSize: 24, letterSpacing: 8, textAlign: 'center', marginTop: 16 }}>
+            • • •
           </div>
         </div>
 
-        {/* Progress dots */}
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', margin: '20px 0' }}>
+        {/* 6. Mezera */}
+        <div style={{ height: 8 }} />
+
+        {/* Progress dots (step indicator) */}
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', margin: '8px 0' }}>
           {([1, 2, 3] as const).map(n => (
             <div key={n} style={{
               width: 10, height: 10, borderRadius: '50%',
@@ -157,7 +166,9 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
           {/* KROK 1: Email */}
           {step === 1 && (
             <>
+              {/* 7. Nadpis Vítejte */}
               <h1 style={{ fontSize: 42, fontWeight: 700, textAlign: 'center', margin: 0 }}>Vítejte</h1>
+              {/* 8. Podtext */}
               <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 18, margin: 0 }}>
                 Zadejte svůj e-mail pro přijetí fotek z večera
               </p>
