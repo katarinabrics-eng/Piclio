@@ -84,25 +84,22 @@ export function PhotographerClient() {
     }
 
     const url = URL.createObjectURL(file)
-
-    createImageBitmap(file).then(bmp => {
-      const w = bmp.width
-      const h = bmp.height
-      bmp.close()
-      const ratio = w / h
+    const img = new Image()
+    img.onload = () => {
+      const ratio = img.naturalWidth / img.naturalHeight
       const tolerance = 0.02
       if (Math.abs(ratio - expectedRatio) > tolerance) {
         setError(
-          `Nesprávny pomer strán (${w}×${h}). ` +
+          `Nesprávny pomer strán (${img.naturalWidth}×${img.naturalHeight}). ` +
           `Očakáva sa ${orientation === 'portrait' ? '2:3' : '3:2'}.`
         )
         URL.revokeObjectURL(url)
         e.target.value = ''
         return
       }
-      if (w < minW || h < minH) {
+      if (img.naturalWidth < minW || img.naturalHeight < minH) {
         setError(
-          `Príliš malé rozmery (${w}×${h}). ` +
+          `Príliš malé rozmery (${img.naturalWidth}×${img.naturalHeight}). ` +
           `Minimum je ${minW}×${minH} px.`
         )
         URL.revokeObjectURL(url)
@@ -110,11 +107,8 @@ export function PhotographerClient() {
         return
       }
       setData({ file, preview: url })
-    }).catch(() => {
-      setError('Nepodarilo sa načítať obrázok')
-      URL.revokeObjectURL(url)
-      e.target.value = ''
-    })
+    }
+    img.src = url
   }
 
   async function handleOverlayUpload(orientation: 'portrait' | 'landscape') {
