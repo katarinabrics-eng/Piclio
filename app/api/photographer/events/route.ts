@@ -110,25 +110,47 @@ export async function POST(req: NextRequest) {
 
   const slug = toSlug(name)
 
-  const { data: event, error } = await supabaseAdmin
+  // Try insert with client_email; if column missing, retry without it
+  let event: Record<string, unknown> | null = null
+  let insertError: { message: string; code?: string } | null = null
+
+  const insertPayload: Record<string, unknown> = {
+    name,
+    slug,
+    date,
+    location,
+    max_guests: maxGuests ?? 100,
+    client_name: clientName,
+    client_email: clientEmail,
+    brand_color: brandColor ?? '#b7e94c',
+    status: 'draft',
+  }
+
+  const res1 = await supabaseAdmin
     .from('events')
-    .insert({
-      name,
-      slug,
-      date,
-      location,
-      max_guests: maxGuests ?? 100,
-      client_name: clientName,
-      client_email: clientEmail,
-      brand_color: brandColor ?? '#b7e94c',
-      status: 'draft',
-    })
+    .insert(insertPayload)
     .select('id, name, slug, date, location, status, max_guests, client_name')
     .single()
 
-  if (error || !event) {
-    console.error('Create event error:', error)
-    return NextResponse.json({ error: 'Nepodařilo se vytvořit event' }, { status: 500 })
+  if (res1.error?.message?.includes('client_email')) {
+    // Column doesn't exist yet — insert without it
+    console.warn('client_email column missing, inserting without it')
+    delete insertPayload.client_email
+    const res2 = await supabaseAdmin
+      .from('events')
+      .insert(insertPayload)
+      .select('id, name, slug, date, location, status, max_guests, client_name')
+      .single()
+    event = res2.data
+    insertError = res2.error
+  } else {
+    event = res1.data
+    insertError = res1.error
+  }
+
+  if (insertError || !event) {
+    console.error('Create event error:', insertError)
+    return NextResponse.json({ error: 'Nepodařilo se vytvořit event', detail: insertError?.message }, { status: 500 })
   }
 
   // Send invite email — best-effort
