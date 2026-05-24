@@ -36,11 +36,46 @@ export function getRootFolderId(): string {
 }
 
 // ---------------------------------------------------------------------------
+// deleteExistingFile
+// ---------------------------------------------------------------------------
+
+/**
+ * Delete all files with `fileName` inside `folderId`.
+ * Used to avoid duplicate overlay files on re-upload.
+ */
+async function deleteExistingFile(folderId: string, fileName: string): Promise<void> {
+  const drive = getDrive()
+
+  const q = [
+    `name = '${fileName.replace(/'/g, "\\'")}'`,
+    `'${folderId}' in parents`,
+    `trashed = false`,
+  ].join(' and ')
+
+  const list = await drive.files.list({
+    q,
+    fields: 'files(id)',
+    spaces: 'drive',
+    supportsAllDrives: true,
+    includeItemsFromAllDrives: true,
+  })
+
+  const files = list.data.files ?? []
+  await Promise.all(
+    files.map(f => f.id
+      ? drive.files.delete({ fileId: f.id, supportsAllDrives: true })
+      : Promise.resolve()
+    )
+  )
+}
+
+// ---------------------------------------------------------------------------
 // uploadFile
 // ---------------------------------------------------------------------------
 
 /**
  * Upload a file buffer to a specific Drive folder.
+ * Deletes any existing file with the same name first to avoid duplicates.
  * @returns Drive file ID of the uploaded file.
  */
 export async function uploadFile(
@@ -50,6 +85,8 @@ export async function uploadFile(
   folderId: string,
 ): Promise<string> {
   const drive = getDrive()
+
+  await deleteExistingFile(folderId, filename)
 
   const stream = new Readable()
   stream.push(buffer)
