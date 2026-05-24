@@ -509,7 +509,14 @@ export function PhotographerClient() {
                       value={overlayPortrait}
                       error={overlayPortraitError}
                       onChange={e => handleOverlaySelect('portrait', e)}
-                      onRemove={() => { setOverlayPortrait(null); setOverlayPortraitError(''); setOverlayPortraitUrl('') }}
+                      onRemove={async () => {
+                        setOverlayPortrait(null); setOverlayPortraitError(''); setOverlayPortraitUrl('')
+                        if (selectedEvent) await fetch('/api/photographer/events', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ id: selectedEvent.id, overlayPortraitUrl: null }),
+                        })
+                      }}
                       onExpand={() => overlayPortrait && setOverlayFullscreen(overlayPortrait.preview)}
                     />
                     <button
@@ -525,9 +532,6 @@ export function PhotographerClient() {
                     >
                       {overlayPortraitUploading ? 'Nahrávam…' : overlayPortraitUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
                     </button>
-                    {overlayPortraitUrl && (
-                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>{overlayPortraitUrl}</div>
-                    )}
                     {/* Composite preview */}
                     {overlayPortrait && (
                       <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
@@ -549,7 +553,14 @@ export function PhotographerClient() {
                       value={overlayLandscape}
                       error={overlayLandscapeError}
                       onChange={e => handleOverlaySelect('landscape', e)}
-                      onRemove={() => { setOverlayLandscape(null); setOverlayLandscapeError(''); setOverlayLandscapeUrl('') }}
+                      onRemove={async () => {
+                        setOverlayLandscape(null); setOverlayLandscapeError(''); setOverlayLandscapeUrl('')
+                        if (selectedEvent) await fetch('/api/photographer/events', {
+                          method: 'PATCH',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ id: selectedEvent.id, overlayLandscapeUrl: null }),
+                        })
+                      }}
                       onExpand={() => overlayLandscape && setOverlayFullscreen(overlayLandscape.preview)}
                     />
                     <button
@@ -565,9 +576,6 @@ export function PhotographerClient() {
                     >
                       {overlayLandscapeUploading ? 'Nahrávam…' : overlayLandscapeUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
                     </button>
-                    {overlayLandscapeUrl && (
-                      <div style={{ fontSize: 11, color: '#6b7280', wordBreak: 'break-all' }}>{overlayLandscapeUrl}</div>
-                    )}
                     {/* Composite preview */}
                     {overlayLandscape && (
                       <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
@@ -986,7 +994,7 @@ interface OverlayZoneProps {
   value: { file: File; preview: string } | null
   error: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onRemove: () => void
+  onRemove: () => void | Promise<void>
   onExpand: () => void
 }
 
