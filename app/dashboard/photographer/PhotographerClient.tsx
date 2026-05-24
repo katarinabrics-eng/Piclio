@@ -507,6 +507,7 @@ export function PhotographerClient() {
                       description="PNG · pomer 2 : 3 · min 1000 × 1500 px · max 8 MB"
                       aspectLabel="2:3"
                       value={overlayPortrait}
+                      savedUrl={overlayPortraitUrl}
                       error={overlayPortraitError}
                       onChange={e => handleOverlaySelect('portrait', e)}
                       onRemove={async () => {
@@ -517,26 +518,28 @@ export function PhotographerClient() {
                           body: JSON.stringify({ id: selectedEvent.id, overlayPortraitUrl: null }),
                         })
                       }}
-                      onExpand={() => overlayPortrait && setOverlayFullscreen(overlayPortrait.preview)}
+                      onExpand={() => setOverlayFullscreen(overlayPortrait?.preview ?? overlayPortraitUrl ?? null)}
                     />
-                    <button
-                      onClick={() => handleOverlayUpload('portrait')}
-                      disabled={!overlayPortrait || !!overlayPortraitError || overlayPortraitUploading}
-                      style={{
-                        background: overlayPortrait && !overlayPortraitError ? '#b7e94c' : '#e5e7eb',
-                        color: overlayPortrait && !overlayPortraitError ? '#1a1225' : '#9ca3af',
-                        border: 'none', borderRadius: 8, padding: '10px',
-                        fontSize: 13, fontWeight: 700, cursor: overlayPortrait && !overlayPortraitError ? 'pointer' : 'not-allowed',
-                        transition: 'background 0.15s',
-                      }}
-                    >
-                      {overlayPortraitUploading ? 'Nahrávam…' : overlayPortraitUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
-                    </button>
+                    {!overlayPortraitUrl && (
+                      <button
+                        onClick={() => handleOverlayUpload('portrait')}
+                        disabled={!overlayPortrait || !!overlayPortraitError || overlayPortraitUploading}
+                        style={{
+                          background: overlayPortrait && !overlayPortraitError ? '#b7e94c' : '#e5e7eb',
+                          color: overlayPortrait && !overlayPortraitError ? '#1a1225' : '#9ca3af',
+                          border: 'none', borderRadius: 8, padding: '10px',
+                          fontSize: 13, fontWeight: 700, cursor: overlayPortrait && !overlayPortraitError ? 'pointer' : 'not-allowed',
+                          transition: 'background 0.15s',
+                        }}
+                      >
+                        {overlayPortraitUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
+                      </button>
+                    )}
                     {/* Composite preview */}
-                    {overlayPortrait && (
+                    {(overlayPortrait || overlayPortraitUrl) && (
                       <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
                         <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        <img src={overlayPortrait.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
+                        <img src={overlayPortrait?.preview ?? overlayPortraitUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
                         </div>
@@ -551,6 +554,7 @@ export function PhotographerClient() {
                       description="PNG · pomer 3 : 2 · min 1500 × 1000 px · max 8 MB"
                       aspectLabel="3:2"
                       value={overlayLandscape}
+                      savedUrl={overlayLandscapeUrl}
                       error={overlayLandscapeError}
                       onChange={e => handleOverlaySelect('landscape', e)}
                       onRemove={async () => {
@@ -561,26 +565,28 @@ export function PhotographerClient() {
                           body: JSON.stringify({ id: selectedEvent.id, overlayLandscapeUrl: null }),
                         })
                       }}
-                      onExpand={() => overlayLandscape && setOverlayFullscreen(overlayLandscape.preview)}
+                      onExpand={() => setOverlayFullscreen(overlayLandscape?.preview ?? overlayLandscapeUrl ?? null)}
                     />
-                    <button
-                      onClick={() => handleOverlayUpload('landscape')}
-                      disabled={!overlayLandscape || !!overlayLandscapeError || overlayLandscapeUploading}
-                      style={{
-                        background: overlayLandscape && !overlayLandscapeError ? '#b7e94c' : '#e5e7eb',
-                        color: overlayLandscape && !overlayLandscapeError ? '#1a1225' : '#9ca3af',
-                        border: 'none', borderRadius: 8, padding: '10px',
-                        fontSize: 13, fontWeight: 700, cursor: overlayLandscape && !overlayLandscapeError ? 'pointer' : 'not-allowed',
-                        transition: 'background 0.15s',
-                      }}
-                    >
-                      {overlayLandscapeUploading ? 'Nahrávam…' : overlayLandscapeUrl ? '✓ Nahraté' : 'Nahrať do Piclio'}
-                    </button>
+                    {!overlayLandscapeUrl && (
+                      <button
+                        onClick={() => handleOverlayUpload('landscape')}
+                        disabled={!overlayLandscape || !!overlayLandscapeError || overlayLandscapeUploading}
+                        style={{
+                          background: overlayLandscape && !overlayLandscapeError ? '#b7e94c' : '#e5e7eb',
+                          color: overlayLandscape && !overlayLandscapeError ? '#1a1225' : '#9ca3af',
+                          border: 'none', borderRadius: 8, padding: '10px',
+                          fontSize: 13, fontWeight: 700, cursor: overlayLandscape && !overlayLandscapeError ? 'pointer' : 'not-allowed',
+                          transition: 'background 0.15s',
+                        }}
+                      >
+                        {overlayLandscapeUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
+                      </button>
+                    )}
                     {/* Composite preview */}
-                    {overlayLandscape && (
+                    {(overlayLandscape || overlayLandscapeUrl) && (
                       <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
                         <img src="/skuska01-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        <img src={overlayLandscape.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
+                        <img src={overlayLandscape?.preview ?? overlayLandscapeUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
                         </div>
@@ -992,14 +998,20 @@ interface OverlayZoneProps {
   description: string
   aspectLabel: string
   value: { file: File; preview: string } | null
+  savedUrl: string
   error: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onRemove: () => void | Promise<void>
   onExpand: () => void
 }
 
-function OverlayZone({ label, description, aspectLabel, value, error, onChange, onRemove, onExpand }: OverlayZoneProps) {
+function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, onChange, onRemove, onExpand }: OverlayZoneProps) {
   const inputId = `overlay-${label}`
+
+  // Determine what to show in the preview area
+  const previewSrc = value?.preview ?? (savedUrl || null)
+  const isSaved = !value && !!savedUrl
+
   return (
     <div style={{
       background: '#fff', borderRadius: 12, padding: 20,
@@ -1012,11 +1024,11 @@ function OverlayZone({ label, description, aspectLabel, value, error, onChange, 
       </div>
 
       {/* Preview or drop zone */}
-      {value ? (
+      {previewSrc ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
             <img
-              src={value.preview}
+              src={previewSrc}
               alt={`${label} overlay náhľad`}
               onClick={onExpand}
               title="Kliknúť pre celý náhľad"
@@ -1045,9 +1057,26 @@ function OverlayZone({ label, description, aspectLabel, value, error, onChange, 
               🔍 celý náhľad
             </div>
           </div>
-          <div style={{ fontSize: 12, color: '#6b7280', wordBreak: 'break-all' }}>
-            {value.file.name} · {(value.file.size / 1024 / 1024).toFixed(2)} MB
-          </div>
+          {isSaved ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>✓ Overlay uložený v systéme</span>
+              <label
+                htmlFor={inputId}
+                style={{
+                  fontSize: 12, fontWeight: 600, color: '#374151',
+                  background: '#f3f4f6', border: '1px solid #d1d5db',
+                  borderRadius: 6, padding: '4px 10px', cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Nahradiť
+              </label>
+            </div>
+          ) : (
+            <div style={{ fontSize: 12, color: '#6b7280', wordBreak: 'break-all' }}>
+              {value!.file.name} · {(value!.file.size / 1024 / 1024).toFixed(2)} MB
+            </div>
+          )}
         </div>
       ) : (
         <label
