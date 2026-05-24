@@ -40,7 +40,7 @@ export function PhotographerClient() {
   const [overlayLandscapeUrl, setOverlayLandscapeUrl] = useState('')
   const [overlayPortraitUploading, setOverlayPortraitUploading] = useState(false)
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
-  const [overlayFullscreen, setOverlayFullscreen] = useState<string | null>(null)
+  const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
   const [overlayStatus, setOverlayStatus] = useState<'pending_client' | 'approved_by_photographer' | 'approved_by_client' | null>(null)
 
   function updateForm(key: string, value: string) {
@@ -518,7 +518,7 @@ export function PhotographerClient() {
                           body: JSON.stringify({ id: selectedEvent.id, overlayPortraitUrl: null }),
                         })
                       }}
-                      onExpand={() => setOverlayFullscreen(overlayPortrait?.preview ?? overlayPortraitUrl ?? null)}
+                      onExpand={() => setOverlayFullscreen('portrait')}
                     />
                     {!overlayPortraitUrl && (
                       <button
@@ -555,7 +555,7 @@ export function PhotographerClient() {
                           body: JSON.stringify({ id: selectedEvent.id, overlayLandscapeUrl: null }),
                         })
                       }}
-                      onExpand={() => setOverlayFullscreen(overlayLandscape?.preview ?? overlayLandscapeUrl ?? null)}
+                      onExpand={() => setOverlayFullscreen('landscape')}
                     />
                     {!overlayLandscapeUrl && (
                       <button
@@ -580,7 +580,11 @@ export function PhotographerClient() {
                 {(overlayPortrait || overlayPortraitUrl || overlayLandscape || overlayLandscapeUrl) && (
                   <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
                     {(overlayPortrait || overlayPortraitUrl) && (
-                      <div style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0 }}>
+                      <div
+                        onClick={() => setOverlayFullscreen('portrait')}
+                        title="Kliknúť pre väčší náhľad"
+                        style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
+                      >
                         <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <img src={overlayPortrait?.preview ?? overlayPortraitUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
@@ -589,7 +593,11 @@ export function PhotographerClient() {
                       </div>
                     )}
                     {(overlayLandscape || overlayLandscapeUrl) && (
-                      <div style={{ aspectRatio: '3/2', height: 200, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0 }}>
+                      <div
+                        onClick={() => setOverlayFullscreen('landscape')}
+                        title="Kliknúť pre väčší náhľad"
+                        style={{ aspectRatio: '3/2', height: 200, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
+                      >
                         <img src="/skuska01-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <img src={overlayLandscape?.preview ?? overlayLandscapeUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
@@ -677,39 +685,54 @@ export function PhotographerClient() {
         )}
       </div>
 
-      {/* Overlay fullscreen preview */}
-      {overlayFullscreen && (
-        <div
-          onClick={() => setOverlayFullscreen(null)}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 2000,
-            background: 'rgba(0,0,0,0.92)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            padding: 24, cursor: 'zoom-out',
-          }}
-        >
-          <img
-            src={overlayFullscreen}
-            alt="Overlay fullscreen"
-            style={{
-              maxWidth: '100%', maxHeight: '100%',
-              objectFit: 'contain', borderRadius: 8,
-              background: 'repeating-conic-gradient(#444 0% 25%, #222 0% 50%) 0 0 / 20px 20px',
-              boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
-            }}
-          />
-          <button
+      {/* Composite fullscreen preview */}
+      {overlayFullscreen && (() => {
+        const isPortrait = overlayFullscreen === 'portrait'
+        const photoSrc = isPortrait ? '/skuska02-portrait.jpg' : '/skuska01-krajina.jpg'
+        const overlaySrc = isPortrait
+          ? (overlayPortrait?.preview ?? overlayPortraitUrl)
+          : (overlayLandscape?.preview ?? overlayLandscapeUrl)
+        return (
+          <div
             onClick={() => setOverlayFullscreen(null)}
             style={{
-              position: 'fixed', top: 20, right: 24,
-              background: 'rgba(255,255,255,0.15)', color: '#fff',
-              border: 'none', borderRadius: 8, width: 36, height: 36,
-              fontSize: 20, cursor: 'pointer', lineHeight: 1,
+              position: 'fixed', inset: 0, zIndex: 2000,
+              background: 'rgba(0,0,0,0.92)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: 24, cursor: 'zoom-out',
             }}
-          >×</button>
-        </div>
-      )}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                position: 'relative',
+                aspectRatio: isPortrait ? '2/3' : '3/2',
+                maxHeight: '90vh',
+                maxWidth: '90vw',
+                borderRadius: 10,
+                overflow: 'hidden',
+                boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
+                cursor: 'default',
+              }}
+            >
+              <img src={photoSrc} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              {overlaySrc && (
+                <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
+              )}
+            </div>
+            <button
+              onClick={() => setOverlayFullscreen(null)}
+              style={{
+                position: 'fixed', top: 20, right: 24,
+                background: 'rgba(255,255,255,0.15)', color: '#fff',
+                border: 'none', borderRadius: 8, width: 36, height: 36,
+                fontSize: 20, cursor: 'pointer', lineHeight: 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >×</button>
+          </div>
+        )
+      })()}
 
       {/* Edit event modal */}
       {editingEvent && (
