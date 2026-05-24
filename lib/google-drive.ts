@@ -56,6 +56,7 @@ export async function uploadFile(
   stream.push(null)
 
   const res = await drive.files.create({
+    supportsAllDrives: true,
     requestBody: {
       name: filename,
       parents: [folderId],
@@ -99,6 +100,8 @@ export async function getOrCreateFolder(
     fields: 'files(id, name)',
     spaces: 'drive',
     pageSize: 1,
+    supportsAllDrives: true,
+    includeItemsFromAllDrives: true,
   })
 
   const existing = list.data.files?.[0]
@@ -106,6 +109,7 @@ export async function getOrCreateFolder(
 
   // Create the folder
   const created = await drive.files.create({
+    supportsAllDrives: true,
     requestBody: {
       name,
       mimeType: 'application/vnd.google-apps.folder',
@@ -132,6 +136,7 @@ export async function makeFilePublic(fileId: string): Promise<string> {
 
   await drive.permissions.create({
     fileId,
+    supportsAllDrives: true,
     requestBody: {
       role: 'reader',
       type: 'anyone',
@@ -140,6 +145,7 @@ export async function makeFilePublic(fileId: string): Promise<string> {
 
   const meta = await drive.files.get({
     fileId,
+    supportsAllDrives: true,
     fields: 'webContentLink, webViewLink',
   })
 
