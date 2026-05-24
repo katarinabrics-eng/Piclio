@@ -143,5 +143,5 @@ export async function makeFilePublic(fileId: string): Promise<string> {
     },
   })
 
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`
+  return `https://drive.google.com/uc?export=view&id=${fileId}`
 }
