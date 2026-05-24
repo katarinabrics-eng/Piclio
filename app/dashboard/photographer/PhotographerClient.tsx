@@ -696,34 +696,44 @@ export function PhotographerClient() {
           <div
             onClick={() => setOverlayFullscreen(null)}
             style={{
-              position: 'fixed', inset: 0, zIndex: 2000,
-              background: 'rgba(0,0,0,0.92)',
+              position: 'fixed', inset: 0,
+              background: 'rgba(0,0,0,0.85)',
+              zIndex: 1000,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              padding: 24, cursor: 'zoom-out',
             }}
           >
             <div
               onClick={e => e.stopPropagation()}
               style={{
                 position: 'relative',
-                aspectRatio: isPortrait ? '2/3' : '3/2',
-                maxHeight: '90vh',
-                maxWidth: '90vw',
-                borderRadius: 10,
                 overflow: 'hidden',
-                boxShadow: '0 8px 48px rgba(0,0,0,0.6)',
-                cursor: 'default',
+                borderRadius: 10,
+                aspectRatio: isPortrait ? '2/3' : '3/2',
+                ...(isPortrait
+                  ? { width: 'min(calc(80vh * 2 / 3), 90vw)' }
+                  : { height: 'min(80vh, calc(90vw * 2 / 3))' }
+                ),
               }}
             >
-              <img src={photoSrc} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              <img
+                src={photoSrc}
+                alt=""
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
               {overlaySrc && (
-                <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  backgroundImage: `url(${overlaySrc})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center',
+                }} />
               )}
             </div>
             <button
               onClick={() => setOverlayFullscreen(null)}
               style={{
-                position: 'fixed', top: 20, right: 24,
+                position: 'fixed', top: 16, right: 16, zIndex: 1001,
                 background: 'rgba(255,255,255,0.15)', color: '#fff',
                 border: 'none', borderRadius: 8, width: 36, height: 36,
                 fontSize: 20, cursor: 'pointer', lineHeight: 1,
