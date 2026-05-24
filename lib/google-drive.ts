@@ -143,13 +143,5 @@ export async function makeFilePublic(fileId: string): Promise<string> {
     },
   })
 
-  const meta = await drive.files.get({
-    fileId,
-    supportsAllDrives: true,
-    fields: 'webContentLink, webViewLink',
-  })
-
-  const link = meta.data.webContentLink ?? meta.data.webViewLink
-  if (!link) throw new Error(`Could not retrieve public link for file ${fileId}`)
-  return link
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`
 }
