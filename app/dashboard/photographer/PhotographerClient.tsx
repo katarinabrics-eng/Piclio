@@ -535,16 +535,6 @@ export function PhotographerClient() {
                         {overlayPortraitUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
                       </button>
                     )}
-                    {/* Composite preview */}
-                    {(overlayPortrait || overlayPortraitUrl) && (
-                      <div style={{ aspectRatio: '2/3', width: 200, position: 'relative', overflow: 'hidden', borderRadius: 10 }}>
-                        <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        <img src={overlayPortrait?.preview ?? overlayPortraitUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
-                        <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
-                          Náhľad kompozitu
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* Landscape */}
@@ -582,19 +572,33 @@ export function PhotographerClient() {
                         {overlayLandscapeUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
                       </button>
                     )}
-                    {/* Composite preview */}
+                  </div>
+
+                </div>
+
+                {/* Composite previews — side by side, both 200 px tall */}
+                {(overlayPortrait || overlayPortraitUrl || overlayLandscape || overlayLandscapeUrl) && (
+                  <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                    {(overlayPortrait || overlayPortraitUrl) && (
+                      <div style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0 }}>
+                        <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        <img src={overlayPortrait?.preview ?? overlayPortraitUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
+                        <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
+                          Portrét
+                        </div>
+                      </div>
+                    )}
                     {(overlayLandscape || overlayLandscapeUrl) && (
-                      <div style={{ aspectRatio: '3/2', height: 200, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10 }}>
+                      <div style={{ aspectRatio: '3/2', height: 200, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0 }}>
                         <img src="/skuska01-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <img src={overlayLandscape?.preview ?? overlayLandscapeUrl} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
-                          Náhľad kompozitu
+                          Krajina
                         </div>
                       </div>
                     )}
                   </div>
-
-                </div>
+                )}
 
                 {/* Approval */}
                 {(() => {
