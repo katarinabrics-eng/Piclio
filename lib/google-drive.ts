@@ -32,7 +32,7 @@ function getDrive() {
 export function getRootFolderId(): string {
   const id = process.env.GOOGLE_DRIVE_FOLDER_ID
   if (!id) throw new Error('GOOGLE_DRIVE_FOLDER_ID env var is not set')
-  return id
+  return id.trim()
 }
 
 // ---------------------------------------------------------------------------
