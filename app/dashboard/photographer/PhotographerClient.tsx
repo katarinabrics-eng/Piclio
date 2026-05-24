@@ -1007,9 +1007,6 @@ interface OverlayZoneProps {
 
 function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, onChange, onRemove, onExpand }: OverlayZoneProps) {
   const inputId = `overlay-${label}`
-
-  // Determine what to show in the preview area
-  const previewSrc = value?.preview ?? (savedUrl || null)
   const isSaved = !value && !!savedUrl
 
   return (
@@ -1023,23 +1020,56 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
         <div style={{ fontSize: 12, color: '#6b7280' }}>{description}</div>
       </div>
 
-      {/* Preview or drop zone */}
-      {previewSrc ? (
+      {/* Saved state — overlay already in system */}
+      {isSaved ? (
+        <>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            background: '#f0fdf4', border: '1px solid #bbf7d0',
+            borderRadius: 8, padding: '8px 12px',
+          }}>
+            <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 700 }}>✓ Uložené v systéme</span>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <label
+              htmlFor={inputId}
+              style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: 6, border: '1px solid #d1d5db', borderRadius: 8,
+                padding: '9px 14px', cursor: 'pointer', background: '#f9fafb',
+                fontSize: 13, fontWeight: 600, color: '#374151',
+                transition: 'background 0.15s',
+              }}
+            >
+              🔄 Nahradiť
+            </label>
+            <button
+              onClick={onRemove}
+              title="Vymazať overlay"
+              style={{
+                border: '1px solid #fecaca', borderRadius: 8,
+                padding: '9px 14px', cursor: 'pointer',
+                background: '#fef2f2', fontSize: 13, fontWeight: 600,
+                color: '#dc2626',
+              }}
+            >
+              Vymazať
+            </button>
+          </div>
+        </>
+      ) : value ? (
+        /* Local file selected — show thumbnail */
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
             <img
-              src={previewSrc}
+              src={value.preview}
               alt={`${label} overlay náhľad`}
               onClick={onExpand}
               title="Kliknúť pre celý náhľad"
               style={{
-                maxHeight: 200,
-                width: 'auto',
-                objectFit: 'contain',
-                borderRadius: 8,
+                maxHeight: 200, width: 'auto', objectFit: 'contain',
+                borderRadius: 8, display: 'block', cursor: 'zoom-in',
                 background: 'repeating-conic-gradient(#e5e7eb 0% 25%, #fff 0% 50%) 0 0 / 16px 16px',
-                display: 'block',
-                cursor: 'zoom-in',
               }}
             />
             <button
@@ -1057,28 +1087,12 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
               🔍 celý náhľad
             </div>
           </div>
-          {isSaved ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-              <span style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>✓ Overlay uložený v systéme</span>
-              <label
-                htmlFor={inputId}
-                style={{
-                  fontSize: 12, fontWeight: 600, color: '#374151',
-                  background: '#f3f4f6', border: '1px solid #d1d5db',
-                  borderRadius: 6, padding: '4px 10px', cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Nahradiť
-              </label>
-            </div>
-          ) : (
-            <div style={{ fontSize: 12, color: '#6b7280', wordBreak: 'break-all' }}>
-              {value!.file.name} · {(value!.file.size / 1024 / 1024).toFixed(2)} MB
-            </div>
-          )}
+          <div style={{ fontSize: 12, color: '#6b7280' }}>
+            {value.file.name} · {(value.file.size / 1024 / 1024).toFixed(2)} MB
+          </div>
         </div>
       ) : (
+        /* Empty — drop zone */
         <label
           htmlFor={inputId}
           style={{
