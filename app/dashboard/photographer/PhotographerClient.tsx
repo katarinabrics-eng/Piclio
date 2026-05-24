@@ -530,8 +530,8 @@ export function PhotographerClient() {
                     )}
                     {/* Composite preview */}
                     {overlayPortrait && (
-                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', display: 'inline-block', height: 300 }}>
-                        <img src="/sample-portrait.jpeg" alt="" style={{ height: 300, width: 'auto', display: 'block' }} />
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
+                        <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <img src={overlayPortrait.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
@@ -570,8 +570,8 @@ export function PhotographerClient() {
                     )}
                     {/* Composite preview */}
                     {overlayLandscape && (
-                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', display: 'inline-block', height: 300 }}>
-                        <img src="/sample-landscape.jpg" alt="" style={{ height: 300, width: 'auto', display: 'block' }} />
+                      <div style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 300 }}>
+                        <img src="/skuska01-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <img src={overlayLandscape.preview} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'normal', display: 'block' }} />
                         <div style={{ position: 'absolute', bottom: 6, left: 8, fontSize: 10, color: 'rgba(255,255,255,0.75)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 6px' }}>
                           Náhľad kompozitu
