@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { uploadFile, getOrCreateFolder, makeFilePublic, getRootFolderId } from '@/lib/google-drive'
 
 const MAX_SIZE = 8 * 1024 * 1024 // 8 MB
-const BUCKET = 'overlays'
 
 function isAuthorized(req: NextRequest) {
   return req.cookies.get('photographer_token')?.value === process.env.PHOTOGRAPHER_TOKEN
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
   // --- verify event exists ---
   const { data: event, error: eventError } = await supabaseAdmin
     .from('events')
-    .select('id')
+    .select('id, slug')
     .eq('id', eventId)
     .single()
 
@@ -56,30 +56,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Event neexistuje' }, { status: 404 })
   }
 
-  // --- upload to Supabase Storage ---
-  const storagePath = `${eventId}/${orientation}.png`
+  // --- upload to Google Drive ---
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
-  const { error: uploadError } = await supabaseAdmin.storage
-    .from(BUCKET)
-    .upload(storagePath, buffer, {
-      contentType: 'image/png',
-      upsert: true,
-    })
+  try {
+    const rootFolderId = getRootFolderId()
+    const eventFolderId = await getOrCreateFolder(event.slug, rootFolderId)
+    const overlaysFolderId = await getOrCreateFolder('overlays', eventFolderId)
+    const fileId = await uploadFile(buffer, `${orientation}.png`, 'image/png', overlaysFolderId)
+    const publicUrl = await makeFilePublic(fileId)
 
-  if (uploadError) {
-    console.error('Overlay upload error:', uploadError.message)
+    return NextResponse.json({ url: publicUrl })
+  } catch (err) {
+    console.error('Overlay Drive upload error:', err)
     return NextResponse.json(
-      { error: 'Nahrávanie zlyhalo', detail: uploadError.message },
+      { error: 'Nahrávanie zlyhalo', detail: String(err) },
       { status: 500 },
     )
   }
-
-  // --- get public URL ---
-  const { data: { publicUrl } } = supabaseAdmin.storage
-    .from(BUCKET)
-    .getPublicUrl(storagePath)
-
-  return NextResponse.json({ url: publicUrl })
 }
