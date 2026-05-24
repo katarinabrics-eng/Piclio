@@ -41,7 +41,7 @@ export function PhotographerClient() {
   const [overlayPortraitUploading, setOverlayPortraitUploading] = useState(false)
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
   const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
-  const [overlayStatus, setOverlayStatus] = useState<'pending_client' | 'approved_by_photographer' | 'approved_by_client' | null>(null)
+  const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -218,6 +218,7 @@ export function PhotographerClient() {
     setTab('guests')
     setOverlayPortraitUrl(event.overlay_portrait_url ?? '')
     setOverlayLandscapeUrl(event.overlay_landscape_url ?? '')
+    setOverlayStatus((event.overlay_status as 'approved' | 'pending_client' | null) ?? null)
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`),
       fetch(`/api/photographer/unmatched?eventId=${event.id}`),
@@ -578,6 +579,25 @@ export function PhotographerClient() {
 
                 {/* Composite previews — side by side, both 200 px tall */}
                 {(overlayPortrait || overlayPortraitUrl || overlayLandscape || overlayLandscapeUrl) && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {/* Status badge */}
+                    {(() => {
+                      if (overlayStatus === 'approved') return (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#d1fae5', border: '1px solid #6ee7b7', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontWeight: 700, color: '#065f46', alignSelf: 'flex-start' }}>
+                          ✓ Schváleno — aktivní
+                        </div>
+                      )
+                      if (overlayStatus === 'pending_client') return (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontWeight: 700, color: '#92400e', alignSelf: 'flex-start' }}>
+                          ⏳ Čeká na zadavatele
+                        </div>
+                      )
+                      return (
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#f3f4f6', border: '1px solid #d1d5db', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontWeight: 600, color: '#6b7280', alignSelf: 'flex-start' }}>
+                          Připraveno
+                        </div>
+                      )
+                    })()}
                   <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' }}>
                     {(overlayPortrait || overlayPortraitUrl) && (
                       <div
@@ -606,6 +626,7 @@ export function PhotographerClient() {
                       </div>
                     )}
                   </div>
+                  </div>
                 )}
 
                 {/* Approval */}
@@ -618,11 +639,24 @@ export function PhotographerClient() {
                     cursor: bothReady ? 'pointer' : 'not-allowed',
                   }
                   const statusMap: Record<string, { text: string; color: string; bg: string }> = {
-                    pending_client:           { text: 'Odesláno zadavateli — čeká na vyjádření', color: '#92400e', bg: '#fef3c7' },
-                    approved_by_photographer: { text: 'Schváleno fotografem — overlay aktivní. Zadavatel může přidat komentář.', color: '#065f46', bg: '#d1fae5' },
-                    approved_by_client:       { text: 'Schváleno zadavatelem — overlay aktivní', color: '#065f46', bg: '#d1fae5' },
+                    pending_client: { text: 'Odesláno zadavateli — čeká na vyjádření', color: '#92400e', bg: '#fef3c7' },
+                    approved:       { text: 'Schváleno — overlay aktivní', color: '#065f46', bg: '#d1fae5' },
                   }
-                  const status = overlayStatus ? statusMap[overlayStatus] : null
+                  const statusDisplay = overlayStatus ? statusMap[overlayStatus] : null
+
+                  async function patchStatus(status: 'approved' | 'pending_client', approvedBy?: 'photographer') {
+                    if (!selectedEvent) return
+                    setOverlayStatus(status)
+                    await fetch('/api/photographer/events', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        id: selectedEvent.id,
+                        overlayStatus: status,
+                        ...(approvedBy ? { overlayApprovedBy: approvedBy } : {}),
+                      }),
+                    })
+                  }
 
                   return (
                     <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -631,23 +665,23 @@ export function PhotographerClient() {
                       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                         <button
                           disabled={!bothReady}
-                          onClick={() => setOverlayStatus('pending_client')}
+                          onClick={() => patchStatus('pending_client')}
                           style={{ ...btnBase, background: bothReady ? '#111827' : '#e5e7eb', color: bothReady ? '#fff' : '#9ca3af' }}
                         >
                           Odeslat ke schválení →
                         </button>
                         <button
                           disabled={!bothReady}
-                          onClick={() => setOverlayStatus('approved_by_photographer')}
+                          onClick={() => patchStatus('approved', 'photographer')}
                           style={{ ...btnBase, background: bothReady ? '#b7e94c' : '#e5e7eb', color: bothReady ? '#1a1225' : '#9ca3af' }}
                         >
                           Schválit sám →
                         </button>
                       </div>
 
-                      {status ? (
-                        <div style={{ fontSize: 13, color: status.color, background: status.bg, borderRadius: 8, padding: '10px 14px' }}>
-                          {status.text}
+                      {statusDisplay ? (
+                        <div style={{ fontSize: 13, color: statusDisplay.color, background: statusDisplay.bg, borderRadius: 8, padding: '10px 14px' }}>
+                          {statusDisplay.text}
                         </div>
                       ) : (
                         <div style={{ fontSize: 12, color: '#9ca3af' }}>
