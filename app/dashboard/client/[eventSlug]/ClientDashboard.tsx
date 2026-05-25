@@ -35,7 +35,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [savingBranding, setSavingBranding] = useState(false)
   const [brandingMsg, setBrandingMsg] = useState('')
 
-  const [infoNotes, setInfoNotes] = useState('')
+  const [description, setDescription] = useState((event as any).description ?? '')
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState('')
 
@@ -66,11 +66,10 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       const res = await fetch(`/api/client/${eventSlug}/branding`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ infoNotes }),
+        body: JSON.stringify({ description }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
-      setInfoMsg('✓ Poznámka odeslána')
-      setInfoNotes('')
+      setInfoMsg('✓ Uloženo')
     } catch (e: any) {
       setInfoMsg(`✗ ${e.message}`)
     } finally {
@@ -374,26 +373,18 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   <div style={labelStyle}>Počet hostů</div>
                   <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.max_guests ?? '—'}</div>
                 </div>
-                {(event as any).description && (
-                  <div>
-                    <div style={labelStyle}>Popis akce</div>
-                    <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280', minHeight: 40, height: 'auto', whiteSpace: 'pre-wrap' }}>
-                      {(event as any).description}
-                    </div>
-                  </div>
-                )}
               </div>
-              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 20 }}>
-                <label style={labelStyle}>Poznámka ke změně informací</label>
+              <div style={{ marginBottom: 16 }}>
+                <label style={labelStyle}>Popis akce</label>
                 <textarea
-                  style={{ ...inputStyle, height: 90, resize: 'vertical' as const, marginBottom: 12 }}
-                  value={infoNotes}
-                  onChange={e => setInfoNotes(e.target.value)}
-                  placeholder="Napište co chcete změnit…"
+                  style={{ ...inputStyle, height: 100, resize: 'vertical' as const, marginBottom: 12 }}
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="Stručný popis akce, program, speciální požadavky…"
                 />
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo || !infoNotes.trim()}>
-                    {savingInfo ? 'Odesílám...' : 'Odeslat poznámku'}
+                  <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo}>
+                    {savingInfo ? 'Ukládám...' : 'Požádat o změny'}
                   </button>
                   {infoMsg && <span style={{ fontSize: 13, color: infoMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{infoMsg}</span>}
                 </div>
