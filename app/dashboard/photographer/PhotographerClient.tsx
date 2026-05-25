@@ -68,6 +68,8 @@ export function PhotographerClient() {
   const [emailBannerFile, setEmailBannerFile] = useState<File | null>(null)
   const [emailBannerUrl, setEmailBannerUrl] = useState('')
   const [emailBrandColor, setEmailBrandColor] = useState('#b7e94c')
+  const [emailBtnTextColor, setEmailBtnTextColor] = useState('#1a1225')
+  const [emailHeaderColor, setEmailHeaderColor] = useState('#1a1225')
   const [emailSubject, setEmailSubject] = useState('')
   const [emailBody, setEmailBody] = useState('')
   const [savingEmailSettings, setSavingEmailSettings] = useState(false)
@@ -153,6 +155,8 @@ export function PhotographerClient() {
           emailBannerUrl: bannerUrl,
           emailSubject,
           emailBody,
+          emailBtnTextColor,
+          emailHeaderColor,
         }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
@@ -411,6 +415,8 @@ export function PhotographerClient() {
     setEmailLogoUrl((event as any).client_logo_url ?? '')
     setEmailBannerUrl((event as any).email_banner_url ?? '')
     setEmailBrandColor((event as any).brand_color ?? '#b7e94c')
+    setEmailBtnTextColor((event as any).email_btn_text_color ?? '#1a1225')
+    setEmailHeaderColor((event as any).email_header_color ?? '#1a1225')
     setEmailSubject((event as any).email_subject ?? '')
     setEmailBody((event as any).email_body ?? '')
     setEmailLogoFile(null)
@@ -855,6 +861,26 @@ export function PhotographerClient() {
                         </div>
                       </div>
 
+                      {/* Button text color */}
+                      <div>
+                        <div style={emailLabelStyle}>Barva textu tlačítka</div>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          <input type="color" value={emailBtnTextColor} onChange={e => setEmailBtnTextColor(e.target.value)}
+                            style={{ width: 28, height: 28, border: '1px solid #d1d5db', borderRadius: '50%', padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                          <span style={{ fontSize: 13, fontFamily: 'monospace', color: '#374151' }}>{emailBtnTextColor}</span>
+                        </div>
+                      </div>
+
+                      {/* Header background color */}
+                      <div>
+                        <div style={emailLabelStyle}>Barva pozadí hlavičky</div>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          <input type="color" value={emailHeaderColor} onChange={e => setEmailHeaderColor(e.target.value)}
+                            style={{ width: 28, height: 28, border: '1px solid #d1d5db', borderRadius: '50%', padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                          <span style={{ fontSize: 13, fontFamily: 'monospace', color: '#374151' }}>{emailHeaderColor}</span>
+                        </div>
+                      </div>
+
                       <div style={{ borderTop: '1px solid #f3f4f6' }} />
 
                       {/* Subject */}
@@ -900,7 +926,7 @@ export function PhotographerClient() {
                       <div style={emailLabelStyle}>Náhled emailu</div>
                       <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #e5e7eb', fontSize: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
                         {/* Header */}
-                        <div style={{ background: '#1a1225', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 56 }}>
+                        <div style={{ background: emailHeaderColor, padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 56 }}>
                           {emailLogoUrl
                             ? <img src={emailLogoUrl} alt="" style={{ maxHeight: 36, maxWidth: 160, objectFit: 'contain' }} />
                             : <span style={{ color: '#b7e94c', fontWeight: 700, fontSize: 16, letterSpacing: '-0.5px' }}>Piclio</span>
@@ -932,7 +958,7 @@ export function PhotographerClient() {
                               .replace(/\{\{gallery_link\}\}/g, 'https://piclio.cz/gallery/...')}
                           </div>
                           <a href="#" onClick={e => e.preventDefault()} style={{
-                            display: 'block', background: emailBrandColor, color: '#1a1225',
+                            display: 'block', background: emailBrandColor, color: emailBtnTextColor,
                             textDecoration: 'none', padding: '10px 16px', borderRadius: 8,
                             fontWeight: 700, textAlign: 'center', fontSize: 13,
                           }}>
@@ -1359,7 +1385,7 @@ export function PhotographerClient() {
                     />
                   </div>
 
-                  {/* Miesto konania */}
+                  {/* Místo konání */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
                       Místo konání
@@ -1372,7 +1398,7 @@ export function PhotographerClient() {
                     />
                   </div>
 
-                  {/* Dátum a čas */}
+                  {/* Datum */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
                       Datum

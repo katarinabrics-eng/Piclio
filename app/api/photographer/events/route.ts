@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body, email_btn_text_color, email_header_color')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })
@@ -104,7 +104,7 @@ export async function PATCH(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, description, photographerNotes, infoNotes, emailBannerUrl, emailSubject, emailBody } = body
+  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, description, photographerNotes, infoNotes, emailBannerUrl, emailSubject, emailBody, emailBtnTextColor, emailHeaderColor } = body
 
   if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
 
@@ -133,6 +133,8 @@ export async function PATCH(req: NextRequest) {
   if (emailBannerUrl !== undefined) updatePayload.email_banner_url = emailBannerUrl
   if (emailSubject !== undefined) updatePayload.email_subject = emailSubject
   if (emailBody !== undefined) updatePayload.email_body = emailBody
+  if (emailBtnTextColor !== undefined) updatePayload.email_btn_text_color = emailBtnTextColor
+  if (emailHeaderColor !== undefined) updatePayload.email_header_color = emailHeaderColor
 
   const { data: event, error } = await supabaseAdmin
     .from('events')
