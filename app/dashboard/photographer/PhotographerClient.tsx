@@ -195,7 +195,7 @@ export function PhotographerClient() {
     setData(null)
 
     if (file.size > 8 * 1024 * 1024) {
-      setError('Súbor je príliš veľký (max 8 MB)')
+      setError('Soubor je příliš velký (max 8 MB)')
       e.target.value = ''
       return
     }
@@ -207,8 +207,8 @@ export function PhotographerClient() {
       const tolerance = 0.02
       if (Math.abs(ratio - expectedRatio) > tolerance) {
         setError(
-          `Nesprávny pomer strán (${img.naturalWidth}×${img.naturalHeight}). ` +
-          `Očakáva sa ${orientation === 'portrait' ? '2:3' : '3:2'}.`
+          `Nesprávný poměr stran (${img.naturalWidth}×${img.naturalHeight}). ` +
+          `Očekáváno ${orientation === 'portrait' ? '2:3' : '3:2'}.`
         )
         URL.revokeObjectURL(url)
         e.target.value = ''
@@ -216,7 +216,7 @@ export function PhotographerClient() {
       }
       if (img.naturalWidth < minW || img.naturalHeight < minH) {
         setError(
-          `Príliš malé rozmery (${img.naturalWidth}×${img.naturalHeight}). ` +
+          `Příliš malé rozměry (${img.naturalWidth}×${img.naturalHeight}). ` +
           `Minimum je ${minW}×${minH} px.`
         )
         URL.revokeObjectURL(url)
@@ -250,7 +250,7 @@ export function PhotographerClient() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error ?? 'Nahrávanie zlyhalo')
+        setError(data.error ?? 'Nahrávání selhalo')
       } else {
         setUrl(data.url)
         // Persist URL to DB
@@ -262,7 +262,7 @@ export function PhotographerClient() {
         })
       }
     } catch {
-      setError('Chyba pripojenia')
+      setError('Chyba připojení')
     } finally {
       setUploading(false)
     }
@@ -618,8 +618,8 @@ export function PhotographerClient() {
               {([
                 { key: 'guests',   label: `Hosté (${guests.length})` },
                 { key: 'unmatched', label: `Nespárované (${unmatched.length})` },
-                { key: 'upload',   label: uploadedCount > 0 ? `Upload (${uploadedCount})` : 'Upload' },
-                { key: 'project',  label: 'O projekte' },
+                { key: 'upload',   label: uploadedCount > 0 ? `Nahrát fotky (${uploadedCount})` : 'Nahrát fotky' },
+                { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
@@ -643,7 +643,7 @@ export function PhotographerClient() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
                     <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galéria'].map(h => (
+                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galerie'].map(h => (
                         <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
                       ))}
                     </tr>
@@ -662,7 +662,7 @@ export function PhotographerClient() {
                         </td>
                         <td style={{ padding: '10px 16px' }}>
                           {g.gallery_token
-                            ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otvoriť →</a>
+                            ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
                             : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
                         </td>
                       </tr>
@@ -975,7 +975,7 @@ export function PhotographerClient() {
                 <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                   <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay</h2>
                   <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
-                    Nahrajte PNG overlay vrstvené cez fotografie hostí. Každá orientácia vyžaduje samostatný súbor.
+                    Nahrajte PNG overlay vrstvené přes fotografie hostů. Každá orientace vyžaduje samostatný soubor.
                   </p>
                 </div>
 
@@ -986,7 +986,7 @@ export function PhotographerClient() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <OverlayZone
                       label="Portrét"
-                      description="PNG · pomer 2 : 3 · min 1000 × 1500 px · max 8 MB"
+                      description="PNG · poměr 2 : 3 · min 1000 × 1500 px · max 8 MB"
                       aspectLabel="2:3"
                       value={overlayPortrait}
                       savedUrl={overlayPortraitUrl}
@@ -1014,7 +1014,7 @@ export function PhotographerClient() {
                           transition: 'background 0.15s',
                         }}
                       >
-                        {overlayPortraitUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
+                        {overlayPortraitUploading ? 'Nahrávám…' : 'Nahrát do Piclio'}
                       </button>
                     )}
                   </div>
@@ -1023,7 +1023,7 @@ export function PhotographerClient() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <OverlayZone
                       label="Krajina"
-                      description="PNG · pomer 3 : 2 · min 1500 × 1000 px · max 8 MB"
+                      description="PNG · poměr 3 : 2 · min 1500 × 1000 px · max 8 MB"
                       aspectLabel="3:2"
                       value={overlayLandscape}
                       savedUrl={overlayLandscapeUrl}
@@ -1051,7 +1051,7 @@ export function PhotographerClient() {
                           transition: 'background 0.15s',
                         }}
                       >
-                        {overlayLandscapeUploading ? 'Nahrávam…' : 'Nahrať do Piclio'}
+                        {overlayLandscapeUploading ? 'Nahrávám…' : 'Nahrát do Piclio'}
                       </button>
                     )}
                   </div>
@@ -1083,7 +1083,7 @@ export function PhotographerClient() {
                     {(overlayPortrait || overlayPortraitUrl) && (
                       <div
                         onClick={() => setOverlayFullscreen('portrait')}
-                        title="Kliknúť pre väčší náhľad"
+                        title="Kliknutím zobrazit větší náhled"
                         style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
                       >
                         <img src="/skuska02-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -1096,7 +1096,7 @@ export function PhotographerClient() {
                     {(overlayLandscape || overlayLandscapeUrl) && (
                       <div
                         onClick={() => setOverlayFullscreen('landscape')}
-                        title="Kliknúť pre väčší náhľad"
+                        title="Kliknutím zobrazit větší náhled"
                         style={{ aspectRatio: '3/2', height: 200, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
                       >
                         <img src="/skuska01-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -1209,7 +1209,7 @@ export function PhotographerClient() {
                       ) : (
                         <div style={{ fontSize: 12, color: '#9ca3af' }}>
                           {bothReady
-                            ? 'Overlay je pripravený — vyberte spôsob schválenia.'
+                            ? 'Overlay je připraven — vyberte způsob schválení.'
                             : `Čeká na: ${[!overlayPortraitUrl && 'portrét', !overlayLandscapeUrl && 'krajina'].filter(Boolean).join(', ')}.`}
                         </div>
                       )}
@@ -1231,7 +1231,7 @@ export function PhotographerClient() {
                     Upload z fotoaparátu (FTP)
                   </h2>
                   <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>
-                    Nastavte FTP klienta vo fotoaparáte alebo použite aplikáciu ako FileZilla.
+                    Nastavte FTP klienta ve fotoaparátu nebo použijte aplikaci jako FileZilla.
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {([
@@ -1255,7 +1255,7 @@ export function PhotographerClient() {
                         </div>
                         <button
                           onClick={() => navigator.clipboard.writeText(value)}
-                          title={`Kopírovať ${label}`}
+                          title={`Zkopírovat ${label}`}
                           style={{
                             background: 'none', border: 'none', cursor: 'pointer',
                             padding: 4, borderRadius: 4, color: '#9ca3af',
@@ -1293,12 +1293,12 @@ export function PhotographerClient() {
               </div>
             )}
 
-            {/* O projekte tab */}
+            {/* O projektu tab */}
             {tab === 'project' && (
               <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>O projekte</h2>
+                <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>O projektu</h2>
                 <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 24px' }}>
-                  Základné informácie o akcii. Uloženie cez API bude doplnené neskôr.
+                  Základní informace o akci, program a interní poznámky.
                 </p>
 
                 {/* Poznámka od zadavatele */}
@@ -1349,7 +1349,7 @@ export function PhotographerClient() {
                   {/* Názov akcie */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
-                      Názov akcie
+                      Název akce
                     </label>
                     <input
                       type="text"
@@ -1362,7 +1362,7 @@ export function PhotographerClient() {
                   {/* Miesto konania */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
-                      Miesto konania
+                      Místo konání
                     </label>
                     <input
                       type="text"
@@ -1375,7 +1375,7 @@ export function PhotographerClient() {
                   {/* Dátum a čas */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
-                      Dátum a čas
+                      Datum
                     </label>
                     <input
                       type="date"
@@ -1388,7 +1388,7 @@ export function PhotographerClient() {
                   {/* Počet hostí */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
-                      Očakávaný počet hostí
+                      Očekávaný počet hostů
                     </label>
                     <input
                       type="number"
@@ -1402,30 +1402,30 @@ export function PhotographerClient() {
                   {/* Popis */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
-                      Popis / informácie o akcii
+                      Popis / informace o akci
                     </label>
                     <textarea
                       rows={4}
                       value={projectForm.description}
                       onChange={e => updateProjectForm('description', e.target.value)}
-                      placeholder="Stručný popis akcie, program, špeciálne požiadavky…"
+                      placeholder="Stručný popis akce, program, speciální požadavky…"
                       style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
                     />
                   </div>
 
-                  {/* Poznámky pre fotografa — len interné, nezobrazuje sa zadávateľovi */}
+                  {/* Poznámky pro fotografa — interní, nezobrazuje se zadavateli */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 4 }}>
-                      Poznámky pre fotografa
+                      Poznámky pro fotografa
                       <span style={{ fontSize: 11, fontWeight: 400, color: '#9ca3af', marginLeft: 8 }}>
-                        (interné — nezobrazuje sa zadávateľovi)
+                        (interní — nezobrazuje se zadavateli)
                       </span>
                     </label>
                     <textarea
                       rows={3}
                       value={projectForm.photographerNotes}
                       onChange={e => updateProjectForm('photographerNotes', e.target.value)}
-                      placeholder="Interné poznámky, špeciálne inštrukcie…"
+                      placeholder="Interní poznámky, speciální instrukce…"
                       style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
                     />
                   </div>
@@ -1443,7 +1443,7 @@ export function PhotographerClient() {
                         cursor: projectSaving ? 'not-allowed' : 'pointer',
                       }}
                     >
-                      {projectSaving ? 'Ukládám…' : 'Uložiť'}
+                      {projectSaving ? 'Ukládám…' : 'Uložit'}
                     </button>
                     {projectSaveMsg && (
                       <span style={{ fontSize: 13, color: projectSaveMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
@@ -1886,7 +1886,7 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
             background: '#f0fdf4', border: '1px solid #bbf7d0',
             borderRadius: 8, padding: '8px 12px',
           }}>
-            <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 700 }}>✓ Uložené v systéme</span>
+            <span style={{ fontSize: 13, color: '#16a34a', fontWeight: 700 }}>✓ Uloženo v systému</span>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <label
@@ -1899,11 +1899,11 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
                 transition: 'background 0.15s',
               }}
             >
-              🔄 Nahradiť
+              🔄 Nahradit
             </label>
             <button
               onClick={onRemove}
-              title="Vymazať overlay"
+              title="Smazat overlay"
               style={{
                 border: '1px solid #fecaca', borderRadius: 8,
                 padding: '9px 14px', cursor: 'pointer',
@@ -1911,7 +1911,7 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
                 color: '#dc2626',
               }}
             >
-              Vymazať
+              Smazat
             </button>
           </div>
         </>
@@ -1921,9 +1921,9 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
             <img
               src={value.preview}
-              alt={`${label} overlay náhľad`}
+              alt={`${label} overlay náhled`}
               onClick={onExpand}
-              title="Kliknúť pre celý náhľad"
+              title="Kliknutím zobrazit celý náhled"
               style={{
                 maxHeight: 200, width: 'auto', objectFit: 'contain',
                 borderRadius: 8, display: 'block', cursor: 'zoom-in',
@@ -1932,7 +1932,7 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
             />
             <button
               onClick={onRemove}
-              title="Odstraniť"
+              title="Odebrat"
               style={{
                 position: 'absolute', top: 6, right: 6,
                 background: 'rgba(0,0,0,0.55)', color: '#fff',
@@ -1942,7 +1942,7 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
               }}
             >×</button>
             <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 10, color: 'rgba(255,255,255,0.85)', background: 'rgba(0,0,0,0.45)', borderRadius: 4, padding: '2px 5px', pointerEvents: 'none' }}>
-              🔍 celý náhľad
+              🔍 celý náhled
             </div>
           </div>
           <div style={{ fontSize: 12, color: '#6b7280' }}>
@@ -1962,7 +1962,7 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
           }}
         >
           <span style={{ fontSize: 28, lineHeight: 1 }}>🖼</span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Vybrať PNG súbor</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Vybrat PNG soubor</span>
           <span style={{ fontSize: 12, color: '#9ca3af' }}>{aspectLabel} · max 8 MB</span>
         </label>
       )}
