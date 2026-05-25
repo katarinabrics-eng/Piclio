@@ -47,6 +47,7 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       const { data: pub } = supabaseAdmin.storage.from('logos').getPublicUrl(path)
       logoUrl = pub.publicUrl
+      console.log('Logo upload:', { path, logoUrl })
     } else {
       logoUrl = (form.get('client_logo_url') as string) || undefined
     }
@@ -76,6 +77,8 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
   const update: Record<string, string> = {}
   if (logoUrl !== undefined) update.client_logo_url = logoUrl
   if (brandColor !== undefined) update.brand_color = brandColor
+
+  console.log('Branding update object:', { logoUrl, brandColor, update, keys: Object.keys(update) })
 
   if (Object.keys(update).length === 0)
     return NextResponse.json({ error: 'Nothing to update' }, { status: 400 })
