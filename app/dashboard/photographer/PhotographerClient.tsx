@@ -849,12 +849,31 @@ export function PhotographerClient() {
                     alignItems: 'flex-start',
                   }}>
                     <span style={{ fontSize: 18, lineHeight: 1 }}>⚠️</span>
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#92400e', marginBottom: 4 }}>
                         Žádost o změnu od zadavatele
                       </div>
-                      <div style={{ fontSize: 13, color: '#78350f', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                      <div style={{ fontSize: 13, color: '#78350f', lineHeight: 1.5, whiteSpace: 'pre-wrap', marginBottom: 12 }}>
                         {overlayNotes}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={async () => {
+                            await fetch('/api/photographer/events', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ id: selectedEvent!.id, overlayNotes: null }),
+                            })
+                            setOverlayNotes(null)
+                          }}
+                          style={{
+                            background: '#1a1225', color: '#fff', border: 'none',
+                            borderRadius: 8, padding: '8px 16px', fontSize: 12,
+                            fontWeight: 600, cursor: 'pointer',
+                          }}
+                        >
+                          ✓ Beru na vědomí — nahraji nový overlay
+                        </button>
                       </div>
                     </div>
                   </div>
