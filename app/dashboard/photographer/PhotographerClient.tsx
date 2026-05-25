@@ -75,7 +75,7 @@ export function PhotographerClient() {
           id: selectedEvent.id,
           name: projectForm.name,
           location: projectForm.location,
-          date: projectForm.date,
+          date: projectForm.date ? projectForm.date.split('T')[0] : undefined,
           maxGuests: parseInt(projectForm.maxGuests) || undefined,
           description: projectForm.description,
           photographerNotes: projectForm.photographerNotes,
@@ -86,7 +86,7 @@ export function PhotographerClient() {
         ...prev,
         name: projectForm.name,
         location: projectForm.location,
-        date: projectForm.date,
+        date: projectForm.date ? projectForm.date.split('T')[0] : prev.date,
         max_guests: parseInt(projectForm.maxGuests) || prev.max_guests,
       } : prev)
       setProjectSaveMsg('✓ Uloženo')
@@ -1062,7 +1062,7 @@ export function PhotographerClient() {
                       Dátum a čas
                     </label>
                     <input
-                      type="datetime-local"
+                      type="date"
                       value={projectForm.date}
                       onChange={e => updateProjectForm('date', e.target.value)}
                       style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none' }}
