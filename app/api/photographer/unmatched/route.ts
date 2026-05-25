@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
+export const dynamic = 'force-dynamic'
+
 function isAuthorized(req: NextRequest) {
   return req.cookies.get('photographer_token')?.value === process.env.PHOTOGRAPHER_TOKEN
 }
