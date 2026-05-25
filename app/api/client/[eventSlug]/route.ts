@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status, description')
     .eq('slug', params.eventSlug)
     .single()
 
