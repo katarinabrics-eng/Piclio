@@ -443,6 +443,10 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 </div>
               )}
               <label style={labelStyle}>Komentář / žádost o změny</label>
+              <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 8, lineHeight: 1.6, marginTop: 0 }}>
+                Popište požadované změny — informace o akci, úpravy textu na fotografiích nebo jakékoliv
+                další přání. Fotograf se na váš komentář co nejdříve ozve.
+              </p>
               <textarea style={{ ...inputStyle, height: 80, resize: 'vertical' as const }}
                 value={overlayNotes} onChange={e => setOverlayNotes(e.target.value)}
                 placeholder="Např.: prosím zvětšit logo, změnit pozici čísla..." />
