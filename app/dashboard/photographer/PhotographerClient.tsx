@@ -6,6 +6,8 @@ import { StatCard } from '@/components/piclio/StatCard'
 import { Logo } from '@/components/piclio/Logo'
 import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
+const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
+
 type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings'
 
 export function PhotographerClient() {
@@ -401,10 +403,10 @@ export function PhotographerClient() {
                     <button
                       onClick={e => {
                         e.stopPropagation()
-                        navigator.clipboard.writeText(`https://piclio.vercel.app/kiosk/${event.slug}`)
+                        navigator.clipboard.writeText(`${APP_URL}/kiosk/${event.slug}`)
                           .then(() => alert(`Zkopírováno: /kiosk/${event.slug}`))
                       }}
-                      title={`piclio.vercel.app/kiosk/${event.slug}`}
+                      title={`${APP_URL}/kiosk/${event.slug}`}
                       style={{
                         background: '#f3f4f6', border: '1px solid #e5e7eb',
                         borderRadius: 8, padding: '6px 12px', fontSize: 12,
