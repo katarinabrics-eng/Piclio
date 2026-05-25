@@ -70,7 +70,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
       if (json.client_logo_url) setLogoUrl(json.client_logo_url)
-      setBrandingMsg('✓ Branding uložený')
+      setBrandingMsg('✓ Branding uložen')
     } catch (e: any) {
       setBrandingMsg(`✗ Chyba: ${e.message}`)
     } finally {
@@ -89,7 +89,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       })
       if (!res.ok) throw new Error((await res.json()).error)
       setOverlayApproved(approved)
-      setOverlayMsg(approved ? '✓ Overlay schválený' : '✓ Žiadosť o zmenu odoslaná')
+      setOverlayMsg(approved ? '✓ Overlay schválen' : '✓ Žádost o změnu odeslána')
     } catch (e: any) {
       setOverlayMsg(`✗ Chyba: ${e.message}`)
     } finally {
@@ -107,7 +107,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         body: JSON.stringify({ playlist: Array.from(playlist) }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
-      setPlaylistMsg(`✓ Playlist uložený (${playlist.size} fotiek)`)
+      setPlaylistMsg(`✓ Playlist uložen (${playlist.size} fotek)`)
     } catch (e: any) {
       setPlaylistMsg(`✗ Chyba: ${e.message}`)
     } finally {
@@ -141,12 +141,12 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   // ── Tabs config ────────────────────────────────────────────────────────────
 
   const TABS: [Tab, string][] = [
-    ['overview',       'Prehľad'],
+    ['overview',       'Přehled'],
     ['guests',         `Hosté (${stats.guestCount})`],
     ['unmatched',      `Nespárované (${stats.unmatchedCount})`],
     ['branding',       'Branding'],
-    ['projekcia',      'Projekcia'],
-    ['gallery_public', 'Verejná galéria'],
+    ['projekcia',      'Projekce'],
+    ['gallery_public', 'Veřejná galerie'],
   ]
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -163,7 +163,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
           <div>
             <div style={{ fontSize: 18, fontWeight: 700 }}>{event.name}</div>
             <div style={{ fontSize: 13, opacity: 0.7, marginTop: 2 }}>
-              {new Date(event.date).toLocaleDateString('sk-SK')}
+              {new Date(event.date).toLocaleDateString('cs-CZ')}
               {event.location ? ` · ${event.location}` : ''}
             </div>
           </div>
@@ -187,29 +187,29 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
           ))}
         </div>
 
-        {/* ── PREHĽAD ── */}
+        {/* ── PŘEHLED ── */}
         {tab === 'overview' && (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 28 }}>
               <StatCard label="Registrovaní hosté" value={stats.guestCount} />
-              <StatCard label="Fotky celkom" value={stats.photoCount} />
-              <StatCard label="Doručené galérie" value={stats.deliveredCount} accent />
+              <StatCard label="Fotky celkem" value={stats.photoCount} />
+              <StatCard label="Doručené galerie" value={stats.deliveredCount} accent />
               <StatCard label="Nespárované fotky" value={stats.unmatchedCount} />
-              <StatCard label="Ø fotky / hosť" value={stats.avgPhotosPerGuest} sublabel="priemer" />
-              <StatCard label="Otvorili galériu" value={stats.galleryOpenedCount} sublabel={`z ${stats.guestCount} hostí`} />
-              <StatCard label="Vo verejnej galérii" value={stats.publicPhotoCount} sublabel="spárovaných fotiek" />
+              <StatCard label="Ø fotky / host" value={stats.avgPhotosPerGuest} sublabel="průměr" />
+              <StatCard label="Otevřeli galerii" value={stats.galleryOpenedCount} sublabel={`z ${stats.guestCount} hostů`} />
+              <StatCard label="Ve veřejné galerii" value={stats.publicPhotoCount} sublabel="spárovaných fotek" />
             </div>
             <div style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-              <div style={{ fontWeight: 700, marginBottom: 16, fontSize: 15 }}>Rýchle linky</div>
+              <div style={{ fontWeight: 700, marginBottom: 16, fontSize: 15 }}>Rychlé odkazy</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {([
-                  ['Slideshow / projekcia', `${APP_URL}/slideshow/${eventSlug}`],
-                  ['Registrácia kiosk', `${APP_URL}/kiosk`],
-                  ...(publicGallery ? [['Verejná galéria', `${APP_URL}/event/${eventSlug}/gallery`]] : []),
+                  ['Slideshow / projekce', `${APP_URL}/slideshow/${eventSlug}`],
+                  ['Registrace kiosk', `${APP_URL}/kiosk`],
+                  ...(publicGallery ? [['Veřejná galerie', `${APP_URL}/event/${eventSlug}/gallery`]] : []),
                 ] as [string, string][]).map(([lbl, url]) => (
                   <div key={url} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f9fafb', borderRadius: 8 }}>
                     <span style={{ fontSize: 14, color: '#374151' }}>{lbl}</span>
-                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: accent, fontWeight: 600, textDecoration: 'none' }}>Otvoriť →</a>
+                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: accent, fontWeight: 600, textDecoration: 'none' }}>Otevřít →</a>
                   </div>
                 ))}
               </div>
@@ -221,12 +221,12 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {tab === 'guests' && (
           <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             {guests.length === 0 ? (
-              <div style={{ padding: 40, textAlign: 'center', color: '#9ca3af' }}>Žiadni hostia</div>
+              <div style={{ padding: 40, textAlign: 'center', color: '#9ca3af' }}>Žádní hosté</div>
             ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                 <thead>
                   <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                    {['#', 'Meno', 'E-mail', 'Fotky', 'Doručené', 'Galéria'].map(h => (
+                    {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručené', 'Galerie'].map(h => (
                       <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
                     ))}
                   </tr>
@@ -240,12 +240,12 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                       <td style={{ padding: '10px 16px' }}>{g.photo_count}</td>
                       <td style={{ padding: '10px 16px' }}>
                         {g.email_sent_at
-                          ? <span style={{ color: '#16a34a', fontSize: 12 }}>✓ {new Date(g.email_sent_at).toLocaleDateString('sk-SK')}</span>
+                          ? <span style={{ color: '#16a34a', fontSize: 12 }}>✓ {new Date(g.email_sent_at).toLocaleDateString('cs-CZ')}</span>
                           : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>}
                       </td>
                       <td style={{ padding: '10px 16px' }}>
                         {g.gallery_token
-                          ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: accent, fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otvoriť →</a>
+                          ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: accent, fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
                           : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
                       </td>
                     </tr>
@@ -260,7 +260,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {tab === 'unmatched' && (
           <div>
             {unmatchedPhotos.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Žiadne nespárované fotky ✓</div>
+              <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Žádné nespárované fotky ✓</div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
                 {unmatchedPhotos.map(photo => (
@@ -280,13 +280,13 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {tab === 'branding' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <section style={card}>
-              <h2 style={sectionTitle}>Logo a farba eventu</h2>
+              <h2 style={sectionTitle}>Logo a barva eventu</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
                 <div>
                   <label style={labelStyle}>Logo URL</label>
                   <input style={inputStyle} value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://..." />
                   <div style={{ marginTop: 8 }}>
-                    <button style={btnSecondary} onClick={() => fileRef.current?.click()}>📁 Nahrať súbor</button>
+                    <button style={btnSecondary} onClick={() => fileRef.current?.click()}>📁 Nahrát soubor</button>
                     <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
                       onChange={e => {
                         const f = e.target.files?.[0]
@@ -296,7 +296,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   </div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Brand farba</label>
+                  <label style={labelStyle}>Brand barva</label>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <input type="color" value={brandColor} onChange={e => setBrandColor(e.target.value)}
                       style={{ width: 52, height: 40, border: 'none', borderRadius: 8, cursor: 'pointer', padding: 2 }} />
@@ -306,28 +306,28 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
               </div>
               {(logoUrl || brandColor) && (
                 <div style={{ marginTop: 20 }}>
-                  <div style={labelStyle}>Náhľad headera</div>
+                  <div style={labelStyle}>Náhled headeru</div>
                   <div style={{ background: brandColor, borderRadius: 10, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
                     {logoUrl && <img src={logoUrl} alt="" style={{ height: 32, objectFit: 'contain' }} onError={e => (e.currentTarget.style.display = 'none')} />}
                     <div>
                       <div style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{event.name}</div>
-                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(event.date).toLocaleDateString('sk-SK')}</div>
+                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(event.date).toLocaleDateString('cs-CZ')}</div>
                     </div>
                   </div>
                 </div>
               )}
               <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
                 <button style={btnPrimary(accent)} onClick={saveBranding} disabled={savingBranding}>
-                  {savingBranding ? 'Ukladám...' : 'Uložiť branding'}
+                  {savingBranding ? 'Ukládám...' : 'Uložit branding'}
                 </button>
                 {brandingMsg && <span style={{ fontSize: 13, color: brandingMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{brandingMsg}</span>}
               </div>
             </section>
 
             <section style={card}>
-              <h2 style={sectionTitle}>Overlay schválenie</h2>
+              <h2 style={sectionTitle}>Schválení overlay</h2>
               <div style={{ marginBottom: 16, padding: '12px 16px', background: overlayApproved ? '#f0fdf4' : '#fef9c3', borderRadius: 8, fontSize: 14 }}>
-                {overlayApproved ? '✅ Overlay bol schválený' : '⏳ Overlay čaká na schválenie'}
+                {overlayApproved ? '✅ Overlay byl schválen' : '⏳ Overlay čeká na schválení'}
               </div>
               {event.overlay_portrait_url || event.overlay_landscape_url ? (
                 <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 16 }}>
@@ -336,16 +336,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                       <div
                         onClick={() => setOverlayFullscreen('portrait')}
-                        title="Kliknúť pre väčší náhľad"
+                        title="Kliknutím zobrazit větší náhled"
                         style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
                       >
                         {/* Demo background */}
-                        <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" opacity={0.25}>
-                            <circle cx="12" cy="8" r="4" fill="white"/>
-                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
-                          </svg>
-                        </div>
+                        <img src="/demo/demo-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </div>
                       <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Portrét</span>
@@ -356,15 +351,10 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                       <div
                         onClick={() => setOverlayFullscreen('landscape')}
-                        title="Kliknúť pre väčší náhľad"
+                        title="Kliknutím zobrazit větší náhled"
                         style={{ aspectRatio: '3/2', height: 133, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
                       >
-                        <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" opacity={0.25}>
-                            <circle cx="12" cy="8" r="4" fill="white"/>
-                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
-                          </svg>
-                        </div>
+                        <img src="/demo/demo-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </div>
                       <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Krajina</span>
@@ -373,42 +363,44 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 </div>
               ) : (
                 <div style={{ marginBottom: 16, padding: '14px 16px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, color: '#6b7280' }}>
-                  <em>Náhľad overlay šablóny — fotograf ešte nenahrál žiadnu šablónu.</em>
+                  <em>Náhled overlay šablony — fotograf zatím nenahrál žádnou šablonu.</em>
                 </div>
               )}
-              <label style={labelStyle}>Komentár / žiadosť o zmeny</label>
+              <label style={labelStyle}>Komentář / žádost o změny</label>
               <textarea style={{ ...inputStyle, height: 80, resize: 'vertical' as const }}
                 value={overlayNotes} onChange={e => setOverlayNotes(e.target.value)}
-                placeholder="Napr.: prosím zväčšiť logo, zmeniť pozíciu čísla..." />
+                placeholder="Např.: prosím zvětšit logo, změnit pozici čísla..." />
               <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-                <button style={btnPrimary('#16a34a')} onClick={() => saveOverlay(true)} disabled={savingOverlay}>✓ Schváliť overlay</button>
-                <button style={{ ...btnSecondary, borderColor: '#dc2626', color: '#dc2626' }} onClick={() => saveOverlay(false)} disabled={savingOverlay}>✗ Požiadať o zmeny</button>
+                {!overlayApproved && (
+                  <button style={btnPrimary('#16a34a')} onClick={() => saveOverlay(true)} disabled={savingOverlay}>✓ Schválit overlay</button>
+                )}
+                <button style={{ ...btnSecondary, borderColor: '#dc2626', color: '#dc2626' }} onClick={() => saveOverlay(false)} disabled={savingOverlay}>✗ Požádat o změny</button>
                 {overlayMsg && <span style={{ fontSize: 13, color: overlayMsg.startsWith('✓') ? '#16a34a' : '#dc2626', alignSelf: 'center' }}>{overlayMsg}</span>}
               </div>
             </section>
           </div>
         )}
 
-        {/* ── PROJEKCIA ── */}
+        {/* ── PROJEKCE ── */}
         {tab === 'projekcia' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <section style={card}>
-              <h2 style={sectionTitle}>Slideshow / projekcia</h2>
+              <h2 style={sectionTitle}>Slideshow / projekce</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'center' }}>
                 <div>
-                  <div style={labelStyle}>Link na projekciu</div>
+                  <div style={labelStyle}>Odkaz na projekci</div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <code style={{ fontSize: 13, background: '#f3f4f6', padding: '8px 12px', borderRadius: 8, flex: 1 }}>
                       {APP_URL}/slideshow/{eventSlug}
                     </code>
                     <a href={`${APP_URL}/slideshow/${eventSlug}`} target="_blank" rel="noopener noreferrer"
                       style={{ ...btnPrimary(accent), textDecoration: 'none', fontSize: 13 }}>
-                      Otvoriť →
+                      Otevřít →
                     </a>
                   </div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={labelStyle}>PIN pre obsluhu</div>
+                  <div style={labelStyle}>PIN pro obsluhu</div>
                   <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: 8, color: accent, background: '#f3f4f6', padding: '10px 20px', borderRadius: 10 }}>
                     {event.slideshow_pin ?? '1234'}
                   </div>
@@ -420,16 +412,16 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <h2 style={{ ...sectionTitle, margin: 0 }}>Playlist ({playlist.size} / {allPhotos.length})</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <button style={btnSecondary} onClick={selectAll}>Všetky</button>
-                  <button style={btnSecondary} onClick={selectNone}>Žiadne</button>
+                  <button style={btnSecondary} onClick={selectAll}>Všechny</button>
+                  <button style={btnSecondary} onClick={selectNone}>Žádné</button>
                   <button style={btnPrimary(accent)} onClick={savePlaylist} disabled={savingPlaylist}>
-                    {savingPlaylist ? 'Ukladám...' : 'Uložiť playlist'}
+                    {savingPlaylist ? 'Ukládám...' : 'Uložit playlist'}
                   </button>
                 </div>
               </div>
               {playlistMsg && <div style={{ marginBottom: 14, fontSize: 13, color: playlistMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{playlistMsg}</div>}
               {allPhotos.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Žiadne spárované fotky ešte nie sú k dispozícii</div>
+                <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Zatím nejsou k dispozici žádné spárované fotky</div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
                   {allPhotos.map(photo => {
@@ -460,11 +452,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
           </div>
         )}
 
-        {/* ── VEREJNÁ GALÉRIA ── */}
+        {/* ── VEŘEJNÁ GALERIE ── */}
         {tab === 'gallery_public' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <section style={card}>
-              <h2 style={sectionTitle}>Verejná galéria eventu</h2>
+              <h2 style={sectionTitle}>Veřejná galerie eventu</h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
                 <button onClick={() => togglePublicGallery(!publicGallery)} disabled={savingPublic} style={{
                   width: 52, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer',
@@ -477,35 +469,35 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   }} />
                 </button>
                 <span style={{ fontSize: 15, fontWeight: 600, color: publicGallery ? '#111827' : '#9ca3af' }}>
-                  {publicGallery ? 'Verejná galéria je ZAPNUTÁ' : 'Verejná galéria je vypnutá'}
+                  {publicGallery ? 'Veřejná galerie je ZAPNUTÁ' : 'Veřejná galerie je vypnutá'}
                 </span>
-                {savingPublic && <span style={{ fontSize: 13, color: '#9ca3af' }}>Ukladám...</span>}
+                {savingPublic && <span style={{ fontSize: 13, color: '#9ca3af' }}>Ukládám...</span>}
               </div>
               {publicGallery ? (
                 <div>
-                  <div style={labelStyle}>Link na verejnú galériu</div>
+                  <div style={labelStyle}>Odkaz na veřejnou galerii</div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 20 }}>
                     <code style={{ fontSize: 13, background: '#f3f4f6', padding: '8px 12px', borderRadius: 8, flex: 1 }}>
                       {APP_URL}/event/{eventSlug}/gallery
                     </code>
                     <a href={`${APP_URL}/event/${eventSlug}/gallery`} target="_blank" rel="noopener noreferrer"
-                      style={{ ...btnPrimary(accent), textDecoration: 'none', fontSize: 13 }}>Otvoriť →</a>
+                      style={{ ...btnPrimary(accent), textDecoration: 'none', fontSize: 13 }}>Otevřít →</a>
                     <button style={btnSecondary}
                       onClick={() => navigator.clipboard.writeText(`${APP_URL}/event/${eventSlug}/gallery`)}>
-                      Kopírovať
+                      Kopírovat
                     </button>
                   </div>
                   <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-                    <StatCard label="Fotky vo verejnej galérii" value={stats.publicPhotoCount} accent />
-                    <StatCard label="Doručených hostí" value={stats.deliveredCount} />
+                    <StatCard label="Fotky ve veřejné galerii" value={stats.publicPhotoCount} accent />
+                    <StatCard label="Doručených hostů" value={stats.deliveredCount} />
                   </div>
                   <div style={{ padding: '12px 16px', background: '#f0fdf4', borderRadius: 8, fontSize: 13, color: '#166534' }}>
-                    Verejná galéria zobrazuje všetky spárované fotky eventu bez rozdelenia podľa hostí.
+                    Veřejná galerie zobrazuje všechny spárované fotky eventu bez rozdělení podle hostů.
                   </div>
                 </div>
               ) : (
                 <div style={{ padding: '20px 24px', background: '#f9fafb', borderRadius: 10, color: '#9ca3af', fontSize: 14 }}>
-                  Zapnite verejnú galériu, aby si fotky mohol prezerať ktokoľvek s linkom.
+                  Zapněte veřejnou galerii, aby si fotky mohl prohlížet kdokoliv s odkazem.
                 </div>
               )}
             </section>
@@ -533,12 +525,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   : { height: 'min(80vh, calc(90vw * 2 / 3))' }),
               }}
             >
-              <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="96" height="96" viewBox="0 0 24 24" fill="none" opacity={0.2}>
-                  <circle cx="12" cy="8" r="4" fill="white"/>
-                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
-                </svg>
-              </div>
+              <img
+                src={isPortrait ? '/demo/demo-portrait.jpg' : '/demo/demo-krajina.jpg'}
+                alt=""
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              />
               {overlaySrc && (
                 <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
               )}
