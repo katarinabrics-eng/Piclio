@@ -45,6 +45,8 @@ export function PhotographerClient() {
   const [overlayApproved, setOverlayApproved] = useState(false)
   const [overlayNotes, setOverlayNotes] = useState<string | null>(null)
   const [overlayToast, setOverlayToast] = useState(false)
+  const [inviteToast, setInviteToast] = useState<'ok' | 'error' | null>(null)
+  const [sendingInvite, setSendingInvite] = useState<string | null>(null)
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const overlayApprovedRef = useRef(false)
 
@@ -262,6 +264,20 @@ export function PhotographerClient() {
     }
   }, [selectedEvent])
 
+  async function resendInvite(eventId: string) {
+    setSendingInvite(eventId)
+    try {
+      const res = await fetch(`/api/photographer/events/${eventId}/resend-invite`, { method: 'POST' })
+      if (!res.ok) throw new Error()
+      setInviteToast('ok')
+    } catch {
+      setInviteToast('error')
+    } finally {
+      setSendingInvite(null)
+      setTimeout(() => setInviteToast(null), 3000)
+    }
+  }
+
   async function selectEvent(event: EventWithStats) {
     setSelectedEvent(event)
     setTab('guests')
@@ -398,6 +414,22 @@ export function PhotographerClient() {
                     >
                       Kiosk URL
                     </button>
+                    {event.client_email && (
+                      <button
+                        onClick={e => { e.stopPropagation(); resendInvite(event.id) }}
+                        disabled={sendingInvite === event.id}
+                        title={`Odeslat pozvánku znovu na ${event.client_email}`}
+                        style={{
+                          background: '#f3f4f6', border: '1px solid #e5e7eb',
+                          borderRadius: 8, padding: '6px 10px', fontSize: 13,
+                          color: sendingInvite === event.id ? '#9ca3af' : '#374151',
+                          cursor: sendingInvite === event.id ? 'not-allowed' : 'pointer',
+                          flexShrink: 0, whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {sendingInvite === event.id ? '…' : '✉'}
+                      </button>
+                    )}
                     <button
                       onClick={e => { e.stopPropagation(); openEdit(event) }}
                       title="Upravit event"
@@ -1297,6 +1329,22 @@ export function PhotographerClient() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Toast — pozvánka odeslána */}
+      {inviteToast && (
+        <div style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
+          background: inviteToast === 'ok' ? '#d1fae5' : '#fee2e2',
+          border: `1px solid ${inviteToast === 'ok' ? '#6ee7b7' : '#fca5a5'}`,
+          borderRadius: 10, padding: '14px 20px',
+          fontSize: 14, fontWeight: 700,
+          color: inviteToast === 'ok' ? '#065f46' : '#991b1b',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          {inviteToast === 'ok' ? '✅ Pozvánka odeslána' : '✗ Nepodařilo se odeslat'}
         </div>
       )}
 
