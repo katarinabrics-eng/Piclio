@@ -6,7 +6,9 @@ interface Props {
 }
 
 async function getClientData(eventSlug: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000'
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
   const res = await fetch(`${baseUrl}/api/client/${eventSlug}`, { cache: 'no-store' })
   if (!res.ok) return null
   return res.json()

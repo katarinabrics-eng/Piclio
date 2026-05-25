@@ -92,6 +92,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
       if (json.client_logo_url) setLogoUrl(json.client_logo_url)
+      if (json.brand_color) setBrandColor(json.brand_color)
       setBrandingMsg('✓ Branding uložen')
     } catch (e: any) {
       setBrandingMsg(`✗ Chyba: ${e.message}`)
