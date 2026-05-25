@@ -328,9 +328,26 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
               <div style={{ marginBottom: 16, padding: '12px 16px', background: overlayApproved ? '#f0fdf4' : '#fef9c3', borderRadius: 8, fontSize: 14 }}>
                 {overlayApproved ? '✅ Overlay bol schválený' : '⏳ Overlay čaká na schválenie'}
               </div>
-              <div style={{ marginBottom: 16, padding: '14px 16px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, color: '#6b7280' }}>
-                <em>Náhľad overlay šablóny — fotograf ešte nenahrál žiadnu šablónu.</em>
-              </div>
+              {event.overlay_portrait_url ? (
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ marginBottom: 8, fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Portrét
+                  </div>
+                  <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ width: '100%', borderRadius: 8, border: '1px solid #e5e7eb', display: 'block' }} />
+                  {event.overlay_landscape_url && (
+                    <>
+                      <div style={{ margin: '12px 0 8px', fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        Krajina
+                      </div>
+                      <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ width: '100%', borderRadius: 8, border: '1px solid #e5e7eb', display: 'block' }} />
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div style={{ marginBottom: 16, padding: '14px 16px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, color: '#6b7280' }}>
+                  <em>Náhľad overlay šablóny — fotograf ešte nenahrál žiadnu šablónu.</em>
+                </div>
+              )}
               <label style={labelStyle}>Komentár / žiadosť o zmeny</label>
               <textarea style={{ ...inputStyle, height: 80, resize: 'vertical' as const }}
                 value={overlayNotes} onChange={e => setOverlayNotes(e.target.value)}
