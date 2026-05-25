@@ -57,6 +57,7 @@ export function PhotographerClient() {
   })
   const [projectSaving, setProjectSaving] = useState(false)
   const [projectSaveMsg, setProjectSaveMsg] = useState('')
+  const [deletingEvent, setDeletingEvent] = useState<string | null>(null)
 
   function updateProjectForm(key: string, value: string) {
     setProjectForm(prev => ({ ...prev, [key]: value }))
@@ -302,6 +303,24 @@ export function PhotographerClient() {
     }
   }, [selectedEvent])
 
+  async function deleteEvent(ev: EventWithStats) {
+    const confirmed = window.confirm(
+      `Opravdu smazat "${ev.name}"?\nSmažou se všichni hosté a fotky. Akce je nevratná.`
+    )
+    if (!confirmed) return
+    setDeletingEvent(ev.id)
+    try {
+      const res = await fetch(`/api/photographer/events/${ev.id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
+      setEvents(prev => prev.filter(e => e.id !== ev.id))
+      if (selectedEvent?.id === ev.id) setSelectedEvent(null)
+    } catch (e: any) {
+      alert(`Nepodařilo se smazat: ${e.message}`)
+    } finally {
+      setDeletingEvent(null)
+    }
+  }
+
   async function resendInvite(eventId: string) {
     setSendingInvite(eventId)
     try {
@@ -478,6 +497,19 @@ export function PhotographerClient() {
                       }}
                     >
                       ✎
+                    </button>
+                    <button
+                      onClick={e => { e.stopPropagation(); deleteEvent(event) }}
+                      disabled={deletingEvent === event.id}
+                      title="Smazat event"
+                      style={{
+                        background: '#fee2e2', border: '1px solid #fecaca',
+                        borderRadius: 6, padding: '6px 10px', fontSize: 14,
+                        color: '#dc2626', cursor: deletingEvent === event.id ? 'not-allowed' : 'pointer',
+                        flexShrink: 0, opacity: deletingEvent === event.id ? 0.5 : 1,
+                      }}
+                    >
+                      🗑️
                     </button>
                     <div style={{ color: '#9ca3af', fontSize: 20 }}>›</div>
                   </div>
