@@ -39,6 +39,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [overlayNotes, setOverlayNotes] = useState(event.overlay_notes ?? '')
   const [savingOverlay, setSavingOverlay] = useState(false)
   const [overlayMsg, setOverlayMsg] = useState('')
+  const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
 
   const [playlist, setPlaylist] = useState<Set<string>>(
     new Set(Array.isArray(event.slideshow_playlist) ? event.slideshow_playlist : [])
@@ -328,19 +329,46 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
               <div style={{ marginBottom: 16, padding: '12px 16px', background: overlayApproved ? '#f0fdf4' : '#fef9c3', borderRadius: 8, fontSize: 14 }}>
                 {overlayApproved ? '✅ Overlay bol schválený' : '⏳ Overlay čaká na schválenie'}
               </div>
-              {event.overlay_portrait_url ? (
-                <div style={{ marginBottom: 16 }}>
-                  <div style={{ marginBottom: 8, fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Portrét
-                  </div>
-                  <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ width: '100%', borderRadius: 8, border: '1px solid #e5e7eb', display: 'block' }} />
-                  {event.overlay_landscape_url && (
-                    <>
-                      <div style={{ margin: '12px 0 8px', fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                        Krajina
+              {event.overlay_portrait_url || event.overlay_landscape_url ? (
+                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 16 }}>
+                  {/* Portrait composite */}
+                  {event.overlay_portrait_url && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                      <div
+                        onClick={() => setOverlayFullscreen('portrait')}
+                        title="Kliknúť pre väčší náhľad"
+                        style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
+                      >
+                        {/* Demo background */}
+                        <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" opacity={0.25}>
+                            <circle cx="12" cy="8" r="4" fill="white"/>
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
+                          </svg>
+                        </div>
+                        <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </div>
-                      <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ width: '100%', borderRadius: 8, border: '1px solid #e5e7eb', display: 'block' }} />
-                    </>
+                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Portrét</span>
+                    </div>
+                  )}
+                  {/* Landscape composite */}
+                  {event.overlay_landscape_url && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                      <div
+                        onClick={() => setOverlayFullscreen('landscape')}
+                        title="Kliknúť pre väčší náhľad"
+                        style={{ aspectRatio: '3/2', height: 133, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
+                      >
+                        <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" opacity={0.25}>
+                            <circle cx="12" cy="8" r="4" fill="white"/>
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
+                          </svg>
+                        </div>
+                        <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+                      </div>
+                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Krajina</span>
+                    </div>
                   )}
                 </div>
               ) : (
@@ -485,6 +513,43 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         )}
 
       </div>
+
+      {/* Overlay fullscreen modal */}
+      {overlayFullscreen && (() => {
+        const isPortrait = overlayFullscreen === 'portrait'
+        const overlaySrc = isPortrait ? event.overlay_portrait_url : event.overlay_landscape_url
+        return (
+          <div
+            onClick={() => setOverlayFullscreen(null)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{
+                position: 'relative', overflow: 'hidden', borderRadius: 10,
+                aspectRatio: isPortrait ? '2/3' : '3/2',
+                ...(isPortrait
+                  ? { width: 'min(calc(80vh * 2 / 3), 90vw)' }
+                  : { height: 'min(80vh, calc(90vw * 2 / 3))' }),
+              }}
+            >
+              <div style={{ position: 'absolute', inset: 0, background: '#2d2040', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="96" height="96" viewBox="0 0 24 24" fill="none" opacity={0.2}>
+                  <circle cx="12" cy="8" r="4" fill="white"/>
+                  <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/>
+                </svg>
+              </div>
+              {overlaySrc && (
+                <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+              )}
+            </div>
+            <button
+              onClick={() => setOverlayFullscreen(null)}
+              style={{ position: 'fixed', top: 16, right: 16, zIndex: 1001, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8, color: 'white', fontSize: 22, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >×</button>
+          </div>
+        )
+      })()}
     </div>
   )
 }
