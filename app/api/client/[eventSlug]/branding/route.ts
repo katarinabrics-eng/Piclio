@@ -38,7 +38,7 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       }
 
       const ext = file.name.split('.').pop() ?? 'png'
-      const path = `${event.id}.${ext}`
+      const path = `${event.id}-${Date.now()}.${ext}`
       const bytes = await file.arrayBuffer()
       await supabaseAdmin.storage.createBucket('logos', { public: true }).catch(() => {})
       const { error } = await supabaseAdmin.storage
