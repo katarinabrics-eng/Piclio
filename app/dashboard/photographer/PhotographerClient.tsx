@@ -620,6 +620,52 @@ export function PhotographerClient() {
             {tab === 'settings' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
+                {/* Podklady od zadavatele */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Podklady od zadavatele</h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>
+                    Logo a barva nahrané zadavatelem v jeho dashboardu.
+                  </p>
+                  {selectedEvent.client_logo_url ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                      <div>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Logo</div>
+                        <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '16px 20px', display: 'inline-flex', alignItems: 'center', gap: 20 }}>
+                          <img
+                            src={selectedEvent.client_logo_url}
+                            alt="Logo zadavatele"
+                            style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain', display: 'block' }}
+                          />
+                          <a
+                            href={selectedEvent.client_logo_url}
+                            download
+                            style={{
+                              background: '#111827', color: '#fff', textDecoration: 'none',
+                              borderRadius: 8, padding: '8px 16px', fontSize: 13, fontWeight: 600,
+                              whiteSpace: 'nowrap', flexShrink: 0,
+                            }}
+                          >
+                            ↓ Stáhnout logo
+                          </a>
+                        </div>
+                      </div>
+                      {selectedEvent.brand_color && (
+                        <div>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>Brand barva</div>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 16px' }}>
+                            <div style={{ width: 28, height: 28, borderRadius: 6, background: selectedEvent.brand_color, border: '1px solid rgba(0,0,0,0.1)', flexShrink: 0 }} />
+                            <span style={{ fontSize: 14, fontFamily: 'monospace', fontWeight: 600, color: '#111827' }}>{selectedEvent.brand_color}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div style={{ padding: '14px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13, color: '#9ca3af' }}>
+                      Zadavatel zatím nenahrál podklady.
+                    </div>
+                  )}
+                </div>
+
                 {/* Section header */}
                 <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                   <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay</h2>
