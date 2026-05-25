@@ -55,9 +55,45 @@ export function PhotographerClient() {
   const [projectForm, setProjectForm] = useState({
     name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
   })
+  const [projectSaving, setProjectSaving] = useState(false)
+  const [projectSaveMsg, setProjectSaveMsg] = useState('')
 
   function updateProjectForm(key: string, value: string) {
     setProjectForm(prev => ({ ...prev, [key]: value }))
+  }
+
+  async function saveProjectInfo() {
+    if (!selectedEvent) return
+    setProjectSaving(true)
+    setProjectSaveMsg('')
+    try {
+      const res = await fetch('/api/photographer/events', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: selectedEvent.id,
+          name: projectForm.name,
+          location: projectForm.location,
+          date: projectForm.date,
+          maxGuests: parseInt(projectForm.maxGuests) || undefined,
+          description: projectForm.description,
+          photographerNotes: projectForm.photographerNotes,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
+      setSelectedEvent(prev => prev ? {
+        ...prev,
+        name: projectForm.name,
+        location: projectForm.location,
+        date: projectForm.date,
+        max_guests: parseInt(projectForm.maxGuests) || prev.max_guests,
+      } : prev)
+      setProjectSaveMsg('✓ Uloženo')
+    } catch (e: any) {
+      setProjectSaveMsg(`✗ ${e.message}`)
+    } finally {
+      setProjectSaving(false)
+    }
   }
 
   function updateForm(key: string, value: string) {
@@ -293,8 +329,8 @@ export function PhotographerClient() {
       date: event.date ? event.date.slice(0, 16) : '',
       location: event.location ?? '',
       maxGuests: String(event.max_guests ?? ''),
-      description: '',
-      photographerNotes: '',
+      description: (event as any).description ?? '',
+      photographerNotes: (event as any).photographer_notes ?? '',
     })
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`),
@@ -982,17 +1018,25 @@ export function PhotographerClient() {
                   </div>
 
                   {/* Uložiť */}
-                  <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <button
-                      onClick={() => console.log('O projekte — uložiť:', projectForm)}
+                      onClick={saveProjectInfo}
+                      disabled={projectSaving}
                       style={{
-                        background: '#b7e94c', color: '#1a1225', border: 'none',
-                        borderRadius: 8, padding: '10px 24px', fontSize: 14, fontWeight: 700,
-                        cursor: 'pointer',
+                        background: projectSaving ? '#e5e7eb' : '#b7e94c',
+                        color: projectSaving ? '#9ca3af' : '#1a1225',
+                        border: 'none', borderRadius: 8, padding: '10px 24px',
+                        fontSize: 14, fontWeight: 700,
+                        cursor: projectSaving ? 'not-allowed' : 'pointer',
                       }}
                     >
-                      Uložiť
+                      {projectSaving ? 'Ukládám…' : 'Uložiť'}
                     </button>
+                    {projectSaveMsg && (
+                      <span style={{ fontSize: 13, color: projectSaveMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
+                        {projectSaveMsg}
+                      </span>
+                    )}
                   </div>
 
                 </div>

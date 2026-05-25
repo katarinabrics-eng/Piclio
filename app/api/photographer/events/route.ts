@@ -102,7 +102,7 @@ export async function PATCH(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy } = body
+  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, description, photographerNotes } = body
 
   if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
 
@@ -125,6 +125,8 @@ export async function PATCH(req: NextRequest) {
   if (overlayLandscapeUrl !== undefined) updatePayload.overlay_landscape_url = overlayLandscapeUrl
   if (overlayStatus !== undefined) updatePayload.overlay_status = overlayStatus
   if (overlayApprovedBy !== undefined) updatePayload.overlay_approved_by = overlayApprovedBy
+  if (description !== undefined) updatePayload.description = description
+  if (photographerNotes !== undefined) updatePayload.photographer_notes = photographerNotes
 
   const { data: event, error } = await supabaseAdmin
     .from('events')

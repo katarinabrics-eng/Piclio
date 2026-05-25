@@ -35,6 +35,10 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [savingBranding, setSavingBranding] = useState(false)
   const [brandingMsg, setBrandingMsg] = useState('')
 
+  const [description, setDescription] = useState((event as any).description ?? '')
+  const [savingInfo, setSavingInfo] = useState(false)
+  const [infoMsg, setInfoMsg] = useState('')
+
   const [overlayApproved, setOverlayApproved] = useState(event.overlay_approved ?? false)
   const [overlayNotes, setOverlayNotes] = useState(event.overlay_notes ?? '')
   const [savingOverlay, setSavingOverlay] = useState(false)
@@ -54,6 +58,24 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const accent = brandColor
 
   // ── Handlers ──────────────────────────────────────────────────────────────
+
+  async function saveInfo() {
+    setSavingInfo(true)
+    setInfoMsg('')
+    try {
+      const res = await fetch(`/api/client/${eventSlug}/branding`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setInfoMsg('✓ Uloženo')
+    } catch (e: any) {
+      setInfoMsg(`✗ ${e.message}`)
+    } finally {
+      setSavingInfo(false)
+    }
+  }
 
   async function saveBranding() {
     setSavingBranding(true)
@@ -321,6 +343,39 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   {savingBranding ? 'Ukládám...' : 'Uložit branding'}
                 </button>
                 {brandingMsg && <span style={{ fontSize: 13, color: brandingMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{brandingMsg}</span>}
+              </div>
+            </section>
+
+            <section style={card}>
+              <h2 style={sectionTitle}>Informace o akci</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
+                <div>
+                  <div style={labelStyle}>Název akce</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.name}</div>
+                </div>
+                <div>
+                  <div style={labelStyle}>Místo konání</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.location ?? '—'}</div>
+                </div>
+                <div>
+                  <div style={labelStyle}>Datum</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{new Date(event.date).toLocaleDateString('cs-CZ')}</div>
+                </div>
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <label style={labelStyle}>Popis akce</label>
+                <textarea
+                  style={{ ...inputStyle, height: 100, resize: 'vertical' as const }}
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="Stručný popis akce, program, speciální požadavky…"
+                />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo}>
+                  {savingInfo ? 'Ukládám...' : 'Uložit'}
+                </button>
+                {infoMsg && <span style={{ fontSize: 13, color: infoMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{infoMsg}</span>}
               </div>
             </section>
 

@@ -25,6 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       const ext = file.name.split('.').pop() ?? 'png'
       const path = `logos/${event.id}.${ext}`
       const bytes = await file.arrayBuffer()
+      await supabaseAdmin.storage.createBucket('logos', { public: true }).catch(() => {})
       const { error } = await supabaseAdmin.storage
         .from('logos')
         .upload(path, bytes, { contentType: file.type, upsert: true })
@@ -39,6 +40,22 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
     const body = await req.json()
     logoUrl = body.client_logo_url
     brandColor = body.brand_color
+    if (body.public_gallery !== undefined) {
+      const { error } = await supabaseAdmin
+        .from('events')
+        .update({ public_gallery: body.public_gallery })
+        .eq('id', event.id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ ok: true })
+    }
+    if (body.description !== undefined) {
+      const { error } = await supabaseAdmin
+        .from('events')
+        .update({ description: body.description })
+        .eq('id', event.id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ ok: true })
+    }
   }
 
   const update: Record<string, string> = {}
