@@ -1134,12 +1134,15 @@ export function PhotographerClient() {
 
             <form onSubmit={handleSaveEdit} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
               <label style={labelStyle}>
-                Název eventu *
+                Název eventu
                 <input
-                  required value={editForm.name}
-                  onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))}
-                  style={inputStyle}
+                  value={editForm.name}
+                  disabled
+                  style={{ ...inputStyle, background: '#f3f4f6', color: '#9ca3af', cursor: 'not-allowed' }}
                 />
+                <span style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }}>
+                  Název nelze změnit — URL zadavatele a kiosku musí zůstat pevná.
+                </span>
               </label>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -1263,6 +1266,19 @@ export function PhotographerClient() {
                   style={inputStyle}
                 />
               </label>
+              <div style={{
+                background: '#fef9c3',
+                border: '1px solid #fde68a',
+                borderRadius: 8,
+                padding: '10px 14px',
+                fontSize: 12,
+                color: '#92400e',
+                marginTop: 6,
+              }}>
+                ⚠️ <strong>Název eventu nelze po uložení změnit.</strong><br/>
+                URL adresa kiosku a zadavatele se generuje z názvu
+                a zůstane pevná. Zkontrolujte název před uložením.
+              </div>
 
               {/* Datum + Místo */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
