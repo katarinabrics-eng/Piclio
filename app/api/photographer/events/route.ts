@@ -106,6 +106,13 @@ export async function PATCH(req: NextRequest) {
 
   if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
 
+  // Načti aktuální stav před updatem — potřebujeme porovnat client_email
+  const { data: existing } = await supabaseAdmin
+    .from('events')
+    .select('client_email, client_name, name, slug')
+    .eq('id', id)
+    .single()
+
   const updatePayload: Record<string, unknown> = {}
   if (name !== undefined) { updatePayload.name = name; updatePayload.slug = toSlug(name) }
   if (date !== undefined) updatePayload.date = date
@@ -129,6 +136,19 @@ export async function PATCH(req: NextRequest) {
   if (error || !event) {
     console.error('Update event error:', error)
     return NextResponse.json({ error: 'Nepodařilo se aktualizovat event', detail: error?.message }, { status: 500 })
+  }
+
+  // Pokud se změnil client_email — odešli pozvánku na nový email
+  const newEmail = clientEmail ?? existing?.client_email
+  if (
+    clientEmail !== undefined &&
+    clientEmail &&
+    clientEmail !== existing?.client_email
+  ) {
+    const resolvedName = clientName ?? existing?.client_name ?? ''
+    const resolvedEventName = name ?? existing?.name ?? ''
+    const resolvedSlug = name ? toSlug(name) : (existing?.slug ?? '')
+    sendInviteEmail(clientEmail, resolvedName, resolvedEventName, resolvedSlug).catch(() => {})
   }
 
   return NextResponse.json({ event })
