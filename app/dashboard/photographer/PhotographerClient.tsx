@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { EventWithStats, Guest, UnmatchedPhoto } from '@/lib/types'
 import { StatCard } from '@/components/piclio/StatCard'
 import { Logo } from '@/components/piclio/Logo'
@@ -44,6 +44,9 @@ export function PhotographerClient() {
   const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
   const [overlayApproved, setOverlayApproved] = useState(false)
   const [overlayNotes, setOverlayNotes] = useState<string | null>(null)
+  const [overlayToast, setOverlayToast] = useState(false)
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const overlayApprovedRef = useRef(false)
 
   const [projectForm, setProjectForm] = useState({
     name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
@@ -222,6 +225,42 @@ export function PhotographerClient() {
       .then(r => r.json())
       .then(d => { setEvents(d.events ?? []); setLoading(false) })
   }, [])
+
+  // Polling — aktualizuje overlay_approved a overlay_notes každých 30s
+  useEffect(() => {
+    if (pollingRef.current) clearInterval(pollingRef.current)
+    if (!selectedEvent) return
+
+    overlayApprovedRef.current = overlayApproved
+
+    pollingRef.current = setInterval(async () => {
+      try {
+        const res = await fetch('/api/photographer/events')
+        const data = await res.json()
+        const fresh = (data.events ?? []).find((e: EventWithStats) => e.id === selectedEvent.id)
+        if (!fresh) return
+
+        const newApproved = fresh.overlay_approved ?? false
+        const newNotes = fresh.overlay_notes ?? null
+
+        // Toast — jen při přechodu false → true
+        if (!overlayApprovedRef.current && newApproved) {
+          setOverlayToast(true)
+          setTimeout(() => setOverlayToast(false), 4000)
+        }
+
+        overlayApprovedRef.current = newApproved
+        setOverlayApproved(newApproved)
+        setOverlayNotes(newNotes)
+      } catch {
+        // polling failure — silent
+      }
+    }, 30000)
+
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current)
+    }
+  }, [selectedEvent])
 
   async function selectEvent(event: EventWithStats) {
     setSelectedEvent(event)
@@ -1258,6 +1297,20 @@ export function PhotographerClient() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* Toast — overlay schválen zadavatelem */}
+      {overlayToast && (
+        <div style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
+          background: '#d1fae5', border: '1px solid #6ee7b7',
+          borderRadius: 10, padding: '14px 20px',
+          fontSize: 14, fontWeight: 700, color: '#065f46',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          ✅ Zadavatel schválil overlay
         </div>
       )}
     </div>
