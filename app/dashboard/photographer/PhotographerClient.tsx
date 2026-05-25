@@ -42,6 +42,8 @@ export function PhotographerClient() {
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
   const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
   const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
+  const [overlayApproved, setOverlayApproved] = useState(false)
+  const [overlayNotes, setOverlayNotes] = useState<string | null>(null)
 
   const [projectForm, setProjectForm] = useState({
     name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
@@ -227,6 +229,8 @@ export function PhotographerClient() {
     setOverlayPortraitUrl(event.overlay_portrait_url ?? '')
     setOverlayLandscapeUrl(event.overlay_landscape_url ?? '')
     setOverlayStatus((event.overlay_status as 'approved' | 'pending_client' | null) ?? null)
+    setOverlayApproved(event.overlay_approved ?? false)
+    setOverlayNotes(event.overlay_notes ?? null)
     setProjectForm({
       name: event.name ?? '',
       date: event.date ? event.date.slice(0, 16) : '',
@@ -643,6 +647,29 @@ export function PhotographerClient() {
                       </div>
                     )}
                   </div>
+                  </div>
+                )}
+
+                {/* Žádost o změnu od zadavatele */}
+                {overlayNotes && !overlayApproved && (
+                  <div style={{
+                    background: '#fef9c3',
+                    border: '1px solid #fde68a',
+                    borderRadius: 10,
+                    padding: '14px 16px',
+                    display: 'flex',
+                    gap: 10,
+                    alignItems: 'flex-start',
+                  }}>
+                    <span style={{ fontSize: 18, lineHeight: 1 }}>⚠️</span>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#92400e', marginBottom: 4 }}>
+                        Žádost o změnu od zadavatele
+                      </div>
+                      <div style={{ fontSize: 13, color: '#78350f', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                        {overlayNotes}
+                      </div>
+                    </div>
                   </div>
                 )}
 
