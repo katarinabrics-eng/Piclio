@@ -22,6 +22,21 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
 
     const file = form.get('logo') as File | null
     if (file && file.size > 0) {
+      // Smaž staré logo pokud existuje
+      const { data: existing } = await supabaseAdmin
+        .from('events')
+        .select('client_logo_url')
+        .eq('id', event.id)
+        .single()
+
+      if (existing?.client_logo_url) {
+        const oldPath = existing.client_logo_url
+          .split('/storage/v1/object/public/logos/')[1]
+        if (oldPath) {
+          await supabaseAdmin.storage.from('logos').remove([oldPath])
+        }
+      }
+
       const ext = file.name.split('.').pop() ?? 'png'
       const path = `${event.id}.${ext}`
       const bytes = await file.arrayBuffer()
@@ -65,12 +80,20 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
   if (Object.keys(update).length === 0)
     return NextResponse.json({ error: 'Nothing to update' }, { status: 400 })
 
-  const { error } = await supabaseAdmin
+  const { data: updatedEvent, error } = await supabaseAdmin
     .from('events')
     .update(update)
     .eq('id', event.id)
+    .select('brand_color, client_logo_url')
+    .single()
+
+  console.log('Branding update result:', {
+    eventId: event.id,
+    brand_color: brandColor,
+    updateResult: updatedEvent,
+  })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  return NextResponse.json({ ok: true, ...update })
+  return NextResponse.json({ ok: true, ...updatedEvent })
 }
