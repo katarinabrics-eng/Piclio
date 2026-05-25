@@ -102,6 +102,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       if (json.client_logo_url) setLogoUrl(json.client_logo_url)
       if (json.brand_color) setBrandColor(json.brand_color)
       setBrandingMsg('✓ Branding uložen')
+      window.location.reload()
     } catch (e: any) {
       setBrandingMsg(`✗ Chyba: ${e.message}`)
     } finally {
