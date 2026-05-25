@@ -700,19 +700,73 @@ export function PhotographerClient() {
 
             {/* Upload tab */}
             {tab === 'upload' && (
-              <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+                {/* FTP credentials card */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                   <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>
-                    Nahrát fotky
+                    Upload z fotoaparátu (FTP)
                   </h2>
-                  <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
-                    Fotky se nahrají na server a OCR automaticky přiřadí hosty podle čísla odznaku.
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>
+                    Nastavte FTP klienta vo fotoaparáte alebo použite aplikáciu ako FileZilla.
                   </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {([
+                      { label: 'Host',  value: 'piclio-backend.fly.dev' },
+                      { label: 'Port',  value: '2121' },
+                      { label: 'User',  value: 'piclio' },
+                      { label: 'Heslo', value: 'piclio123' },
+                    ] as const).map(({ label, value }) => (
+                      <div key={label} style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        background: '#f9fafb', borderRadius: 8, padding: '10px 14px',
+                        border: '1px solid #e5e7eb',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <span style={{ fontSize: 12, color: '#6b7280', fontWeight: 600, width: 40 }}>
+                            {label}
+                          </span>
+                          <span style={{ fontSize: 14, color: '#111827', fontFamily: 'monospace', fontWeight: 500 }}>
+                            {value}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => navigator.clipboard.writeText(value)}
+                          title={`Kopírovať ${label}`}
+                          style={{
+                            background: 'none', border: 'none', cursor: 'pointer',
+                            padding: 4, borderRadius: 4, color: '#9ca3af',
+                            display: 'flex', alignItems: 'center',
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.color = '#374151')}
+                          onMouseLeave={e => (e.currentTarget.style.color = '#9ca3af')}
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2"/>
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <PhotoUploader
-                  eventId={selectedEvent.id}
-                  onUploadComplete={(count) => setUploadedCount(count)}
-                />
+
+                {/* Web uploader card */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <div style={{ marginBottom: 20 }}>
+                    <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>
+                      Nahrát fotky
+                    </h2>
+                    <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
+                      Fotky se nahrají na server a OCR automaticky přiřadí hosty podle čísla odznaku.
+                    </p>
+                  </div>
+                  <PhotoUploader
+                    eventId={selectedEvent.id}
+                    onUploadComplete={(count) => setUploadedCount(count)}
+                  />
+                </div>
+
               </div>
             )}
           </>
