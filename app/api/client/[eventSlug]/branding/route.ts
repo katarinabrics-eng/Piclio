@@ -66,6 +66,15 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
     }
+    // Info notes from client
+    if (body.infoNotes !== undefined) {
+      const { error } = await supabaseAdmin
+        .from('events')
+        .update({ info_notes: body.infoNotes })
+        .eq('id', event.id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ ok: true })
+    }
     // Info fields: location, date, maxGuests, description
     const infoUpdate: Record<string, unknown> = {}
     if (body.location !== undefined) infoUpdate.location = body.location

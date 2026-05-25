@@ -35,10 +35,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [savingBranding, setSavingBranding] = useState(false)
   const [brandingMsg, setBrandingMsg] = useState('')
 
-  const [location, setLocation] = useState(event.location ?? '')
-  const [date, setDate] = useState(event.date ? String(event.date).slice(0, 10) : '')
-  const [maxGuests, setMaxGuests] = useState(String(event.max_guests ?? ''))
-  const [description, setDescription] = useState((event as any).description ?? '')
+  const [infoNotes, setInfoNotes] = useState('')
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState('')
 
@@ -69,15 +66,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       const res = await fetch(`/api/client/${eventSlug}/branding`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          location,
-          date,
-          maxGuests: parseInt(maxGuests) || undefined,
-          description,
-        }),
+        body: JSON.stringify({ infoNotes }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
-      setInfoMsg('✓ Uloženo')
+      setInfoMsg('✓ Poznámka odeslána')
+      setInfoNotes('')
     } catch (e: any) {
       setInfoMsg(`✗ ${e.message}`)
     } finally {
@@ -360,55 +353,50 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
 
             <section style={card}>
               <h2 style={sectionTitle}>Informace o akci</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}>
                 <div>
-                  <div style={labelStyle}>Název akce <span style={{ fontSize: 10, color: '#9ca3af', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>— nelze změnit</span></div>
+                  <div style={labelStyle}>Název akce</div>
                   <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.name}</div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Místo konání</label>
-                  <input
-                    style={inputStyle}
-                    value={location}
-                    onChange={e => setLocation(e.target.value)}
-                    placeholder="Např. Praha, Hotel XY"
-                  />
+                  <div style={labelStyle}>Místo konání</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.location ?? '—'}</div>
                 </div>
                 <div>
-                  <label style={labelStyle}>Datum</label>
-                  <input
-                    type="date"
-                    style={inputStyle}
-                    value={date}
-                    onChange={e => setDate(e.target.value)}
-                  />
+                  <div style={labelStyle}>Datum</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>
+                    {event.date ? new Date(event.date).toLocaleDateString('cs-CZ') : '—'}
+                  </div>
                 </div>
               </div>
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Očekávaný počet hostů</label>
-                <input
-                  type="number"
-                  style={{ ...inputStyle, width: 160 }}
-                  value={maxGuests}
-                  onChange={e => setMaxGuests(e.target.value)}
-                  min={1}
-                  placeholder="100"
-                />
+              <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: 12, marginBottom: 20 }}>
+                <div>
+                  <div style={labelStyle}>Počet hostů</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.max_guests ?? '—'}</div>
+                </div>
+                {(event as any).description && (
+                  <div>
+                    <div style={labelStyle}>Popis akce</div>
+                    <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280', minHeight: 40, height: 'auto', whiteSpace: 'pre-wrap' }}>
+                      {(event as any).description}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Popis akce</label>
+              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 20 }}>
+                <label style={labelStyle}>Poznámka ke změně informací</label>
                 <textarea
-                  style={{ ...inputStyle, height: 100, resize: 'vertical' as const }}
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
-                  placeholder="Stručný popis akce, program, speciální požadavky…"
+                  style={{ ...inputStyle, height: 90, resize: 'vertical' as const, marginBottom: 12 }}
+                  value={infoNotes}
+                  onChange={e => setInfoNotes(e.target.value)}
+                  placeholder="Napište co chcete změnit…"
                 />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo}>
-                  {savingInfo ? 'Ukládám...' : 'Uložit'}
-                </button>
-                {infoMsg && <span style={{ fontSize: 13, color: infoMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{infoMsg}</span>}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo || !infoNotes.trim()}>
+                    {savingInfo ? 'Odesílám...' : 'Odeslat poznámku'}
+                  </button>
+                  {infoMsg && <span style={{ fontSize: 13, color: infoMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{infoMsg}</span>}
+                </div>
               </div>
             </section>
 

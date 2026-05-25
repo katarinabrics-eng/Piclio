@@ -46,6 +46,7 @@ export function PhotographerClient() {
   const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
   const [overlayApproved, setOverlayApproved] = useState(false)
   const [overlayNotes, setOverlayNotes] = useState<string | null>(null)
+  const [infoNotes, setInfoNotes] = useState<string | null>(null)
   const [overlayToast, setOverlayToast] = useState(false)
   const [inviteToast, setInviteToast] = useState<'ok' | 'error' | null>(null)
   const [sendingInvite, setSendingInvite] = useState<string | null>(null)
@@ -293,6 +294,7 @@ export function PhotographerClient() {
         overlayApprovedRef.current = newApproved
         setOverlayApproved(newApproved)
         setOverlayNotes(newNotes)
+        setInfoNotes(fresh.info_notes ?? null)
       } catch {
         // polling failure — silent
       }
@@ -343,6 +345,7 @@ export function PhotographerClient() {
     setOverlayStatus((event.overlay_status as 'approved' | 'pending_client' | null) ?? null)
     setOverlayApproved(event.overlay_approved ?? false)
     setOverlayNotes(event.overlay_notes ?? null)
+    setInfoNotes((event as any).info_notes ?? null)
     setProjectForm({
       name: event.name ?? '',
       date: event.date ? event.date.slice(0, 16) : '',
@@ -1027,6 +1030,49 @@ export function PhotographerClient() {
                 <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 24px' }}>
                   Základné informácie o akcii. Uloženie cez API bude doplnené neskôr.
                 </p>
+
+                {/* Poznámka od zadavatele */}
+                {infoNotes && (
+                  <div style={{
+                    background: '#fef9c3',
+                    border: '1px solid #fde68a',
+                    borderRadius: 10,
+                    padding: '14px 16px',
+                    display: 'flex',
+                    gap: 10,
+                    alignItems: 'flex-start',
+                    marginBottom: 20,
+                  }}>
+                    <span style={{ fontSize: 18, lineHeight: 1 }}>📝</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#92400e', marginBottom: 4 }}>
+                        Poznámka od zadavatele
+                      </div>
+                      <div style={{ fontSize: 13, color: '#78350f', lineHeight: 1.5, whiteSpace: 'pre-wrap', marginBottom: 12 }}>
+                        {infoNotes}
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <button
+                          onClick={async () => {
+                            await fetch('/api/photographer/events', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ id: selectedEvent!.id, infoNotes: null }),
+                            })
+                            setInfoNotes(null)
+                          }}
+                          style={{
+                            background: '#1a1225', color: '#fff', border: 'none',
+                            borderRadius: 8, padding: '8px 16px', fontSize: 12,
+                            fontWeight: 600, cursor: 'pointer',
+                          }}
+                        >
+                          ✓ Beru na vědomí
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 

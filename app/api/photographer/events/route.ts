@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, description, photographer_notes')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, description, photographer_notes, info_notes')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })
@@ -104,7 +104,7 @@ export async function PATCH(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, description, photographerNotes } = body
+  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, description, photographerNotes, infoNotes } = body
 
   if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
 
@@ -129,6 +129,7 @@ export async function PATCH(req: NextRequest) {
   if (overlayApprovedBy !== undefined) updatePayload.overlay_approved_by = overlayApprovedBy
   if (description !== undefined) updatePayload.description = description
   if (photographerNotes !== undefined) updatePayload.photographer_notes = photographerNotes
+  if (infoNotes !== undefined) updatePayload.info_notes = infoNotes
 
   const { data: event, error } = await supabaseAdmin
     .from('events')
