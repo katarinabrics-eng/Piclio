@@ -6,7 +6,7 @@ import { StatCard } from '@/components/piclio/StatCard'
 import { Logo } from '@/components/piclio/Logo'
 import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
-type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'settings'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings'
 
 export function PhotographerClient() {
   const [events, setEvents] = useState<EventWithStats[]>([])
@@ -42,6 +42,14 @@ export function PhotographerClient() {
   const [overlayLandscapeUploading, setOverlayLandscapeUploading] = useState(false)
   const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
   const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
+
+  const [projectForm, setProjectForm] = useState({
+    name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
+  })
+
+  function updateProjectForm(key: string, value: string) {
+    setProjectForm(prev => ({ ...prev, [key]: value }))
+  }
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
@@ -219,6 +227,14 @@ export function PhotographerClient() {
     setOverlayPortraitUrl(event.overlay_portrait_url ?? '')
     setOverlayLandscapeUrl(event.overlay_landscape_url ?? '')
     setOverlayStatus((event.overlay_status as 'approved' | 'pending_client' | null) ?? null)
+    setProjectForm({
+      name: event.name ?? '',
+      date: event.date ? event.date.slice(0, 16) : '',
+      location: event.location ?? '',
+      maxGuests: String(event.max_guests ?? ''),
+      description: '',
+      photographerNotes: '',
+    })
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`),
       fetch(`/api/photographer/unmatched?eventId=${event.id}`),
@@ -385,6 +401,7 @@ export function PhotographerClient() {
                 { key: 'guests',   label: `Hosté (${guests.length})` },
                 { key: 'unmatched', label: `Nespárované (${unmatched.length})` },
                 { key: 'upload',   label: uploadedCount > 0 ? `Upload (${uploadedCount})` : 'Upload' },
+                { key: 'project',  label: 'O projekte' },
                 { key: 'settings', label: 'Nastavení' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
@@ -769,6 +786,119 @@ export function PhotographerClient() {
 
               </div>
             )}
+
+            {/* O projekte tab */}
+            {tab === 'project' && (
+              <div style={{ background: '#fff', borderRadius: 12, padding: 28, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>O projekte</h2>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 24px' }}>
+                  Základné informácie o akcii. Uloženie cez API bude doplnené neskôr.
+                </p>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+                  {/* Názov akcie */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Názov akcie
+                    </label>
+                    <input
+                      type="text"
+                      value={projectForm.name}
+                      onChange={e => updateProjectForm('name', e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none' }}
+                    />
+                  </div>
+
+                  {/* Miesto konania */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Miesto konania
+                    </label>
+                    <input
+                      type="text"
+                      value={projectForm.location}
+                      onChange={e => updateProjectForm('location', e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none' }}
+                    />
+                  </div>
+
+                  {/* Dátum a čas */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Dátum a čas
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={projectForm.date}
+                      onChange={e => updateProjectForm('date', e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none' }}
+                    />
+                  </div>
+
+                  {/* Počet hostí */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Očakávaný počet hostí
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      value={projectForm.maxGuests}
+                      onChange={e => updateProjectForm('maxGuests', e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none' }}
+                    />
+                  </div>
+
+                  {/* Popis */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Popis / informácie o akcii
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={projectForm.description}
+                      onChange={e => updateProjectForm('description', e.target.value)}
+                      placeholder="Stručný popis akcie, program, špeciálne požiadavky…"
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
+                    />
+                  </div>
+
+                  {/* Poznámky pre fotografa — len interné, nezobrazuje sa zadávateľovi */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 4 }}>
+                      Poznámky pre fotografa
+                      <span style={{ fontSize: 11, fontWeight: 400, color: '#9ca3af', marginLeft: 8 }}>
+                        (interné — nezobrazuje sa zadávateľovi)
+                      </span>
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={projectForm.photographerNotes}
+                      onChange={e => updateProjectForm('photographerNotes', e.target.value)}
+                      placeholder="Interné poznámky, špeciálne inštrukcie…"
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
+                    />
+                  </div>
+
+                  {/* Uložiť */}
+                  <div>
+                    <button
+                      onClick={() => console.log('O projekte — uložiť:', projectForm)}
+                      style={{
+                        background: '#b7e94c', color: '#1a1225', border: 'none',
+                        borderRadius: 8, padding: '10px 24px', fontSize: 14, fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Uložiť
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            )}
+
           </>
         )}
       </div>
