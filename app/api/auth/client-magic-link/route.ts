@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     const resend = new Resend(key)
 
     await resend.emails.send({
-      from: 'Piclio <onboarding@resend.dev>',
+      from: 'Piclio <noreply@piclio.cz>',
       to: [email],
       subject: `Váš přístup k projektu ${event.name}`,
       html: `<!DOCTYPE html>

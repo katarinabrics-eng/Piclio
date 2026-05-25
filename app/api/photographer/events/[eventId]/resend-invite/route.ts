@@ -19,7 +19,7 @@ async function sendInviteEmail(
   const dashboardUrl = `${APP_URL}/dashboard/client/${slug}`
 
   await resend.emails.send({
-    from: 'Piclio <onboarding@resend.dev>',
+    from: 'Piclio <noreply@piclio.cz>',
     to: [clientEmail],
     subject: `Byli jste přizváni ke spolupráci na eventu ${eventName}`,
     html: `<!DOCTYPE html>

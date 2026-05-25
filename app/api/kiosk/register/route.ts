@@ -34,7 +34,7 @@ async function sendRegistrationEmail(
   try {
     const resend = new Resend(process.env.RESEND_API_KEY)
     await resend.emails.send({
-      from: 'Piclio <onboarding@resend.dev>',
+      from: 'Piclio <noreply@piclio.cz>',
       to: [email],
       subject: `Vítejte na ${eventName} — zde najdete své fotografie`,
       html: `<!DOCTYPE html>
