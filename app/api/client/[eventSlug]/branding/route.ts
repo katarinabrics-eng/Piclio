@@ -22,6 +22,23 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
     const form = await req.formData()
     brandColor = (form.get('brand_color') as string) || undefined
 
+    // Email banner upload
+    const bannerFile = form.get('email_banner') as File | null
+    if (bannerFile && bannerFile.size > 0) {
+      const ext = bannerFile.name.split('.').pop() ?? 'jpg'
+      const path = `banner-${event.id}-${Date.now()}.${ext}`
+      const bytes = await bannerFile.arrayBuffer()
+      await supabaseAdmin.storage.createBucket('logos', { public: true }).catch(() => {})
+      const { error } = await supabaseAdmin.storage
+        .from('logos')
+        .upload(path, bytes, { contentType: bannerFile.type, upsert: true })
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const { data: pub } = supabaseAdmin.storage.from('logos').getPublicUrl(path)
+      const emailBannerUrl = pub.publicUrl
+      await supabaseAdmin.from('events').update({ email_banner_url: emailBannerUrl }).eq('id', event.id)
+      return NextResponse.json({ ok: true, email_banner_url: emailBannerUrl })
+    }
+
     const file = form.get('logo') as File | null
     if (file && file.size > 0) {
       // Smaž staré logo pokud existuje

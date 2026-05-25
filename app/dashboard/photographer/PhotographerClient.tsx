@@ -52,6 +52,8 @@ export function PhotographerClient() {
   const [sendingInvite, setSendingInvite] = useState<string | null>(null)
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const overlayApprovedRef = useRef(false)
+  const emailLogoRef = useRef<HTMLInputElement>(null)
+  const emailBannerRef = useRef<HTMLInputElement>(null)
 
   const [projectForm, setProjectForm] = useState({
     name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
@@ -59,6 +61,17 @@ export function PhotographerClient() {
   const [projectSaving, setProjectSaving] = useState(false)
   const [projectSaveMsg, setProjectSaveMsg] = useState('')
   const [deletingEvent, setDeletingEvent] = useState<string | null>(null)
+
+  // Email settings
+  const [emailLogoFile, setEmailLogoFile] = useState<File | null>(null)
+  const [emailLogoUrl, setEmailLogoUrl] = useState('')
+  const [emailBannerFile, setEmailBannerFile] = useState<File | null>(null)
+  const [emailBannerUrl, setEmailBannerUrl] = useState('')
+  const [emailBrandColor, setEmailBrandColor] = useState('#b7e94c')
+  const [emailSubject, setEmailSubject] = useState('')
+  const [emailBody, setEmailBody] = useState('')
+  const [savingEmailSettings, setSavingEmailSettings] = useState(false)
+  const [emailSettingsMsg, setEmailSettingsMsg] = useState('')
 
   function updateProjectForm(key: string, value: string) {
     setProjectForm(prev => ({ ...prev, [key]: value }))
@@ -100,6 +113,55 @@ export function PhotographerClient() {
 
   function updateForm(key: string, value: string) {
     setForm(prev => ({ ...prev, [key]: value }))
+  }
+
+  async function saveEmailSettings() {
+    if (!selectedEvent) return
+    setSavingEmailSettings(true)
+    setEmailSettingsMsg('')
+    try {
+      // Upload logo if new file selected
+      if (emailLogoFile) {
+        const form = new FormData()
+        form.append('logo', emailLogoFile)
+        form.append('brand_color', emailBrandColor)
+        const res = await fetch(`/api/client/${selectedEvent.slug}/branding`, { method: 'PUT', body: form })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json.error)
+        setEmailLogoUrl(json.client_logo_url ?? emailLogoUrl)
+        setEmailLogoFile(null)
+      }
+      // Upload banner if new file selected
+      let bannerUrl = emailBannerUrl
+      if (emailBannerFile) {
+        const form = new FormData()
+        form.append('email_banner', emailBannerFile)
+        const res = await fetch(`/api/client/${selectedEvent.slug}/branding`, { method: 'PUT', body: form })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json.error)
+        bannerUrl = json.email_banner_url ?? emailBannerUrl
+        setEmailBannerUrl(bannerUrl)
+        setEmailBannerFile(null)
+      }
+      // Save text settings + brand color
+      const res = await fetch('/api/photographer/events', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: selectedEvent.id,
+          brandColor: emailBrandColor,
+          emailBannerUrl: bannerUrl,
+          emailSubject,
+          emailBody,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
+      setEmailSettingsMsg('✓ Uloženo')
+    } catch (e: any) {
+      setEmailSettingsMsg(`✗ ${e.message}`)
+    } finally {
+      setSavingEmailSettings(false)
+    }
   }
 
   function openEdit(event: EventWithStats) {
@@ -346,6 +408,14 @@ export function PhotographerClient() {
     setOverlayApproved(event.overlay_approved ?? false)
     setOverlayNotes(event.overlay_notes ?? null)
     setInfoNotes((event as any).info_notes ?? null)
+    setEmailLogoUrl((event as any).client_logo_url ?? '')
+    setEmailBannerUrl((event as any).email_banner_url ?? '')
+    setEmailBrandColor((event as any).brand_color ?? '#b7e94c')
+    setEmailSubject((event as any).email_subject ?? '')
+    setEmailBody((event as any).email_body ?? '')
+    setEmailLogoFile(null)
+    setEmailBannerFile(null)
+    setEmailSettingsMsg('')
     setProjectForm({
       name: event.name ?? '',
       date: event.date ? event.date.slice(0, 16) : '',
@@ -699,6 +769,206 @@ export function PhotographerClient() {
                       Zadavatel zatím nenahrál podklady.
                     </div>
                   )}
+                </div>
+
+                {/* Nastavení emailu pro hosty */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Nastavení emailu pro hosty</h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>
+                    Přizpůsobte email, který hosté obdrží s odkazem na svou galerii.
+                  </p>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
+
+                    {/* LEFT — settings */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+                      {/* Logo */}
+                      <div>
+                        <div style={emailLabelStyle}>Logo klienta / firmy</div>
+                        <div
+                          onClick={() => emailLogoRef.current?.click()}
+                          style={{
+                            border: '2px dashed #d1d5db', borderRadius: 10, padding: '14px 16px',
+                            cursor: 'pointer', textAlign: 'center', background: '#fafafa',
+                            transition: 'border-color 0.15s',
+                          }}
+                        >
+                          {emailLogoUrl ? (
+                            <img src={emailLogoUrl} alt="" style={{ maxHeight: 56, maxWidth: '100%', objectFit: 'contain', display: 'block', margin: '0 auto 8px' }} />
+                          ) : (
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>🖼</div>
+                          )}
+                          <div style={{ fontSize: 12, color: '#6b7280' }}>
+                            {emailLogoFile ? emailLogoFile.name : 'PNG nebo SVG, průhledné · doporučeno 400 × 120 px'}
+                          </div>
+                        </div>
+                        <input ref={emailLogoRef} type="file" accept="image/png,image/svg+xml" style={{ display: 'none' }}
+                          onChange={e => {
+                            const f = e.target.files?.[0]
+                            if (f) { setEmailLogoFile(f); setEmailLogoUrl(URL.createObjectURL(f)) }
+                          }} />
+                      </div>
+
+                      {/* Banner */}
+                      <div>
+                        <div style={emailLabelStyle}>Grafika hlavičky emailu</div>
+                        <div
+                          onClick={() => emailBannerRef.current?.click()}
+                          style={{
+                            border: '2px dashed #d1d5db', borderRadius: 10, padding: '14px 16px',
+                            cursor: 'pointer', textAlign: 'center', background: '#fafafa',
+                          }}
+                        >
+                          {emailBannerUrl ? (
+                            <img src={emailBannerUrl} alt="" style={{ maxHeight: 60, maxWidth: '100%', objectFit: 'cover', borderRadius: 6, display: 'block', margin: '0 auto 8px' }} />
+                          ) : (
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>🎨</div>
+                          )}
+                          <div style={{ fontSize: 12, color: '#6b7280' }}>
+                            {emailBannerFile ? emailBannerFile.name : 'Banner eventu · 1200 × 400 px · JPG nebo PNG'}
+                          </div>
+                        </div>
+                        <input ref={emailBannerRef} type="file" accept="image/jpeg,image/png" style={{ display: 'none' }}
+                          onChange={e => {
+                            const f = e.target.files?.[0]
+                            if (f) { setEmailBannerFile(f); setEmailBannerUrl(URL.createObjectURL(f)) }
+                          }} />
+                      </div>
+
+                      {/* Brand color */}
+                      <div>
+                        <div style={emailLabelStyle}>Akcentní barva eventu / firmy</div>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                          {['#b7e94c', '#1a1225', '#60a5fa', '#f59e0b', '#f472b6', '#e11d48'].map(c => (
+                            <button key={c} onClick={() => setEmailBrandColor(c)} style={{
+                              width: 28, height: 28, borderRadius: '50%', background: c, border: 'none',
+                              cursor: 'pointer', flexShrink: 0,
+                              outline: emailBrandColor === c ? `3px solid ${c}` : 'none',
+                              outlineOffset: 2,
+                              boxShadow: emailBrandColor === c ? '0 0 0 2px #fff' : 'none',
+                            }} />
+                          ))}
+                          <input type="color" value={emailBrandColor} onChange={e => setEmailBrandColor(e.target.value)}
+                            style={{ width: 28, height: 28, border: '1px solid #d1d5db', borderRadius: '50%', padding: 2, cursor: 'pointer', flexShrink: 0 }} />
+                          <span style={{ fontSize: 13, fontFamily: 'monospace', color: '#374151' }}>{emailBrandColor}</span>
+                        </div>
+                      </div>
+
+                      <div style={{ borderTop: '1px solid #f3f4f6' }} />
+
+                      {/* Subject */}
+                      <div>
+                        <label style={emailLabelStyle}>Předmět emailu</label>
+                        <input
+                          type="text"
+                          value={emailSubject}
+                          onChange={e => setEmailSubject(e.target.value)}
+                          placeholder="Vaše fotografie z akce {{event_name}} jsou připraveny"
+                          style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, outline: 'none' }}
+                        />
+                      </div>
+
+                      {/* Body */}
+                      <div>
+                        <label style={emailLabelStyle}>Tělo emailu</label>
+                        <textarea
+                          rows={4}
+                          value={emailBody}
+                          onChange={e => setEmailBody(e.target.value)}
+                          placeholder={'Dobrý den,\npřipravili jsme pro vás fotografie z akce {{event_name}}.\n\nKlikněte na odkaz níže a prohlédněte si svoji galerii.'}
+                          style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, outline: 'none', resize: 'vertical' }}
+                        />
+                      </div>
+
+                      {/* Variable tags */}
+                      <div>
+                        <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6, fontWeight: 600 }}>Dostupné proměnné</div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          {['{{event_name}}', '{{gallery_link}}', '{{guest_name}}', '{{photo_count}}'].map(v => (
+                            <code key={v} style={{ fontSize: 11, background: '#f3f4f6', padding: '3px 8px', borderRadius: 6, color: '#374151', cursor: 'pointer' }}
+                              onClick={() => setEmailBody(prev => prev + v)}
+                            >{v}</code>
+                          ))}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* RIGHT — live preview */}
+                    <div>
+                      <div style={emailLabelStyle}>Náhled emailu</div>
+                      <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #e5e7eb', fontSize: 13, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+                        {/* Header */}
+                        <div style={{ background: '#1a1225', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 56 }}>
+                          {emailLogoUrl
+                            ? <img src={emailLogoUrl} alt="" style={{ maxHeight: 36, maxWidth: 160, objectFit: 'contain' }} />
+                            : <span style={{ color: '#b7e94c', fontWeight: 700, fontSize: 16, letterSpacing: '-0.5px' }}>Piclio</span>
+                          }
+                        </div>
+                        {/* Accent bar */}
+                        <div style={{ height: 4, background: emailBrandColor }} />
+                        {/* Banner */}
+                        {emailBannerUrl
+                          ? <img src={emailBannerUrl} alt="" style={{ width: '100%', height: 80, objectFit: 'cover', display: 'block' }} />
+                          : <div style={{ height: 60, background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <span style={{ fontSize: 11, color: '#9ca3af' }}>banner · 1200 × 400 px</span>
+                            </div>
+                        }
+                        {/* Body */}
+                        <div style={{ padding: '16px 20px', background: '#fff' }}>
+                          <div style={{ fontSize: 11, color: '#6b7280', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Předmět</div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: '#111827', marginBottom: 14 }}>
+                            {(emailSubject || 'Vaše fotografie z akce {{event_name}} jsou připraveny')
+                              .replace(/\{\{event_name\}\}/g, selectedEvent?.name ?? 'Název akce')
+                              .replace(/\{\{guest_name\}\}/g, 'Jan Novák')
+                              .replace(/\{\{photo_count\}\}/g, '12')}
+                          </div>
+                          <div style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, whiteSpace: 'pre-wrap', marginBottom: 16 }}>
+                            {(emailBody || 'Dobrý den,\npřipravili jsme pro vás fotografie z akce {{event_name}}.\n\nKlikněte na odkaz níže a prohlédněte si svoji galerii.')
+                              .replace(/\{\{event_name\}\}/g, selectedEvent?.name ?? 'Název akce')
+                              .replace(/\{\{guest_name\}\}/g, 'Jan Novák')
+                              .replace(/\{\{photo_count\}\}/g, '12')
+                              .replace(/\{\{gallery_link\}\}/g, 'https://piclio.cz/gallery/...')}
+                          </div>
+                          <a href="#" onClick={e => e.preventDefault()} style={{
+                            display: 'block', background: emailBrandColor, color: '#1a1225',
+                            textDecoration: 'none', padding: '10px 16px', borderRadius: 8,
+                            fontWeight: 700, textAlign: 'center', fontSize: 13,
+                          }}>
+                            Otevřít galerii →
+                          </a>
+                        </div>
+                        {/* Footer */}
+                        <div style={{ padding: '10px 20px', background: '#f9fafb', borderTop: '1px solid #f3f4f6', fontSize: 11, color: '#9ca3af', textAlign: 'center' }}>
+                          Piclio by Lucifera Studio
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Save button */}
+                  <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid #f3f4f6', paddingTop: 20 }}>
+                    <button
+                      onClick={saveEmailSettings}
+                      disabled={savingEmailSettings}
+                      style={{
+                        background: savingEmailSettings ? '#e5e7eb' : '#b7e94c',
+                        color: savingEmailSettings ? '#9ca3af' : '#1a1225',
+                        border: 'none', borderRadius: 8, padding: '10px 24px',
+                        fontSize: 14, fontWeight: 700,
+                        cursor: savingEmailSettings ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      {savingEmailSettings ? 'Ukládám…' : 'Uložit nastavení emailu'}
+                    </button>
+                    {emailSettingsMsg && (
+                      <span style={{ fontSize: 13, color: emailSettingsMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
+                        {emailSettingsMsg}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Section header */}
@@ -1716,6 +1986,11 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
       )}
     </div>
   )
+}
+
+const emailLabelStyle: React.CSSProperties = {
+  fontSize: 12, fontWeight: 600, color: '#6b7280',
+  textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8, display: 'block',
 }
 
 function Stat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {
