@@ -87,6 +87,7 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
   if (brandColor !== undefined) update.brand_color = brandColor
 
   console.log('Branding update object:', { logoUrl, brandColor, update, keys: Object.keys(update) })
+  console.log('SAVING TO DB:', update)
 
   if (Object.keys(update).length === 0)
     return NextResponse.json({ error: 'Nothing to update' }, { status: 400 })

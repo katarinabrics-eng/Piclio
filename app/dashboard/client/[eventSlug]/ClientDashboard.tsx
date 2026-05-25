@@ -101,6 +101,8 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       if (!res.ok) throw new Error(json.error)
       if (json.client_logo_url) setLogoUrl(json.client_logo_url)
       if (json.brand_color) setBrandColor(json.brand_color)
+      console.log('BEFORE RELOAD — brand_color from response:', json.brand_color)
+      console.log('BEFORE RELOAD — current brandColor state:', brandColor)
       setBrandingMsg('✓ Branding uložen')
       window.location.reload()
     } catch (e: any) {
