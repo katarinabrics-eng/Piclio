@@ -35,6 +35,9 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [savingBranding, setSavingBranding] = useState(false)
   const [brandingMsg, setBrandingMsg] = useState('')
 
+  const [location, setLocation] = useState(event.location ?? '')
+  const [date, setDate] = useState(event.date ? String(event.date).slice(0, 10) : '')
+  const [maxGuests, setMaxGuests] = useState(String(event.max_guests ?? ''))
   const [description, setDescription] = useState((event as any).description ?? '')
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState('')
@@ -66,7 +69,12 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       const res = await fetch(`/api/client/${eventSlug}/branding`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ description }),
+        body: JSON.stringify({
+          location,
+          date,
+          maxGuests: parseInt(maxGuests) || undefined,
+          description,
+        }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
       setInfoMsg('✓ Uloženo')
@@ -351,17 +359,38 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
               <h2 style={sectionTitle}>Informace o akci</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 16 }}>
                 <div>
-                  <div style={labelStyle}>Název akce</div>
+                  <div style={labelStyle}>Název akce <span style={{ fontSize: 10, color: '#9ca3af', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>— nelze změnit</span></div>
                   <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.name}</div>
                 </div>
                 <div>
-                  <div style={labelStyle}>Místo konání</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.location ?? '—'}</div>
+                  <label style={labelStyle}>Místo konání</label>
+                  <input
+                    style={inputStyle}
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
+                    placeholder="Např. Praha, Hotel XY"
+                  />
                 </div>
                 <div>
-                  <div style={labelStyle}>Datum</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{new Date(event.date).toLocaleDateString('cs-CZ')}</div>
+                  <label style={labelStyle}>Datum</label>
+                  <input
+                    type="date"
+                    style={inputStyle}
+                    value={date}
+                    onChange={e => setDate(e.target.value)}
+                  />
                 </div>
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <label style={labelStyle}>Očekávaný počet hostů</label>
+                <input
+                  type="number"
+                  style={{ ...inputStyle, width: 160 }}
+                  value={maxGuests}
+                  onChange={e => setMaxGuests(e.target.value)}
+                  min={1}
+                  placeholder="100"
+                />
               </div>
               <div style={{ marginBottom: 16 }}>
                 <label style={labelStyle}>Popis akce</label>

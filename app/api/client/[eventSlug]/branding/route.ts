@@ -66,10 +66,16 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
     }
-    if (body.description !== undefined) {
+    // Info fields: location, date, maxGuests, description
+    const infoUpdate: Record<string, unknown> = {}
+    if (body.location !== undefined) infoUpdate.location = body.location
+    if (body.date !== undefined) infoUpdate.date = body.date
+    if (body.maxGuests !== undefined) infoUpdate.max_guests = body.maxGuests
+    if (body.description !== undefined) infoUpdate.description = body.description
+    if (Object.keys(infoUpdate).length > 0) {
       const { error } = await supabaseAdmin
         .from('events')
-        .update({ description: body.description })
+        .update(infoUpdate)
         .eq('id', event.id)
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ ok: true })
