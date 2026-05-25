@@ -23,7 +23,7 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
     const file = form.get('logo') as File | null
     if (file && file.size > 0) {
       const ext = file.name.split('.').pop() ?? 'png'
-      const path = `logos/${event.id}.${ext}`
+      const path = `${event.id}.${ext}`
       const bytes = await file.arrayBuffer()
       await supabaseAdmin.storage.createBucket('logos', { public: true }).catch(() => {})
       const { error } = await supabaseAdmin.storage
