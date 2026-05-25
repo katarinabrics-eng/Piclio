@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
+import {
+  RekognitionClient,
+  CreateCollectionCommand,
+  IndexFacesCommand,
+} from '@aws-sdk/client-rekognition'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -8,6 +13,16 @@ const supabase = createClient(
 )
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.vercel.app'
+
+function getRekognitionClient() {
+  return new RekognitionClient({
+    region: process.env.AWS_REGION ?? 'eu-north-1',
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
+  })
+}
 
 async function sendRegistrationEmail(
   email: string,
@@ -164,11 +179,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create guest' }, { status: 500 })
   }
 
-  // Store selfie — best-effort, non-blocking
+  // Store selfie + index face in Rekognition — best-effort, non-blocking
   if (faceImageBase64) {
     try {
       const base64Data = faceImageBase64.replace(/^data:image\/\w+;base64,/, '')
       const buffer = Buffer.from(base64Data, 'base64')
+
+      // Upload selfie to Supabase Storage
       await supabase.storage.createBucket('selfies', { public: false }).catch(() => {})
       await supabase.storage
         .from('selfies')
@@ -176,8 +193,40 @@ export async function POST(req: NextRequest) {
           contentType: 'image/jpeg',
           upsert: true,
         })
+
+      // Index face in AWS Rekognition
+      try {
+        const rek = getRekognitionClient()
+        const collectionId = `piclio-${activeEvent.id}`
+
+        // Create collection if it doesn't exist yet
+        await rek.send(new CreateCollectionCommand({ CollectionId: collectionId }))
+          .catch((err: Error) => {
+            if (err.name !== 'ResourceAlreadyExistsException') throw err
+          })
+
+        // Index the face
+        const indexResult = await rek.send(new IndexFacesCommand({
+          CollectionId: collectionId,
+          Image: { Bytes: buffer },
+          ExternalImageId: newGuest.id,
+          MaxFaces: 1,
+          DetectionAttributes: [],
+        }))
+
+        const faceId = indexResult.FaceRecords?.[0]?.Face?.FaceId
+        if (faceId) {
+          await supabase
+            .from('guests')
+            .update({ rekognition_face_id: faceId })
+            .eq('id', newGuest.id)
+          console.log(`Rekognition face indexed: ${faceId} → guest ${newGuest.id}`)
+        }
+      } catch (rekErr) {
+        console.error(`Rekognition indexing failed for guest ${newGuest.id}:`, rekErr)
+      }
     } catch {
-      console.log(`Face image received for guest ${newGuest.id}, length: ${faceImageBase64.length}`)
+      console.log(`Selfie upload failed for guest ${newGuest.id}`)
     }
   }
 
