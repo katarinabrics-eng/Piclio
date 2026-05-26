@@ -766,9 +766,7 @@ export function PhotographerClient() {
                           </button>
                         </div>
                         <div style={{ padding: '10px 12px' }}>
-                          {photo.ocr_number && (
-                            <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>OCR: #{photo.ocr_number}</div>
-                          )}
+
                           <select
                             value={assignTarget[photo.id] ?? ''}
                             onChange={e => setAssignTarget(prev => ({ ...prev, [photo.id]: e.target.value }))}

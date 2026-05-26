@@ -30,12 +30,14 @@ export async function GET(req: NextRequest) {
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
   const paths = photos.map(p => p.storage_path)
+  console.log('unmatched paths to sign:', paths)
   let signedUrls: { signedUrl: string | null }[] | null = null
   try {
     const { data, error: urlError } = await supabaseAdmin.storage
       .from('photos')
       .createSignedUrls(paths, 3600)
     if (urlError) console.error('createSignedUrls batch error:', urlError.message)
+    console.log('batch signedUrls result:', data?.map((d, i) => ({ path: paths[i], ok: !!d.signedUrl })))
     signedUrls = data
   } catch (e) {
     console.error('createSignedUrls threw:', e)
@@ -48,6 +50,7 @@ export async function GET(req: NextRequest) {
         try {
           const { data } = await supabaseAdmin.storage
             .from('photos').createSignedUrl(path, 3600)
+          console.log('individual signedUrl:', path, '->', data?.signedUrl ? 'OK' : 'MISSING')
           if (!data?.signedUrl) console.warn('no signedUrl for path:', path)
           return { signedUrl: data?.signedUrl ?? null }
         } catch (e) {
