@@ -21,7 +21,7 @@ async function signPhotos(photos: any[], expiresIn: number): Promise<any[]> {
 export default async function ClientDashboardPage({ params }: Props) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_approved_by, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status, description')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_approved_by, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_mode, description')
     .eq('slug', params.eventSlug)
     .single()
 
@@ -79,6 +79,7 @@ export default async function ClientDashboardPage({ params }: Props) {
         slideshow_playlist: event.slideshow_playlist ?? [],
         public_gallery: event.public_gallery ?? false,
         overlay_approved: event.overlay_approved ?? false,
+        overlay_mode: (event.overlay_mode ?? 'none') as 'custom' | 'piclio' | 'none',
       }}
       guests={guestList}
       stats={{
