@@ -739,21 +739,16 @@ export function PhotographerClient() {
                 {unmatched.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Všechny fotky jsou spárovány ✓</div>
                 ) : (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'flex-start' }}>
                     {unmatched.map((photo, idx) => (
-                      <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                      <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0, minWidth: 160 }}>
                         {/* Thumbnail — click opens lightbox, trash button on hover */}
-                        <div style={{ position: 'relative', overflow: 'hidden', aspectRatio: '3/2' }}>
+                        <div style={{ position: 'relative' }}>
                           <img
                             src={photo.url}
                             alt={photo.filename}
                             onClick={() => setLightboxIndex(idx)}
-                            onLoad={e => {
-                              const img = e.currentTarget
-                              const isPortrait = img.naturalHeight > img.naturalWidth
-                              if (img.parentElement) img.parentElement.style.aspectRatio = isPortrait ? '2/3' : '3/2'
-                            }}
-                            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
+                            style={{ height: 340, width: 'auto', display: 'block', cursor: 'zoom-in' }}
                           />
                           {/* Trash button — top-right corner */}
                           <button
