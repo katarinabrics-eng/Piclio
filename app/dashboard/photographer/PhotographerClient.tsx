@@ -47,6 +47,8 @@ export function PhotographerClient() {
   const [overlayStatus, setOverlayStatus] = useState<'approved' | 'pending_client' | null>(null)
   const [overlayApproved, setOverlayApproved] = useState(false)
   const [overlayNotes, setOverlayNotes] = useState<string | null>(null)
+  const [overlayMode, setOverlayMode] = useState<'custom' | 'piclio' | 'none'>('none')
+  const [savingOverlayMode, setSavingOverlayMode] = useState(false)
   const [infoNotes, setInfoNotes] = useState<string | null>(null)
   const [overlayToast, setOverlayToast] = useState(false)
   const [inviteToast, setInviteToast] = useState<'ok' | 'error' | null>(null)
@@ -446,6 +448,7 @@ export function PhotographerClient() {
     setOverlayStatus((event.overlay_status as 'approved' | 'pending_client' | null) ?? null)
     setOverlayApproved(event.overlay_approved ?? false)
     setOverlayNotes(event.overlay_notes ?? null)
+    setOverlayMode((event.overlay_mode as 'custom' | 'piclio' | 'none') ?? 'none')
     setInfoNotes((event as any).info_notes ?? null)
     setEmailLogoUrl((event as any).client_logo_url ?? '')
     setEmailBannerUrl((event as any).email_banner_url ?? '')
@@ -485,6 +488,18 @@ export function PhotographerClient() {
     } else {
       alert('Nepodařilo se smazat fotku.')
     }
+  }
+
+  async function saveOverlayMode(mode: 'custom' | 'piclio' | 'none') {
+    if (!selectedEvent) return
+    setOverlayMode(mode)
+    setSavingOverlayMode(true)
+    await fetch('/api/photographer/events', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: selectedEvent.id, overlayMode: mode }),
+    })
+    setSavingOverlayMode(false)
   }
 
   async function assignPhoto(photoId: string) {
@@ -1072,9 +1087,47 @@ export function PhotographerClient() {
                   </div>
                 </div>
 
+                {/* Overlay mode switcher */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Režim overlaya</h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>
+                    Zvolte, jaká grafika bude aplikována na fotky před doručením hostům.
+                    {savingOverlayMode && <span style={{ marginLeft: 8, color: '#9ca3af' }}>Ukládám…</span>}
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+                    {([
+                      { value: 'custom' as const, icon: '🖼', label: 'Vlastný overlay', desc: 'Logo a grafika klienta nasadená na fotky' },
+                      { value: 'piclio' as const, icon: '💧', label: 'Piclio watermark', desc: 'Malé Piclio logo vľavo hore' },
+                      { value: 'none'   as const, icon: '✕',  label: 'Bez overlaya',    desc: 'Čisté fotky, hosť dostane originál' },
+                    ] as const).map(opt => (
+                      <div
+                        key={opt.value}
+                        onClick={() => saveOverlayMode(opt.value)}
+                        style={{
+                          border: overlayMode === opt.value ? '2px solid #b7e94c' : '1.5px solid #e5e7eb',
+                          borderRadius: 10,
+                          padding: '14px 16px',
+                          cursor: 'pointer',
+                          background: overlayMode === opt.value ? '#f9ffe6' : '#fafafa',
+                          transition: 'border-color 0.15s, background 0.15s',
+                        }}
+                      >
+                        <div style={{ fontSize: 20, marginBottom: 6 }}>{opt.icon}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: '#111827', marginBottom: 3 }}>{opt.label}</div>
+                        <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.4 }}>{opt.desc}</div>
+                        {overlayMode === opt.value && (
+                          <div style={{ marginTop: 8, fontSize: 11, fontWeight: 600, color: '#4d7c0f', background: '#ecfccb', borderRadius: 4, padding: '2px 7px', display: 'inline-block' }}>
+                            Aktívny
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Section header */}
                 <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay</h2>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay súbory</h2>
                   <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
                     Nahrajte PNG overlay vrstvené přes fotografie hostů. Každá orientace vyžaduje samostatný soubor.
                   </p>

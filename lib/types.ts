@@ -21,6 +21,7 @@ export interface PiclioEvent {
   overlay_landscape_url: string | null
   overlay_status: 'approved' | 'pending_client' | null
   overlay_approved_by: 'photographer' | 'client' | null
+  overlay_mode: 'custom' | 'piclio' | 'none'
 }
 
 export interface Guest {
