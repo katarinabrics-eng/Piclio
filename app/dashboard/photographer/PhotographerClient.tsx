@@ -491,11 +491,17 @@ export function PhotographerClient() {
     const guestId = assignTarget[photoId]
     if (!guestId) return
     setAssigningPhoto(photoId)
-    await fetch('/api/photographer/assign', {
+    const res = await fetch('/api/photographer/assign', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ photoId, guestId }),
     })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      alert(`Přiřazení selhalo: ${err.error ?? res.status}`)
+      setAssigningPhoto(null)
+      return
+    }
     setUnmatched(prev => prev.filter(p => p.id !== photoId))
     setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: Math.max(0, prev.unmatchedCount - 1) } : prev)
     setGuests(prev => prev.map(g =>

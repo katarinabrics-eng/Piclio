@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const { error: pgError } = await supabaseAdmin
     .from('photo_guests')
-    .upsert({ photo_id: photoId, guest_id: guestId }, { onConflict: 'photo_id,guest_id' })
+    .upsert({ photo_id: photoId, guest_id: guestId, assigned_by: 'manual' }, { onConflict: 'photo_id,guest_id' })
 
   if (pgError) return NextResponse.json({ error: pgError.message }, { status: 500 })
 

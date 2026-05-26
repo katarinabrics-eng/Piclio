@@ -32,12 +32,30 @@ export async function GET(req: NextRequest) {
   const paths = photos.map(p => p.storage_path)
   let signedUrls: { signedUrl: string | null }[] | null = null
   try {
-    const { data } = await supabaseAdmin.storage
+    const { data, error: urlError } = await supabaseAdmin.storage
       .from('photos')
-      .createSignedUrls(paths, 3600) // 1h
+      .createSignedUrls(paths, 3600)
+    if (urlError) console.error('createSignedUrls batch error:', urlError.message)
     signedUrls = data
   } catch (e) {
-    console.error('createSignedUrls failed:', e)
+    console.error('createSignedUrls threw:', e)
+  }
+  // Fallback: individual signed URL calls for any path that got no URL
+  if (!signedUrls || signedUrls.some(s => !s.signedUrl)) {
+    signedUrls = await Promise.all(
+      paths.map(async (path, i) => {
+        if (signedUrls?.[i]?.signedUrl) return signedUrls[i]
+        try {
+          const { data } = await supabaseAdmin.storage
+            .from('photos').createSignedUrl(path, 3600)
+          if (!data?.signedUrl) console.warn('no signedUrl for path:', path)
+          return { signedUrl: data?.signedUrl ?? null }
+        } catch (e) {
+          console.error('createSignedUrl failed for', path, e)
+          return { signedUrl: null }
+        }
+      })
+    )
   }
 
   const photosWithUrls = photos.map((p, i) => ({
