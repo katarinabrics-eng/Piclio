@@ -36,22 +36,39 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
       return Array.isArray(p) ? p : [p]
     })
 
+  console.log('gallery guest_id:', guest.id, 'photo_guests rows:', photoGuests?.length ?? 0, 'photos:', photos.length)
+
   if (photos.length === 0) {
     return NextResponse.json({ guest, event, photos: [] })
   }
 
   const paths = photos.map((p: any) => p.storage_path)
-  const { data: signedUrls } = await supabaseAdmin.storage
-    .from('photos')
-    .createSignedUrls(paths, 172800) // 48h
 
-  const urlMap = Object.fromEntries(
-    (signedUrls ?? []).map(s => [s.path, s.signedUrl])
-  )
+  // Batch signed URLs with individual fallback for any that fail
+  const signedUrlMap: Record<string, string> = {}
+  try {
+    const { data, error: urlError } = await supabaseAdmin.storage
+      .from('photos').createSignedUrls(paths, 172800)
+    if (urlError) console.error('gallery createSignedUrls error:', urlError.message)
+    for (const item of data ?? []) {
+      if (item.path && item.signedUrl) signedUrlMap[item.path] = item.signedUrl
+    }
+  } catch (e) {
+    console.error('gallery createSignedUrls threw:', e)
+  }
+  // Fallback: individual call for any path that got no URL
+  await Promise.all(paths.map(async path => {
+    if (signedUrlMap[path]) return
+    try {
+      const { data } = await supabaseAdmin.storage.from('photos').createSignedUrl(path, 172800)
+      if (data?.signedUrl) signedUrlMap[path] = data.signedUrl
+      else console.warn('gallery: no signedUrl for path:', path)
+    } catch (e) { console.error('gallery: createSignedUrl failed for', path, e) }
+  }))
 
   const photosWithUrls = photos.map((p: any) => ({
     id: p.id,
-    url: urlMap[p.storage_path] ?? '',
+    url: signedUrlMap[p.storage_path] ?? '',
     filename: p.filename,
     taken_at: p.taken_at,
     uploaded_at: p.uploaded_at,
