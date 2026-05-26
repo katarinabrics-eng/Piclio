@@ -371,6 +371,15 @@ export function PhotographerClient() {
     }
   }, [selectedEvent])
 
+  // Re-fetch unmatched photos whenever the unmatched tab is opened
+  useEffect(() => {
+    if (tab !== 'unmatched' || !selectedEvent) return
+    fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`)
+      .then(r => r.json())
+      .then(d => setUnmatched(d.photos ?? []))
+      .catch(() => {})
+  }, [tab, selectedEvent])
+
   async function deleteEvent(ev: EventWithStats) {
     const confirmed = window.confirm(
       `Opravdu smazat "${ev.name}"?\nSmažou se všichni hosté a fotky. Akce je nevratná.`
