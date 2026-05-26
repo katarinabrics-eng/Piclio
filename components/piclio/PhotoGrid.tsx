@@ -17,12 +17,11 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
           to   { opacity: 1; transform: scale(1); }
         }
         .piclio-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 8px;
+          columns: 3;
+          column-gap: 8px;
         }
         @media (max-width: 600px) {
-          .piclio-grid { grid-template-columns: repeat(2, 1fr); }
+          .piclio-grid { columns: 2; }
         }
       `}</style>
       <div className="piclio-grid">
@@ -31,10 +30,10 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
             key={photo.id}
             onClick={() => onPhotoClick(index)}
             style={{
-              aspectRatio: '3/2',
+              breakInside: 'avoid',
+              marginBottom: 8,
+              width: '100%',
               cursor: 'pointer',
-              borderRadius: 8,
-              overflow: 'hidden',
               animation: newPhotoIds?.has(photo.id) ? 'piclio-fadein 0.5s ease' : 'none',
             }}
           >
@@ -42,7 +41,7 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
               src={photo.url}
               alt={photo.filename}
               loading="lazy"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'opacity 0.15s' }}
+              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 8, transition: 'opacity 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             />
