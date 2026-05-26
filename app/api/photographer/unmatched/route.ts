@@ -37,13 +37,18 @@ export async function GET(req: NextRequest) {
       .from('photos')
       .createSignedUrls(paths, 86400)
     if (urlError) console.error('createSignedUrls batch error:', urlError.message)
-    console.log('batch signedUrls result:', data?.map((d, i) => ({ path: paths[i], ok: !!d.signedUrl })))
+    // Per-path result
+    for (let i = 0; i < paths.length; i++) {
+      const url = data?.[i]?.signedUrl
+      console.log(`signed [${i}] path=${paths[i]} ok=${!!url} url=${url ? url.slice(0, 80) + '...' : 'NULL'}`)
+    }
     signedUrls = data
   } catch (e) {
     console.error('createSignedUrls threw:', e)
   }
   // Fallback: individual signed URL calls for any path that got no URL
   if (!signedUrls || signedUrls.some(s => !s.signedUrl)) {
+    console.log('fallback: running individual createSignedUrl for missing paths')
     signedUrls = await Promise.all(
       paths.map(async (path, i) => {
         if (signedUrls?.[i]?.signedUrl) return signedUrls[i]
