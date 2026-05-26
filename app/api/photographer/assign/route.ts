@@ -41,5 +41,25 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Index face into Rekognition — best-effort, never blocks the response
+  try {
+    const { data: photo } = await supabaseAdmin
+      .from('photos')
+      .select('event_id')
+      .eq('id', photoId)
+      .single()
+
+    if (photo?.event_id) {
+      const backendUrl = process.env.BACKEND_URL ?? 'https://piclio-backend.fly.dev'
+      fetch(`${backendUrl}/index-face`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photo_id: photoId, guest_id: guestId, event_id: photo.event_id }),
+      }).catch(e => console.warn('index-face call failed:', e))
+    }
+  } catch (e) {
+    console.warn('index-face setup failed:', e)
+  }
+
   return NextResponse.json({ success: true })
 }
