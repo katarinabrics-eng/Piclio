@@ -34,13 +34,22 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
               width: '100%',
               cursor: 'pointer',
               animation: newPhotoIds?.has(photo.id) ? 'piclio-fadein 0.5s ease' : 'none',
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 8,
+              aspectRatio: '3/2',
             }}
           >
             <img
               src={photo.url}
               alt={photo.filename}
               loading="lazy"
-              style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 8, transition: 'opacity 0.15s' }}
+              onLoad={e => {
+                const img = e.currentTarget
+                const isPortrait = img.naturalHeight > img.naturalWidth
+                if (img.parentElement) img.parentElement.style.aspectRatio = isPortrait ? '2/3' : '3/2'
+              }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', borderRadius: 8, transition: 'opacity 0.15s' }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             />

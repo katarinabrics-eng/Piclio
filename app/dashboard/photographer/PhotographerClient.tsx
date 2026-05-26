@@ -743,12 +743,17 @@ export function PhotographerClient() {
                     {unmatched.map((photo, idx) => (
                       <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                         {/* Thumbnail — click opens lightbox, trash button on hover */}
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', overflow: 'hidden', aspectRatio: '3/2' }}>
                           <img
                             src={photo.url}
                             alt={photo.filename}
                             onClick={() => setLightboxIndex(idx)}
-                            style={{ width: '100%', height: 160, objectFit: 'cover', objectPosition: 'top', display: 'block', cursor: 'zoom-in' }}
+                            onLoad={e => {
+                              const img = e.currentTarget
+                              const isPortrait = img.naturalHeight > img.naturalWidth
+                              if (img.parentElement) img.parentElement.style.aspectRatio = isPortrait ? '2/3' : '3/2'
+                            }}
+                            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
                           />
                           {/* Trash button — top-right corner */}
                           <button
