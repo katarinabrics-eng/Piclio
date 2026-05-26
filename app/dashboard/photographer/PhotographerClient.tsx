@@ -1339,7 +1339,7 @@ export function PhotographerClient() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {([
                       { label: 'Host',  value: 'piclio-backend.fly.dev' },
-                      { label: 'Port',  value: '2121' },
+                      { label: 'Port',  value: '02121' },
                       { label: 'User',  value: 'piclio' },
                       { label: 'Heslo', value: 'piclio123' },
                     ] as const).map(({ label, value }) => (
