@@ -758,7 +758,7 @@ export function PhotographerClient() {
                     {unmatched.map((photo, idx) => (
                       <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0, minWidth: 160 }}>
                         {/* Thumbnail — click opens lightbox, trash button on hover */}
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', display: 'block', width: '100%', minHeight: 340, background: '#f3f4f6', overflow: 'hidden' }}>
                           <img
                             src={photo.url}
                             alt={photo.filename}
@@ -766,12 +766,12 @@ export function PhotographerClient() {
                             onError={e => console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)}
                             style={{ height: 340, width: 'auto', display: 'block', cursor: 'zoom-in' }}
                           />
-                          {/* Trash button — top-right corner */}
+                          {/* Trash button — overlaid on thumbnail */}
                           <button
                             onClick={e => { e.stopPropagation(); deleteUnmatchedPhoto(photo.id) }}
                             title="Smazat fotku"
                             style={{
-                              position: 'absolute', top: 6, right: 6,
+                              position: 'absolute', top: 8, right: 8,
                               background: 'rgba(220,38,38,0.85)', color: '#fff',
                               border: 'none', borderRadius: 6, width: 28, height: 28,
                               fontSize: 14, cursor: 'pointer', lineHeight: 1,
