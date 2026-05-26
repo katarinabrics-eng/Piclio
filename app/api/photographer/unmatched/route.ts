@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
   const paths = photos.map(p => p.storage_path)
-  let signedUrls: { signedUrl: string }[] | null = null
+  let signedUrls: { signedUrl: string | null }[] | null = null
   try {
     const { data } = await supabaseAdmin.storage
       .from('photos')
