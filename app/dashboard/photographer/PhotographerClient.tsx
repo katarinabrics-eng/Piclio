@@ -758,7 +758,7 @@ export function PhotographerClient() {
                     {unmatched.map((photo, idx) => (
                       <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0, minWidth: 160 }}>
                         {/* Thumbnail — click opens lightbox, trash button on hover */}
-                        <div style={{ position: 'relative', display: 'block', width: '100%', minHeight: 340, background: '#f3f4f6', overflow: 'hidden' }}>
+                        <div style={{ position: 'relative', minHeight: 340, background: '#f3f4f6', overflow: 'hidden' }}>
                           <img
                             src={photo.url}
                             alt={photo.filename}
