@@ -15,6 +15,7 @@ export function PhotographerClient() {
   const [selectedEvent, setSelectedEvent] = useState<EventWithStats | null>(null)
   const [guests, setGuests] = useState<Guest[]>([])
   const [unmatched, setUnmatched] = useState<UnmatchedPhoto[]>([])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [tab, setTab] = useState<Tab>('events')
   const [loading, setLoading] = useState(true)
   const [assigningPhoto, setAssigningPhoto] = useState<string | null>(null)
@@ -380,6 +381,18 @@ export function PhotographerClient() {
       .catch(() => {})
   }, [tab, selectedEvent])
 
+  // Keyboard navigation for unmatched lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') { setLightboxIndex(null); return }
+      if (e.key === 'ArrowRight') setLightboxIndex(i => i !== null ? Math.min(i + 1, unmatched.length - 1) : null)
+      if (e.key === 'ArrowLeft')  setLightboxIndex(i => i !== null ? Math.max(i - 1, 0) : null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIndex, unmatched.length])
+
   async function deleteEvent(ev: EventWithStats) {
     const confirmed = window.confirm(
       `Opravdu smazat "${ev.name}"?\nSmažou se všichni hosté a fotky. Akce je nevratná.`
@@ -446,6 +459,19 @@ export function PhotographerClient() {
     const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
     setGuests(gData.guests ?? [])
     setUnmatched(uData.photos ?? [])
+  }
+
+  async function deleteUnmatchedPhoto(photoId: string) {
+    const confirmed = window.confirm('Opravdu smazat tuto nespárovanou fotku? Akce je nevratná.')
+    if (!confirmed) return
+    const res = await fetch(`/api/photographer/unmatched/${photoId}`, { method: 'DELETE' })
+    if (res.ok) {
+      setUnmatched(prev => prev.filter(p => p.id !== photoId))
+      // Close lightbox if we deleted the open photo
+      setLightboxIndex(prev => prev === null ? null : null)
+    } else {
+      alert('Nepodařilo se smazat fotku.')
+    }
   }
 
   async function assignPhoto(photoId: string) {
@@ -694,9 +720,31 @@ export function PhotographerClient() {
                   <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Všechny fotky jsou spárovány ✓</div>
                 ) : (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
-                    {unmatched.map(photo => (
+                    {unmatched.map((photo, idx) => (
                       <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                        <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }} />
+                        {/* Thumbnail — click opens lightbox, trash button on hover */}
+                        <div style={{ position: 'relative' }}>
+                          <img
+                            src={photo.url}
+                            alt={photo.filename}
+                            onClick={() => setLightboxIndex(idx)}
+                            style={{ width: '100%', height: 160, objectFit: 'cover', objectPosition: 'top', display: 'block', cursor: 'zoom-in' }}
+                          />
+                          {/* Trash button — top-right corner */}
+                          <button
+                            onClick={e => { e.stopPropagation(); deleteUnmatchedPhoto(photo.id) }}
+                            title="Smazat fotku"
+                            style={{
+                              position: 'absolute', top: 6, right: 6,
+                              background: 'rgba(220,38,38,0.85)', color: '#fff',
+                              border: 'none', borderRadius: 6, width: 28, height: 28,
+                              fontSize: 14, cursor: 'pointer', lineHeight: 1,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}
+                          >
+                            🗑
+                          </button>
+                        </div>
                         <div style={{ padding: '10px 12px' }}>
                           {photo.ocr_number && (
                             <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>OCR: #{photo.ocr_number}</div>
@@ -1494,6 +1542,99 @@ export function PhotographerClient() {
           </>
         )}
       </div>
+
+      {/* Unmatched lightbox */}
+      {lightboxIndex !== null && unmatched[lightboxIndex] && (
+        <div
+          onClick={() => setLightboxIndex(null)}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.9)',
+            zIndex: 1000,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          {/* Close */}
+          <button
+            onClick={() => setLightboxIndex(null)}
+            style={{
+              position: 'fixed', top: 16, right: 16, zIndex: 1001,
+              background: 'rgba(255,255,255,0.15)', color: '#fff',
+              border: 'none', borderRadius: 8, width: 36, height: 36,
+              fontSize: 20, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >×</button>
+
+          {/* Prev arrow */}
+          {lightboxIndex > 0 && (
+            <button
+              onClick={e => { e.stopPropagation(); setLightboxIndex(i => i !== null ? i - 1 : null) }}
+              style={{
+                position: 'fixed', left: 16, top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.15)', color: '#fff',
+                border: 'none', borderRadius: 8, width: 40, height: 40,
+                fontSize: 22, cursor: 'pointer', zIndex: 1001,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >‹</button>
+          )}
+
+          {/* Next arrow */}
+          {lightboxIndex < unmatched.length - 1 && (
+            <button
+              onClick={e => { e.stopPropagation(); setLightboxIndex(i => i !== null ? i + 1 : null) }}
+              style={{
+                position: 'fixed', right: 16, top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.15)', color: '#fff',
+                border: 'none', borderRadius: 8, width: 40, height: 40,
+                fontSize: 22, cursor: 'pointer', zIndex: 1001,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >›</button>
+          )}
+
+          {/* Image */}
+          <img
+            src={unmatched[lightboxIndex].url}
+            alt={unmatched[lightboxIndex].filename}
+            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: 'min(90vw, 1200px)',
+              maxHeight: '90vh',
+              objectFit: 'contain',
+              borderRadius: 8,
+              display: 'block',
+              userSelect: 'none',
+            }}
+          />
+
+          {/* Counter + filename */}
+          <div style={{
+            position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.6)', color: '#fff',
+            borderRadius: 8, padding: '6px 16px', fontSize: 13,
+            display: 'flex', alignItems: 'center', gap: 12, zIndex: 1001,
+          }}>
+            <span>{lightboxIndex + 1} / {unmatched.length}</span>
+            <span style={{ opacity: 0.6 }}>|</span>
+            <span style={{ fontFamily: 'monospace', fontSize: 12, opacity: 0.85 }}>
+              {unmatched[lightboxIndex].filename}
+            </span>
+            {/* Delete from lightbox */}
+            <button
+              onClick={e => { e.stopPropagation(); deleteUnmatchedPhoto(unmatched[lightboxIndex!].id); setLightboxIndex(null) }}
+              title="Smazat fotku"
+              style={{
+                background: 'rgba(220,38,38,0.85)', color: '#fff',
+                border: 'none', borderRadius: 6, padding: '3px 10px',
+                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                marginLeft: 4,
+              }}
+            >🗑 Smazat</button>
+          </div>
+        </div>
+      )}
 
       {/* Composite fullscreen preview */}
       {overlayFullscreen && (() => {
