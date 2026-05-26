@@ -21,6 +21,8 @@ export async function GET(req: NextRequest) {
 
   const { data: photos, error } = await query.order('uploaded_at', { ascending: false })
 
+  console.log('unmatched query — eventId:', eventId, 'count:', photos?.length ?? 0, 'error:', error?.message ?? null)
+
   if (error) {
     console.error('unmatched query error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
