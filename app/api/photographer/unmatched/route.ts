@@ -16,19 +16,27 @@ export async function GET(req: NextRequest) {
     .from('photos')
     .select('id, filename, storage_path, uploaded_at, ocr_number, event_id, status')
     .eq('status', 'unmatched')
-    .order('uploaded_at', { ascending: false })
 
   if (eventId) query = query.eq('event_id', eventId)
 
-  const { data: photos, error } = await query
+  const { data: photos, error } = await query.order('uploaded_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('unmatched query error:', error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
   const paths = photos.map(p => p.storage_path)
-  const { data: signedUrls } = await supabaseAdmin.storage
-    .from('photos')
-    .createSignedUrls(paths, 3600) // 1h
+  let signedUrls: { signedUrl: string }[] | null = null
+  try {
+    const { data } = await supabaseAdmin.storage
+      .from('photos')
+      .createSignedUrls(paths, 3600) // 1h
+    signedUrls = data
+  } catch (e) {
+    console.error('createSignedUrls failed:', e)
+  }
 
   const photosWithUrls = photos.map((p, i) => ({
     ...p,
