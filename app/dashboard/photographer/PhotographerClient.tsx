@@ -763,6 +763,7 @@ export function PhotographerClient() {
                             src={photo.url}
                             alt={photo.filename}
                             onClick={() => setLightboxIndex(idx)}
+                            onError={e => console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)}
                             style={{ height: 340, width: 'auto', display: 'block', cursor: 'zoom-in' }}
                           />
                           {/* Trash button — top-right corner */}
