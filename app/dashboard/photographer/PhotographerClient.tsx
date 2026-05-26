@@ -372,14 +372,27 @@ export function PhotographerClient() {
     }
   }, [selectedEvent])
 
-  // Re-fetch unmatched photos whenever the unmatched tab is opened
+  // Fetch + poll unmatched photos while the unmatched tab is active (15 s interval)
   useEffect(() => {
     if (tab !== 'unmatched' || !selectedEvent) return
-    fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`)
-      .then(r => r.json())
-      .then(d => setUnmatched(d.photos ?? []))
-      .catch(() => {})
-  }, [tab, selectedEvent])
+    const eventId = selectedEvent.id
+
+    function fetchUnmatched() {
+      fetch(`/api/photographer/unmatched?eventId=${eventId}`)
+        .then(r => r.json())
+        .then(d => {
+          const photos = d.photos ?? []
+          setUnmatched(photos)
+          // Keep badge count in sync with actual array length from server
+          setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: photos.length } : prev)
+        })
+        .catch(() => {})
+    }
+
+    fetchUnmatched()                               // immediate on tab open
+    const interval = setInterval(fetchUnmatched, 15000)
+    return () => clearInterval(interval)           // stop when tab changes or event changes
+  }, [tab, selectedEvent?.id])                     // dep: id only, avoids loop from setSelectedEvent
 
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
@@ -467,8 +480,8 @@ export function PhotographerClient() {
     const res = await fetch(`/api/photographer/unmatched/${photoId}`, { method: 'DELETE' })
     if (res.ok) {
       setUnmatched(prev => prev.filter(p => p.id !== photoId))
-      // Close lightbox if we deleted the open photo
-      setLightboxIndex(prev => prev === null ? null : null)
+      setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: Math.max(0, prev.unmatchedCount - 1) } : prev)
+      setLightboxIndex(null)
     } else {
       alert('Nepodařilo se smazat fotku.')
     }
@@ -484,6 +497,7 @@ export function PhotographerClient() {
       body: JSON.stringify({ photoId, guestId }),
     })
     setUnmatched(prev => prev.filter(p => p.id !== photoId))
+    setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: Math.max(0, prev.unmatchedCount - 1) } : prev)
     setGuests(prev => prev.map(g =>
       g.id === guestId ? { ...g, photo_count: g.photo_count + 1 } : g
     ))
