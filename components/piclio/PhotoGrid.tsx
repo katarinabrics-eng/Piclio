@@ -16,15 +16,14 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
           from { opacity: 0; transform: scale(0.96); }
           to   { opacity: 1; transform: scale(1); }
         }
-        .piclio-grid {
-          columns: 3;
-          column-gap: 8px;
-        }
         @media (max-width: 600px) {
-          .piclio-grid { columns: 2; }
+          .piclio-grid { columns: 2 !important; }
         }
       `}</style>
-      <div className="piclio-grid">
+      <div
+        className="piclio-grid"
+        style={{ columns: 3, columnGap: 8 }}
+      >
         {photos.map((photo, index) => (
           <div
             key={photo.id}
