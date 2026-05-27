@@ -75,6 +75,17 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
     const id = setInterval(tick, 15000)
     return () => clearInterval(id)
   }, [eventSlug, tab])
+
+  // Sync unmatched content immediately when stats count changes while on the unmatched tab.
+  // Prevents badge showing "0" while the content list still shows stale photos.
+  useEffect(() => {
+    if (tab !== 'unmatched') return
+    fetch(`/api/client/${eventSlug}/live?include=unmatched`)
+      .then(r => r.json())
+      .then(d => { if (d.unmatchedPhotos) setLiveUnmatched(d.unmatchedPhotos) })
+      .catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventSlug, liveStats.unmatchedCount])
   const [brandColor, setBrandColor] = useState(event.brand_color ?? '#1a1225')
   const [logoUrl, setLogoUrl] = useState(event.client_logo_url ?? '')
   const [logoFile, setLogoFile] = useState<File | null>(null)
