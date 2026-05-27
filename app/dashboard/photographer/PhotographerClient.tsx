@@ -475,6 +475,7 @@ export function PhotographerClient() {
     const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
     setGuests(gData.guests ?? [])
     setUnmatched(uData.photos ?? [])
+    if (event.unmatchedCount === 0) setUnmatched([])
   }
 
   async function deleteUnmatchedPhoto(photoId: string) {
