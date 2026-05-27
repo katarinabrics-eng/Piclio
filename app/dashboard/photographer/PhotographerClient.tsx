@@ -754,66 +754,78 @@ export function PhotographerClient() {
                 {unmatched.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Všechny fotky jsou spárovány ✓</div>
                 ) : (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'flex-start' }}>
-                    {unmatched.map((photo, idx) => (
-                      <div key={photo.id} style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', flexShrink: 0, minWidth: 160 }}>
-                        {/* Thumbnail — click opens lightbox, trash button on hover */}
-                        <div style={{ position: 'relative', minHeight: 340, background: '#f3f4f6', overflow: 'hidden' }}>
-                          <img
-                            src={photo.url}
-                            alt={photo.filename}
-                            onClick={() => setLightboxIndex(idx)}
-                            onError={e => console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)}
-                            style={{ height: 340, width: 'auto', display: 'block', cursor: 'zoom-in' }}
-                          />
-                          {/* Trash button — overlaid on thumbnail */}
-                          <button
-                            onClick={e => { e.stopPropagation(); deleteUnmatchedPhoto(photo.id) }}
-                            title="Smazat fotku"
-                            style={{
-                              position: 'absolute', top: 8, right: 8,
-                              background: 'rgba(220,38,38,0.85)', color: '#fff',
-                              border: 'none', borderRadius: 6, width: 28, height: 28,
-                              fontSize: 14, cursor: 'pointer', lineHeight: 1,
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            }}
-                          >
-                            🗑
-                          </button>
+                  <>
+                    <style>{`
+                      .unmatched-grid {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 12px;
+                      }
+                      @media (max-width: 600px) {
+                        .unmatched-grid { grid-template-columns: repeat(2, 1fr); }
+                      }
+                    `}</style>
+                    <div className="unmatched-grid">
+                      {unmatched.map((photo, idx) => (
+                        <div key={photo.id} style={{ background: '#fff', borderRadius: 10, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                          {/* Thumbnail */}
+                          <div style={{ position: 'relative', height: 220, overflow: 'hidden', background: '#f3f4f6' }}>
+                            <img
+                              src={photo.url}
+                              alt={photo.filename}
+                              onClick={() => setLightboxIndex(idx)}
+                              onError={e => console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
+                            />
+                            {/* Trash button */}
+                            <button
+                              onClick={e => { e.stopPropagation(); deleteUnmatchedPhoto(photo.id) }}
+                              title="Smazat fotku"
+                              style={{
+                                position: 'absolute', top: 6, right: 6,
+                                background: 'rgba(220,38,38,0.85)', color: '#fff',
+                                border: 'none', borderRadius: 6, width: 26, height: 26,
+                                fontSize: 13, cursor: 'pointer', lineHeight: 1,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}
+                            >
+                              🗑
+                            </button>
+                          </div>
+                          {/* Controls */}
+                          <div style={{ padding: '8px 10px' }}>
+                            <select
+                              value={assignTarget[photo.id] ?? ''}
+                              onChange={e => setAssignTarget(prev => ({ ...prev, [photo.id]: e.target.value }))}
+                              style={{
+                                width: '100%', padding: '5px 6px', borderRadius: 6,
+                                border: '1px solid #d1d5db', fontSize: 12, marginBottom: 6,
+                              }}
+                            >
+                              <option value="">Vybrat hosta…</option>
+                              {guests.map(g => (
+                                <option key={g.id} value={g.id}>
+                                  {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              onClick={() => assignPhoto(photo.id)}
+                              disabled={!assignTarget[photo.id] || assigningPhoto === photo.id}
+                              style={{
+                                width: '100%', background: '#111827', color: '#fff',
+                                border: 'none', borderRadius: 6, padding: '5px',
+                                fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                opacity: !assignTarget[photo.id] ? 0.4 : 1,
+                              }}
+                            >
+                              {assigningPhoto === photo.id ? 'Přiřazuji…' : 'Přiřadit'}
+                            </button>
+                          </div>
                         </div>
-                        <div style={{ padding: '10px 12px' }}>
-
-                          <select
-                            value={assignTarget[photo.id] ?? ''}
-                            onChange={e => setAssignTarget(prev => ({ ...prev, [photo.id]: e.target.value }))}
-                            style={{
-                              width: '100%', padding: '6px 8px', borderRadius: 6,
-                              border: '1px solid #d1d5db', fontSize: 13, marginBottom: 8,
-                            }}
-                          >
-                            <option value="">Vybrat hosta…</option>
-                            {guests.map(g => (
-                              <option key={g.id} value={g.id}>
-                                {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
-                              </option>
-                            ))}
-                          </select>
-                          <button
-                            onClick={() => assignPhoto(photo.id)}
-                            disabled={!assignTarget[photo.id] || assigningPhoto === photo.id}
-                            style={{
-                              width: '100%', background: '#111827', color: '#fff',
-                              border: 'none', borderRadius: 6, padding: '7px',
-                              fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                              opacity: !assignTarget[photo.id] ? 0.4 : 1,
-                            }}
-                          >
-                            {assigningPhoto === photo.id ? 'Přiřazuji…' : 'Přiřadit'}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
             )}
