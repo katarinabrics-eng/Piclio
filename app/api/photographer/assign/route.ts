@@ -13,6 +13,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'photoId and guestId are required' }, { status: 400 })
   }
 
+  // Check if this photo→guest link already exists (to avoid double-incrementing photo_count)
+  const { data: existingPg } = await supabaseAdmin
+    .from('photo_guests')
+    .select('photo_id')
+    .eq('photo_id', photoId)
+    .eq('guest_id', guestId)
+    .maybeSingle()
+
+  const isNewAssignment = !existingPg
+
   const { error: pgError } = await supabaseAdmin
     .from('photo_guests')
     .upsert({ photo_id: photoId, guest_id: guestId, assigned_by: 'manual' }, { onConflict: 'photo_id,guest_id' })
@@ -26,18 +36,21 @@ export async function POST(req: NextRequest) {
 
   if (statusError) return NextResponse.json({ error: statusError.message }, { status: 500 })
 
-  const { error: rpcError } = await supabaseAdmin.rpc('increment_photo_count', { guest_id_arg: guestId })
-  if (rpcError) {
-    const { data: guestData } = await supabaseAdmin
-      .from('guests')
-      .select('photo_count')
-      .eq('id', guestId)
-      .single()
-    if (guestData) {
-      await supabaseAdmin
+  // Only increment photo_count for new assignments, not re-assigns
+  if (isNewAssignment) {
+    const { error: rpcError } = await supabaseAdmin.rpc('increment_photo_count', { guest_id_arg: guestId })
+    if (rpcError) {
+      const { data: guestData } = await supabaseAdmin
         .from('guests')
-        .update({ photo_count: (guestData.photo_count ?? 0) + 1 })
+        .select('photo_count')
         .eq('id', guestId)
+        .single()
+      if (guestData) {
+        await supabaseAdmin
+          .from('guests')
+          .update({ photo_count: (guestData.photo_count ?? 0) + 1 })
+          .eq('id', guestId)
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,7 +27,7 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
 
   const { data: photoGuests } = await supabaseAdmin
     .from('photo_guests')
-    .select('photos(id, filename, storage_path, taken_at, uploaded_at)')
+    .select('photos(id, filename, storage_path, original_path, taken_at, uploaded_at)')
     .eq('guest_id', guest.id)
 
   const photos = (photoGuests ?? [])
@@ -42,33 +43,12 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     return NextResponse.json({ guest, event, photos: [] })
   }
 
-  const paths = photos.map((p: any) => p.storage_path)
+  // Use signPhotosRobust: array-indexed (immune to null item.path), original_path fallback
+  const photosWithSignedUrls = await signPhotosRobust(photos, 172800)
 
-  // Batch signed URLs with individual fallback for any that fail
-  const signedUrlMap: Record<string, string> = {}
-  try {
-    const { data, error: urlError } = await supabaseAdmin.storage
-      .from('photos').createSignedUrls(paths, 172800)
-    if (urlError) console.error('gallery createSignedUrls error:', urlError.message)
-    for (const item of data ?? []) {
-      if (item.path && item.signedUrl) signedUrlMap[item.path] = item.signedUrl
-    }
-  } catch (e) {
-    console.error('gallery createSignedUrls threw:', e)
-  }
-  // Fallback: individual call for any path that got no URL
-  await Promise.all(paths.map(async path => {
-    if (signedUrlMap[path]) return
-    try {
-      const { data } = await supabaseAdmin.storage.from('photos').createSignedUrl(path, 172800)
-      if (data?.signedUrl) signedUrlMap[path] = data.signedUrl
-      else console.warn('gallery: no signedUrl for path:', path)
-    } catch (e) { console.error('gallery: createSignedUrl failed for', path, e) }
-  }))
-
-  const photosWithUrls = photos.map((p: any) => ({
+  const photosWithUrls = photosWithSignedUrls.map((p: any) => ({
     id: p.id,
-    url: signedUrlMap[p.storage_path] ?? '',
+    url: p.url,
     filename: p.filename,
     taken_at: p.taken_at,
     uploaded_at: p.uploaded_at,
