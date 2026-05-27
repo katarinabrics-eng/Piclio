@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 
 export const dynamic = 'force-dynamic'
 
@@ -87,7 +88,7 @@ export async function GET(
       .order('uploaded_at', { ascending: false })
       .limit(20)
 
-    results.unmatchedPhotos = await signPhotos(unmatchedPhotos ?? [], 86400)
+    results.unmatchedPhotos = await signPhotosRobust(unmatchedPhotos ?? [], 86400)
   }
 
   if (include.includes('photos')) {

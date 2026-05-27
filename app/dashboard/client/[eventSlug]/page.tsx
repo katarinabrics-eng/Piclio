@@ -1,20 +1,23 @@
 import { notFound } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 import { ClientDashboard } from './ClientDashboard'
 
 interface Props {
   params: { eventSlug: string }
 }
 
+// Simple batch sign for matched/gallery photos (no fallback needed — these paths are reliable)
 async function signPhotos(photos: any[], expiresIn: number): Promise<any[]> {
   if (photos.length === 0) return []
   const paths = photos.map(p => p.storage_path)
   const { data: signedUrls } = await supabaseAdmin.storage
     .from('photos')
     .createSignedUrls(paths, expiresIn)
+  const ts = Date.now()
   return photos.map((p, i) => ({
     ...p,
-    url: signedUrls?.[i]?.signedUrl ?? '',
+    url: signedUrls?.[i]?.signedUrl ? `${signedUrls[i].signedUrl}&t=${ts}` : '',
   }))
 }
 
@@ -59,14 +62,14 @@ export default async function ClientDashboardPage({ params }: Props) {
 
   const { data: unmatchedPhotos } = await supabaseAdmin
     .from('photos')
-    .select('id, filename, storage_path, uploaded_at, ocr_number, status')
+    .select('id, filename, storage_path, original_path, uploaded_at, ocr_number, status')
     .eq('event_id', event.id)
     .eq('status', 'unmatched')
     .order('uploaded_at', { ascending: false })
     .limit(20)
 
   const [unmatchedWithUrls, allPhotosWithUrls] = await Promise.all([
-    signPhotos(unmatchedPhotos ?? [], 3600),
+    signPhotosRobust(unmatchedPhotos ?? [], 86400),
     signPhotos(allPhotos ?? [], 172800),
   ])
 
