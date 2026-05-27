@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { PiclioEvent, Guest, UnmatchedPhoto, PlaylistPhoto } from '@/lib/types'
 import { StatCard } from '@/components/piclio/StatCard'
 
@@ -29,6 +29,52 @@ const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.vercel.app'
 
 export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhotos, eventSlug }: Props) {
   const [tab, setTab] = useState<Tab>('overview')
+
+  // ── Live state (SSR-initialised, refreshed by polling) ─────────────────────
+  const [liveStats, setLiveStats] = useState(stats)
+  const [liveGuests, setLiveGuests] = useState(guests)
+  const [liveUnmatched, setLiveUnmatched] = useState(unmatchedPhotos)
+  const [liveAllPhotos, setLiveAllPhotos] = useState(allPhotos)
+
+  // Poll stats + guests every 15s (always active)
+  useEffect(() => {
+    const tick = () =>
+      fetch(`/api/client/${eventSlug}/live?include=stats,guests`)
+        .then(r => r.json())
+        .then(d => {
+          if (d.stats) setLiveStats(d.stats)
+          if (d.guests) setLiveGuests(d.guests)
+        })
+        .catch(() => {})
+    const id = setInterval(tick, 15000)
+    return () => clearInterval(id)
+  }, [eventSlug])
+
+  // Poll unmatched photos every 15s when that tab is active
+  useEffect(() => {
+    if (tab !== 'unmatched') return
+    const tick = () =>
+      fetch(`/api/client/${eventSlug}/live?include=unmatched`)
+        .then(r => r.json())
+        .then(d => { if (d.unmatchedPhotos) setLiveUnmatched(d.unmatchedPhotos) })
+        .catch(() => {})
+    tick()
+    const id = setInterval(tick, 15000)
+    return () => clearInterval(id)
+  }, [eventSlug, tab])
+
+  // Poll allPhotos every 15s when projekcia or gallery_public tab is active
+  useEffect(() => {
+    if (tab !== 'projekcia' && tab !== 'gallery_public') return
+    const tick = () =>
+      fetch(`/api/client/${eventSlug}/live?include=photos`)
+        .then(r => r.json())
+        .then(d => { if (d.allPhotos) setLiveAllPhotos(d.allPhotos) })
+        .catch(() => {})
+    tick()
+    const id = setInterval(tick, 15000)
+    return () => clearInterval(id)
+  }, [eventSlug, tab])
   const [brandColor, setBrandColor] = useState(event.brand_color ?? '#1a1225')
   const [logoUrl, setLogoUrl] = useState(event.client_logo_url ?? '')
   const [logoFile, setLogoFile] = useState<File | null>(null)
@@ -161,15 +207,15 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
     })
   }
 
-  function selectAll() { setPlaylist(new Set(allPhotos.map(p => p.id))) }
+  function selectAll() { setPlaylist(new Set(liveAllPhotos.map(p => p.id))) }
   function selectNone() { setPlaylist(new Set()) }
 
   // ── Tabs config ────────────────────────────────────────────────────────────
 
   const TABS: [Tab, string][] = [
     ['overview',       'Přehled'],
-    ['guests',         `Hosté (${stats.guestCount})`],
-    ['unmatched',      `Nespárované (${stats.unmatchedCount})`],
+    ['guests',         `Hosté (${liveStats.guestCount})`],
+    ['unmatched',      `Nespárované (${liveStats.unmatchedCount})`],
     ['branding',       'Branding'],
     ['projekcia',      'Projekce'],
     ['gallery_public', 'Veřejná galerie'],
@@ -217,13 +263,13 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {tab === 'overview' && (
           <div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 28 }}>
-              <StatCard label="Registrovaní hosté" value={stats.guestCount} />
-              <StatCard label="Fotky celkem" value={stats.photoCount} />
-              <StatCard label="Doručené galerie" value={stats.deliveredCount} accent />
-              <StatCard label="Nespárované fotky" value={stats.unmatchedCount} />
-              <StatCard label="Ø fotky / host" value={stats.avgPhotosPerGuest} sublabel="průměr" />
-              <StatCard label="Otevřeli galerii" value={stats.galleryOpenedCount} sublabel={`z ${stats.guestCount} hostů`} />
-              <StatCard label="Ve veřejné galerii" value={stats.publicPhotoCount} sublabel="spárovaných fotek" />
+              <StatCard label="Registrovaní hosté" value={liveStats.guestCount} />
+              <StatCard label="Fotky celkem" value={liveStats.photoCount} />
+              <StatCard label="Doručené galerie" value={liveStats.deliveredCount} accent />
+              <StatCard label="Nespárované fotky" value={liveStats.unmatchedCount} />
+              <StatCard label="Ø fotky / host" value={liveStats.avgPhotosPerGuest} sublabel="průměr" />
+              <StatCard label="Otevřeli galerii" value={liveStats.galleryOpenedCount} sublabel={`z ${liveStats.guestCount} hostů`} />
+              <StatCard label="Ve veřejné galerii" value={liveStats.publicPhotoCount} sublabel="spárovaných fotek" />
             </div>
             <div style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
               <div style={{ fontWeight: 700, marginBottom: 16, fontSize: 15 }}>Rychlé odkazy</div>
@@ -246,7 +292,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {/* ── HOSTÉ ── */}
         {tab === 'guests' && (
           <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-            {guests.length === 0 ? (
+            {liveGuests.length === 0 ? (
               <div style={{ padding: 40, textAlign: 'center', color: '#9ca3af' }}>Žádní hosté</div>
             ) : (
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
@@ -258,7 +304,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   </tr>
                 </thead>
                 <tbody>
-                  {guests.map(g => (
+                  {liveGuests.map(g => (
                     <tr key={g.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
                       <td style={{ padding: '10px 16px', color: '#9ca3af' }}>{g.badge_number ?? '—'}</td>
                       <td style={{ padding: '10px 16px', fontWeight: 500 }}>{g.name ?? '—'}</td>
@@ -285,11 +331,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {/* ── NESPÁROVANÉ ── */}
         {tab === 'unmatched' && (
           <div>
-            {unmatchedPhotos.length === 0 ? (
+            {liveUnmatched.length === 0 ? (
               <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Žádné nespárované fotky ✓</div>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
-                {unmatchedPhotos.map(photo => (
+                {liveUnmatched.map(photo => (
                   <div key={photo.id} style={{ borderRadius: 10, overflow: 'hidden', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
                     <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block' }} />
                     {photo.ocr_number && (
@@ -481,7 +527,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
 
             <section style={card}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <h2 style={{ ...sectionTitle, margin: 0 }}>Playlist ({playlist.size} / {allPhotos.length})</h2>
+                <h2 style={{ ...sectionTitle, margin: 0 }}>Playlist ({playlist.size} / {liveAllPhotos.length})</h2>
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button style={btnSecondary} onClick={selectAll}>Všechny</button>
                   <button style={btnSecondary} onClick={selectNone}>Žádné</button>
@@ -491,11 +537,11 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 </div>
               </div>
               {playlistMsg && <div style={{ marginBottom: 14, fontSize: 13, color: playlistMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{playlistMsg}</div>}
-              {allPhotos.length === 0 ? (
+              {liveAllPhotos.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Zatím nejsou k dispozici žádné spárované fotky</div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
-                  {allPhotos.map(photo => {
+                  {liveAllPhotos.map(photo => {
                     const selected = playlist.has(photo.id)
                     return (
                       <div key={photo.id} onClick={() => togglePhoto(photo.id)} style={{
@@ -559,8 +605,8 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                     </button>
                   </div>
                   <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-                    <StatCard label="Fotky ve veřejné galerii" value={stats.publicPhotoCount} accent />
-                    <StatCard label="Doručených hostů" value={stats.deliveredCount} />
+                    <StatCard label="Fotky ve veřejné galerii" value={liveStats.publicPhotoCount} accent />
+                    <StatCard label="Doručených hostů" value={liveStats.deliveredCount} />
                   </div>
                   <div style={{ padding: '12px 16px', background: '#f0fdf4', borderRadius: 8, fontSize: 13, color: '#166534' }}>
                     Veřejná galerie zobrazuje všechny spárované fotky eventu bez rozdělení podle hostů.

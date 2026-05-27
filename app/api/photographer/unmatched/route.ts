@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   let query = supabaseAdmin
     .from('photos')
-    .select('id, filename, storage_path, uploaded_at, ocr_number, event_id, status')
+    .select('id, filename, storage_path, original_path, uploaded_at, ocr_number, event_id, status')
     .eq('status', 'unmatched')
 
   if (eventId) query = query.eq('event_id', eventId)
@@ -56,8 +56,18 @@ export async function GET(req: NextRequest) {
           const { data } = await supabaseAdmin.storage
             .from('photos').createSignedUrl(path, 86400)
           console.log('individual signedUrl:', path, '->', data?.signedUrl ? 'OK' : 'MISSING')
-          if (!data?.signedUrl) console.warn('no signedUrl for path:', path)
-          return { signedUrl: data?.signedUrl ?? null }
+          if (data?.signedUrl) return { signedUrl: data.signedUrl }
+          // Try original_path as fallback if different from storage_path
+          const originalPath = photos[i]?.original_path
+          if (originalPath && originalPath !== path) {
+            console.log('trying original_path fallback:', originalPath)
+            const { data: fb } = await supabaseAdmin.storage
+              .from('photos').createSignedUrl(originalPath, 86400)
+            console.log('original_path fallback:', originalPath, '->', fb?.signedUrl ? 'OK' : 'MISSING')
+            return { signedUrl: fb?.signedUrl ?? null }
+          }
+          console.warn('no signedUrl for path:', path)
+          return { signedUrl: null }
         } catch (e) {
           console.error('createSignedUrl failed for', path, e)
           return { signedUrl: null }
