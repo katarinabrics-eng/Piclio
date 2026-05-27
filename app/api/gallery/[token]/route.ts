@@ -30,6 +30,12 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     .select('photos(id, filename, storage_path, original_path, taken_at, uploaded_at)')
     .eq('guest_id', guest.id)
 
+  // Log null-photo rows (broken FK or deleted photo)
+  const nullRows = (photoGuests ?? []).filter(pg => !pg.photos)
+  if (nullRows.length > 0) {
+    console.warn('gallery: photo_guests rows with null photo join:', nullRows.length)
+  }
+
   const photos = (photoGuests ?? [])
     .flatMap(pg => {
       const p = pg.photos as any
@@ -37,7 +43,10 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
       return Array.isArray(p) ? p : [p]
     })
 
-  console.log('gallery guest_id:', guest.id, 'photo_guests rows:', photoGuests?.length ?? 0, 'photos:', photos.length)
+  console.log('gallery guest_id:', guest.id,
+    '| photo_guests rows:', photoGuests?.length ?? 0,
+    '| null-join rows:', nullRows.length,
+    '| photos resolved:', photos.length)
 
   if (photos.length === 0) {
     return NextResponse.json({ guest, event, photos: [] })
@@ -46,6 +55,14 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
   // Use signPhotosRobust: array-indexed (immune to null item.path), original_path fallback
   const photosWithSignedUrls = await signPhotosRobust(photos, 172800)
 
+  // Log per-photo URL result so we can spot which path fails
+  photosWithSignedUrls.forEach((p: any) => {
+    console.log('gallery sign:',
+      p.filename,
+      '| path:', p.storage_path,
+      '| url:', p.url ? 'OK' : 'EMPTY')
+  })
+
   const photosWithUrls = photosWithSignedUrls.map((p: any) => ({
     id: p.id,
     url: p.url,
@@ -53,6 +70,9 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     taken_at: p.taken_at,
     uploaded_at: p.uploaded_at,
   }))
+
+  console.log('gallery returning:', photosWithUrls.length, 'photos,',
+    photosWithUrls.filter(p => !p.url).length, 'with empty URL')
 
   return NextResponse.json({ guest, event, photos: photosWithUrls })
 }
