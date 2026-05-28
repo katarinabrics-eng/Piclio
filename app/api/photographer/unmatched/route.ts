@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const eventId = req.nextUrl.searchParams.get('eventId')
+  const rawUrl = req.nextUrl.toString()
+  console.log('[unmatched] rawUrl:', rawUrl, '| eventId raw:', JSON.stringify(eventId))
 
   let query = supabaseAdmin
     .from('photos')
@@ -22,7 +24,7 @@ export async function GET(req: NextRequest) {
 
   const { data: photos, error } = await query.order('uploaded_at', { ascending: false })
 
-  console.log('unmatched query — eventId:', eventId, 'count:', photos?.length ?? 0, 'error:', error?.message ?? null)
+  console.log('[unmatched] eventId:', eventId, '| count:', photos?.length ?? 0, '| error:', error?.message ?? null)
 
   if (error) {
     console.error('unmatched query error:', error)
