@@ -94,13 +94,13 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Prop
           Čaká sa na prvé fotky…
         </div>
       ) : (
-        <div style={{ columns: 4, gap: '4px', padding: '0 4px 4px', overflowY: 'auto', flex: 1 }}>
+        <div style={{ display: 'grid', gridAutoFlow: 'column', gridAutoColumns: 'auto', gridTemplateRows: 'calc(50vh - 40px)', gap: '4px', overflowX: 'auto', flex: 1 }}>
           {photos.map(photo => (
-            <div key={photo.id} style={{ breakInside: 'avoid', animation: newPhotoIds.has(photo.id) ? 'slideFadeIn 0.7s ease forwards' : 'none' }}>
+            <div key={photo.id} style={{ height: '100%', animation: newPhotoIds.has(photo.id) ? 'slideFadeIn 0.7s ease forwards' : 'none' }}>
               <img
                 src={photo.url}
                 alt={photo.filename}
-                style={{ width: '100%', display: 'block', marginBottom: 4, objectFit: 'cover' }}
+                style={{ height: '100%', width: 'auto', objectFit: 'contain', display: 'block' }}
               />
             </div>
           ))}
