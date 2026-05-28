@@ -380,7 +380,7 @@ export function PhotographerClient() {
     const eventId = selectedEvent.id
 
     function fetchUnmatched() {
-      fetch(`/api/photographer/unmatched?eventId=${eventId}`)
+      fetch(`/api/photographer/unmatched?eventId=${eventId}`, { cache: 'no-store' })
         .then(r => r.json())
         .then(d => {
           const photos = d.photos ?? []
@@ -470,7 +470,7 @@ export function PhotographerClient() {
     })
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`),
-      fetch(`/api/photographer/unmatched?eventId=${event.id}`),
+      fetch(`/api/photographer/unmatched?eventId=${event.id}`, { cache: 'no-store' }),
     ])
     const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
     setGuests(gData.guests ?? [])
