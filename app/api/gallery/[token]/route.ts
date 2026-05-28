@@ -27,25 +27,23 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
 
   const { data: photoGuests } = await supabaseAdmin
     .from('photo_guests')
-    .select('photos(id, filename, storage_path, original_path, taken_at, uploaded_at)')
+    .select('photo_id')
     .eq('guest_id', guest.id)
 
-  // Log null-photo rows (broken FK or deleted photo)
-  const nullRows = (photoGuests ?? []).filter(pg => !pg.photos)
-  if (nullRows.length > 0) {
-    console.warn('gallery: photo_guests rows with null photo join:', nullRows.length)
-  }
+  const photoIds = (photoGuests ?? []).map(pg => pg.photo_id)
 
-  const photos = (photoGuests ?? [])
-    .flatMap(pg => {
-      const p = pg.photos as any
-      if (!p) return []
-      return Array.isArray(p) ? p : [p]
-    })
+  const { data: photosData } = photoIds.length > 0
+    ? await supabaseAdmin
+        .from('photos')
+        .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
+        .in('id', photoIds)
+    : { data: [] }
+
+  const photos = photosData ?? []
 
   console.log('gallery guest_id:', guest.id,
     '| photo_guests rows:', photoGuests?.length ?? 0,
-    '| null-join rows:', nullRows.length,
+    '| photoIds:', photoIds.length,
     '| photos resolved:', photos.length)
 
   if (photos.length === 0) {
