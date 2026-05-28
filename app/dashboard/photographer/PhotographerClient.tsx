@@ -747,7 +747,7 @@ export function PhotographerClient() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
                     <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galerie', 'Akcie'].map(h => (
+                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galerie', 'Akce'].map(h => (
                         <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
                       ))}
                     </tr>
