@@ -177,7 +177,7 @@ function PhotoSlot({
       <img
         src={photo.url}
         alt={photo.filename}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', background: '#000' }}
       />
       {isNew && (
         <div style={{
