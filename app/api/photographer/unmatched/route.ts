@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
   const eventId = req.nextUrl.searchParams.get('eventId')
   const rawUrl = req.nextUrl.toString()
   console.log('[unmatched] rawUrl:', rawUrl, '| eventId raw:', JSON.stringify(eventId))
+  console.log('[unmatched] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 50))
 
   let query = supabaseAdmin
     .from('photos')
