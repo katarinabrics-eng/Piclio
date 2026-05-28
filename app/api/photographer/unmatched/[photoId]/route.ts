@@ -21,7 +21,8 @@ export async function DELETE(
     .single()
 
   if (fetchError || !photo) {
-    return NextResponse.json({ error: 'Photo not found' }, { status: 404 })
+    // Already deleted — treat as success (idempotent)
+    return NextResponse.json({ success: true })
   }
 
   // Remove from Storage (best-effort — don't block DB delete)
