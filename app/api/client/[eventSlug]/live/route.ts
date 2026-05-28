@@ -96,7 +96,6 @@ export async function GET(
       .from('photos')
       .select('id, filename, storage_path, uploaded_at')
       .eq('event_id', event.id)
-      .eq('status', 'matched')
       .order('uploaded_at', { ascending: false })
       .limit(100)
 
