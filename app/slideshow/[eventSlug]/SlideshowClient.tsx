@@ -61,9 +61,6 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Prop
     return () => { supabase.removeChannel(channel) }
   }, [eventSlug, supabase])
 
-  const featured = photos.slice(0, 2)
-  const older = photos.slice(2)
-
   return (
     <div style={{
       height: '100vh',
@@ -92,56 +89,20 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Prop
       </div>
 
       {/* Photos */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6, padding: '0 8px 8px', minHeight: 0 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, height: 'calc(100vh - 60px)', padding: '0 8px 8px' }}>
         {photos.length === 0 ? (
-          <div style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'rgba(183,233,76,0.2)',
-            fontSize: 16,
-            letterSpacing: '0.1em',
-          }}>
+          <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.2)', fontSize: 16, letterSpacing: '0.1em' }}>
             Čaká sa na prvé fotky…
           </div>
         ) : (
-          <>
-            {/* Featured — 2 large photos */}
-            <div style={{
-              display: 'flex',
-              gap: 6,
-              flex: older.length > 0 ? '0 0 63vh' : '1 1 auto',
-            }}>
-              {featured.map((photo, idx) => (
-                <PhotoSlot
-                  key={photo.id}
-                  photo={photo}
-                  isNew={newPhotoIds.has(photo.id)}
-                  style={{ flex: idx === 0 ? 3 : 2 }}
-                  large
-                />
-              ))}
-              {/* Placeholder when only 1 photo */}
-              {featured.length === 1 && (
-                <div style={{ flex: 2, borderRadius: 10, background: 'rgba(255,255,255,0.03)' }} />
-              )}
-            </div>
-
-            {/* Older photos strip */}
-            {older.length > 0 && (
-              <div style={{ display: 'flex', gap: 6, flex: 1, minHeight: 0 }}>
-                {older.map(photo => (
-                  <PhotoSlot
-                    key={photo.id}
-                    photo={photo}
-                    isNew={newPhotoIds.has(photo.id)}
-                    style={{ flex: 1, minWidth: 0 }}
-                  />
-                ))}
-              </div>
-            )}
-          </>
+          photos.slice(0, 2).map(photo => (
+            <PhotoSlot
+              key={photo.id}
+              photo={photo}
+              isNew={newPhotoIds.has(photo.id)}
+              large
+            />
+          ))
         )}
       </div>
 
@@ -180,7 +141,7 @@ function PhotoSlot({
       <img
         src={photo.url}
         alt={photo.filename}
-        style={{ maxWidth: '100%', maxHeight: '100vh', objectFit: 'contain', display: 'block' }}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
       />
       {isNew && (
         <div style={{
