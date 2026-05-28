@@ -57,12 +57,27 @@ export async function GET(
         .not('email_sent_at', 'is', null),
       supabaseAdmin
         .from('guests')
-        .select('id, event_id, email, name, badge_number, gallery_token, photo_count, email_sent_at, registered_at')
+        .select('id, event_id, email, name, badge_number, gallery_token, email_sent_at, registered_at')
         .eq('event_id', event.id)
         .order('badge_number', { ascending: true }),
     ])
 
     const guestList = guests ?? []
+
+    // Dynamically count photos per guest from photo_guests
+    const guestIds = guestList.map((g: any) => g.id)
+    const { data: pgRows } = guestIds.length > 0
+      ? await supabaseAdmin
+          .from('photo_guests')
+          .select('guest_id')
+          .in('guest_id', guestIds)
+      : { data: [] }
+
+    const photoCountMap: Record<string, number> = {}
+    for (const row of (pgRows ?? [])) {
+      photoCountMap[row.guest_id] = (photoCountMap[row.guest_id] ?? 0) + 1
+    }
+
     const guestCount = guestList.length
     const totalPhotos = photoCount ?? 0
     const galleryOpenedCount = guestList.filter((g: any) => g.email_sent_at).length
@@ -76,7 +91,10 @@ export async function GET(
       galleryOpenedCount,
       publicPhotoCount: totalPhotos - (unmatchedCount ?? 0),
     }
-    results.guests = guestList
+    results.guests = guestList.map((g: any) => ({
+      ...g,
+      photo_count: photoCountMap[g.id] ?? 0,
+    }))
   }
 
   if (include.includes('unmatched')) {
