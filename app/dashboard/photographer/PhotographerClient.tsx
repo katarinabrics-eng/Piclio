@@ -332,7 +332,7 @@ export function PhotographerClient() {
   }
 
   useEffect(() => {
-    fetch('/api/photographer/events')
+    fetch('/api/photographer/events', { cache: 'no-store' })
       .then(r => r.json())
       .then(d => { setEvents(d.events ?? []); setLoading(false) })
   }, [])
@@ -346,7 +346,7 @@ export function PhotographerClient() {
 
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch('/api/photographer/events')
+        const res = await fetch('/api/photographer/events', { cache: 'no-store' })
         const data = await res.json()
         const fresh = (data.events ?? []).find((e: EventWithStats) => e.id === selectedEvent.id)
         if (!fresh) return
@@ -469,7 +469,7 @@ export function PhotographerClient() {
       photographerNotes: (event as any).photographer_notes ?? '',
     })
     const [gRes, uRes] = await Promise.all([
-      fetch(`/api/photographer/events/${event.id}/guests`),
+      fetch(`/api/photographer/events/${event.id}/guests`, { cache: 'no-store' }),
       fetch(`/api/photographer/unmatched?eventId=${event.id}`, { cache: 'no-store' }),
     ])
     const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
