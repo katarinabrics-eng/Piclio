@@ -446,6 +446,14 @@ export function PhotographerClient() {
     setEditingGuestId(null)
   }
 
+  async function deleteGuest(guestId: string, email: string) {
+    if (!confirm(`Zmazať hosta ${email}?\nZmaže sa aj jeho galéria a všetky priradené fotky.`)) return
+    try {
+      const res = await fetch(`/api/photographer/guests/${guestId}`, { method: 'DELETE' })
+      if (res.ok) setGuests(prev => prev.filter(g => g.id !== guestId))
+    } catch {}
+  }
+
   async function resendInvite(eventId: string) {
     setSendingInvite(eventId)
     try {
@@ -739,7 +747,7 @@ export function PhotographerClient() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
                     <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galerie'].map(h => (
+                      {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručeno', 'Galerie', 'Akcie'].map(h => (
                         <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
                       ))}
                     </tr>
@@ -791,6 +799,20 @@ export function PhotographerClient() {
                           {g.gallery_token
                             ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
                             : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
+                        </td>
+                        <td style={{ padding: '10px 16px' }}>
+                          <button
+                            onClick={() => deleteGuest(g.id, g.email)}
+                            title="Zmazať hosta"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#ef4444' }}
+                          >
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                            </svg>
+                          </button>
                         </td>
                       </tr>
                     ))}

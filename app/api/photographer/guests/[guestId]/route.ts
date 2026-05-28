@@ -24,3 +24,15 @@ export async function PATCH(req: NextRequest, { params }: { params: { guestId: s
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ guest: data })
 }
+
+export async function DELETE(req: NextRequest, { params }: { params: { guestId: string } }) {
+  if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const { error } = await supabaseAdmin
+    .from('guests')
+    .delete()
+    .eq('id', params.guestId)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ success: true })
+}
