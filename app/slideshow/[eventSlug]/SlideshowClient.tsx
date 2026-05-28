@@ -170,6 +170,9 @@ function PhotoSlot({
     <div style={{
       ...style,
       position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       borderRadius: large ? 10 : 7,
       overflow: 'hidden',
       animation: isNew ? 'slideFadeIn 0.7s ease forwards' : 'none',
@@ -177,7 +180,7 @@ function PhotoSlot({
       <img
         src={photo.url}
         alt={photo.filename}
-        style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', background: '#000' }}
+        style={{ maxWidth: '100%', maxHeight: '100vh', objectFit: 'contain', display: 'block' }}
       />
       {isNew && (
         <div style={{
