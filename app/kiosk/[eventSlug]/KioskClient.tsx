@@ -19,6 +19,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [showEmailConfirm, setShowEmailConfirm] = useState(false)
   const [badgeNumber, setBadgeNumber] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(10)
@@ -47,7 +48,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   }, [step])
 
   function resetAll() {
-    setStep(1); setEmail(''); setEmailError('')
+    setStep(1); setEmail(''); setEmailError(''); setShowEmailConfirm(false)
     setBadgeNumber(null); setPhotoTaken(false)
     setPhotoBase64(''); setCountdown(10)
   }
@@ -69,7 +70,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Zadejte platný e-mail'); return
     }
-    setEmailError(''); setStep(2)
+    setEmailError(''); setShowEmailConfirm(true)
   }
 
   function capturePhoto() {
@@ -159,7 +160,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 20 }}>
 
           {/* KROK 1: Email */}
-          {step === 1 && (
+          {step === 1 && !showEmailConfirm && (
             <>
               {/* 7. Nadpis Vítejte */}
               <h1 style={{ fontSize: 42, fontWeight: 700, textAlign: 'center', margin: 0 }}>Vítejte</h1>
@@ -185,6 +186,28 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
                 <p style={{ color: '#ff6b6b', textAlign: 'center', margin: 0, fontSize: 15 }}>{emailError}</p>
               )}
               <button onClick={handleEmailContinue} style={btnPrimary}>Pokračovat →</button>
+            </>
+          )}
+
+          {/* POTVRDENIE EMAILU */}
+          {step === 1 && showEmailConfirm && (
+            <>
+              <h1 style={{ fontSize: 36, fontWeight: 700, textAlign: 'center', margin: 0 }}>Je váš e-mail správný?</h1>
+              <div style={{
+                background: 'rgba(255,255,255,0.08)', borderRadius: 16,
+                padding: '20px 24px', textAlign: 'center',
+              }}>
+                <span style={{ fontSize: 22, fontWeight: 700, color: '#b7e94c', wordBreak: 'break-all' }}>{email}</span>
+              </div>
+              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 16, margin: 0 }}>
+                Na tento e-mail vám pošleme odkaz na vaše fotografie z večera.
+              </p>
+              <button onClick={() => { setShowEmailConfirm(false); setStep(2) }} style={btnPrimary}>
+                Ano, pokračovat →
+              </button>
+              <button onClick={() => setShowEmailConfirm(false)} style={{ ...btnSecondary, width: '100%', flex: 'unset' }}>
+                Opravit e-mail
+              </button>
             </>
           )}
 
