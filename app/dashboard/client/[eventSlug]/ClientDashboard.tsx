@@ -584,7 +584,9 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                         boxShadow: selected ? `0 0 0 2px ${accent}40` : '0 1px 4px rgba(0,0,0,0.08)',
                         transition: 'all 0.15s',
                       }}>
-                        <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: 120, objectFit: 'cover', display: 'block' }} />
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#000', height: 120 }}>
+                          <img src={photo.url} alt={photo.filename} style={{ width: '100%', maxHeight: 120, objectFit: 'contain', display: 'block' }} />
+                        </div>
                         <div style={{
                           position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: '50%',
                           background: selected ? accent : 'rgba(255,255,255,0.85)',
