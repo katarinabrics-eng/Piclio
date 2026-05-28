@@ -89,22 +89,23 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Prop
       </div>
 
       {/* Photos */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, height: 'calc(100vh - 60px)', padding: '0 8px 8px' }}>
-        {photos.length === 0 ? (
-          <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.2)', fontSize: 16, letterSpacing: '0.1em' }}>
-            Čaká sa na prvé fotky…
-          </div>
-        ) : (
-          photos.slice(0, 2).map(photo => (
-            <PhotoSlot
-              key={photo.id}
-              photo={photo}
-              isNew={newPhotoIds.has(photo.id)}
-              large
-            />
-          ))
-        )}
-      </div>
+      {photos.length === 0 ? (
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.2)', fontSize: 16, letterSpacing: '0.1em' }}>
+          Čaká sa na prvé fotky…
+        </div>
+      ) : (
+        <div style={{ columns: 4, gap: '4px', padding: '0 4px 4px', overflowY: 'auto', flex: 1 }}>
+          {photos.map(photo => (
+            <div key={photo.id} style={{ breakInside: 'avoid', animation: newPhotoIds.has(photo.id) ? 'slideFadeIn 0.7s ease forwards' : 'none' }}>
+              <img
+                src={photo.url}
+                alt={photo.filename}
+                style={{ width: '100%', display: 'block', marginBottom: 4, objectFit: 'cover' }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
       <style>{`
         @keyframes slideFadeIn {
@@ -112,46 +113,6 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos }: Prop
           to   { opacity: 1; transform: scale(1); }
         }
       `}</style>
-    </div>
-  )
-}
-
-function PhotoSlot({
-  photo,
-  isNew,
-  style,
-  large,
-}: {
-  photo: SlideshowPhoto
-  isNew: boolean
-  style?: React.CSSProperties
-  large?: boolean
-}) {
-  return (
-    <div style={{
-      ...style,
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: large ? 10 : 7,
-      overflow: 'hidden',
-      animation: isNew ? 'slideFadeIn 0.7s ease forwards' : 'none',
-    }}>
-      <img
-        src={photo.url}
-        alt={photo.filename}
-        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
-      />
-      {isNew && (
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          boxShadow: 'inset 0 0 0 3px #b7e94c',
-          borderRadius: 'inherit',
-          pointerEvents: 'none',
-        }} />
-      )}
     </div>
   )
 }
