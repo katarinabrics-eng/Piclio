@@ -20,6 +20,9 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [showEmailConfirm, setShowEmailConfirm] = useState(false)
+  const [showReturningGuest, setShowReturningGuest] = useState(false)
+  const [existingBadgeNumber, setExistingBadgeNumber] = useState<number | null>(null)
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [badgeNumber, setBadgeNumber] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(10)
@@ -49,6 +52,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
 
   function resetAll() {
     setStep(1); setEmail(''); setEmailError(''); setShowEmailConfirm(false)
+    setShowReturningGuest(false); setExistingBadgeNumber(null); setIsCheckingEmail(false)
     setBadgeNumber(null); setPhotoTaken(false)
     setPhotoBase64(''); setCountdown(10)
   }
@@ -66,11 +70,43 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
     streamRef.current = null
   }
 
-  function handleEmailContinue() {
+  async function handleEmailContinue() {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Zadejte platný e-mail'); return
     }
-    setEmailError(''); setShowEmailConfirm(true)
+    setIsCheckingEmail(true)
+    try {
+      const res = await fetch(`/api/kiosk/check-email?email=${encodeURIComponent(email)}&eventId=${eventId}`)
+      const data = await res.json()
+      if (data.exists) {
+        setExistingBadgeNumber(data.badgeNumber)
+        setShowReturningGuest(true)
+      } else {
+        setEmailError(''); setShowEmailConfirm(true)
+      }
+    } catch {
+      setEmailError(''); setShowEmailConfirm(true)
+    } finally {
+      setIsCheckingEmail(false)
+    }
+  }
+
+  async function replaceBadge() {
+    setIsLoading(true)
+    try {
+      const res = await fetch('/api/kiosk/replace-badge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, eventId }),
+      })
+      const data = await res.json()
+      if (data.badgeNumber) {
+        setShowReturningGuest(false)
+        setBadgeNumber(data.badgeNumber)
+        setStep(3)
+      }
+    } catch {}
+    setIsLoading(false)
   }
 
   function capturePhoto() {
@@ -160,7 +196,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 20 }}>
 
           {/* KROK 1: Email */}
-          {step === 1 && !showEmailConfirm && (
+          {step === 1 && !showEmailConfirm && !showReturningGuest && (
             <>
               {/* 7. Nadpis Vítejte */}
               <h1 style={{ fontSize: 42, fontWeight: 700, textAlign: 'center', margin: 0 }}>Vítejte</h1>
@@ -185,7 +221,31 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
               {emailError && (
                 <p style={{ color: '#ff6b6b', textAlign: 'center', margin: 0, fontSize: 15 }}>{emailError}</p>
               )}
-              <button onClick={handleEmailContinue} style={btnPrimary}>Pokračovat →</button>
+              <button onClick={handleEmailContinue} disabled={isCheckingEmail}
+                style={{ ...btnPrimary, opacity: isCheckingEmail ? 0.7 : 1 }}>
+                {isCheckingEmail ? 'Kontroluji…' : 'Pokračovat →'}
+              </button>
+            </>
+          )}
+
+          {/* VRACAJÚCI SA HOST */}
+          {step === 1 && showReturningGuest && (
+            <>
+              <h1 style={{ fontSize: 36, fontWeight: 700, textAlign: 'center', margin: 0 }}>Vítejte zpět!</h1>
+              <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 16, margin: 0 }}>
+                Váš odznak má číslo
+              </p>
+              <div style={{
+                fontSize: 80, fontWeight: 800, color: '#b7e94c',
+                textAlign: 'center', lineHeight: 1, fontVariantNumeric: 'tabular-nums',
+              }}>
+                {existingBadgeNumber}
+              </div>
+              <button onClick={resetAll} style={btnPrimary}>Mám ho, děkuji</button>
+              <button onClick={replaceBadge} disabled={isLoading}
+                style={{ ...btnSecondary, width: '100%', flex: 'unset', opacity: isLoading ? 0.7 : 1 }}>
+                {isLoading ? 'Přiřazuji…' : 'Ztratil/a jsem ho'}
+              </button>
             </>
           )}
 
