@@ -6,9 +6,10 @@ interface PhotoGridProps {
   photos: GalleryPhoto[]
   onPhotoClick: (index: number) => void
   newPhotoIds?: Set<string>
+  onDownload?: (photo: GalleryPhoto) => void
 }
 
-export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps) {
+export function PhotoGrid({ photos, onPhotoClick, newPhotoIds, onDownload }: PhotoGridProps) {
   return (
     <>
       <style>{`
@@ -25,9 +26,8 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
           <div
             key={photo.id}
             className="piclio-photo-item"
-            onClick={() => onPhotoClick(index)}
             style={{
-              cursor: 'pointer',
+              position: 'relative',
               animation: newPhotoIds?.has(photo.id) ? 'piclio-fadein 0.5s ease' : 'none',
               borderRadius: 8,
               overflow: 'hidden',
@@ -38,10 +38,26 @@ export function PhotoGrid({ photos, onPhotoClick, newPhotoIds }: PhotoGridProps)
               src={photo.url}
               alt={photo.filename}
               loading="lazy"
-              style={{ height: 340, width: 'auto', display: 'block', borderRadius: 8, transition: 'opacity 0.15s' }}
+              onClick={() => onPhotoClick(index)}
+              style={{ height: 340, width: 'auto', display: 'block', borderRadius: 8, transition: 'opacity 0.15s', cursor: 'pointer' }}
               onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             />
+            {onDownload && (
+              <button
+                onClick={e => { e.stopPropagation(); onDownload(photo) }}
+                title="Stáhnout"
+                style={{
+                  position: 'absolute', bottom: 8, right: 8,
+                  background: 'rgba(0,0,0,0.55)', border: 'none', borderRadius: 6,
+                  color: '#fff', width: 32, height: 32, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 16, lineHeight: 1,
+                }}
+              >
+                ↓
+              </button>
+            )}
           </div>
         ))}
       </div>
