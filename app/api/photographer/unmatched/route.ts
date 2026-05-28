@@ -12,7 +12,6 @@ export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const eventId = req.nextUrl.searchParams.get('eventId')
-  console.log('[unmatched] eventId:', JSON.stringify(eventId))
 
   const baseQuery = supabaseAdmin
     .from('photos')
