@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, brand_color, slideshow_content, slideshow_selected_guests, slideshow_interval, slideshow_animation, slideshow_output')
+    .select('id, name, slug, date, brand_color, slideshow_content, slideshow_selected_guests, slideshow_interval, slideshow_animation, slideshow_output, slideshow_layout')
     .eq('slug', params.eventSlug)
     .single()
 
@@ -53,6 +53,7 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
         interval: event.slideshow_interval ?? 5,
         animation: event.slideshow_animation ?? 'fade',
         output: event.slideshow_output ?? 'slideshow',
+        layout: event.slideshow_layout ?? 'single',
       },
     })
   }
@@ -98,6 +99,7 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
       interval: event.slideshow_interval ?? 5,
       animation: event.slideshow_animation ?? 'fade',
       output: event.slideshow_output ?? 'slideshow',
+      layout: event.slideshow_layout ?? 'single',
     },
   })
 }

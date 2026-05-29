@@ -8,7 +8,17 @@ import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
 
-type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings' | 'projekce'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings' | 'projekce' | 'galerie'
+
+interface GalleryPhoto {
+  id: string
+  url: string
+  filename: string
+  uploaded_at: string
+  guest_id?: string
+  guest_name?: string
+  orientation?: 'portrait' | 'landscape'
+}
 
 export function PhotographerClient() {
   const [events, setEvents] = useState<EventWithStats[]>([])
@@ -74,6 +84,15 @@ export function PhotographerClient() {
   const [slideshowInterval, setSlideshowInterval] = useState(5)
   const [slideshowAnimation, setSlideshowAnimation] = useState<'fade' | 'slide' | 'none'>('fade')
   const [slideshowLayout, setSlideshowLayout] = useState<'single' | 'kenburns' | 'grid'>('single')
+
+  // Gallery tab
+  const [galleryTab, setGalleryTab] = useState<'all' | 'by-guest' | 'unassigned'>('all')
+  const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([])
+  const [galleryLoading, setGalleryLoading] = useState(false)
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<Set<string>>(new Set())
+  const [gallerySort, setGallerySort] = useState<'newest' | 'oldest'>('newest')
+  const [playlistPhotos, setPlaylistPhotos] = useState<GalleryPhoto[]>([])
+  const [selectedGuestFilter, setSelectedGuestFilter] = useState<string>('all')
   const [savingSlideshow, setSavingSlideshow] = useState(false)
   const [slideshowMsg, setSlideshowMsg] = useState('')
 
@@ -434,6 +453,20 @@ export function PhotographerClient() {
     return () => clearInterval(interval)           // stop when tab changes or event changes
   }, [tab, selectedEvent?.id])                     // dep: id only, avoids loop from setSelectedEvent
 
+  // Fetch gallery photos when galerie tab is active
+  useEffect(() => {
+    if (tab !== 'galerie' || !selectedEvent) return
+    setGalleryLoading(true)
+    setSelectedPhotoIds(new Set())
+    const p = new URLSearchParams({ tab: galleryTab, sort: gallerySort })
+    if (galleryTab === 'by-guest' && selectedGuestFilter !== 'all') p.set('guest_id', selectedGuestFilter)
+    fetch(`/api/events/${selectedEvent.slug}/gallery-photos?${p}`)
+      .then(r => r.json())
+      .then(d => setGalleryPhotos(d.photos ?? []))
+      .catch(() => setGalleryPhotos([]))
+      .finally(() => setGalleryLoading(false))
+  }, [tab, galleryTab, gallerySort, selectedGuestFilter, selectedEvent])
+
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
     if (lightboxIndex === null) return
@@ -769,6 +802,7 @@ export function PhotographerClient() {
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
                 { key: 'projekce', label: 'Projekce' },
+                { key: 'galerie',  label: 'Galerie eventu' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -1737,6 +1771,135 @@ export function PhotographerClient() {
                   </div>
 
                 </div>
+              </div>
+            )}
+
+            {/* Galerie eventu tab */}
+            {tab === 'galerie' && selectedEvent && (
+              <div style={{ display: 'flex', gap: 16, height: 'calc(100vh - 280px)', minHeight: 500 }}>
+
+                {/* LEVÝ PANEL — všechny fotky */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
+
+                  {/* Toolbar */}
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f3f4f6', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                    {(['all', 'by-guest', 'unassigned'] as const).map(t => (
+                      <button key={t} onClick={() => setGalleryTab(t)} style={{
+                        padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                        background: galleryTab === t ? '#111827' : '#f3f4f6',
+                        color: galleryTab === t ? '#fff' : '#6b7280', border: 'none',
+                      }}>
+                        {t === 'all' ? 'Všechny' : t === 'by-guest' ? 'Dle hosta' : 'Nezařazené'}
+                      </button>
+                    ))}
+
+                    {galleryTab === 'by-guest' && (
+                      <select value={selectedGuestFilter} onChange={e => setSelectedGuestFilter(e.target.value)}
+                        style={{ fontSize: 12, padding: '4px 8px', borderRadius: 6, border: '1px solid #e5e7eb' }}>
+                        <option value="all">Všichni hosté</option>
+                        {guests.map(g => (
+                          <option key={g.id} value={g.id}>#{g.badge_number} {g.name ?? g.email}</option>
+                        ))}
+                      </select>
+                    )}
+
+                    <select value={gallerySort} onChange={e => setGallerySort(e.target.value as any)}
+                      style={{ fontSize: 12, padding: '4px 8px', borderRadius: 6, border: '1px solid #e5e7eb', marginLeft: 'auto' }}>
+                      <option value="newest">Nejnovější</option>
+                      <option value="oldest">Nejstarší</option>
+                    </select>
+
+                    {selectedPhotoIds.size > 0 && (
+                      <button onClick={() => {
+                        const toAdd = galleryPhotos.filter(p => selectedPhotoIds.has(p.id) && !playlistPhotos.find(pp => pp.id === p.id))
+                        setPlaylistPhotos(prev => [...prev, ...toAdd])
+                        setSelectedPhotoIds(new Set())
+                      }} style={{ padding: '5px 12px', borderRadius: 20, fontSize: 12, fontWeight: 600, cursor: 'pointer', background: '#b7e94c', color: '#1a1225', border: 'none' }}>
+                        + Přidat do slideshow ({selectedPhotoIds.size})
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Grid fotek */}
+                  <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
+                    {galleryLoading && (
+                      <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>Načítám…</div>
+                    )}
+                    {!galleryLoading && galleryPhotos.length === 0 && (
+                      <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>Žádné fotky</div>
+                    )}
+                    {galleryPhotos.map(photo => {
+                      const selected = selectedPhotoIds.has(photo.id)
+                      const inPlaylist = playlistPhotos.some(p => p.id === photo.id)
+                      return (
+                        <div key={photo.id} onClick={() => {
+                          if (inPlaylist) return
+                          setSelectedPhotoIds(prev => {
+                            const next = new Set(prev)
+                            next.has(photo.id) ? next.delete(photo.id) : next.add(photo.id)
+                            return next
+                          })
+                        }} style={{
+                          position: 'relative', borderRadius: 8, overflow: 'hidden',
+                          cursor: inPlaylist ? 'default' : 'pointer', aspectRatio: '3/2',
+                          border: selected ? '2px solid #b7e94c' : inPlaylist ? '2px solid #6b7280' : '2px solid transparent',
+                          opacity: inPlaylist ? 0.5 : 1,
+                        }}>
+                          <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                          {selected && (
+                            <div style={{ position: 'absolute', top: 4, right: 4, background: '#b7e94c', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#1a1225' }}>✓</div>
+                          )}
+                          {inPlaylist && (
+                            <div style={{ position: 'absolute', top: 4, right: 4, background: '#6b7280', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#fff' }}>▶</div>
+                          )}
+                          {photo.guest_name && (
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.6)', color: '#fff', fontSize: 9, padding: '2px 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {photo.guest_name}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* PRAVÝ PANEL — playlist */}
+                <div style={{ width: 260, display: 'flex', flexDirection: 'column', background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', overflow: 'hidden' }}>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f3f4f6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 13, fontWeight: 700 }}>Playlist ({playlistPhotos.length})</span>
+                    <button onClick={() => setPlaylistPhotos([])} style={{ fontSize: 11, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>Vymazat vše</button>
+                  </div>
+                  <div style={{ flex: 1, overflowY: 'auto', padding: 8 }}>
+                    {playlistPhotos.length === 0 && (
+                      <div style={{ textAlign: 'center', padding: 30, color: '#9ca3af', fontSize: 12 }}>Přidejte fotky ze seznamu</div>
+                    )}
+                    {playlistPhotos.map((photo, idx) => (
+                      <div key={photo.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', borderBottom: '1px solid #f9fafb' }}>
+                        <span style={{ fontSize: 10, color: '#9ca3af', minWidth: 16 }}>{idx + 1}</span>
+                        <img src={photo.url} alt="" style={{ width: 44, height: 30, objectFit: 'cover', borderRadius: 4 }} />
+                        <span style={{ fontSize: 11, color: '#374151', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {photo.guest_name || photo.filename}
+                        </span>
+                        <button onClick={() => setPlaylistPhotos(prev => prev.filter(p => p.id !== photo.id))}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 14, padding: 0 }}>×</button>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ padding: 12, borderTop: '1px solid #f3f4f6', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <button onClick={async () => {
+                      if (!selectedEvent || playlistPhotos.length === 0) return
+                      const guestIds = [...new Set(playlistPhotos.map(p => p.guest_id).filter(Boolean))] as string[]
+                      await fetch(`/api/events/${selectedEvent.slug}/slideshow-settings`, {
+                        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ slideshow_selected_guests: guestIds }),
+                      })
+                      window.open(`/slideshow/${selectedEvent.slug}`, '_blank')
+                    }} style={{ background: '#111827', color: '#fff', border: 'none', borderRadius: 8, padding: '10px', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                      ▶ Spustit slideshow
+                    </button>
+                  </div>
+                </div>
+
               </div>
             )}
 
