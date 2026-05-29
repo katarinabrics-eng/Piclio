@@ -8,7 +8,7 @@ import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
 
-type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings' | 'projekce'
 
 export function PhotographerClient() {
   const [events, setEvents] = useState<EventWithStats[]>([])
@@ -67,6 +67,15 @@ export function PhotographerClient() {
   const [projectSaveMsg, setProjectSaveMsg] = useState('')
   const [deletingEvent, setDeletingEvent] = useState<string | null>(null)
 
+  // Slideshow settings
+  const [slideshowContent, setSlideshowContent] = useState<'photographer' | 'client' | 'random' | 'selected_guests'>('random')
+  const [slideshowSelectedGuests, setSlideshowSelectedGuests] = useState<string[]>([])
+  const [slideshowOutput, setSlideshowOutput] = useState<'slideshow' | 'download' | 'both'>('slideshow')
+  const [slideshowInterval, setSlideshowInterval] = useState(5)
+  const [slideshowAnimation, setSlideshowAnimation] = useState<'fade' | 'slide' | 'none'>('fade')
+  const [savingSlideshow, setSavingSlideshow] = useState(false)
+  const [slideshowMsg, setSlideshowMsg] = useState('')
+
   // Email settings
   const [emailLogoFile, setEmailLogoFile] = useState<File | null>(null)
   const [emailLogoUrl, setEmailLogoUrl] = useState('')
@@ -82,6 +91,31 @@ export function PhotographerClient() {
 
   function updateProjectForm(key: string, value: string) {
     setProjectForm(prev => ({ ...prev, [key]: value }))
+  }
+
+  async function saveSlideshow() {
+    if (!selectedEvent) return
+    setSavingSlideshow(true)
+    setSlideshowMsg('')
+    try {
+      const res = await fetch(`/api/events/${selectedEvent.slug}/slideshow-settings`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slideshow_content: slideshowContent,
+          slideshow_selected_guests: slideshowSelectedGuests,
+          slideshow_output: slideshowOutput,
+          slideshow_interval: slideshowInterval,
+          slideshow_animation: slideshowAnimation,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
+      setSlideshowMsg('✓ Uloženo')
+    } catch (e: any) {
+      setSlideshowMsg(`✗ ${e.message}`)
+    } finally {
+      setSavingSlideshow(false)
+    }
   }
 
   async function saveProjectInfo() {
@@ -496,6 +530,12 @@ export function PhotographerClient() {
       description: (event as any).description ?? '',
       photographerNotes: (event as any).photographer_notes ?? '',
     })
+    setSlideshowContent((event as any).slideshow_content ?? 'random')
+    setSlideshowSelectedGuests((event as any).slideshow_selected_guests ?? [])
+    setSlideshowOutput((event as any).slideshow_output ?? 'slideshow')
+    setSlideshowInterval((event as any).slideshow_interval ?? 5)
+    setSlideshowAnimation((event as any).slideshow_animation ?? 'fade')
+    setSlideshowMsg('')
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`, { cache: 'no-store' }),
       fetch(`/api/photographer/unmatched?eventId=${event.id}`, { cache: 'no-store' }),
@@ -725,6 +765,7 @@ export function PhotographerClient() {
                 { key: 'upload',   label: uploadedCount > 0 ? `Nahrát fotky (${uploadedCount})` : 'Nahrát fotky' },
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
+                { key: 'projekce', label: 'Projekce' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -1696,6 +1737,130 @@ export function PhotographerClient() {
               </div>
             )}
 
+            {/* Projekce tab */}
+            {tab === 'projekce' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 20px' }}>Nastavení slideshow</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+                    <div>
+                      <label style={projLabel}>Obsah slideshow</label>
+                      <select value={slideshowContent} onChange={e => setSlideshowContent(e.target.value as any)} style={projSelect}>
+                        <option value="random">Náhodný kolotoč</option>
+                        <option value="photographer">Fotograf vybírá</option>
+                        <option value="client">Zadavatel vybírá</option>
+                        <option value="selected_guests">Vybrané galerie hostů</option>
+                      </select>
+                    </div>
+
+                    {slideshowContent === 'selected_guests' && (
+                      <div>
+                        <label style={projLabel}>Vybrané galerie ({slideshowSelectedGuests.length} / {guests.length} hostů)</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: 8, padding: 8 }}>
+                          {guests.length === 0 && (
+                            <div style={{ fontSize: 13, color: '#9ca3af', padding: 8 }}>Nejsou žádní hosté</div>
+                          )}
+                          {guests.map(g => (
+                            <label key={g.id} style={{
+                              display: 'flex', alignItems: 'center', gap: 8,
+                              padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
+                              background: slideshowSelectedGuests.includes(g.id) ? '#f0fdf4' : 'transparent',
+                            }}>
+                              <input
+                                type="checkbox"
+                                checked={slideshowSelectedGuests.includes(g.id)}
+                                onChange={e => setSlideshowSelectedGuests(prev =>
+                                  e.target.checked ? [...prev, g.id] : prev.filter(id => id !== g.id)
+                                )}
+                              />
+                              <span style={{ fontSize: 13 }}>
+                                {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
+                              </span>
+                              <span style={{ fontSize: 11, color: '#9ca3af', marginLeft: 'auto' }}>
+                                {g.photo_count} fotek
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <label style={projLabel}>Animace</label>
+                      <select value={slideshowAnimation} onChange={e => setSlideshowAnimation(e.target.value as any)} style={projSelect}>
+                        <option value="fade">Prolínačka (fade)</option>
+                        <option value="slide">Posouvání (slide)</option>
+                        <option value="none">Žádná</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={projLabel}>Výstup</label>
+                      <select value={slideshowOutput} onChange={e => setSlideshowOutput(e.target.value as any)} style={projSelect}>
+                        <option value="slideshow">Slideshow</option>
+                        <option value="download">Stáhnout vše</option>
+                        <option value="both">Obojí</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label style={projLabel}>Interval: {slideshowInterval} s</label>
+                      <input
+                        type="range" min={2} max={30} value={slideshowInterval}
+                        onChange={e => setSlideshowInterval(Number(e.target.value))}
+                        style={{ width: '100%', marginBottom: 4 }}
+                      />
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#9ca3af' }}>
+                        <span>2s</span><span>30s</span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', paddingTop: 4, borderTop: '1px solid #f3f4f6' }}>
+                      <button
+                        onClick={saveSlideshow}
+                        disabled={savingSlideshow}
+                        style={{
+                          background: savingSlideshow ? '#e5e7eb' : '#b7e94c',
+                          color: savingSlideshow ? '#9ca3af' : '#1a1225',
+                          border: 'none', borderRadius: 8, padding: '10px 22px',
+                          fontSize: 14, fontWeight: 700,
+                          cursor: savingSlideshow ? 'not-allowed' : 'pointer',
+                        }}
+                      >
+                        {savingSlideshow ? 'Ukládám…' : 'Uložit nastavení'}
+                      </button>
+                      <a
+                        href={`/slideshow/${selectedEvent.slug}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{
+                          background: '#111827', color: '#fff', border: 'none', borderRadius: 8,
+                          padding: '10px 22px', fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        ▶ Spustit slideshow
+                      </a>
+                      {(slideshowOutput === 'download' || slideshowOutput === 'both') && (
+                        <button style={{
+                          background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8,
+                          padding: '10px 22px', fontSize: 14, fontWeight: 600, cursor: 'pointer', color: '#374151',
+                        }}>
+                          ↓ Stáhnout ZIP
+                        </button>
+                      )}
+                      {slideshowMsg && (
+                        <span style={{ fontSize: 13, color: slideshowMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
+                          {slideshowMsg}
+                        </span>
+                      )}
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            )}
+
           </>
         )}
       </div>
@@ -2325,6 +2490,15 @@ function OverlayZone({ label, description, aspectLabel, value, savedUrl, error, 
 const emailLabelStyle: React.CSSProperties = {
   fontSize: 12, fontWeight: 600, color: '#6b7280',
   textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8, display: 'block',
+}
+
+const projLabel: React.CSSProperties = {
+  display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6,
+}
+
+const projSelect: React.CSSProperties = {
+  width: '100%', padding: '9px 12px', borderRadius: 8,
+  border: '1px solid #e5e7eb', fontSize: 14, outline: 'none',
 }
 
 function Stat({ label, value, warn }: { label: string; value: number; warn?: boolean }) {

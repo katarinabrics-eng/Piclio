@@ -1,44 +1,103 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, brand_color')
+    .select('id, name, slug, date, brand_color, slideshow_content, slideshow_selected_guests, slideshow_interval, slideshow_animation, slideshow_output')
     .eq('slug', params.eventSlug)
     .single()
 
   if (!event) return NextResponse.json({ error: 'Event not found' }, { status: 404 })
 
-  const { data: photos } = await supabaseAdmin
-    .from('photos')
-    .select('id, filename, storage_path, uploaded_at, taken_at')
-    .eq('event_id', event.id)
-    .eq('status', 'matched')
-    .order('uploaded_at', { ascending: false })
-    .limit(20)
+  const content: string = event.slideshow_content ?? 'random'
+  const selectedGuests: string[] = event.slideshow_selected_guests ?? []
 
-  if (!photos || photos.length === 0) {
-    return NextResponse.json({ event, photos: [] })
+  let photoIds: string[] = []
+
+  if (
+    content === 'selected_guests' ||
+    ((content === 'photographer' || content === 'client') && selectedGuests.length > 0)
+  ) {
+    // Photos belonging to specific guests
+    const { data: pg } = await supabaseAdmin
+      .from('photo_guests')
+      .select('photo_id')
+      .in('guest_id', selectedGuests)
+    photoIds = (pg ?? []).map(r => r.photo_id)
+  } else {
+    // All photo_guests for this event (random / fallback)
+    const { data: guestRows } = await supabaseAdmin
+      .from('guests')
+      .select('id')
+      .eq('event_id', event.id)
+    const guestIds = (guestRows ?? []).map(g => g.id)
+
+    if (guestIds.length > 0) {
+      const { data: pg } = await supabaseAdmin
+        .from('photo_guests')
+        .select('photo_id')
+        .in('guest_id', guestIds)
+      photoIds = (pg ?? []).map(r => r.photo_id)
+    }
   }
 
-  const paths = photos.map(p => p.storage_path)
-  const { data: signedUrls } = await supabaseAdmin.storage
+  if (photoIds.length === 0) {
+    return NextResponse.json({
+      event,
+      photos: [],
+      settings: {
+        interval: event.slideshow_interval ?? 5,
+        animation: event.slideshow_animation ?? 'fade',
+        output: event.slideshow_output ?? 'slideshow',
+      },
+    })
+  }
+
+  // Deduplicate
+  const uniquePhotoIds = [...new Set(photoIds)]
+
+  const { data: photos } = await supabaseAdmin
     .from('photos')
-    .createSignedUrls(paths, 172800) // 48h
+    .select('id, filename, storage_path, original_path, uploaded_at')
+    .in('id', uniquePhotoIds)
 
-  const urlMap = Object.fromEntries(
-    (signedUrls ?? []).map(s => [s.path, s.signedUrl])
-  )
+  if (!photos || photos.length === 0) {
+    return NextResponse.json({
+      event,
+      photos: [],
+      settings: {
+        interval: event.slideshow_interval ?? 5,
+        animation: event.slideshow_animation ?? 'fade',
+        output: event.slideshow_output ?? 'slideshow',
+      },
+    })
+  }
 
-  const photosWithUrls = photos.map(p => ({
+  // Shuffle for random content
+  const ordered = content === 'random'
+    ? [...photos].sort(() => Math.random() - 0.5)
+    : photos
+
+  const signed = await signPhotosRobust(ordered, 172800)
+
+  const photosWithUrls = signed.map((p: any) => ({
     id: p.id,
-    url: urlMap[p.storage_path] ?? '',
+    url: p.url,
     filename: p.filename,
     uploaded_at: p.uploaded_at,
   }))
 
-  return NextResponse.json({ event, photos: photosWithUrls })
+  return NextResponse.json({
+    event,
+    photos: photosWithUrls,
+    settings: {
+      interval: event.slideshow_interval ?? 5,
+      animation: event.slideshow_animation ?? 'fade',
+      output: event.slideshow_output ?? 'slideshow',
+    },
+  })
 }

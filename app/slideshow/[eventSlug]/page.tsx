@@ -20,7 +20,8 @@ export default async function SlideshowPage({ params }: Props) {
     <SlideshowClient
       eventSlug={params.eventSlug}
       initialEvent={data.event}
-      initialPhotos={data.photos}
+      initialPhotos={data.photos ?? []}
+      initialSettings={data.settings ?? { interval: 5, animation: 'fade', output: 'slideshow' }}
     />
   )
 }

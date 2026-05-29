@@ -22,6 +22,11 @@ export interface PiclioEvent {
   overlay_status: 'approved' | 'pending_client' | null
   overlay_approved_by: 'photographer' | 'client' | null
   overlay_mode: 'custom' | 'piclio' | 'none'
+  slideshow_content: 'photographer' | 'client' | 'random' | 'selected_guests'
+  slideshow_selected_guests: string[]
+  slideshow_output: 'slideshow' | 'download' | 'both'
+  slideshow_interval: number
+  slideshow_animation: 'fade' | 'slide' | 'none'
 }
 
 export interface Guest {

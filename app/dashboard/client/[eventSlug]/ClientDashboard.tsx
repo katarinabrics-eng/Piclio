@@ -120,6 +120,12 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [publicGallery, setPublicGallery] = useState(event.public_gallery ?? false)
   const [savingPublic, setSavingPublic] = useState(false)
 
+  const [clientSelectedGuests, setClientSelectedGuests] = useState<string[]>(
+    Array.isArray((event as any).slideshow_selected_guests) ? (event as any).slideshow_selected_guests : []
+  )
+  const [savingClientSlideshow, setSavingClientSlideshow] = useState(false)
+  const [clientSlideshowMsg, setClientSlideshowMsg] = useState('')
+
   const fileRef = useRef<HTMLInputElement>(null)
   const accent = brandColor
 
@@ -186,6 +192,24 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       setOverlayMsg(`✗ Chyba: ${e.message}`)
     } finally {
       setSavingOverlay(false)
+    }
+  }
+
+  async function saveClientSlideshow() {
+    setSavingClientSlideshow(true)
+    setClientSlideshowMsg('')
+    try {
+      const res = await fetch(`/api/events/${eventSlug}/slideshow-settings`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slideshow_selected_guests: clientSelectedGuests }),
+      })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setClientSlideshowMsg(`✓ Uloženo (${clientSelectedGuests.length} hostů)`)
+    } catch (e: any) {
+      setClientSlideshowMsg(`✗ ${e.message}`)
+    } finally {
+      setSavingClientSlideshow(false)
     }
   }
 
@@ -535,6 +559,86 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         {/* ── PROJEKCE ── */}
         {tab === 'projekcia' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+            {/* Nastavení projekce */}
+            <section style={card}>
+              <h2 style={sectionTitle}>Nastavení projekce</h2>
+              {(event as any).slideshow_content === 'client' ? (
+                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>
+                  Fotograf vám dal právo vybírat obsah slideshow. Vyberte hosty níže.
+                </p>
+              ) : (
+                <div style={{ padding: '12px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
+                  Nastavení slideshow spravuje fotograf. Aktuální obsah:{' '}
+                  <strong>
+                    {{ random: 'náhodný kolotoč', photographer: 'fotograf vybírá', client: 'zadavatel vybírá', selected_guests: 'vybrané galerie' }[(event as any).slideshow_content ?? 'random'] ?? 'náhodný kolotoč'}
+                  </strong>
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <a
+                  href={`${APP_URL}/slideshow/${eventSlug}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ ...btnPrimary(accent), textDecoration: 'none' }}
+                >
+                  ▶ Spustit slideshow
+                </a>
+                <button
+                  style={btnSecondary}
+                  onClick={() => navigator.clipboard.writeText(`${APP_URL}/slideshow/${eventSlug}`)}
+                >
+                  Kopírovat odkaz
+                </button>
+              </div>
+            </section>
+
+            {/* Guest multiselect — jen pokud fotograf dal právo klientovi */}
+            {(event as any).slideshow_content === 'client' && (
+              <section style={card}>
+                <h2 style={sectionTitle}>Vybrané galerie hostů ({clientSelectedGuests.length} / {liveGuests.length})</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: 8, padding: 8, marginBottom: 14 }}>
+                  {liveGuests.length === 0 && (
+                    <div style={{ fontSize: 13, color: '#9ca3af', padding: 8 }}>Žádní hosté</div>
+                  )}
+                  {liveGuests.map(g => (
+                    <label key={g.id} style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
+                      background: clientSelectedGuests.includes(g.id) ? '#f0fdf4' : 'transparent',
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={clientSelectedGuests.includes(g.id)}
+                        onChange={e => setClientSelectedGuests(prev =>
+                          e.target.checked ? [...prev, g.id] : prev.filter(id => id !== g.id)
+                        )}
+                      />
+                      <span style={{ fontSize: 13 }}>
+                        {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
+                      </span>
+                      <span style={{ fontSize: 11, color: '#9ca3af', marginLeft: 'auto' }}>
+                        {g.photo_count} fotek
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                  <button
+                    style={btnPrimary(accent)}
+                    onClick={saveClientSlideshow}
+                    disabled={savingClientSlideshow}
+                  >
+                    {savingClientSlideshow ? 'Ukládám…' : 'Uložit výběr'}
+                  </button>
+                  {clientSlideshowMsg && (
+                    <span style={{ fontSize: 13, color: clientSlideshowMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
+                      {clientSlideshowMsg}
+                    </span>
+                  )}
+                </div>
+              </section>
+            )}
+
             <section style={card}>
               <h2 style={sectionTitle}>Slideshow / projekce</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'center' }}>
