@@ -21,7 +21,7 @@ export default async function SlideshowPage({ params }: Props) {
       eventSlug={params.eventSlug}
       initialEvent={data.event}
       initialPhotos={data.photos ?? []}
-      initialSettings={data.settings ?? { interval: 5, animation: 'fade', output: 'slideshow', layout: 'single' }}
+      initialSettings={data.settings ?? { interval: 5, animation: 'fade', layout: 'single' }}
     />
   )
 }

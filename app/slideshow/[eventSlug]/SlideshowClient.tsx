@@ -18,8 +18,7 @@ interface SlideshowEvent {
 interface SlideshowSettings {
   interval: number
   animation: 'fade' | 'slide' | 'none'
-  output: 'slideshow' | 'download' | 'both'
-  layout: 'single' | 'slide' | 'kenburns' | 'grid'
+  layout: 'single' | 'kenburns' | 'slide' | 'grid'
 }
 
 interface Props {
@@ -34,14 +33,13 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [current, setCurrent] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [visible, setVisible] = useState(true)
+  const [animating, setAnimating] = useState(false)
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photosRef = useRef(photos)
   useEffect(() => { photosRef.current = photos }, [photos])
 
   const intervalMs = (initialSettings.interval ?? 5) * 1000
-  const animation = initialSettings.animation ?? 'fade'
-  const layout = initialSettings.layout ?? 'single'
 
   const supabase = useRef(
     createBrowserClient(
@@ -64,16 +62,23 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
   const advance = useCallback((dir: 1 | -1 = 1) => {
     if (photosRef.current.length === 0) return
-    if (animation === 'fade' || layout === 'kenburns') {
+    const anim = initialSettings.animation
+    if (anim === 'fade') {
       setVisible(false)
       setTimeout(() => {
         setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
         setVisible(true)
       }, 350)
+    } else if (anim === 'slide') {
+      setAnimating(true)
+      setTimeout(() => {
+        setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
+        setAnimating(false)
+      }, 400)
     } else {
       setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
     }
-  }, [animation, layout])
+  }, [initialSettings.animation])
 
   useEffect(() => {
     if (!playing || photos.length <= 1) return
@@ -106,92 +111,78 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const photo = photos[current]
-  const n = photos.length
+  const layout = initialSettings.layout
+  const n = Math.max(photos.length, 1)
+  const photo  = photos[current]
+  const photo2 = photos[(current + 1) % n]
+  const photo3 = photos[(current + 2) % n]
 
-  // ── Slide transition helpers ──────────────────────────────────────────────
-  const slideTransition = animation === 'slide' ? 'transform 0.4s ease' : 'none'
-
-  // ── Render layout ─────────────────────────────────────────────────────────
-  function renderPhoto() {
-    if (!photo) return null
-
-    // Ken Burns layout — same as single but always with KB animation
-    if (layout === 'kenburns') {
+  function renderContent() {
+    if (photos.length === 0) {
       return (
-        <img
-          key={photo.id}
-          src={photo.url}
-          alt={photo.filename}
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover', display: 'block',
-            opacity: visible ? 1 : 0,
-            transition: 'opacity 0.35s ease',
-            animation: 'kenburns 8s ease-in-out infinite alternate',
-          }}
-        />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.25)', fontSize: 16, letterSpacing: '0.1em' }}>
+          Čeká se na fotky…
+        </div>
       )
     }
 
-    // Slide layout — outgoing exits left, incoming enters from right
-    if (layout === 'slide') {
+    if (layout === 'grid') {
       return (
-        <img
-          key={photo.id}
-          src={photo.url}
-          alt={photo.filename}
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'contain', display: 'block',
-            animation: 'slideInFromRight 0.45s ease forwards',
-          }}
-        />
-      )
-    }
-
-    // Grid layout — 3 photos simultaneously
-    if (layout === 'grid' && n >= 1) {
-      const p0 = photos[current % n]
-      const p1 = photos[(current + 1) % n]
-      const p2 = photos[(current + 2) % n]
-      return (
-        <div
-          key={current}
-          style={{
-            position: 'absolute', inset: 0, display: 'flex', gap: 3,
-            opacity: visible ? 1 : 0, transition: 'opacity 0.35s ease',
-          }}
-        >
-          <div style={{ flex: 2, overflow: 'hidden' }}>
-            <img src={p0.url} alt={p0.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 4, padding: 4 }}>
+          <div style={{ flex: 1, overflow: 'hidden', borderRadius: 4 }}>
+            <img src={photo?.url} alt="" style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              transition: 'opacity 0.35s ease',
+            }} />
           </div>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <div style={{ flex: 1, overflow: 'hidden' }}>
-              <img src={p1.url} alt={p1.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            </div>
-            <div style={{ flex: 1, overflow: 'hidden' }}>
-              <img src={p2.url} alt={p2.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            </div>
+          <div style={{ flex: 1, overflow: 'hidden', borderRadius: 4 }}>
+            <img src={photo2?.url} alt="" style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              transition: 'opacity 0.35s ease',
+            }} />
+          </div>
+          <div style={{ flex: 2, overflow: 'hidden', borderRadius: 4 }}>
+            <img src={photo3?.url} alt="" style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              transition: 'opacity 0.35s ease',
+            }} />
           </div>
         </div>
       )
     }
 
-    // Single (default)
+    // single / kenburns / slide layout
     return (
-      <img
-        key={photo.id}
-        src={photo.url}
-        alt={photo.filename}
-        style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'contain', display: 'block',
-          transition: animation === 'fade' ? 'opacity 0.35s ease' : slideTransition,
-          opacity: animation === 'fade' ? (visible ? 1 : 0) : 1,
-          transform: animation === 'slide' ? (visible ? 'translateX(0)' : 'translateX(-100%)') : 'none',
-        }}
-      />
+      <>
+        <img
+          key={photo?.id}
+          src={photo?.url}
+          alt=""
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'contain',
+            opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+            transition: initialSettings.animation === 'fade' ? 'opacity 0.35s ease' : 'none',
+            animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
+            transform: initialSettings.animation === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
+          }}
+        />
+        {initialSettings.animation === 'slide' && animating && (
+          <img
+            key={(photo2?.id ?? '') + '-in'}
+            src={photo2?.url}
+            alt=""
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              objectFit: 'contain',
+              animation: 'slideInRight 0.4s ease forwards',
+            }}
+          />
+        )}
+      </>
     )
   }
 
@@ -202,28 +193,36 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     >
       <style>{`
         @keyframes kenburns {
-          from { transform: scale(1) translate(0, 0); }
-          to   { transform: scale(1.12) translate(-2%, -1%); }
+          0%   { transform: scale(1)    translate(0, 0); }
+          100% { transform: scale(1.12) translate(-2%, -1%); }
         }
-        @keyframes slideInFromRight {
-          from { transform: translateX(100%); opacity: 0; }
-          to   { transform: translateX(0);    opacity: 1; }
+        @keyframes slideInRight {
+          from { transform: translateX(100%); }
+          to   { transform: translateX(0); }
+        }
+        @keyframes slideOutLeft {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-100%); }
         }
       `}</style>
 
-      {photos.length === 0 ? (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.25)', fontSize: 16, letterSpacing: '0.1em' }}>
-          Čeká se na fotky…
-        </div>
-      ) : renderPhoto()}
+      {renderContent()}
 
       {/* Event name */}
-      <div style={{ position: 'absolute', top: 16, left: 20, color: 'rgba(183,233,76,0.5)', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s' }}>
+      <div style={{
+        position: 'absolute', top: 16, left: 20,
+        color: 'rgba(183,233,76,0.5)', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em',
+        pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s',
+      }}>
         {initialEvent.name}
       </div>
 
       {/* Keyboard hint */}
-      <div style={{ position: 'absolute', top: 16, right: 20, fontSize: 11, color: 'rgba(255,255,255,0.2)', pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s' }}>
+      <div style={{
+        position: 'absolute', top: 16, right: 20,
+        fontSize: 11, color: 'rgba(255,255,255,0.2)',
+        pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s',
+      }}>
         Space · ← → · F · ESC
       </div>
 
@@ -239,7 +238,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         <button onClick={() => setPlaying(p => !p)} style={ctrlBtn}>{playing ? '⏸' : '▶'}</button>
         <button onClick={() => advance(1)} style={ctrlBtn}>›</button>
         <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, margin: '0 4px', userSelect: 'none' }}>
-          {n > 0 ? `${current + 1} / ${n}` : '0'}
+          {photos.length > 0 ? `${current + 1} / ${photos.length}` : '0'}
         </span>
         <button
           onClick={() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()}
