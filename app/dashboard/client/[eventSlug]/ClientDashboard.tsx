@@ -571,7 +571,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 <div style={{ padding: '12px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
                   Nastavení slideshow spravuje fotograf. Aktuální obsah:{' '}
                   <strong>
-                    {{ random: 'náhodný kolotoč', photographer: 'fotograf vybírá', client: 'zadavatel vybírá', selected_guests: 'vybrané galerie' }[(event as any).slideshow_content ?? 'random'] ?? 'náhodný kolotoč'}
+                    {({'random': 'náhodný kolotoč', 'photographer': 'fotograf vybírá', 'client': 'zadavatel vybírá', 'selected_guests': 'vybrané galerie'} as Record<string, string>)[(event as any).slideshow_content ?? 'random'] ?? 'náhodný kolotoč'}
                   </strong>
                 </div>
               )}
