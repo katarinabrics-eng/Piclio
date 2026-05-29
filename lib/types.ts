@@ -27,6 +27,7 @@ export interface PiclioEvent {
   slideshow_output: 'slideshow' | 'download' | 'both'
   slideshow_interval: number
   slideshow_animation: 'fade' | 'slide' | 'none'
+  slideshow_layout: 'single' | 'slide' | 'kenburns' | 'grid'
 }
 
 export interface Guest {

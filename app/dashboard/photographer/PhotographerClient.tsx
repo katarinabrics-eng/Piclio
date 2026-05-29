@@ -73,6 +73,7 @@ export function PhotographerClient() {
   const [slideshowOutput, setSlideshowOutput] = useState<'slideshow' | 'download' | 'both'>('slideshow')
   const [slideshowInterval, setSlideshowInterval] = useState(5)
   const [slideshowAnimation, setSlideshowAnimation] = useState<'fade' | 'slide' | 'none'>('fade')
+  const [slideshowLayout, setSlideshowLayout] = useState<'single' | 'kenburns' | 'grid'>('single')
   const [savingSlideshow, setSavingSlideshow] = useState(false)
   const [slideshowMsg, setSlideshowMsg] = useState('')
 
@@ -107,6 +108,7 @@ export function PhotographerClient() {
           slideshow_output: slideshowOutput,
           slideshow_interval: slideshowInterval,
           slideshow_animation: slideshowAnimation,
+          slideshow_layout: slideshowLayout,
         }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
@@ -535,6 +537,7 @@ export function PhotographerClient() {
     setSlideshowOutput((event as any).slideshow_output ?? 'slideshow')
     setSlideshowInterval((event as any).slideshow_interval ?? 5)
     setSlideshowAnimation((event as any).slideshow_animation ?? 'fade')
+    setSlideshowLayout((event as any).slideshow_layout ?? 'single')
     setSlideshowMsg('')
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`, { cache: 'no-store' }),
@@ -1786,13 +1789,52 @@ export function PhotographerClient() {
                       </div>
                     )}
 
+                    {/* Layout výběr */}
                     <div>
-                      <label style={projLabel}>Animace</label>
-                      <select value={slideshowAnimation} onChange={e => setSlideshowAnimation(e.target.value as any)} style={projSelect}>
-                        <option value="fade">Prolínačka (fade)</option>
-                        <option value="slide">Posouvání (slide)</option>
-                        <option value="none">Žádná</option>
-                      </select>
+                      <label style={projLabel}>Rozvržení snímků</label>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                        {([
+                          { key: 'single',   label: 'Jedna fotka',  desc: 'Plné plátno, jedna fotka' },
+                          { key: 'slide',    label: 'Posouvání',    desc: 'Fotky se sunou ze strany' },
+                          { key: 'kenburns', label: 'Ken Burns',    desc: 'Pomalý zoom, filmový efekt' },
+                          { key: 'grid',     label: 'Mozaika',      desc: '2 portréty + 1 krajina' },
+                        ] as const).map(({ key, label, desc }) => (
+                          <button key={key} onClick={() => setSlideshowLayout(key as any)}
+                            style={{
+                              border: slideshowLayout === key ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                              borderRadius: 10, padding: '12px 14px', cursor: 'pointer',
+                              background: slideshowLayout === key ? '#f7ffe0' : '#fff',
+                              textAlign: 'left' as const, transition: 'all 0.15s',
+                            }}>
+                            <div style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{label}</div>
+                            <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{desc}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Animace přechodu */}
+                    <div>
+                      <label style={projLabel}>Animace přechodu</label>
+                      <div style={{ display: 'flex', gap: 10 }}>
+                        {([
+                          { key: 'fade',  label: 'Prolínačka', desc: 'Plynulý přechod' },
+                          { key: 'slide', label: 'Posouvání',  desc: 'Zleva doprava' },
+                          { key: 'none',  label: 'Žádná',      desc: 'Okamžitý střih' },
+                        ] as const).map(({ key, label, desc }) => (
+                          <button key={key} onClick={() => setSlideshowAnimation(key)}
+                            style={{
+                              flex: 1,
+                              border: slideshowAnimation === key ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                              borderRadius: 10, padding: '10px 12px', cursor: 'pointer',
+                              background: slideshowAnimation === key ? '#f7ffe0' : '#fff',
+                              textAlign: 'center' as const, transition: 'all 0.15s',
+                            }}>
+                            <div style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{label}</div>
+                            <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{desc}</div>
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     <div>

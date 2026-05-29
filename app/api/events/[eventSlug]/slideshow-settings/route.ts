@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('slug, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation')
+    .select('slug, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation, slideshow_layout')
     .eq('slug', params.eventSlug)
     .single()
 
@@ -23,6 +23,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { eventSlug:
     'slideshow_output',
     'slideshow_interval',
     'slideshow_animation',
+    'slideshow_layout',
   ]
   const patch = Object.fromEntries(Object.entries(body).filter(([k]) => allowed.includes(k)))
 
@@ -33,7 +34,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { eventSlug:
     .from('events')
     .update(patch)
     .eq('slug', params.eventSlug)
-    .select('slug, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation')
+    .select('slug, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation, slideshow_layout')
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
