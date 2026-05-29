@@ -83,6 +83,11 @@ export default async function ClientDashboardPage({ params }: Props) {
         public_gallery: event.public_gallery ?? false,
         overlay_approved: event.overlay_approved ?? false,
         overlay_mode: (event.overlay_mode ?? 'none') as 'custom' | 'piclio' | 'none',
+        slideshow_content: (event.slideshow_content ?? 'random') as 'photographer' | 'client' | 'random' | 'selected_guests',
+        slideshow_selected_guests: event.slideshow_selected_guests ?? [],
+        slideshow_output: (event.slideshow_output ?? 'slideshow') as 'slideshow' | 'download' | 'both',
+        slideshow_interval: event.slideshow_interval ?? 5,
+        slideshow_animation: (event.slideshow_animation ?? 'fade') as 'fade' | 'slide' | 'none',
       }}
       guests={guestList}
       stats={{
