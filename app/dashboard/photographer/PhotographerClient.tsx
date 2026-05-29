@@ -1888,7 +1888,7 @@ export function PhotographerClient() {
                   <div style={{ padding: 12, borderTop: '1px solid #f3f4f6', display: 'flex', flexDirection: 'column', gap: 8 }}>
                     <button onClick={async () => {
                       if (!selectedEvent || playlistPhotos.length === 0) return
-                      const guestIds = [...new Set(playlistPhotos.map(p => p.guest_id).filter(Boolean))] as string[]
+                      const guestIds = Array.from(new Set(playlistPhotos.map(p => p.guest_id).filter(Boolean))) as string[]
                       await fetch(`/api/events/${selectedEvent.slug}/slideshow-settings`, {
                         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ slideshow_selected_guests: guestIds }),
