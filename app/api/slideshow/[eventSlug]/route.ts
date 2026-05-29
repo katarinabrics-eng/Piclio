@@ -58,7 +58,7 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
   }
 
   // Deduplicate
-  const uniquePhotoIds = [...new Set(photoIds)]
+  const uniquePhotoIds = Array.from(new Set(photoIds))
 
   const { data: photos } = await supabaseAdmin
     .from('photos')
