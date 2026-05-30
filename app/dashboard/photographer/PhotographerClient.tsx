@@ -595,6 +595,12 @@ export function PhotographerClient() {
       setUnmatched(prev => prev.filter(p => p.id !== photoId))
       setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: Math.max(0, prev.unmatchedCount - 1) } : prev)
       setLightboxIndex(null)
+      // Znovu načti nespárované ze serveru (respektuje deleted_photos filtr)
+      if (selectedEvent) {
+        const r = await fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`)
+        const d = await r.json()
+        setUnmatched(d.photos ?? [])
+      }
     } else {
       alert('Nepodařilo se smazat fotku.')
     }
