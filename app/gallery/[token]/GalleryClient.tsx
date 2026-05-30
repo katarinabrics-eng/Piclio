@@ -21,6 +21,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   const [activeTab, setActiveTab] = useState<'moje' | 'event'>('moje')
   const [eventPhotos, setEventPhotos] = useState<UnmatchedPhoto[]>([])
   const [claiming, setClaiming] = useState<string | null>(null)
+  const [hiddenPhotoIds, setHiddenPhotoIds] = useState<Set<string>>(new Set())
 
   const supabase = useRef(
     createBrowserClient(
@@ -144,7 +145,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
             }}
           >
             {tab === 'moje' ? 'Moje fotky' : 'Fotky z eventu'}
-            {tab === 'event' && eventPhotos.length > 0 && ` (${eventPhotos.length})`}
+            {tab === 'event' && eventPhotos.length > 0 && ` (${eventPhotos.length - hiddenPhotoIds.size})`}
           </button>
         ))}
       </div>
@@ -209,6 +210,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                     onError={() => {
                       const el = document.getElementById(`ep-${photo.id}`)
                       if (el) el.style.display = 'none'
+                      setHiddenPhotoIds(prev => new Set(prev).add(photo.id))
                     }}
                     style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block' }}
                   />
