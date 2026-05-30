@@ -471,7 +471,7 @@ export default function LandingPage() {
 
             {/* Pravá strana — Kristína karta */}
             <div style={{
-              background: 'linear-gradient(135deg, #231845 0%, #1a1232 100%)',
+              background: '#191224',
               border: '1px solid rgba(183,233,76,0.2)',
               borderRadius: 28, padding: '40px 36px',
             }}>
