@@ -588,6 +588,20 @@ export function PhotographerClient() {
     const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
     setGuests(gData.guests ?? [])
     setUnmatched(uData.photos ?? [])
+
+    // Refresh počítadel pro tento event
+    const evRes = await fetch(`/api/photographer/events?refresh=1`, { cache: 'no-store' })
+    const evData = await evRes.json()
+    const freshEvent = (evData.events ?? []).find((e: any) => e.id === event.id)
+    if (freshEvent) {
+      setSelectedEvent(prev => prev ? {
+        ...prev,
+        photoCount: freshEvent.photoCount,
+        unmatchedCount: freshEvent.unmatchedCount,
+        guestCount: freshEvent.guestCount,
+        deliveredCount: freshEvent.deliveredCount,
+      } : prev)
+    }
   }
 
   async function deleteUnmatchedPhoto(photoId: string) {
