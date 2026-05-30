@@ -15,12 +15,12 @@ export default function LandingPage() {
       }}>
         <Image src="/logo01.png" alt="Piclio" width={100} height={32} style={{ objectFit: 'contain' }} />
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <Link href="/login" style={{
+          <a href="https://www.piclio.cz/login" style={{
             color: '#d0d0d0', textDecoration: 'none', fontSize: 14, fontWeight: 500,
             padding: '8px 16px', borderRadius: 8, transition: 'color 0.2s',
           }}>
             Přihlásit se
-          </Link>
+          </a>
           <Link href="/login" style={{
             background: '#b7e94c', color: '#0a0a0a', textDecoration: 'none',
             fontSize: 14, fontWeight: 700, padding: '9px 20px', borderRadius: 8,
