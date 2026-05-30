@@ -201,7 +201,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
               gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
               gap: 8,
             }}>
-              {eventPhotos.map(photo => (
+              {eventPhotos.filter(p => p.url && p.url.length > 0).map(photo => (
                 <div key={photo.id}>
                   <img
                     src={photo.url}
