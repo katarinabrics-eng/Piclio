@@ -365,6 +365,10 @@ export function PhotographerClient() {
 
   async function handleCreateEvent(e: React.FormEvent) {
     e.preventDefault()
+    if (eventType === 'ai' && (!form.clientName.trim() || !form.clientEmail.trim())) {
+      setCreateError('Vyplňte jméno a email zadavatele.')
+      return
+    }
     setCreating(true)
     setCreateError('')
     try {
@@ -2678,6 +2682,7 @@ export function PhotographerClient() {
                   <label style={labelStyle}>
                     Jméno zadavatele *
                     <input
+                      required={eventType === 'ai'}
                       value={form.clientName}
                       onChange={e => updateForm('clientName', e.target.value)}
                       placeholder="Jan Novák"
@@ -2688,7 +2693,7 @@ export function PhotographerClient() {
                   <label style={labelStyle}>
                     Email zadavatele *
                     <input
-                      type="email" value={form.clientEmail}
+                      type="email" required={eventType === 'ai'} value={form.clientEmail}
                       onChange={e => updateForm('clientEmail', e.target.value)}
                       placeholder="jan@firma.cz"
                       style={inputStyle}
