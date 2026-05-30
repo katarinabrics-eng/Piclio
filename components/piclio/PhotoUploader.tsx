@@ -21,7 +21,7 @@ const UPLOAD_URL = 'https://piclio-backend.fly.dev/upload'
 const MAX_CONCURRENT = 3
 const TIMEOUT_MS = 30_000
 
-export function PhotoUploader({ eventId: _eventId, onUploadComplete }: PhotoUploaderProps) {
+export function PhotoUploader({ eventId, onUploadComplete }: PhotoUploaderProps) {
   const [files, setFiles] = useState<FileItem[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -47,6 +47,7 @@ export function PhotoUploader({ eventId: _eventId, onUploadComplete }: PhotoUplo
     const xhr = new XMLHttpRequest()
     const formData = new FormData()
     formData.append('file', item.file)
+    if (eventId) formData.append('event_id', eventId)
 
     xhr.upload.onprogress = (e) => {
       if (e.lengthComputable) {
