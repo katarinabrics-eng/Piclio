@@ -613,6 +613,7 @@ export function PhotographerClient() {
     if (selectedUnmatched.size === 0) return
     const confirmed = window.confirm(`Opravdu smazat ${selectedUnmatched.size} fotek? Akce je nevratná.`)
     if (!confirmed) return
+    const deletedCount = selectedUnmatched.size
     setDeletingBulk(true)
     const ids = Array.from(selectedUnmatched)
     await Promise.all(ids.map(id =>
@@ -622,8 +623,14 @@ export function PhotographerClient() {
     if (selectedEvent) {
       const r = await fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`)
       const d = await r.json()
-      setUnmatched(d.photos ?? [])
-      setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: d.photos?.length ?? 0 } : prev)
+      const newUnmatched = d.photos ?? []
+      setUnmatched(newUnmatched)
+      // Aktualizuj počítadla — unmatchedCount ze serveru, photoCount odečti smazané
+      setSelectedEvent(prev => prev ? {
+        ...prev,
+        unmatchedCount: newUnmatched.length,
+        photoCount: Math.max(0, prev.photoCount - deletedCount),
+      } : prev)
     }
     setDeletingBulk(false)
   }
@@ -1000,6 +1007,7 @@ export function PhotographerClient() {
                       {unmatched.map((photo, idx) => (
                         <div
                           key={photo.id}
+                          data-photo-id={photo.id}
                           style={{
                             background: '#fff', borderRadius: 10, overflow: 'hidden',
                             boxShadow: selectedUnmatched.has(photo.id) ? '0 0 0 2px #b7e94c' : '0 1px 4px rgba(0,0,0,0.06)',
@@ -1030,7 +1038,11 @@ export function PhotographerClient() {
                               src={photo.url}
                               alt={photo.filename}
                               onClick={() => setLightboxIndex(idx)}
-                              onError={e => console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)}
+                              onError={e => {
+                                console.error('[unmatched img error]', photo.filename, '|', photo.url, '|', e.type)
+                                const card = (e.target as HTMLElement).closest('[data-photo-id]') as HTMLElement
+                                if (card) card.style.display = 'none'
+                              }}
                               style={{ maxHeight: 220, maxWidth: '100%', width: 'auto', height: 'auto', display: 'block', cursor: 'zoom-in' }}
                             />
                             {/* Trash button */}

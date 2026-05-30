@@ -31,10 +31,13 @@ export async function GET(req: NextRequest) {
   }
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
+  // Filter out photos without a valid storage_path
+  const validPhotos = photos.filter(p => p.storage_path && p.storage_path.trim() !== '')
+
   // Filter out permanently deleted photos
   const { data: deleted } = await supabaseAdmin.from('deleted_photos').select('storage_path')
   const deletedPaths = new Set((deleted ?? []).map((d: { storage_path: string }) => d.storage_path))
-  const filtered = photos.filter(p => !deletedPaths.has(p.storage_path))
+  const filtered = validPhotos.filter(p => !deletedPaths.has(p.storage_path))
 
   if (filtered.length === 0) return NextResponse.json({ photos: [] })
 
