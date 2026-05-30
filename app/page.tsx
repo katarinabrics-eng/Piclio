@@ -181,6 +181,7 @@ export default function LandingPage() {
             '/demo/demo-krajina.jpg',
             '/demo/Piclio05.jpg',
             '/demo/Piclio-event01.png',
+            // zdvojení pro nekonečnou smyčku
             '/demo/Hero-01.png',
             '/demo/demo-portrait.jpg',
             '/demo/Piclio01.jpg',
