@@ -471,7 +471,7 @@ export default function LandingPage() {
 
             {/* Pravá strana — Kristína karta */}
             <div style={{
-              background: 'linear-gradient(135deg, #1e1640 0%, #13102a 100%)',
+              background: 'linear-gradient(135deg, #231845 0%, #1a1232 100%)',
               border: '1px solid rgba(183,233,76,0.2)',
               borderRadius: 28, padding: '40px 36px',
             }}>
@@ -489,7 +489,7 @@ export default function LandingPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <a href="mailto:ahoj@piclio.cz?subject=Zájem o Piclio SaaS pro fotografy" style={{
                   display: 'flex', alignItems: 'center', gap: 10,
-                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'rgba(183,233,76,0.04)', border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
                 }}>
                   <span style={{ fontSize: 16 }}>✉</span>
@@ -500,7 +500,7 @@ export default function LandingPage() {
                 </a>
                 <a href="tel:+420604750776" style={{
                   display: 'flex', alignItems: 'center', gap: 10,
-                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                  background: 'rgba(183,233,76,0.04)', border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
                 }}>
                   <span style={{ fontSize: 16 }}>📞</span>
