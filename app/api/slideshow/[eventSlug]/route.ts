@@ -78,10 +78,15 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
     })
   }
 
+  // Filter out permanently deleted photos
+  const { data: deleted } = await supabaseAdmin.from('deleted_photos').select('storage_path')
+  const deletedPaths = new Set((deleted ?? []).map((d: { storage_path: string }) => d.storage_path))
+  const filteredPhotos = photos.filter((p: { storage_path: string }) => !deletedPaths.has(p.storage_path))
+
   // Shuffle for random content
   const ordered = content === 'random'
-    ? [...photos].sort(() => Math.random() - 0.5)
-    : photos
+    ? [...filteredPhotos].sort(() => Math.random() - 0.5)
+    : filteredPhotos
 
   const signed = await signPhotosRobust(ordered, 172800)
 

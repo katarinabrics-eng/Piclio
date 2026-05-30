@@ -31,9 +31,16 @@ export async function GET(req: NextRequest) {
   }
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
-  console.log('unmatched paths to sign:', photos.map(p => p.storage_path))
+  // Filter out permanently deleted photos
+  const { data: deleted } = await supabaseAdmin.from('deleted_photos').select('storage_path')
+  const deletedPaths = new Set((deleted ?? []).map((d: { storage_path: string }) => d.storage_path))
+  const filtered = photos.filter(p => !deletedPaths.has(p.storage_path))
 
-  const photosWithUrls = await signPhotosRobust(photos, 86400)
+  if (filtered.length === 0) return NextResponse.json({ photos: [] })
+
+  console.log('unmatched paths to sign:', filtered.map(p => p.storage_path))
+
+  const photosWithUrls = await signPhotosRobust(filtered, 86400)
 
   return NextResponse.json({ photos: photosWithUrls })
 }

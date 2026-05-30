@@ -53,7 +53,11 @@ export async function GET(req: NextRequest, { params }: { params: { eventSlug: s
       .eq('event_id', event.id)
       .order('uploaded_at', { ascending: sort === 'oldest' })
 
-    const unassigned = (allPhotos ?? []).filter(p => !assignedPhotoIds.has(p.id))
+    // Filter out permanently deleted photos
+    const { data: deletedRows } = await supabaseAdmin.from('deleted_photos').select('storage_path')
+    const deletedPaths = new Set((deletedRows ?? []).map((d: { storage_path: string }) => d.storage_path))
+
+    const unassigned = (allPhotos ?? []).filter(p => !assignedPhotoIds.has(p.id) && !deletedPaths.has(p.storage_path))
     if (unassigned.length === 0) return NextResponse.json({ photos: [] })
 
     const signed = await signPhotosRobust(unassigned, 172800)
@@ -108,7 +112,14 @@ export async function GET(req: NextRequest, { params }: { params: { eventSlug: s
 
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
-  const signed = await signPhotosRobust(photos, 172800)
+  // Filter out permanently deleted photos
+  const { data: deletedRows2 } = await supabaseAdmin.from('deleted_photos').select('storage_path')
+  const deletedPaths2 = new Set((deletedRows2 ?? []).map((d: { storage_path: string }) => d.storage_path))
+  const photosFiltered = photos.filter((p: { storage_path: string }) => !deletedPaths2.has(p.storage_path))
+
+  if (photosFiltered.length === 0) return NextResponse.json({ photos: [] })
+
+  const signed = await signPhotosRobust(photosFiltered, 172800)
 
   const result: GalleryPhoto[] = signed.map((p: any) => ({
     id: p.id,

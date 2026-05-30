@@ -44,5 +44,10 @@ export async function DELETE(
 
   if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
 
+  // Record deleted path so it never reappears
+  await supabaseAdmin
+    .from('deleted_photos')
+    .upsert({ storage_path: photo.storage_path })
+
   return NextResponse.json({ success: true })
 }

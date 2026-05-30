@@ -39,7 +39,12 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
         .in('id', photoIds)
     : { data: [] }
 
-  const photos = photosData ?? []
+  const photosRaw = photosData ?? []
+
+  // Filter out permanently deleted photos
+  const { data: deletedRows } = await supabaseAdmin.from('deleted_photos').select('storage_path')
+  const deletedPaths = new Set((deletedRows ?? []).map((d: { storage_path: string }) => d.storage_path))
+  const photos = photosRaw.filter((p: { storage_path: string }) => !deletedPaths.has(p.storage_path))
 
   console.log('gallery guest_id:', guest.id,
     '| photo_guests rows:', photoGuests?.length ?? 0,
