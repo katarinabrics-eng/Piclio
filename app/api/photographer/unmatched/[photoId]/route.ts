@@ -52,5 +52,12 @@ export async function DELETE(
     .from('deleted_photos')
     .upsert({ storage_path: photo.storage_path })
 
+  // Smaž fyzický soubor z backendu
+  try {
+    await fetch(`https://piclio-backend.fly.dev/photos/${photoId}`, { method: 'DELETE' })
+  } catch (e) {
+    console.error('Backend delete failed:', e)
+  }
+
   return NextResponse.json({ success: true })
 }
