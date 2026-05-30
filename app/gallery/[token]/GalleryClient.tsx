@@ -30,7 +30,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   ).current
 
   const fetchEventPhotos = useCallback(async () => {
-    const res = await fetch(`/api/gallery/${token}/unmatched`)
+    const res = await fetch(`/api/gallery/${token}/unmatched`, { cache: 'no-store' })
     const data = await res.json()
     if (data.photos) setEventPhotos(data.photos)
   }, [token])
