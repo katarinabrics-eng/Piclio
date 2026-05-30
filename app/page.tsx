@@ -28,10 +28,10 @@ export default function LandingPage() {
       </nav>
 
       {/* HERO — fullscreen */}
-      <section style={{ position: 'relative', height: '100vh', minHeight: 640, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+      <section style={{ position: 'relative', height: '78vh', minHeight: 520, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
         <Image src="/demo/Hero-01.png" alt="Fotograf na eventu" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} priority />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(25,18,36,0.1) 0%, rgba(25,18,36,0.35) 45%, rgba(25,18,36,0.92) 78%, rgba(25,18,36,0.99) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 96px 72px', maxWidth: 1400, margin: '0 auto', width: '100%' }}>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 96px 52px', maxWidth: 1400, margin: '0 auto', width: '100%' }}>
           <div style={{ maxWidth: 620 }}>
             <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
             <h1 style={{ fontSize: 'clamp(48px, 5.5vw, 82px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 28px', maxWidth: 600 }}>
