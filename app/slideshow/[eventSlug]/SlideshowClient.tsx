@@ -60,6 +60,14 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     return () => { supabase.removeChannel(channel) }
   }, [eventSlug, supabase])
 
+  useEffect(() => {
+    fetch(`/api/slideshow/${eventSlug}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.photos?.length > 0) setPhotos(data.photos)
+      })
+  }, [eventSlug])
+
   const advance = useCallback((dir: 1 | -1 = 1) => {
     if (photosRef.current.length === 0) return
     const anim = initialSettings.animation
@@ -240,6 +248,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, margin: '0 4px', userSelect: 'none' }}>
           {photos.length > 0 ? `${current + 1} / ${photos.length}` : '0'}
         </span>
+        <button onClick={() => window.location.reload()} style={ctrlBtn} title="Reload nastavení">↺</button>
         <button
           onClick={() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()}
           style={ctrlBtn} title="Fullscreen (F)"

@@ -72,6 +72,7 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
       settings: {
         interval: event.slideshow_interval ?? 5,
         animation: event.slideshow_animation ?? 'fade',
+        layout: event.slideshow_layout ?? 'single',
         output: event.slideshow_output ?? 'slideshow',
       },
     })
