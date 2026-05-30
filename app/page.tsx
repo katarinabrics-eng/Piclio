@@ -355,19 +355,19 @@ export default function LandingPage() {
                 name: 'Katarína',
                 role: 'Obraz · Strategie · AI',
                 desc: '26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.',
-                initials: 'K',
+                foto: '/demo/katarina.png',
               },
               {
                 name: 'Luboš',
                 role: 'Světlo · Kompozice · Technologie',
                 desc: '26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup bude vypadat profesionálně.',
-                initials: 'L',
+                foto: '/demo/lubos.png',
               },
               {
                 name: 'Kristína',
                 role: 'Péče o zákazníka · Koordinace',
                 desc: 'Vaše hlavní spojka s projektem. Stará se o průběh akce, zákazníky a brand DNA.',
-                initials: 'Kr',
+                foto: '/demo/kristina.png',
               },
             ].map(p => (
               <div key={p.name} style={{
@@ -377,13 +377,13 @@ export default function LandingPage() {
                 padding: '36px 32px',
               }}>
                 <div style={{
-                  width: 64, height: 64, borderRadius: '50%',
-                  background: 'rgba(183,233,76,0.1)',
-                  border: '1px solid rgba(183,233,76,0.2)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 20, fontWeight: 700, color: '#b7e94c',
-                  marginBottom: 20,
-                }}>{p.initials}</div>
+                  width: 72, height: 72, borderRadius: '50%',
+                  overflow: 'hidden', marginBottom: 20,
+                  border: '2px solid rgba(183,233,76,0.2)',
+                  position: 'relative',
+                }}>
+                  <Image src={p.foto} alt={p.name} fill style={{ objectFit: 'cover', objectPosition: 'top' }} />
+                </div>
                 <div style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 6, letterSpacing: '-0.02em' }}>{p.name}</div>
                 <div style={{ fontSize: 12, color: '#b7e94c', marginBottom: 16, letterSpacing: '0.03em', fontWeight: 500 }}>{p.role}</div>
                 <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
