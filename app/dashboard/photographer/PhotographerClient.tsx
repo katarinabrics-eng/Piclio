@@ -42,6 +42,8 @@ export function PhotographerClient() {
   })
   const [eventType, setEventType] = useState<'ai' | 'simple'>('ai')
   const [galleryPublic, setGalleryPublic] = useState(false)
+  const [selectedUnmatched, setSelectedUnmatched] = useState<Set<string>>(new Set())
+  const [deletingBulk, setDeletingBulk] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventWithStats | null>(null)
   const [editForm, setEditForm] = useState({
     name: '', date: '', location: '', maxGuests: '100',
@@ -578,6 +580,7 @@ export function PhotographerClient() {
     setSlideshowAnimation((event as any).slideshow_animation ?? 'fade')
     setSlideshowLayout((event as any).slideshow_layout ?? 'single')
     setSlideshowMsg('')
+    setSelectedUnmatched(new Set())
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`, { cache: 'no-store' }),
       fetch(`/api/photographer/unmatched?eventId=${event.id}`, { cache: 'no-store' }),
@@ -604,6 +607,25 @@ export function PhotographerClient() {
     } else {
       alert('Nepodařilo se smazat fotku.')
     }
+  }
+
+  async function deleteBulkUnmatched() {
+    if (selectedUnmatched.size === 0) return
+    const confirmed = window.confirm(`Opravdu smazat ${selectedUnmatched.size} fotek? Akce je nevratná.`)
+    if (!confirmed) return
+    setDeletingBulk(true)
+    const ids = Array.from(selectedUnmatched)
+    await Promise.all(ids.map(id =>
+      fetch(`/api/photographer/unmatched/${id}`, { method: 'DELETE' })
+    ))
+    setSelectedUnmatched(new Set())
+    if (selectedEvent) {
+      const r = await fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`)
+      const d = await r.json()
+      setUnmatched(d.photos ?? [])
+      setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: d.photos?.length ?? 0 } : prev)
+    }
+    setDeletingBulk(false)
   }
 
   async function saveOverlayMode(mode: 'custom' | 'piclio' | 'none') {
@@ -933,11 +955,77 @@ export function PhotographerClient() {
                         .unmatched-grid { grid-template-columns: repeat(2, 1fr); }
                       }
                     `}</style>
+                    {/* Bulk toolbar */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, flexWrap: 'wrap' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, cursor: 'pointer', userSelect: 'none' }}>
+                        <input
+                          type="checkbox"
+                          checked={selectedUnmatched.size === unmatched.length && unmatched.length > 0}
+                          onChange={e => {
+                            if (e.target.checked) setSelectedUnmatched(new Set(unmatched.map(p => p.id)))
+                            else setSelectedUnmatched(new Set())
+                          }}
+                          style={{ width: 15, height: 15, cursor: 'pointer' }}
+                        />
+                        Vybrat vše
+                      </label>
+                      {selectedUnmatched.size > 0 && (
+                        <>
+                          <span style={{ fontSize: 13, color: '#6b7280' }}>Vybráno: {selectedUnmatched.size}</span>
+                          <button
+                            onClick={deleteBulkUnmatched}
+                            disabled={deletingBulk}
+                            style={{
+                              background: deletingBulk ? '#e5e7eb' : '#dc2626', color: '#fff',
+                              border: 'none', borderRadius: 7, padding: '6px 14px',
+                              fontSize: 13, fontWeight: 600, cursor: deletingBulk ? 'not-allowed' : 'pointer',
+                            }}
+                          >
+                            {deletingBulk ? 'Mažu…' : `🗑 Smazat ${selectedUnmatched.size} fotek`}
+                          </button>
+                          <button
+                            onClick={() => setSelectedUnmatched(new Set())}
+                            style={{
+                              background: 'transparent', border: '1px solid #d1d5db',
+                              borderRadius: 7, padding: '6px 12px', fontSize: 13,
+                              color: '#6b7280', cursor: 'pointer',
+                            }}
+                          >
+                            Zrušit výběr
+                          </button>
+                        </>
+                      )}
+                    </div>
                     <div className="unmatched-grid">
                       {unmatched.map((photo, idx) => (
-                        <div key={photo.id} style={{ background: '#fff', borderRadius: 10, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+                        <div
+                          key={photo.id}
+                          style={{
+                            background: '#fff', borderRadius: 10, overflow: 'hidden',
+                            boxShadow: selectedUnmatched.has(photo.id) ? '0 0 0 2px #b7e94c' : '0 1px 4px rgba(0,0,0,0.06)',
+                          }}
+                        >
                           {/* Thumbnail */}
                           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', background: '#f3f4f6' }}>
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={selectedUnmatched.has(photo.id)}
+                              onChange={e => {
+                                e.stopPropagation()
+                                setSelectedUnmatched(prev => {
+                                  const next = new Set(prev)
+                                  if (e.target.checked) next.add(photo.id)
+                                  else next.delete(photo.id)
+                                  return next
+                                })
+                              }}
+                              onClick={e => e.stopPropagation()}
+                              style={{
+                                position: 'absolute', top: 8, left: 8,
+                                width: 16, height: 16, cursor: 'pointer', zIndex: 2,
+                              }}
+                            />
                             <img
                               src={photo.url}
                               alt={photo.filename}
