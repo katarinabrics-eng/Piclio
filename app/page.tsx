@@ -28,22 +28,19 @@ export default function LandingPage() {
       </nav>
 
       {/* HERO — fullscreen */}
-      <section style={{ position: 'relative', height: '100vh', minHeight: 640, overflow: 'hidden' }}>
+      <section style={{ position: 'relative', height: '100vh', minHeight: 640, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
         <Image src="/demo/Hero-01.png" alt="Fotograf na eventu" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} priority />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(25,18,36,0.1) 0%, rgba(25,18,36,0.35) 45%, rgba(25,18,36,0.92) 78%, rgba(25,18,36,0.99) 100%)' }} />
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 96px 72px' }}>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 96px 72px', maxWidth: 1400, margin: '0 auto', width: '100%' }}>
           <div style={{ maxWidth: 620 }}>
             <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
-            <h1 style={{ fontSize: 'clamp(52px, 7vw, 96px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 28px', maxWidth: 600 }}>
+            <h1 style={{ fontSize: 'clamp(48px, 5.5vw, 82px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 28px', maxWidth: 600 }}>
               Akce skončí.<br />
               <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>Zážitek</span><br />
               zůstane.
             </h1>
-            <p style={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(255,255,255,0.7)', margin: '0 0 14px', maxWidth: 520 }}>
+            <p style={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)', margin: '0 0 36px', maxWidth: 520 }}>
               Profesionální fotky v telefonu každého hosta — doručené do 30 sekund. Bez aplikací. Bez čekání.
-            </p>
-            <p style={{ fontSize: 13, lineHeight: 1.75, color: 'rgba(255,255,255,0.4)', margin: '0 0 36px', maxWidth: 500 }}>
-              Piclio by Lucifera boří staré pořádky v eventové fotografii. Propojujeme 52 let vizuálních zkušeností s nejmodernější AI technologií, která doručí emoce přímo tam, kde je hosté chtějí mít — hned teď do jejich soukromé galerie.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci na klíč →</Link>
