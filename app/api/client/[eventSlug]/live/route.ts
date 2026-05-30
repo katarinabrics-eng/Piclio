@@ -44,12 +44,14 @@ export async function GET(
       supabaseAdmin
         .from('photos')
         .select('*', { count: 'exact', head: true })
-        .eq('event_id', event.id),
+        .eq('event_id', event.id)
+        .neq('is_deleted', true),
       supabaseAdmin
         .from('photos')
         .select('*', { count: 'exact', head: true })
         .eq('event_id', event.id)
-        .eq('status', 'unmatched'),
+        .eq('status', 'unmatched')
+        .neq('is_deleted', true),
       supabaseAdmin
         .from('guests')
         .select('*', { count: 'exact', head: true })
@@ -103,6 +105,7 @@ export async function GET(
       .select('id, filename, storage_path, original_path, uploaded_at, ocr_number, status')
       .eq('event_id', event.id)
       .eq('status', 'unmatched')
+      .neq('is_deleted', true)
       .order('uploaded_at', { ascending: false })
       .limit(20)
 
@@ -114,6 +117,7 @@ export async function GET(
       .from('photos')
       .select('id, filename, storage_path, uploaded_at')
       .eq('event_id', event.id)
+      .neq('is_deleted', true)
       .order('uploaded_at', { ascending: false })
       .limit(100)
 
