@@ -202,10 +202,14 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
               gap: 8,
             }}>
               {eventPhotos.filter(p => p.url && p.url.length > 0).map(photo => (
-                <div key={photo.id}>
+                <div key={photo.id} id={`ep-${photo.id}`}>
                   <img
                     src={photo.url}
                     alt={photo.filename}
+                    onError={() => {
+                      const el = document.getElementById(`ep-${photo.id}`)
+                      if (el) el.style.display = 'none'
+                    }}
                     style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block' }}
                   />
                   <button
