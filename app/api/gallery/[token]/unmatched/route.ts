@@ -49,5 +49,5 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
       status: p.status,
       event_id: p.event_id,
     })),
-  })
+  }, { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } })
 }
