@@ -172,7 +172,10 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { name, date, location, maxGuests, clientName, clientEmail, brandColor } = body
 
-  if (!name || !date || !location || !clientName || !clientEmail) {
+  if (!name || !date || !location) {
+    return NextResponse.json({ error: 'Chybí povinná pole' }, { status: 400 })
+  }
+  if (body.event_type !== 'simple' && (!clientName || !clientEmail)) {
     return NextResponse.json({ error: 'Chybí povinná pole' }, { status: 400 })
   }
 
