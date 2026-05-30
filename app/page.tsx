@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function LandingPage() {
+  const [activeStep, setActiveStep] = useState(1)
   return (
     <div style={{ background: '#191224', color: '#f0f0f0', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
 
@@ -222,27 +224,40 @@ export default function LandingPage() {
           <div className="steps-desktop" style={{ gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči — žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg' },
-                { n: '02', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png' },
-                { n: '03', title: 'AI spáruje do 30 sekund', desc: 'Systém rozpozná hosta a fotka automaticky přibude do jeho galerie.', img: '/demo/hero-02.png' },
-                { n: '04', title: 'Fotka přibyde do galerie', desc: 'Host vidí fotky jak přibývají — celý večer, v reálném čase, přímo v telefonu.', img: '/demo/Piclio03.jpg' },
-                { n: '05', title: 'Host sdílí s přáteli', desc: 'Otevře odkaz a sdílí okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg' },
+                { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', notif: 'E-mail zaregistrován · Galerie připravena' },
+                { n: '02', title: 'Připne si číslovaný odznáček', desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.', img: '/demo/demo-portrait.jpg', notif: 'Odznáček #014 přiřazen · Připraven k focení' },
+                { n: '03', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', notif: 'Fotka pořízena · Odesílám na server...' },
+                { n: '04', title: 'Fotka přibyde do galerie', desc: 'Do 30 sekund AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.', img: '/demo/Piclio03.jpg', notif: 'Přibyla do vaší galerie automaticky' },
+                { n: '05', title: 'Host sdílí s přáteli', desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', notif: 'Sdíleno · 3 přátelé viděli vaši fotku' },
               ].map((step, i) => (
                 <div
                   key={step.n}
                   onMouseEnter={() => {
+                    setActiveStep(i + 1)
                     const img = document.getElementById('step-preview-img') as HTMLImageElement
+                    const notifEl = document.getElementById('step-notif-text')
                     if (img) img.src = step.img
-                    document.querySelectorAll('.step-row').forEach((el, j) => {
-                      (el as HTMLElement).style.opacity = j === i ? '1' : '0.4'
-                    })
+                    if (notifEl) notifEl.textContent = step.notif
                   }}
-                  className="step-row"
-                  style={{ display: 'flex', gap: 16, padding: '20px 18px', borderRadius: 14, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.06)', background: i === 0 ? 'rgba(183,233,76,0.05)' : 'transparent', opacity: i === 0 ? 1 : 0.4, transition: 'all 0.2s' }}
+                  style={{
+                    display: 'flex', gap: 16, padding: '20px 18px',
+                    borderRadius: 14, cursor: 'pointer',
+                    border: activeStep === i + 1 ? '1px solid rgba(183,233,76,0.3)' : '1px solid rgba(255,255,255,0.06)',
+                    background: activeStep === i + 1 ? 'rgba(183,233,76,0.07)' : 'transparent',
+                    opacity: activeStep === i + 1 ? 1 : 0.4,
+                    transition: 'all 0.2s',
+                    borderLeft: activeStep === i + 1 ? '3px solid #b7e94c' : '3px solid transparent',
+                  }}
                 >
-                  <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#b7e94c' }}>{step.n}</div>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                    background: activeStep === i + 1 ? 'rgba(183,233,76,0.15)' : 'rgba(255,255,255,0.06)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 12, fontWeight: 700,
+                    color: activeStep === i + 1 ? '#b7e94c' : 'rgba(255,255,255,0.35)',
+                  }}>{step.n}</div>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 5 }}>{step.title}</div>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: activeStep === i + 1 ? '#fff' : 'rgba(255,255,255,0.6)', marginBottom: 5 }}>{step.title}</div>
                     <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{step.desc}</div>
                   </div>
                 </div>
@@ -253,9 +268,9 @@ export default function LandingPage() {
                 <img id="step-preview-img" src="/demo/Piclio01.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s' }} />
                 <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20, background: 'rgba(25,18,36,0.92)', backdropFilter: 'blur(12px)', borderRadius: 14, padding: '12px 16px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', marginBottom: 4, letterSpacing: '0.08em' }}>NOVÁ FOTKA · PRÁVĚ TEĎ</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block' }}></span>
-                    Přibyla do vaší galerie automaticky
+                  <div id="step-notif-text" style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}></span>
+                    E-mail zaregistrován · Galerie připravena
                   </div>
                 </div>
               </div>
