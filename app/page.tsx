@@ -376,14 +376,7 @@ export default function LandingPage() {
                 borderRadius: 24,
                 padding: '36px 32px',
               }}>
-                <div style={{
-                  width: 72, height: 72, borderRadius: '50%',
-                  overflow: 'hidden', marginBottom: 20,
-                  border: '2px solid rgba(183,233,76,0.2)',
-                  position: 'relative',
-                }}>
-                  <Image src={p.foto} alt={p.name} fill style={{ objectFit: 'cover', objectPosition: 'top' }} />
-                </div>
+                <img src={p.foto} alt={p.name} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', marginBottom: 20, border: '2px solid rgba(183,233,76,0.2)', display: 'block' }} />
                 <div style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 6, letterSpacing: '-0.02em' }}>{p.name}</div>
                 <div style={{ fontSize: 12, color: '#b7e94c', marginBottom: 16, letterSpacing: '0.03em', fontWeight: 500 }}>{p.role}</div>
                 <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
