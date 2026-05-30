@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -410,11 +412,61 @@ export default function LandingPage() {
       {/* CTA */}
       <section style={{ padding: '0 48px 80px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#16122a', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Vaši hosté si zaslouží víc než USB disk.</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-end' }}>
-            <p style={{ fontSize: 13, color: 'rgba(22,18,42,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>Pro firmy, event agentury<br />i profesionální fotografy.<br />Praha a celá ČR.</p>
-            <Link href="/login" style={{ background: '#16122a', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600, padding: '14px 28px', borderRadius: 100, display: 'inline-block' }}>Nezávazná poptávka →</Link>
-            <a href="mailto:ahoj@piclio.cz" style={{ color: 'rgba(22,18,42,0.5)', textDecoration: 'none', fontSize: 13, padding: '14px 28px', borderRadius: 100, border: '1.5px solid rgba(22,18,42,0.2)', display: 'inline-block' }}>ahoj@piclio.cz</a>
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#16122a', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Udělejte z vaší další akce zážitek, o kterém se bude mluvit.</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end', minWidth: 340 }}>
+            <p style={{ fontSize: 13, color: 'rgba(10,10,10,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>
+              Pro firmy, event agentury<br />i profesionální fotografy.<br />Praha a celá ČR.
+            </p>
+            <input
+              type="text"
+              placeholder="Vaše jméno"
+              style={{
+                width: '100%', padding: '12px 18px', borderRadius: 12,
+                border: '1.5px solid rgba(10,10,10,0.15)',
+                background: 'rgba(255,255,255,0.6)',
+                fontSize: 14, outline: 'none', color: '#16122a',
+                backdropFilter: 'blur(8px)',
+              }}
+            />
+            <input
+              type="email"
+              placeholder="Váš e-mail"
+              style={{
+                width: '100%', padding: '12px 18px', borderRadius: 12,
+                border: '1.5px solid rgba(10,10,10,0.15)',
+                background: 'rgba(255,255,255,0.6)',
+                fontSize: 14, outline: 'none', color: '#16122a',
+                backdropFilter: 'blur(8px)',
+              }}
+            />
+            <textarea
+              placeholder="Popište vaši akci — datum, počet hostů, typ eventu..."
+              rows={3}
+              style={{
+                width: '100%', padding: '12px 18px', borderRadius: 12,
+                border: '1.5px solid rgba(10,10,10,0.15)',
+                background: 'rgba(255,255,255,0.6)',
+                fontSize: 14, outline: 'none', color: '#16122a',
+                resize: 'none', fontFamily: 'inherit',
+                backdropFilter: 'blur(8px)',
+              }}
+            />
+            <button
+              onClick={() => {
+                const name = (document.querySelector('input[placeholder="Vaše jméno"]') as HTMLInputElement)?.value
+                const email = (document.querySelector('input[placeholder="Váš e-mail"]') as HTMLInputElement)?.value
+                const msg = (document.querySelector('textarea') as HTMLTextAreaElement)?.value
+                window.location.href = `mailto:ahoj@piclio.cz?subject=Poptávka od ${name}&body=Jméno: ${name}%0AE-mail: ${email}%0A%0A${msg}`
+              }}
+              style={{
+                width: '100%', padding: '14px 28px', borderRadius: 100,
+                background: '#16122a', color: '#fff',
+                fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                border: 'none', letterSpacing: '0.01em',
+              }}
+            >
+              Odeslat poptávku →
+            </button>
           </div>
         </div>
       </section>
