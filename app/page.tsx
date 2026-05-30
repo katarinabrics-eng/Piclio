@@ -255,6 +255,76 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* TÝM */}
+      <section style={{ padding: '100px 48px', background: '#0d0b14', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>NÁŠE TÝM</p>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
+            52 let zkušeností<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>v každém pixelu.</span>
+          </h2>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 64px', maxWidth: 480 }}>
+            Nejsme jen kód a servery. Jsme fyzický fotoateliér spojující řemeslo s digitálním ekosystémem.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+            {[
+              {
+                name: 'Luboš',
+                role: 'CEO · Světlo, Kompozice, Technologie',
+                desc: '26 let ve fotografii a filmu. Technický garant kvality, světla a bezchybného výstupu.',
+                initials: 'L',
+              },
+              {
+                name: 'Katarína',
+                role: 'Obraz, Strategie, AI',
+                desc: '26 let vizuální tvorby. Vytváří procesy a AI integrace, které zjednodušují práci s obsahem.',
+                initials: 'K',
+              },
+              {
+                name: 'Kristína',
+                role: 'Péče o zákazníka, Koordinace',
+                desc: 'Vaše hlavní spojka s projektem. Stará se o průběh akce, zákazníky a brand DNA.',
+                initials: 'Kr',
+              },
+            ].map(p => (
+              <div key={p.name} style={{
+                background: 'linear-gradient(135deg, #1a1232 0%, #13102a 100%)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: 24,
+                padding: '36px 32px',
+              }}>
+                <div style={{
+                  width: 64, height: 64, borderRadius: '50%',
+                  background: 'rgba(183,233,76,0.1)',
+                  border: '1px solid rgba(183,233,76,0.2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 20, fontWeight: 700, color: '#b7e94c',
+                  marginBottom: 20,
+                }}>{p.initials}</div>
+                <div style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 6, letterSpacing: '-0.02em' }}>{p.name}</div>
+                <div style={{ fontSize: 12, color: '#b7e94c', marginBottom: 16, letterSpacing: '0.03em', fontWeight: 500 }}>{p.role}</div>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 48, padding: '32px 40px', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 32 }}>
+            <div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Lucifera Studio</div>
+              <div style={{ fontSize: 15, color: '#fff', fontWeight: 500 }}>Kampa, Praha</div>
+            </div>
+            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.08)' }} />
+            <div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>E-mail</div>
+              <a href="mailto:ahoj@piclio.cz" style={{ fontSize: 15, color: '#b7e94c', textDecoration: 'none', fontWeight: 500 }}>ahoj@piclio.cz</a>
+            </div>
+            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.08)' }} />
+            <div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Telefon</div>
+              <a href="tel:+420604750776" style={{ fontSize: 15, color: '#fff', textDecoration: 'none', fontWeight: 500 }}>+420 604 750 776</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section style={{ padding: '0 48px 80px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
