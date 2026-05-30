@@ -28,6 +28,8 @@ export interface PiclioEvent {
   slideshow_interval: number
   slideshow_animation: 'fade' | 'slide' | 'none'
   slideshow_layout: 'single' | 'slide' | 'kenburns' | 'grid'
+  event_type: 'ai' | 'simple'
+  gallery_public: boolean
 }
 
 export interface Guest {

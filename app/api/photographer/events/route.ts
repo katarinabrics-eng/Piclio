@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, overlay_mode, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body, email_btn_text_color, email_header_color')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, overlay_mode, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body, email_btn_text_color, email_header_color, event_type, gallery_public')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })
@@ -191,6 +191,8 @@ export async function POST(req: NextRequest) {
     client_email: clientEmail,
     brand_color: brandColor ?? '#b7e94c',
     status: 'draft',
+    event_type: body.event_type ?? 'ai',
+    gallery_public: body.gallery_public ?? false,
   }
 
   const res1 = await supabaseAdmin

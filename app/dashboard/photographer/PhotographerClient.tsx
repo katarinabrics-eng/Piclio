@@ -40,6 +40,8 @@ export function PhotographerClient() {
     name: '', date: '', location: '', maxGuests: '100',
     clientName: '', clientEmail: '', brandColor: '#b7e94c',
   })
+  const [eventType, setEventType] = useState<'ai' | 'simple'>('ai')
+  const [galleryPublic, setGalleryPublic] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventWithStats | null>(null)
   const [editForm, setEditForm] = useState({
     name: '', date: '', location: '', maxGuests: '100',
@@ -375,6 +377,8 @@ export function PhotographerClient() {
           clientName: form.clientName,
           clientEmail: form.clientEmail,
           brandColor: form.brandColor,
+          event_type: eventType,
+          gallery_public: galleryPublic,
         }),
       })
       const data = await res.json()
@@ -382,6 +386,8 @@ export function PhotographerClient() {
       setEvents(prev => [data.event, ...prev])
       setShowNewEvent(false)
       setForm({ name: '', date: '', location: '', maxGuests: '100', clientName: '', clientEmail: '', brandColor: '#b7e94c' })
+      setEventType('ai')
+      setGalleryPublic(false)
     } catch {
       setCreateError('Chyba připojení')
     }
@@ -695,7 +701,12 @@ export function PhotographerClient() {
                     onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)')}
                   >
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 700, fontSize: 16, color: '#111827' }}>{event.name}</div>
+                      <div style={{ fontWeight: 700, fontSize: 16, color: '#111827', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        {event.name}
+                        {event.event_type === 'simple' && (
+                          <span style={{ fontSize: 10, background: 'rgba(183,233,76,0.15)', color: '#5a7a00', padding: '2px 8px', borderRadius: 100, fontWeight: 600 }}>GALERIE</span>
+                        )}
+                      </div>
                       <div style={{ fontSize: 13, color: '#6b7280', marginTop: 3 }}>
                         {new Date(event.date).toLocaleDateString('cs-CZ')}
                         {event.location ? ` · ${event.location}` : ''}
@@ -2353,7 +2364,7 @@ export function PhotographerClient() {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           zIndex: 1000, padding: 20,
         }}
-          onClick={e => { if (e.target === e.currentTarget) setShowNewEvent(false) }}
+          onClick={e => { if (e.target === e.currentTarget) { setShowNewEvent(false); setEventType('ai'); setGalleryPublic(false) } }}
         >
           <div style={{
             background: '#fff', borderRadius: 16, width: '100%', maxWidth: 520,
@@ -2366,13 +2377,86 @@ export function PhotographerClient() {
             }}>
               <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>Nový event</h2>
               <button
-                onClick={() => setShowNewEvent(false)}
+                onClick={() => { setShowNewEvent(false); setEventType('ai'); setGalleryPublic(false) }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 22, lineHeight: 1 }}
               >×</button>
             </div>
 
             {/* Form */}
             <form onSubmit={handleCreateEvent} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+              {/* Typ eventu */}
+              <div style={{ marginBottom: 8 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 12 }}>
+                  Typ události
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <button
+                    type="button"
+                    onClick={() => setEventType('ai')}
+                    style={{
+                      padding: '16px 14px', borderRadius: 12, cursor: 'pointer', textAlign: 'left',
+                      border: eventType === 'ai' ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                      background: eventType === 'ai' ? '#f7fde8' : '#fafafa',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <div style={{ fontSize: 18, marginBottom: 6 }}>🤖</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#111827', marginBottom: 4 }}>Plná integrace</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', lineHeight: 1.5 }}>AI detekce, soukromé galerie hostů, kiosk, slideshow</div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEventType('simple')}
+                    style={{
+                      padding: '16px 14px', borderRadius: 12, cursor: 'pointer', textAlign: 'left',
+                      border: eventType === 'simple' ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                      background: eventType === 'simple' ? '#f7fde8' : '#fafafa',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <div style={{ fontSize: 18, marginBottom: 6 }}>📸</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#111827', marginBottom: 4 }}>Jednoduchá galerie</div>
+                    <div style={{ fontSize: 11, color: '#6b7280', lineHeight: 1.5 }}>Jedna sdílená galerie, download, liky — bez AI</div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Viditelnost galerie — jen pro simple */}
+              {eventType === 'simple' && (
+                <div style={{ marginBottom: 8 }}>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 10 }}>
+                    Viditelnost galerie
+                  </label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <button
+                      type="button"
+                      onClick={() => setGalleryPublic(false)}
+                      style={{
+                        padding: '12px 14px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                        border: !galleryPublic ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                        background: !galleryPublic ? '#f7fde8' : '#fafafa',
+                      }}
+                    >
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#111827', marginBottom: 2 }}>🔒 Privátní</div>
+                      <div style={{ fontSize: 11, color: '#6b7280' }}>Jen kdo má odkaz</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGalleryPublic(true)}
+                      style={{
+                        padding: '12px 14px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                        border: galleryPublic ? '2px solid #b7e94c' : '1px solid #e5e7eb',
+                        background: galleryPublic ? '#f7fde8' : '#fafafa',
+                      }}
+                    >
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#111827', marginBottom: 2 }}>🌐 Veřejná</div>
+                      <div style={{ fontSize: 11, color: '#6b7280' }}>Kdokoli může najít</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Název */}
               <label style={labelStyle}>
                 Název eventu *
