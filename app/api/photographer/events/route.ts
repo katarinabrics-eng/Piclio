@@ -82,29 +82,20 @@ export async function GET(req: NextRequest) {
 
   if (!events) return NextResponse.json({ events: [] })
 
-  // Načti smazané storage_paths jednou pro všechny eventy
-  const { data: deletedPaths } = await supabaseAdmin
-    .from('deleted_photos')
-    .select('storage_path')
-  const deletedSet = new Set((deletedPaths ?? []).map((d: any) => d.storage_path))
-
   const eventsWithStats = await Promise.all(events.map(async (event) => {
     const [
       { count: guestCount },
       { count: deliveredCount },
-      { data: allPhotos },
-      { data: unmatchedPhotos },
+      { count: photoCount },
+      { count: unmatchedCount },
     ] = await Promise.all([
       supabaseAdmin.from('guests').select('*', { count: 'exact', head: true }).eq('event_id', event.id),
       supabaseAdmin.from('guests').select('*', { count: 'exact', head: true }).eq('event_id', event.id).not('email_sent_at', 'is', null),
-      supabaseAdmin.from('photos').select('id, storage_path').eq('event_id', event.id),
-      supabaseAdmin.from('photos').select('id, storage_path').eq('event_id', event.id).eq('status', 'unmatched'),
+      supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id).neq('is_deleted', true),
+      supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id).eq('status', 'unmatched').neq('is_deleted', true),
     ])
 
-    const photoCount = (allPhotos ?? []).filter((p: any) => !deletedSet.has(p.storage_path)).length
-    const unmatchedCount = (unmatchedPhotos ?? []).filter((p: any) => !deletedSet.has(p.storage_path)).length
-
-    return { ...event, guestCount: guestCount ?? 0, photoCount, unmatchedCount, deliveredCount: deliveredCount ?? 0 }
+    return { ...event, guestCount: guestCount ?? 0, photoCount: photoCount ?? 0, unmatchedCount: unmatchedCount ?? 0, deliveredCount: deliveredCount ?? 0 }
   }))
 
   return NextResponse.json({ events: eventsWithStats })

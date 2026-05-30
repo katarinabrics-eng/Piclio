@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
     .order('uploaded_at', { ascending: false })
 
   const { data: photos, error } = eventId
-    ? await baseQuery.eq('event_id', eventId)
-    : await baseQuery
+    ? await baseQuery.eq('event_id', eventId).neq('is_deleted', true)
+    : await baseQuery.neq('is_deleted', true)
 
   console.log('[unmatched] eventId:', eventId, '| count:', photos?.length ?? 0, '| error:', error?.message ?? null)
 

@@ -36,6 +36,9 @@ export async function DELETE(
     console.error('Storage delete error:', storageError.message)
   }
 
+  // Mark as deleted before removing DB row
+  await supabaseAdmin.from('photos').update({ is_deleted: true }).eq('id', photoId)
+
   // Delete DB row
   const { error: dbError } = await supabaseAdmin
     .from('photos')
