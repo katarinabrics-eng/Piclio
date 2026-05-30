@@ -428,45 +428,95 @@ export default function LandingPage() {
       </section>
 
       {/* CENÍK SAAS */}
-      <section id="ceník" className="section-pad" style={{ padding: '100px 48px', background: '#191224' }}>
+      <section id="ceník" style={{ padding: '100px 48px', background: '#0d0b14' }} className="section-pad">
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PRO FOTOGRAFY · SAAS</p>
-          <div className="cenik-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, gap: 32 }}>
-            <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: 0 }}>Platforma pro fotografy.</h2>
-            <p className="cenik-sub" style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', maxWidth: 260, textAlign: 'right', lineHeight: 1.6, margin: 0, flexShrink: 0 }}>Využijte vlastní techniku. Překvapte klienty bleskovým doručením.</p>
-          </div>
-          <div className="cenik-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-            {[
-              { tag: 'STARTER', price: '990 Kč', period: 'za event · 100 hostů', features: ['AI Face Recognition','Soukromé galerie hostů','QR kód + e-mail'], pop: false },
-              { tag: '★ PRO EVENT', price: '2 490 Kč', period: 'za event · 500 hostů', features: ['AI Face Recognition','White label galerie','Dashboard fotografa','Slideshow projekce'], pop: true },
-              { tag: 'MĚSÍČNÍ', price: '2 990 Kč', period: 'měsíčně · neomezené akce', features: ['Neomezené akce','10 000 fotek / měsíc','Prioritní podpora'], pop: false },
-              { tag: 'ROČNÍ', price: '24 900 Kč', period: 'ročně · vše neomezené', features: ['API přístup','White label','Custom integrace','Dedicated support'], pop: false },
-            ].map(p => (
-              <div key={p.tag} style={{ background: p.pop ? 'linear-gradient(135deg, #1e1640 0%, #1f1530 100%)' : 'rgba(255,255,255,0.03)', border: p.pop ? '1px solid rgba(183,233,76,0.35)' : '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '28px 24px' }}>
-                <div style={{ fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, color: p.pop ? '#b7e94c' : 'rgba(255,255,255,0.4)', marginBottom: 16 }}>{p.tag}</div>
-                <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', marginBottom: 4 }}>{p.price}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 24 }}>{p.period}</div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {p.features.map(f => (
-                    <li key={f} style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', display: 'flex', gap: 8 }}>
-                      <span style={{ color: '#b7e94c', fontWeight: 700, flexShrink: 0 }}>—</span>{f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/login" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 100, fontSize: 13, fontWeight: p.pop ? 700 : 500, textDecoration: 'none', background: p.pop ? '#b7e94c' : 'transparent', color: p.pop ? '#191224' : 'rgba(255,255,255,0.6)', border: p.pop ? 'none' : '1px solid rgba(255,255,255,0.12)' }}>Začít →</Link>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 32, padding: '24px 32px', background: 'rgba(183,233,76,0.06)', border: '1px solid rgba(183,233,76,0.2)', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 20 }}>
-            <span style={{ fontSize: 20 }}>⚠️</span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }} className="kiosk-grid">
+
+            {/* Levá strana — text */}
             <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', marginBottom: 4 }}>PRÁVĚ PŘIPRAVUJEME</div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>
-                Tato sekce je v závěrečné fázi ladění. Chcete se stát naším testerem za zvýhodněnou cenu?{' '}
-                <a href="mailto:ahoj@piclio.cz" style={{ color: '#b7e94c', textDecoration: 'none', fontWeight: 600 }}>Napište nám</a>{' '}
-                a domluvíme se na individuálních podmínkách.
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(183,233,76,0.1)', border: '1px solid rgba(183,233,76,0.25)', borderRadius: 100, padding: '6px 16px', marginBottom: 28 }}>
+                <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block' }}></span>
+                <span style={{ fontSize: 11, color: '#b7e94c', fontWeight: 600, letterSpacing: '0.12em' }}>PRÁVĚ PŘIPRAVUJEME · BRZY SPOUŠTÍME</span>
+              </div>
+              <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 20px' }}>
+                Buďte mezi prvními.<br />
+                <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Za zvýhodněných podmínek.</span>
+              </h2>
+              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: '0 0 32px', maxWidth: 440 }}>
+                Piclio SaaS platforma pro fotografy je v závěrečné fázi vývoje. Máte jedinečnou příležitost být jedni z prvních, kteří ji vyzkouší — a získat přístup za speciálních podmínek.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
+                {[
+                  'Přístup do beta verze ještě před veřejným spuštěním',
+                  'Zvýhodněná cena platná napořád pro early adopters',
+                  'Přímý vliv na vývoj — vaše zpětná vazba formuje produkt',
+                  'Osobní onboarding a podpora od našeho týmu',
+                ].map(f => (
+                  <div key={f} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                    <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(183,233,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                      <span style={{ fontSize: 10, color: '#b7e94c', fontWeight: 700 }}>✓</span>
+                    </span>
+                    <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+              <a href="mailto:ahoj@piclio.cz?subject=Zájem o beta přístup Piclio SaaS" style={{
+                display: 'inline-block', background: '#b7e94c', color: '#0d0b14',
+                padding: '14px 32px', borderRadius: 100, fontSize: 14, fontWeight: 700,
+                textDecoration: 'none', letterSpacing: '0.01em',
+              }}>
+                Mám zájem o beta přístup →
+              </a>
+            </div>
+
+            {/* Pravá strana — Kristína karta */}
+            <div style={{
+              background: 'linear-gradient(135deg, #1e1640 0%, #13102a 100%)',
+              border: '1px solid rgba(183,233,76,0.2)',
+              borderRadius: 28, padding: '40px 36px',
+            }}>
+              <div style={{ fontSize: 11, letterSpacing: '0.15em', color: '#b7e94c', fontWeight: 500, marginBottom: 28 }}>VÁŠ KONTAKT PRO FOTOGRAFY</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 }}>
+                <img src="/demo/kristina.png" alt="Kristína" style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', border: '2px solid rgba(183,233,76,0.25)' }} />
+                <div>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Kristína</div>
+                  <div style={{ fontSize: 12, color: '#b7e94c', fontWeight: 500 }}>Péče o zákazníka · Koordinace</div>
+                </div>
+              </div>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: '0 0 28px' }}>
+                Ráda vám sdělí vše o tom, jak vám Piclio může pomoci. Domluvíme se na podmínkách přímo pro vás.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <a href="mailto:ahoj@piclio.cz?subject=Zájem o Piclio SaaS pro fotografy" style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
+                }}>
+                  <span style={{ fontSize: 16 }}>✉</span>
+                  <div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 2 }}>E-MAIL</div>
+                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 500 }}>ahoj@piclio.cz</div>
+                  </div>
+                </a>
+                <a href="tel:+420604750776" style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
+                }}>
+                  <span style={{ fontSize: 16 }}>📞</span>
+                  <div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 2 }}>TELEFON</div>
+                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 500 }}>+420 604 750 776</div>
+                  </div>
+                </a>
+              </div>
+              <div style={{ marginTop: 24, padding: '14px 16px', background: 'rgba(183,233,76,0.06)', borderRadius: 12, border: '1px solid rgba(183,233,76,0.12)' }}>
+                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+                  💬 <em>&quot;Napište nám a domluvíme se na podmínkách — osobně, bez automatů.&quot;</em>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
