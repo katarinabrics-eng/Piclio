@@ -177,14 +177,18 @@ export default function LandingPage() {
             '/demo/demo-portrait.jpg',
             '/demo/Piclio01.jpg',
             '/demo/hero-02.png',
-            '/demo/demo-krajina.jpg',
             '/demo/Piclio03.jpg',
+            '/demo/demo-krajina.jpg',
+            '/demo/Piclio05.jpg',
+            '/demo/Piclio-event01.png',
             '/demo/Hero-01.png',
             '/demo/demo-portrait.jpg',
             '/demo/Piclio01.jpg',
             '/demo/hero-02.png',
-            '/demo/demo-krajina.jpg',
             '/demo/Piclio03.jpg',
+            '/demo/demo-krajina.jpg',
+            '/demo/Piclio05.jpg',
+            '/demo/Piclio-event01.png',
           ].map((src, i) => (
             <div key={i} style={{ width: 280, height: 380, flexShrink: 0, marginRight: 3, position: 'relative', overflow: 'hidden' }}>
               <Image src={src} alt="Foto z eventu" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
