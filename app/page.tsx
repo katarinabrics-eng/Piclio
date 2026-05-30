@@ -20,17 +20,17 @@ export default function LandingPage() {
         .gallery-track:hover { animation-play-state: paused; }
 
         @media (max-width: 768px) {
-          .hero-content { padding: 0 24px 48px !important; }
-          .hero-h1 { font-size: 48px !important; }
-          .hero-bottom { flex-direction: column !important; gap: 24px !important; }
-          .hero-sub { text-align: left !important; max-width: 100% !important; }
-          .hero-scroll { justify-content: flex-start !important; }
+          .hero-content { padding: 0 24px 40px !important; }
+          .hero-tag { margin-top: 80px !important; margin-bottom: 14px !important; }
+          .hero-h1 { font-size: 42px !important; margin-bottom: 20px !important; }
+          .hero-sub { display: none !important; }
+          .hero-scroll { display: none !important; }
+          .hero-btns a, .hero-btns button { padding: 12px 22px !important; font-size: 13px !important; }
+          .hero-bottom { flex-direction: column !important; gap: 16px !important; align-items: flex-start !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
           .stats-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
           .problem-grid { grid-template-columns: 1fr !important; }
           .kiosk-grid { grid-template-columns: 1fr !important; }
-          .kiosk-left { padding: 48px 24px !important; border-right: none !important; }
-          .kiosk-right { padding: 48px 24px !important; border-top: 1px solid rgba(255,255,255,0.06) !important; }
           .gallery-tile { width: 200px !important; height: 280px !important; }
           .atrakce-grid { grid-template-columns: 1fr !important; }
           .cenik-grid { grid-template-columns: 1fr !important; }
@@ -182,142 +182,132 @@ export default function LandingPage() {
       </section>
 
       {/* JAK TO FUNGUJE */}
-      <section id="jak-to-funguje" style={{ padding: '100px 48px', background: '#191224' }}>
+      <section id="jak-to-funguje" style={{ padding: '80px 48px', background: '#191224' }} className="section-pad">
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 16, fontWeight: 500 }}>JAK TO FUNGUJE</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 64px', lineHeight: 1.05 }}>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 12px', lineHeight: 1.05 }}>
             Jednou zadáte e-mail.<br />
             <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Zbytek udělá Piclio.</span>
           </h2>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', marginBottom: 48, lineHeight: 1.6 }}>Od vstupu po sdílení — vše automaticky.</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }} className="kiosk-grid">
+          <style>{`
+            .steps-accordion { display: none; }
+            .steps-desktop { display: grid; }
+            @media (max-width: 768px) {
+              .steps-accordion { display: flex; flex-direction: column; gap: 4px; }
+              .steps-desktop { display: none !important; }
+              .acc-item { border-radius: 14px; overflow: hidden; }
+              .acc-header { display: flex; align-items: center; gap: 14px; padding: 16px 18px; cursor: pointer; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; background: rgba(255,255,255,0.03); }
+              .acc-header.open { background: rgba(183,233,76,0.07); border-color: rgba(183,233,76,0.15); border-radius: 14px 14px 0 0; }
+              .acc-num { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
+              .acc-num.open { background: rgba(183,233,76,0.15); color: #b7e94c; }
+              .acc-title { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.5); flex: 1; }
+              .acc-title.open { color: #fff; }
+              .acc-chevron { color: rgba(255,255,255,0.25); font-size: 14px; }
+              .acc-chevron.open { color: #b7e94c; transform: rotate(90deg); }
+              .acc-body { display: none; background: rgba(255,255,255,0.02); border: 1px solid rgba(183,233,76,0.12); border-top: none; border-radius: 0 0 14px 14px; overflow: hidden; }
+              .acc-body.open { display: block; }
+              .acc-photo { aspect-ratio: 16/9; background: #2a1f42; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+              .acc-photo img { width: 100%; height: 100%; object-fit: cover; }
+              .acc-notif { position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(25,18,36,0.92); border-radius: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,0.08); }
+              .acc-notif-top { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 0.07em; margin-bottom: 3px; }
+              .acc-notif-val { font-size: 12px; font-weight: 600; color: #b7e94c; display: flex; align-items: center; gap: 5px; }
+              .acc-notif-dot { width: 6px; height: 6px; background: #b7e94c; border-radius: 50%; flex-shrink: 0; }
+              .acc-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; padding: 14px 18px 18px; }
+            }
+          `}</style>
 
-            {/* Levý panel — kroky */}
+          {/* DESKTOP — 2 sloupce */}
+          <div className="steps-desktop" style={{ gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                {
-                  n: '01',
-                  title: 'Host přijde ke kiosku',
-                  desc: 'Na vstupu stojí Piclio kiosk. Host zadá e-mail a udělá rychlé selfie v prohlížeči — žádná aplikace, žádná registrace.',
-                  img: '/demo/demo-portrait.jpg',
-                },
-                {
-                  n: '02',
-                  title: 'Připne si číslované odznáček',
-                  desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.',
-                  img: '/demo/Piclio01.jpg',
-                },
-                {
-                  n: '03',
-                  title: 'Fotograf fotí volně',
-                  desc: 'Fotograf se pohybuje v davu a fotí přirozené momenty. Žádné pózování, žádné čekání ve frontě.',
-                  img: '/demo/Hero-01.png',
-                },
-                {
-                  n: '04',
-                  title: 'Fotka přibyde do galerie',
-                  desc: 'Do 30 sekund od stisknutí spouště AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.',
-                  img: '/demo/hero-02.png',
-                },
-                {
-                  n: '05',
-                  title: 'Host sdílí s přáteli',
-                  desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.',
-                  img: '/demo/Piclio03.jpg',
-                },
+                { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči — žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg' },
+                { n: '02', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png' },
+                { n: '03', title: 'AI spáruje do 30 sekund', desc: 'Systém rozpozná hosta a fotka automaticky přibude do jeho galerie.', img: '/demo/hero-02.png' },
+                { n: '04', title: 'Fotka přibyde do galerie', desc: 'Host vidí fotky jak přibývají — celý večer, v reálném čase, přímo v telefonu.', img: '/demo/Piclio03.jpg' },
+                { n: '05', title: 'Host sdílí s přáteli', desc: 'Otevře odkaz a sdílí okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg' },
               ].map((step, i) => (
                 <div
                   key={step.n}
-                  id={`step-${step.n}`}
                   onMouseEnter={() => {
-                    document.querySelectorAll('.step-item').forEach(el => (el as HTMLElement).style.opacity = '0.45')
-                    const el = document.getElementById(`step-${step.n}`)
-                    if (el) el.style.opacity = '1'
-                    const img = document.getElementById('step-preview') as HTMLImageElement
+                    const img = document.getElementById('step-preview-img') as HTMLImageElement
                     if (img) img.src = step.img
+                    document.querySelectorAll('.step-row').forEach((el, j) => {
+                      (el as HTMLElement).style.opacity = j === i ? '1' : '0.4'
+                    })
                   }}
-                  className="step-item"
-                  style={{
-                    display: 'flex', gap: 20, padding: '24px 20px',
-                    borderRadius: 16, cursor: 'pointer',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    background: i === 0 ? 'rgba(183,233,76,0.05)' : 'transparent',
-                    transition: 'all 0.2s',
-                    opacity: i === 0 ? 1 : 0.45,
-                  }}
+                  className="step-row"
+                  style={{ display: 'flex', gap: 16, padding: '20px 18px', borderRadius: 14, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.06)', background: i === 0 ? 'rgba(183,233,76,0.05)' : 'transparent', opacity: i === 0 ? 1 : 0.4, transition: 'all 0.2s' }}
                 >
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                    background: 'rgba(183,233,76,0.1)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 13, fontWeight: 700, color: '#b7e94c',
-                  }}>{step.n}</div>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#b7e94c' }}>{step.n}</div>
                   <div>
-                    <div style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{step.title}</div>
-                    <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>{step.desc}</div>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 5 }}>{step.title}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{step.desc}</div>
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* Pravý panel — náhled fotky */}
             <div style={{ position: 'sticky', top: 100 }}>
-              <div style={{
-                borderRadius: 24, overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.08)',
-                background: '#160f28',
-                aspectRatio: '4/5',
-                position: 'relative',
-              }}>
-                <img
-                  id="step-preview"
-                  src="/demo/demo-portrait.jpg"
-                  alt="Náhled kroku"
-                  style={{
-                    width: '100%', height: '100%',
-                    objectFit: 'cover', objectPosition: 'center',
-                    transition: 'opacity 0.3s ease',
-                  }}
-                />
-                {/* Overlay s notifikací */}
-                <div style={{
-                  position: 'absolute', bottom: 24, left: 24, right: 24,
-                  background: 'rgba(25,18,36,0.92)',
-                  backdropFilter: 'blur(12px)',
-                  borderRadius: 16, padding: '14px 18px',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}>
-                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginBottom: 5, letterSpacing: '0.08em', fontWeight: 500 }}>
-                    NOVÁ FOTKA · PRÁVĚ TEĎ
-                  </div>
+              <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', aspectRatio: '4/5', position: 'relative', background: '#160f28' }}>
+                <img id="step-preview-img" src="/demo/Piclio01.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20, background: 'rgba(25,18,36,0.92)', backdropFilter: 'blur(12px)', borderRadius: 14, padding: '12px 16px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', marginBottom: 4, letterSpacing: '0.08em' }}>NOVÁ FOTKA · PRÁVĚ TEĎ</div>
                   <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}></span>
+                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block' }}></span>
                     Přibyla do vaší galerie automaticky
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Kiosk mockup pod fotkou */}
-              <div style={{
-                marginTop: 16,
-                background: '#0d0b14', borderRadius: 20,
-                padding: '20px 24px',
-                border: '1px solid rgba(183,233,76,0.12)',
-                display: 'flex', alignItems: 'center', gap: 16,
-              }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 2 }}>
-                    Piclio<span style={{ width: 5, height: 5, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', marginLeft: 2, verticalAlign: 'super' }}></span>
-                  </div>
-                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>Kiosk · Zadejte e-mail pro příjem fotek</div>
+          {/* MOBIL — accordion */}
+          <div className="steps-accordion">
+            {[
+              { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', open: true },
+              { n: '02', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', open: false },
+              { n: '03', title: 'AI spáruje do 30 sekund', desc: 'Systém rozpozná hosta a fotka automaticky přibude do jeho galerie.', img: '/demo/hero-02.png', open: false },
+              { n: '04', title: 'Fotka přibyde do galerie', desc: 'Host vidí fotky jak přibývají — celý večer, v reálném čase.', img: '/demo/Piclio03.jpg', open: false },
+              { n: '05', title: 'Host sdílí s přáteli', desc: 'Otevře odkaz a sdílí okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', open: false },
+            ].map((step) => (
+              <div key={step.n} className="acc-item">
+                <div
+                  className={`acc-header ${step.open ? 'open' : ''}`}
+                  onClick={(e) => {
+                    const item = (e.currentTarget as HTMLElement).closest('.acc-item')!
+                    const body = item.querySelector('.acc-body') as HTMLElement
+                    const isOpen = body.classList.contains('open')
+                    document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'))
+                    document.querySelectorAll('.acc-header').forEach(h => h.classList.remove('open'))
+                    document.querySelectorAll('.acc-num').forEach(n => n.classList.remove('open'))
+                    document.querySelectorAll('.acc-title').forEach(t => t.classList.remove('open'))
+                    document.querySelectorAll('.acc-chevron').forEach(c => c.classList.remove('open'))
+                    if (!isOpen) {
+                      body.classList.add('open')
+                      e.currentTarget.classList.add('open')
+                      item.querySelector('.acc-num')?.classList.add('open')
+                      item.querySelector('.acc-title')?.classList.add('open')
+                      item.querySelector('.acc-chevron')?.classList.add('open')
+                    }
+                  }}
+                >
+                  <div className={`acc-num ${step.open ? 'open' : ''}`}>{step.n}</div>
+                  <div className={`acc-title ${step.open ? 'open' : ''}`}>{step.title}</div>
+                  <span className={`acc-chevron ${step.open ? 'open' : ''}`}>▶</span>
                 </div>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  {['01','02','03'].map(n => (
-                    <div key={n} style={{ width: 32, height: 32, background: '#fff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 10, color: '#0a0a0a' }}>{n}</div>
-                  ))}
+                <div className={`acc-body ${step.open ? 'open' : ''}`}>
+                  <div className="acc-photo">
+                    <img src={step.img} alt={step.title} />
+                    <div className="acc-notif">
+                      <div className="acc-notif-top">NOVÁ FOTKA · PRÁVĚ TEĎ</div>
+                      <div className="acc-notif-val"><span className="acc-notif-dot"></span>Přibyla do vaší galerie automaticky</div>
+                    </div>
+                  </div>
+                  <div className="acc-desc">{step.desc}</div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
