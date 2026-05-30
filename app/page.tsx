@@ -147,13 +147,53 @@ export default function LandingPage() {
       </section>
 
       {/* GALERIE STRIP */}
-      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 3 }}>
-        {[1,2,3,4,5].map(i => (
-          <div key={i} style={{ aspectRatio: '3/4', background: i % 2 === 0 ? '#1a1232' : '#13102a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-            <div style={{ fontSize: 28, opacity: 0.12 }}>📷</div>
-            <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.12)', letterSpacing: '0.1em' }}>FOTO Z EVENTU</div>
-          </div>
-        ))}
+      <section style={{ overflow: 'hidden', position: 'relative' }}>
+        <style>{`
+          @keyframes scroll-gallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .gallery-track {
+            display: flex;
+            animation: scroll-gallery 20s linear infinite;
+            width: max-content;
+          }
+          .gallery-track:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+        <div className="gallery-track">
+          {[
+            '/demo/Hero-01.png',
+            '/demo/demo-portrait.jpg',
+            '/demo/Piclio01.jpg',
+            '/demo/hero-02.png',
+            '/demo/demo-krajina.jpg',
+            '/demo/Piclio03.jpg',
+            '/demo/Hero-01.png',
+            '/demo/demo-portrait.jpg',
+            '/demo/Piclio01.jpg',
+            '/demo/hero-02.png',
+            '/demo/demo-krajina.jpg',
+            '/demo/Piclio03.jpg',
+          ].map((src, i) => (
+            <div key={i} style={{
+              width: 280,
+              height: 380,
+              flexShrink: 0,
+              marginRight: 3,
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <Image
+                src={src}
+                alt="Foto z eventu"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+              />
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ATRAKCE */}
