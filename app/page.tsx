@@ -139,23 +139,25 @@ export default function LandingPage() {
       </section>
 
       {/* STATS */}
-      <section className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        {[
-          { n: '30s', l: 'OD ZÁVĚRKY K DORUČENÍ' },
-          { n: '300+', l: 'HOSTŮ NA JEDNÉ AKCI' },
-          { n: '52', l: 'LET ZKUŠENOSTÍ TÝMU' },
-          { n: '0', l: 'STAŽENÝCH APLIKACÍ' },
-        ].map((s, i) => (
-          <div key={i} style={{ padding: '36px 48px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-            <div style={{ fontSize: 52, fontWeight: 800, color: '#b7e94c', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: 8 }}>{s.n}</div>
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 500 }}>{s.l}</div>
-          </div>
-        ))}
+      <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: 1200, margin: '0 auto' }}>
+          {[
+            { n: '30s', l: 'OD ZÁVĚRKY K DORUČENÍ' },
+            { n: '300+', l: 'HOSTŮ NA JEDNÉ AKCI' },
+            { n: '52', l: 'LET ZKUŠENOSTÍ TÝMU' },
+            { n: '0', l: 'STAŽENÝCH APLIKACÍ' },
+          ].map((s, i) => (
+            <div key={i} style={{ padding: '36px 48px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+              <div style={{ fontSize: 52, fontWeight: 800, color: '#b7e94c', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: 8 }}>{s.n}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 500 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* PROBLÉM */}
       <section className="section-pad" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #1a1625 100%)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROBLÉM KTERÝ ŘEŠÍME</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
             Konec éry<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>„Kdy už mi pošleš ty fotky?"</span>
@@ -180,56 +182,140 @@ export default function LandingPage() {
       </section>
 
       {/* JAK TO FUNGUJE */}
-      <section id="jak-to-funguje" className="kiosk-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '85vh' }}>
-        <div className="kiosk-left" style={{ padding: '80px 64px', background: '#191224', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>TECHNOLOGIE KTERÁ NEPŘEKÁŽÍ ZÁBAVĚ</p>
-          <h2 style={{ fontSize: 'clamp(32px, 3.5vw, 50px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 20px' }}>
+      <section id="jak-to-funguje" style={{ padding: '100px 48px', background: '#191224' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 16, fontWeight: 500 }}>JAK TO FUNGUJE</p>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 64px', lineHeight: 1.05 }}>
             Jednou zadáte e-mail.<br />
             <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Zbytek udělá Piclio.</span>
           </h2>
-          <p style={{ fontSize: 15, lineHeight: 1.75, color: 'rgba(255,255,255,0.55)', margin: '0 0 40px', maxWidth: 400 }}>
-            Host se zaregistruje u kiosku na vstupu. Od té chvíle mu každá nová fotka přibývá do galerie automaticky — celý večer, v reálném čase.
-          </p>
-          {[
-            { n: '01', title: 'Registrace bez aplikací', desc: 'Host naskenuje QR kód nebo zadá e-mail u kiosku a pořídí si rychlé „magické" selfie v prohlížeči.' },
-            { n: '02', title: 'Akce a momentky', desc: 'Fotograf fotí v davu nebo hosté pózují v AI koutku. Data putují přes WiFi okamžitě na server.' },
-            { n: '03', title: 'AI párování do 30 sekund', desc: 'Systém pomocí Face Recognition rozpozná hosta a doručí fotku do jeho unikátní galerie.' },
-            { n: '04', title: 'GDPR Native', desc: 'Selfie slouží pouze k vytvoření digitálního otisku a ihned se maže. Data jsou bezpečně hostována v EU.' },
-          ].map(step => (
-            <div key={step.n} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '18px 20px', marginBottom: 10, background: 'rgba(45,31,78,0.3)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#b7e94c' }}>{step.n}</div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{step.title}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{step.desc}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="kiosk-right" style={{ background: 'linear-gradient(135deg, #251840 0%, #191224 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            <div style={{ width: 260, background: '#191224', borderRadius: 24, padding: '32px 24px', border: '1px solid rgba(183,233,76,0.15)', textAlign: 'center', boxShadow: '0 0 60px rgba(45,31,78,0.6)' }}>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
-                Piclio<span style={{ width: 6, height: 6, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', marginLeft: 2, verticalAlign: 'super' }}></span>
-              </div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 24, lineHeight: 1.5 }}>Zadejte svůj e-mail<br />pro příjem fotek z večera</div>
-              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '11px 14px', fontSize: 12, color: 'rgba(255,255,255,0.25)', marginBottom: 10, textAlign: 'left', border: '1px solid rgba(255,255,255,0.08)' }}>vas@email.cz</div>
-              <div style={{ background: '#b7e94c', color: '#191224', borderRadius: 12, padding: 11, fontSize: 13, fontWeight: 700 }}>Pokračovat →</div>
-              <div style={{ display: 'flex', gap: 7, justifyContent: 'center', marginTop: 18 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#b7e94c' }} />
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(255,255,255,0.15)' }} />
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(255,255,255,0.15)' }} />
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              {['01','02','03','04'].map(n => (
-                <div key={n} style={{ width: 52, height: 52, background: '#fff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14, color: '#191224' }}>{n}</div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }} className="kiosk-grid">
+
+            {/* Levý panel — kroky */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {[
+                {
+                  n: '01',
+                  title: 'Host přijde ke kiosku',
+                  desc: 'Na vstupu stojí Piclio kiosk. Host zadá e-mail a udělá rychlé selfie v prohlížeči — žádná aplikace, žádná registrace.',
+                  img: '/demo/demo-portrait.jpg',
+                },
+                {
+                  n: '02',
+                  title: 'Připne si číslované odznáček',
+                  desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.',
+                  img: '/demo/Piclio01.jpg',
+                },
+                {
+                  n: '03',
+                  title: 'Fotograf fotí volně',
+                  desc: 'Fotograf se pohybuje v davu a fotí přirozené momenty. Žádné pózování, žádné čekání ve frontě.',
+                  img: '/demo/Hero-01.png',
+                },
+                {
+                  n: '04',
+                  title: 'Fotka přibyde do galerie',
+                  desc: 'Do 30 sekund od stisknutí spouště AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.',
+                  img: '/demo/hero-02.png',
+                },
+                {
+                  n: '05',
+                  title: 'Host sdílí s přáteli',
+                  desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.',
+                  img: '/demo/Piclio03.jpg',
+                },
+              ].map((step, i) => (
+                <div
+                  key={step.n}
+                  id={`step-${step.n}`}
+                  onMouseEnter={() => {
+                    document.querySelectorAll('.step-item').forEach(el => (el as HTMLElement).style.opacity = '0.45')
+                    const el = document.getElementById(`step-${step.n}`)
+                    if (el) el.style.opacity = '1'
+                    const img = document.getElementById('step-preview') as HTMLImageElement
+                    if (img) img.src = step.img
+                  }}
+                  className="step-item"
+                  style={{
+                    display: 'flex', gap: 20, padding: '24px 20px',
+                    borderRadius: 16, cursor: 'pointer',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: i === 0 ? 'rgba(183,233,76,0.05)' : 'transparent',
+                    transition: 'all 0.2s',
+                    opacity: i === 0 ? 1 : 0.45,
+                  }}
+                >
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+                    background: 'rgba(183,233,76,0.1)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 13, fontWeight: 700, color: '#b7e94c',
+                  }}>{step.n}</div>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 6 }}>{step.title}</div>
+                    <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.65 }}>{step.desc}</div>
+                  </div>
+                </div>
               ))}
             </div>
-            <div style={{ background: 'rgba(20,14,38,0.97)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '12px 18px', width: '100%' }}>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', marginBottom: 5, letterSpacing: '0.08em', fontWeight: 500 }}>NOVÁ FOTKA · PRÁVĚ TEĎ</div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}></span>
-                Přibyla do vaší galerie automaticky
+
+            {/* Pravý panel — náhled fotky */}
+            <div style={{ position: 'sticky', top: 100 }}>
+              <div style={{
+                borderRadius: 24, overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,0.08)',
+                background: '#160f28',
+                aspectRatio: '4/5',
+                position: 'relative',
+              }}>
+                <img
+                  id="step-preview"
+                  src="/demo/demo-portrait.jpg"
+                  alt="Náhled kroku"
+                  style={{
+                    width: '100%', height: '100%',
+                    objectFit: 'cover', objectPosition: 'center',
+                    transition: 'opacity 0.3s ease',
+                  }}
+                />
+                {/* Overlay s notifikací */}
+                <div style={{
+                  position: 'absolute', bottom: 24, left: 24, right: 24,
+                  background: 'rgba(25,18,36,0.92)',
+                  backdropFilter: 'blur(12px)',
+                  borderRadius: 16, padding: '14px 18px',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                }}>
+                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginBottom: 5, letterSpacing: '0.08em', fontWeight: 500 }}>
+                    NOVÁ FOTKA · PRÁVĚ TEĎ
+                  </div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}></span>
+                    Přibyla do vaší galerie automaticky
+                  </div>
+                </div>
+              </div>
+
+              {/* Kiosk mockup pod fotkou */}
+              <div style={{
+                marginTop: 16,
+                background: '#0d0b14', borderRadius: 20,
+                padding: '20px 24px',
+                border: '1px solid rgba(183,233,76,0.12)',
+                display: 'flex', alignItems: 'center', gap: 16,
+              }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 2 }}>
+                    Piclio<span style={{ width: 5, height: 5, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', marginLeft: 2, verticalAlign: 'super' }}></span>
+                  </div>
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>Kiosk · Zadejte e-mail pro příjem fotek</div>
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {['01','02','03'].map(n => (
+                    <div key={n} style={{ width: 32, height: 32, background: '#fff', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 10, color: '#0a0a0a' }}>{n}</div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -266,7 +352,7 @@ export default function LandingPage() {
 
       {/* ATRAKCE */}
       <section id="atrakce" className="section-pad" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>ZÁŽITKOVÉ FOTOSLUŽBY NA KLÍČ</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 48px' }}>
             Profesionální produkce<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>pro váš event.</span>
@@ -310,7 +396,7 @@ export default function LandingPage() {
 
       {/* CENÍK SAAS */}
       <section id="ceník" className="section-pad" style={{ padding: '100px 48px', background: '#191224' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PRO FOTOGRAFY · SAAS</p>
           <div className="cenik-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, gap: 32 }}>
             <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: 0 }}>Platforma pro fotografy.</h2>
@@ -354,7 +440,7 @@ export default function LandingPage() {
 
       {/* SROVNÁNÍ */}
       <section className="section-pad" style={{ padding: '80px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROČ PICLIO?</p>
           <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 40px' }}>Vlastnost po vlastnosti.</h2>
           <div style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
@@ -381,7 +467,7 @@ export default function LandingPage() {
 
       {/* TÝM */}
       <section className="section-pad" style={{ padding: '100px 48px', background: '#191224', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>O NÁS</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
             52 let zkušeností.<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Nejsme jen agentura, jsme studio.</span>
@@ -424,7 +510,7 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section style={{ padding: '0 48px 80px' }}>
-        <div className="cta-inner" style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
+        <div className="cta-inner" style={{ maxWidth: 1200, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
           <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#191224', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Udělejte z vaší další akce zážitek, o kterém se bude mluvit.</h2>
           <div className="cta-form" style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end', minWidth: 340 }}>
             <p style={{ fontSize: 13, color: 'rgba(10,10,10,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>
@@ -450,6 +536,7 @@ export default function LandingPage() {
 
       {/* FOOTER */}
       <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 48px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <Image src="/logo01.png" alt="Piclio" width={80} height={26} style={{ objectFit: 'contain', display: 'block', marginBottom: 8 }} />
@@ -464,6 +551,7 @@ export default function LandingPage() {
               <a key={l} href={'#'+l.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ /g,'-')} style={{ fontSize: 12, color: 'rgba(255,255,255,0.22)', textDecoration: 'none' }}>{l}</a>
             ))}
           </div>
+        </div>
         </div>
       </footer>
 
