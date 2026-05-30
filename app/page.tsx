@@ -1,11 +1,49 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
+const STEPS = [
+  { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', notif: 'E-mail zaregistrován · Galerie připravena' },
+  { n: '02', title: 'Připne si číslovaný odznáček', desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.', img: '/demo/demo-portrait.jpg', notif: 'Odznáček #014 přiřazen · Připraven k focení' },
+  { n: '03', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', notif: 'Fotka pořízena · Odesílám na server...' },
+  { n: '04', title: 'Fotka přibyde do galerie', desc: 'Do 30 sekund AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.', img: '/demo/Piclio03.jpg', notif: 'Přibyla do vaší galerie automaticky' },
+  { n: '05', title: 'Host sdílí s přáteli', desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', notif: 'Sdíleno · 3 přátelé viděli vaši fotku' },
+]
+
 export default function LandingPage() {
   const [activeStep, setActiveStep] = useState(1)
+  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  function goToStep(idx: number) {
+    setActiveStep(idx + 1)
+    const img = document.getElementById('step-preview-img') as HTMLImageElement
+    const notifEl = document.getElementById('step-notif-text')
+    if (img) img.src = STEPS[idx].img
+    if (notifEl) notifEl.textContent = STEPS[idx].notif
+  }
+
+  function resetAuto() {
+    if (autoRef.current) clearInterval(autoRef.current)
+    autoRef.current = setInterval(() => {
+      setActiveStep(prev => {
+        const next = prev % STEPS.length
+        const img = document.getElementById('step-preview-img') as HTMLImageElement
+        const notifEl = document.getElementById('step-notif-text')
+        if (img) img.src = STEPS[next].img
+        if (notifEl) notifEl.textContent = STEPS[next].notif
+        return next + 1
+      })
+    }, 2800)
+  }
+
+  useEffect(() => {
+    resetAuto()
+    return () => { if (autoRef.current) clearInterval(autoRef.current) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div style={{ background: '#191224', color: '#f0f0f0', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
 
@@ -224,21 +262,11 @@ export default function LandingPage() {
           <div className="steps-desktop" style={{ gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', notif: 'E-mail zaregistrován · Galerie připravena' },
-                { n: '02', title: 'Připne si číslovaný odznáček', desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.', img: '/demo/demo-portrait.jpg', notif: 'Odznáček #014 přiřazen · Připraven k focení' },
-                { n: '03', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', notif: 'Fotka pořízena · Odesílám na server...' },
-                { n: '04', title: 'Fotka přibyde do galerie', desc: 'Do 30 sekund AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.', img: '/demo/Piclio03.jpg', notif: 'Přibyla do vaší galerie automaticky' },
-                { n: '05', title: 'Host sdílí s přáteli', desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', notif: 'Sdíleno · 3 přátelé viděli vaši fotku' },
+                ...STEPS
               ].map((step, i) => (
                 <div
                   key={step.n}
-                  onMouseEnter={() => {
-                    setActiveStep(i + 1)
-                    const img = document.getElementById('step-preview-img') as HTMLImageElement
-                    const notifEl = document.getElementById('step-notif-text')
-                    if (img) img.src = step.img
-                    if (notifEl) notifEl.textContent = step.notif
-                  }}
+                  onMouseEnter={() => { goToStep(i); resetAuto() }}
                   style={{
                     display: 'flex', gap: 16, padding: '20px 18px',
                     borderRadius: 14, cursor: 'pointer',
