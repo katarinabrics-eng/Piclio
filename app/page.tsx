@@ -30,20 +30,25 @@ export default function LandingPage() {
         <Image src="/demo/Hero-01.png" alt="Fotograf na eventu" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} priority />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(13,11,20,0.1) 0%, rgba(13,11,20,0.35) 45%, rgba(13,11,20,0.92) 78%, rgba(13,11,20,0.99) 100%)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 64px 64px' }}>
-          <div>
-            <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
-            <h1 style={{ fontSize: 'clamp(52px, 7vw, 96px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 36px' }}>
+          <div style={{ maxWidth: 620 }}>
+            <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
+            <h1 style={{ fontSize: 'clamp(52px, 7vw, 96px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 28px' }}>
               Akce skončí.<br />
               <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>Zážitek</span><br />
               zůstane.
             </h1>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <Link href="/login" style={{ background: '#b7e94c', color: '#0a0a0a', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci →</Link>
-              <a href="#jak-to-funguje" style={{ color: '#fff', textDecoration: 'none', fontSize: 14, padding: '14px 30px', borderRadius: 100, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.07)', display: 'inline-block' }}>Jak to funguje</a>
+            <p style={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(255,255,255,0.7)', margin: '0 0 14px', maxWidth: 520 }}>
+              Profesionální fotky v telefonu každého hosta — doručené do 30 sekund. Bez aplikací. Bez čekání.
+            </p>
+            <p style={{ fontSize: 13, lineHeight: 1.75, color: 'rgba(255,255,255,0.4)', margin: '0 0 36px', maxWidth: 500 }}>
+              Piclio by Lucifera boří staré pořádky v eventové fotografii. Propojujeme 52 let vizuálních zkušeností s nejmodernější AI technologií, která doručí emoce přímo tam, kde je hosté chtějí mít — hned teď do jejich soukromé galerie.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <Link href="/login" style={{ background: '#b7e94c', color: '#0a0a0a', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci na klíč →</Link>
+              <a href="#jak-to-funguje" style={{ color: '#fff', textDecoration: 'none', fontSize: 14, padding: '14px 30px', borderRadius: 100, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.07)', display: 'inline-block' }}>Vyzkoušet software (Beta)</a>
             </div>
           </div>
           <div style={{ textAlign: 'right', paddingBottom: 4 }}>
-            <p style={{ fontSize: 15, lineHeight: 1.75, color: 'rgba(255,255,255,0.65)', maxWidth: 320, margin: '0 0 16px' }}>Fotky v telefonu každého hosta — automaticky, celý večer. Bez aplikace. Bez čekání.</p>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
               <div style={{ width: 40, height: 1, background: 'rgba(255,255,255,0.12)' }} />SCROLL
             </div>
@@ -70,14 +75,17 @@ export default function LandingPage() {
       <section style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #13102a 0%, #1a1625 100%)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROBLÉM KTERÝ ŘEŠÍME</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 60px' }}>
+          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
             Konec éry<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>„Kdy už mi pošleš ty fotky?"</span>
           </h2>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 56px', maxWidth: 560 }}>
+            Tradiční fotokoutky a reportáže narážejí na překážky, které Piclio odstraňuje:
+          </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(255,255,255,0.05)' }}>
             {[
-              { n: '01', title: 'Týdny čekání', desc: 'Fotky se doručují na USB discích nebo přes hromadné odkazy dlouho po opadnutí emocí z akce.' },
-              { n: '02', title: 'Složité hledání', desc: 'Zdlouhavé scrollování stovkami cizích tváří v nepřehledných sdílených galeriích.' },
-              { n: '03', title: 'Narušení zábavy', desc: 'Dlouhé fronty u statických fotokoutků se základní webkamerou a neosobním přístupem.' },
+              { n: '01', title: 'Žádné týdny čekání', desc: 'Fotky nedoručujeme po akci na USB, ale v reálném čase, kdy jsou emoce nejživější.' },
+              { n: '02', title: 'Žádné složité hledání', desc: 'Hosté nemusí scrollovat stovkami cizích tváří. Systém je pozná a ukáže jim v soukromé galerii jen jejich snímky.' },
+              { n: '03', title: 'Žádné narušení zábavy', desc: 'Zapomeňte na fronty u statických boxů. Naši fotografové jsou v centru dění.' },
             ].map(c => (
               <div key={c.n} style={{ background: 'linear-gradient(135deg, #13102a 0%, #1a1625 100%)', padding: '40px 32px' }}>
                 <div style={{ fontSize: 64, fontWeight: 800, color: 'rgba(183,233,76,0.06)', lineHeight: 1, marginBottom: 20 }}>{c.n}</div>
@@ -92,7 +100,7 @@ export default function LandingPage() {
       {/* JAK TO FUNGUJE — kiosk demo */}
       <section id="jak-to-funguje" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '85vh' }}>
         <div style={{ padding: '80px 64px', background: '#0d0b14', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PICLIO KIOSK · JAK TO FUNGUJE</p>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>TECHNOLOGIE KTERÁ NEPŘEKÁŽÍ ZÁBAVĚ</p>
           <h2 style={{ fontSize: 'clamp(32px, 3.5vw, 50px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 20px' }}>
             Jednou zadáte e-mail.<br />
             <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Zbytek udělá Piclio.</span>
@@ -101,9 +109,10 @@ export default function LandingPage() {
             Host se zaregistruje u kiosku na vstupu. Od té chvíle mu každá nová fotka přibývá do galerie automaticky — celý večer, v reálném čase.
           </p>
           {[
-            { n: '01', title: 'Registrace u kiosku', desc: 'E-mail u kiosku na vstupu nebo přes QR kód. Jednou a naposledy.' },
-            { n: '02', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika.' },
-            { n: '03', title: 'AI spáruje do 30 sekund', desc: 'Fotka automaticky přibude do galerie hosta. Bez obsluhy.' },
+            { n: '01', title: 'Registrace bez aplikací', desc: 'Host naskenuje QR kód nebo zadá e-mail u kiosku a pořídí si rychlé „magické" selfie v prohlížeči.' },
+            { n: '02', title: 'Akce a momentky', desc: 'Fotograf fotí v davu nebo hosté pózují v AI koutku. Data putují přes WiFi okamžitě na server.' },
+            { n: '03', title: 'AI párování do 30 sekund', desc: 'Systém pomocí Face Recognition rozpozná hosta a doručí fotku do jeho unikátní galerie.' },
+            { n: '04', title: 'GDPR Native', desc: 'Selfie slouží pouze k vytvoření digitálního otisku a ihned se maže. Data jsou bezpečně hostována v EU.' },
           ].map(step => (
             <div key={step.n} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', padding: '18px 20px', marginBottom: 10, background: 'rgba(45,31,78,0.3)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
               <div style={{ width: 36, height: 36, borderRadius: 10, flexShrink: 0, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#b7e94c' }}>{step.n}</div>
@@ -177,20 +186,8 @@ export default function LandingPage() {
             '/demo/demo-krajina.jpg',
             '/demo/Piclio03.jpg',
           ].map((src, i) => (
-            <div key={i} style={{
-              width: 280,
-              height: 380,
-              flexShrink: 0,
-              marginRight: 3,
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              <Image
-                src={src}
-                alt="Foto z eventu"
-                fill
-                style={{ objectFit: 'cover', objectPosition: 'center' }}
-              />
+            <div key={i} style={{ width: 280, height: 380, flexShrink: 0, marginRight: 3, position: 'relative', overflow: 'hidden' }}>
+              <Image src={src} alt="Foto z eventu" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
             </div>
           ))}
         </div>
@@ -199,16 +196,36 @@ export default function LandingPage() {
       {/* ATRAKCE */}
       <section id="atrakce" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #13102a 0%, #0d0b14 100%)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>ZÁŽITKOVÉ FOTOATRAKCE</p>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>ZÁŽITKOVÉ FOTOSLUŽBY NA KLÍČ</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 48px' }}>
-            Fotografie která baví.<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Hosté stojí ve frontě zpátky.</span>
+            Profesionální produkce<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>pro váš event.</span>
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
             {[
-              { badge: 'BESTSELLER', featured: true, name: 'AI Magic Corner', desc: 'Z hosta superhrdina, astronaut nebo postava z jiného světa. Generativní AI přemění kohokoli v reálném čase. Fyzický tisk jako památka.', price: 'od 15 000 Kč', sub: '3 hodiny · obsluha v ceně · okamžitý tisk' },
-              { badge: 'FULL SERVICE', featured: false, name: 'Fotoreportáž Piclio', desc: 'Živý fotograf se pohybuje v davu, zachycuje přirozené momenty. Každá fotka putuje do galerie hosta automaticky.', price: 'od 17 000 Kč', sub: '4 hodiny · AI doručení v ceně' },
-              { badge: 'ZÁBAVA', featured: false, name: 'Fotokoutek a scény', desc: 'Od Green Screenu po fyzicky postavené dekorace. Scény které ladí s tématem vaší akce.', price: 'od 7 500 Kč', sub: '3 hodiny · digitální i fyzický výstup' },
-              { badge: 'NA MÍRU', featured: false, name: 'Prémiová scéna', desc: 'Specifické téma, brand nebo vize? Postavíme scénu přesně podle vás. Extra světlo, extra technologie.', price: 'od 21 000 Kč', sub: 'Individuální nabídka' },
+              {
+                badge: 'BESTSELLER', featured: true,
+                name: 'The AI Magic Corner',
+                desc: 'Náš bestseller. Generativní AI v reálném čase promění hosty v hrdiny nebo je přenese do jiných světů. Zahrnuje technika, obsluhu a okamžitý tisk.',
+                price: '19 000 Kč', sub: '3 hodiny · obsluha v ceně · okamžitý tisk',
+              },
+              {
+                badge: 'FULL SERVICE', featured: false,
+                name: 'Fotoreportáž Piclio',
+                desc: 'Živý fotograf zachycuje autentické emoce přímo v davu. Zahrnuje unikátní hybridní identifikační systém (Face Recognition + ID jmenovky pro 100% spolehlivost), hosting a individuální grafiku galerie.',
+                price: '21 000 Kč', sub: '4 hodiny · AI doručení v ceně',
+              },
+              {
+                badge: 'NA MÍRU', featured: false,
+                name: 'Prémiová reálná scéna',
+                desc: 'Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu (Gatsby, džungle, brand).',
+                price: 'od 25 000 Kč', sub: 'Individuální nabídka',
+              },
+              {
+                badge: 'DOPLNĚK', featured: false,
+                name: 'Živé promítání',
+                desc: 'Okamžitý přenos právě pořízených fotografií na obrazovky v sále pro maximální zapojení publika.',
+                price: 'od 4 900 Kč', sub: 'Lze přidat k libovolnému balíčku',
+              },
             ].map(a => (
               <div key={a.name} style={{ background: a.featured ? 'linear-gradient(135deg, #1e1640 0%, #13102a 100%)' : 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 40, border: a.featured ? '1px solid rgba(183,233,76,0.25)' : '1px solid rgba(255,255,255,0.07)' }}>
                 <div style={{ display: 'inline-block', fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, padding: '4px 12px', borderRadius: 100, background: a.featured ? '#b7e94c' : 'rgba(183,233,76,0.1)', color: a.featured ? '#0a0a0a' : '#b7e94c', marginBottom: 20 }}>{a.badge}</div>
@@ -219,6 +236,26 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          {/* Tisk balíčky */}
+          <div style={{ marginTop: 32, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 24, padding: '36px 40px' }}>
+            <p style={{ fontSize: 11, letterSpacing: '0.16em', color: '#b7e94c', fontWeight: 600, margin: '0 0 16px' }}>BALÍČKY OKAMŽITÉHO TISKU · termosublimační tisk přímo na místě</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+              {[
+                { tag: 'S', desc: 'do 200 ks fotek', price: '3 000 Kč' },
+                { tag: 'M', desc: 'do 500 ks fotek', price: '6 500 Kč' },
+                { tag: 'L', desc: 'do 1 000 ks fotek', price: '11 000 Kč' },
+              ].map(t => (
+                <div key={t.tag} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, color: '#b7e94c', flexShrink: 0 }}>{t.tag}</div>
+                  <div>
+                    <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginBottom: 3 }}>{t.desc}</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>{t.price}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -226,9 +263,9 @@ export default function LandingPage() {
       <section id="ceník" style={{ padding: '100px 48px', background: '#0d0b14' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PRO FOTOGRAFY · SAAS</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, gap: 32 }}>
             <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: 0 }}>Platforma pro fotografy.</h2>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', maxWidth: 240, textAlign: 'right', lineHeight: 1.6, margin: 0 }}>Využijte vlastní techniku. Překvapte klienty bleskovým doručením.</p>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', maxWidth: 260, textAlign: 'right', lineHeight: 1.6, margin: 0, flexShrink: 0 }}>Využijte vlastní techniku. Překvapte klienty bleskovým doručením.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
             {[
@@ -252,36 +289,76 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          {/* Beta banner */}
+          <div style={{ marginTop: 32, padding: '24px 32px', background: 'rgba(183,233,76,0.06)', border: '1px solid rgba(183,233,76,0.2)', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 20 }}>
+            <span style={{ fontSize: 20 }}>⚠️</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', marginBottom: 4 }}>PRÁVĚ PŘIPRAVUJEME</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>
+                Tato sekce je v závěrečné fázi ladění. Chcete se stát naším testerem za zvýhodněnou cenu?{' '}
+                <a href="mailto:ahoj@piclio.cz" style={{ color: '#b7e94c', textDecoration: 'none', fontWeight: 600 }}>Napište nám</a>{' '}
+                a domluvíme se na individuálních podmínkách.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SROVNÁNÍ */}
+      <section style={{ padding: '80px 48px', background: 'linear-gradient(135deg, #13102a 0%, #0d0b14 100%)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROČ PICLIO?</p>
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 40px' }}>Vlastnost po vlastnosti.</h2>
+          <div style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
+            {/* Header */}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', background: 'rgba(255,255,255,0.04)' }}>
+              <div style={{ padding: '16px 28px', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 600 }}>VLASTNOST</div>
+              <div style={{ padding: '16px 28px', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 600, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>BĚŽNÝ FOTOKOUTEK</div>
+              <div style={{ padding: '16px 28px', fontSize: 11, color: '#b7e94c', letterSpacing: '0.1em', fontWeight: 600, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>PICLIO BY LUCIFERA</div>
+            </div>
+            {[
+              { prop: 'Doručení fotek', old: 'USB po akci / hledání v galerii', new: 'Okamžitě do telefonu' },
+              { prop: 'Identifikace hostů', old: 'Ruční zadávání / žádná', new: 'Face Recognition + Hybrid ID' },
+              { prop: 'Způsob fotografování', old: 'Statické místo v rohu', new: 'Mobilní studio v centru dění' },
+              { prop: 'AI Magie', old: 'Statický Green Screen', new: 'Generativní AI v reálném čase' },
+            ].map((r, i) => (
+              <div key={r.prop} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.05)', background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)' }}>
+                <div style={{ padding: '18px 28px', fontSize: 14, fontWeight: 600, color: '#e0e0e0' }}>{r.prop}</div>
+                <div style={{ padding: '18px 28px', fontSize: 13, color: 'rgba(255,255,255,0.35)', borderLeft: '1px solid rgba(255,255,255,0.06)' }}>{r.old}</div>
+                <div style={{ padding: '18px 28px', fontSize: 13, color: '#b7e94c', fontWeight: 500, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>{r.new}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* TÝM */}
       <section style={{ padding: '100px 48px', background: '#0d0b14', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>NÁŠE TÝM</p>
+          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>O NÁS</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
-            52 let zkušeností<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>v každém pixelu.</span>
+            52 let zkušeností.<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Nejsme jen agentura, jsme studio.</span>
           </h2>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 64px', maxWidth: 480 }}>
-            Nejsme jen kód a servery. Jsme fyzický fotoateliér spojující řemeslo s digitálním ekosystémem.
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 64px', maxWidth: 540 }}>
+            Za projektem stojí duo z ateliéru na Kampě, které spojuje precizní práci se světlem a moderní AI digitální ekosystém.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {[
               {
-                name: 'Luboš',
-                role: 'CEO · Světlo, Kompozice, Technologie',
-                desc: '26 let ve fotografii a filmu. Technický garant kvality, světla a bezchybného výstupu.',
-                initials: 'L',
-              },
-              {
                 name: 'Katarína',
-                role: 'Obraz, Strategie, AI',
-                desc: '26 let vizuální tvorby. Vytváří procesy a AI integrace, které zjednodušují práci s obsahem.',
+                role: 'Obraz · Strategie · AI',
+                desc: '26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.',
                 initials: 'K',
               },
               {
+                name: 'Luboš',
+                role: 'Světlo · Kompozice · Technologie',
+                desc: '26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup bude vypadat profesionálně.',
+                initials: 'L',
+              },
+              {
                 name: 'Kristína',
-                role: 'Péče o zákazníka, Koordinace',
+                role: 'Péče o zákazníka · Koordinace',
                 desc: 'Vaše hlavní spojka s projektem. Stará se o průběh akce, zákazníky a brand DNA.',
                 initials: 'Kr',
               },
@@ -306,7 +383,7 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-          <div style={{ marginTop: 48, padding: '32px 40px', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 32 }}>
+          <div style={{ marginTop: 48, padding: '32px 40px', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}>
             <div>
               <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Lucifera Studio</div>
               <div style={{ fontSize: 15, color: '#fff', fontWeight: 500 }}>Kampa, Praha</div>
@@ -327,7 +404,7 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section style={{ padding: '0 48px 80px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
           <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#0a0a0a', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Vaši hosté si zaslouží víc než USB disk.</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-end' }}>
             <p style={{ fontSize: 13, color: 'rgba(10,10,10,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>Pro firmy, event agentury<br />i profesionální fotografy.<br />Praha a celá ČR.</p>
@@ -338,11 +415,14 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '100%' }}>
-        <Image src="/logo01.png" alt="Piclio" width={80} height={26} style={{ objectFit: 'contain' }} />
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '100%', flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <Image src="/logo01.png" alt="Piclio" width={80} height={26} style={{ objectFit: 'contain', display: 'block', marginBottom: 8 }} />
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)' }}>Piclio by Lucifera – Vaše značka a zážitky v novém světle.</div>
+        </div>
         <div style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>ahoj@piclio.cz · +420 604 750 776</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.18)', marginTop: 4 }}>© 2026 Lucifera Studio · Kampa, Praha</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.18)', marginTop: 4 }}>© 2026 Studio Lucifera · Kampa, Praha</div>
         </div>
         <div style={{ display: 'flex', gap: 24 }}>
           {['Jak to funguje','Atrakce','Ceník'].map(l => (
