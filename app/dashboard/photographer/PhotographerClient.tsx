@@ -2480,8 +2480,9 @@ export function PhotographerClient() {
           onClick={e => { if (e.target === e.currentTarget) { setShowNewEvent(false); setEventType('ai'); setGalleryPublic(false) } }}
         >
           <div style={{
-            background: '#fff', borderRadius: 16, width: '100%', maxWidth: 520,
+            background: '#fff', borderRadius: 16, width: '100%', maxWidth: 620,
             boxShadow: '0 24px 64px rgba(0,0,0,0.3)', overflow: 'hidden',
+            maxHeight: '90vh', overflowY: 'auto',
           }}>
             {/* Modal header */}
             <div style={{
@@ -2497,6 +2498,88 @@ export function PhotographerClient() {
 
             {/* Form */}
             <form onSubmit={handleCreateEvent} style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}>
+
+              {/* Typ události */}
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 16 }}>
+                  Vyber typ události — nelze po vytvoření změnit.
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                  {/* Plná integrace */}
+                  <div
+                    onClick={() => setEventType('ai')}
+                    style={{
+                      borderRadius: 14, padding: 22, cursor: 'pointer',
+                      border: eventType === 'ai' ? '1.5px solid #b7e94c' : '1.5px solid #e5e7eb',
+                      background: eventType === 'ai' ? '#f9ffe6' : '#fafafa',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: eventType === 'ai' ? '#5a7a00' : '#9ca3af' }}>PLNÁ INTEGRACE</span>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', border: eventType === 'ai' ? '2px solid #b7e94c' : '2px solid #d1d5db', background: eventType === 'ai' ? '#b7e94c' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {eventType === 'ai' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff' }} />}
+                      </div>
+                    </div>
+                    <div style={{ height: 64, borderRadius: 10, marginBottom: 14, background: 'linear-gradient(135deg,#1a1625 0%,#2d1f4e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, overflow: 'hidden' }}>
+                      <span style={{ background: 'rgba(183,233,76,0.2)', border: '1px solid rgba(183,233,76,0.4)', borderRadius: 100, padding: '3px 10px', fontSize: 10, color: '#b7e94c', fontWeight: 600 }}>AI párování</span>
+                      <span style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '4px 10px', fontSize: 10, color: 'rgba(255,255,255,0.7)' }}>host #014</span>
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 6 }}>S AI detekcí</div>
+                    <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.65, marginBottom: 14 }}>Každý host dostane svou soukromou galerii. Piclio automaticky přiřadí fotky pomocí AI.</div>
+                    <div style={{ height: 1, background: '#f0f0f0', marginBottom: 12 }} />
+                    {[
+                      { yes: true, text: 'AI detekce + číslované odznáčky' },
+                      { yes: true, text: 'Soukromá galerie každého hosta' },
+                      { yes: true, text: 'Piclio kiosk na vstupu' },
+                      { yes: true, text: 'Slideshow projekce' },
+                      { yes: true, text: 'Dashboard fotografa i zadavatele' },
+                    ].map(f => (
+                      <div key={f.text} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <span style={{ width: 16, height: 16, borderRadius: 4, background: '#b7e94c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: '#3a5000', flexShrink: 0 }}>✓</span>
+                        <span style={{ fontSize: 12, color: '#374151' }}>{f.text}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Jednoduchá galerie */}
+                  <div
+                    onClick={() => setEventType('simple')}
+                    style={{
+                      borderRadius: 14, padding: 22, cursor: 'pointer',
+                      border: eventType === 'simple' ? '1.5px solid #b7e94c' : '1.5px solid #e5e7eb',
+                      background: eventType === 'simple' ? '#f9ffe6' : '#fafafa',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: eventType === 'simple' ? '#5a7a00' : '#9ca3af' }}>JEDNODUCHÁ GALERIE</span>
+                      <div style={{ width: 18, height: 18, borderRadius: '50%', border: eventType === 'simple' ? '2px solid #b7e94c' : '2px solid #d1d5db', background: eventType === 'simple' ? '#b7e94c' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {eventType === 'simple' && <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff' }} />}
+                      </div>
+                    </div>
+                    <div style={{ height: 64, borderRadius: 10, marginBottom: 14, background: 'linear-gradient(135deg,#0f2a1a 0%,#1a3a2a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, overflow: 'hidden' }}>
+                      <span style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '4px 10px', fontSize: 10, color: 'rgba(255,255,255,0.7)' }}>zahradní grilovačka</span>
+                      <span style={{ background: 'rgba(183,233,76,0.2)', border: '1px solid rgba(183,233,76,0.4)', borderRadius: 100, padding: '3px 10px', fontSize: 10, color: '#b7e94c', fontWeight: 600 }}>sdílená galerie</span>
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 6 }}>Bez AI třídění</div>
+                    <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.65, marginBottom: 14 }}>Jedna sdílená galerie pro celou akci. Ideální pro neformální eventy a rodinné akce.</div>
+                    <div style={{ height: 1, background: '#f0f0f0', marginBottom: 12 }} />
+                    {[
+                      { yes: true,  text: 'Jedna sdílená galerie' },
+                      { yes: true,  text: 'Download, liky, komentáře' },
+                      { yes: true,  text: 'Privátní nebo veřejná' },
+                      { yes: false, text: 'Bez AI detekce' },
+                      { yes: false, text: 'Bez soukromých galerií' },
+                    ].map(f => (
+                      <div key={f.text} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <span style={{ width: 16, height: 16, borderRadius: 4, background: f.yes ? '#b7e94c' : '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: f.yes ? '#3a5000' : '#9ca3af', flexShrink: 0 }}>{f.yes ? '✓' : '–'}</span>
+                        <span style={{ fontSize: 12, color: f.yes ? '#374151' : '#9ca3af', textDecoration: f.yes ? 'none' : 'line-through' }}>{f.text}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               {/* Název */}
               <label style={labelStyle}>
@@ -2543,8 +2626,25 @@ export function PhotographerClient() {
                 </label>
               </div>
 
+              {/* Přístup ke galerii — jen pro simple */}
+              {eventType === 'simple' && (
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 8, color: '#374151' }}>Přístup ke galerii</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                    <button type="button" onClick={() => setGalleryPublic(false)}
+                      style={{ padding: '11px', borderRadius: 10, cursor: 'pointer', border: !galleryPublic ? '1.5px solid #b7e94c' : '1px solid #e5e7eb', background: !galleryPublic ? '#f9ffe6' : '#fff', fontWeight: 600, fontSize: 13, color: '#111' }}>
+                      🔒 Jen s odkazem
+                    </button>
+                    <button type="button" onClick={() => setGalleryPublic(true)}
+                      style={{ padding: '11px', borderRadius: 10, cursor: 'pointer', border: galleryPublic ? '1.5px solid #b7e94c' : '1px solid #e5e7eb', background: galleryPublic ? '#f9ffe6' : '#fff', fontWeight: 600, fontSize: 13, color: '#111' }}>
+                      🌐 Veřejná
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Max hostů + Barva */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: eventType === 'simple' ? 'none' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <label style={labelStyle}>
                   Max. počet hostů
                   <input
@@ -2566,34 +2666,36 @@ export function PhotographerClient() {
                 </label>
               </div>
 
-              {/* Divider */}
-              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 4 }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                  Zadavatel (obdrží pozvánku)
+              {/* Divider + sekce ZADAVATEL — skrytá pro simple */}
+              <div style={{ display: eventType === 'simple' ? 'none' : 'block' }}>
+                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 4, marginBottom: 14 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
+                    Zadavatel (obdrží pozvánku)
+                  </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  {/* Jméno zadavatele */}
+                  <label style={labelStyle}>
+                    Jméno zadavatele *
+                    <input
+                      value={form.clientName}
+                      onChange={e => updateForm('clientName', e.target.value)}
+                      placeholder="Jan Novák"
+                      style={inputStyle}
+                    />
+                  </label>
+                  {/* Email zadavatele */}
+                  <label style={labelStyle}>
+                    Email zadavatele *
+                    <input
+                      type="email" value={form.clientEmail}
+                      onChange={e => updateForm('clientEmail', e.target.value)}
+                      placeholder="jan@firma.cz"
+                      style={inputStyle}
+                    />
+                  </label>
                 </div>
               </div>
-
-              {/* Jméno zadavatele */}
-              <label style={labelStyle}>
-                Jméno zadavatele *
-                <input
-                  required value={form.clientName}
-                  onChange={e => updateForm('clientName', e.target.value)}
-                  placeholder="Jan Novák"
-                  style={inputStyle}
-                />
-              </label>
-
-              {/* Email zadavatele */}
-              <label style={labelStyle}>
-                Email zadavatele *
-                <input
-                  type="email" required value={form.clientEmail}
-                  onChange={e => updateForm('clientEmail', e.target.value)}
-                  placeholder="jan@firma.cz"
-                  style={inputStyle}
-                />
-              </label>
 
               {/* Error */}
               {createError && (
