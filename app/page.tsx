@@ -5,14 +5,14 @@ import Link from 'next/link'
 
 export default function LandingPage() {
   return (
-    <div style={{ background: '#16122a', color: '#f0f0f0', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
+    <div style={{ background: '#191224', color: '#f0f0f0', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
 
       {/* NAV */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 48px', height: 64,
-        background: 'rgba(22,18,42,0.88)', backdropFilter: 'blur(12px)',
+        background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(12px)',
         borderBottom: '1px solid rgba(255,255,255,0.06)',
       }}>
         <Image src="/logo01.png" alt="Piclio" width={100} height={32} style={{ objectFit: 'contain' }} />
@@ -23,14 +23,14 @@ export default function LandingPage() {
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <a href="/login" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontSize: 13, padding: '8px 16px' }}>Přihlásit se</a>
-          <Link href="/login" style={{ background: '#b7e94c', color: '#16122a', textDecoration: 'none', fontSize: 13, fontWeight: 700, padding: '9px 20px', borderRadius: 100 }}>Poptat akci →</Link>
+          <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 13, fontWeight: 700, padding: '9px 20px', borderRadius: 100 }}>Poptat akci →</Link>
         </div>
       </nav>
 
       {/* HERO — fullscreen */}
       <section style={{ position: 'relative', height: '100vh', minHeight: 640, overflow: 'hidden' }}>
         <Image src="/demo/Hero-01.png" alt="Fotograf na eventu" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} priority />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(22,18,42,0.1) 0%, rgba(22,18,42,0.35) 45%, rgba(22,18,42,0.92) 78%, rgba(22,18,42,0.99) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(25,18,36,0.1) 0%, rgba(25,18,36,0.35) 45%, rgba(25,18,36,0.92) 78%, rgba(25,18,36,0.99) 100%)' }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 64px 64px' }}>
           <div style={{ maxWidth: 620 }}>
             <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
@@ -46,7 +46,7 @@ export default function LandingPage() {
               Piclio by Lucifera boří staré pořádky v eventové fotografii. Propojujeme 52 let vizuálních zkušeností s nejmodernější AI technologií, která doručí emoce přímo tam, kde je hosté chtějí mít — hned teď do jejich soukromé galerie.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link href="/login" style={{ background: '#b7e94c', color: '#16122a', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci na klíč →</Link>
+              <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci na klíč →</Link>
               <a href="#jak-to-funguje" style={{ color: '#fff', textDecoration: 'none', fontSize: 14, padding: '14px 30px', borderRadius: 100, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.07)', display: 'inline-block' }}>Vyzkoušet software (Beta)</a>
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function LandingPage() {
       </section>
 
       {/* PROBLÉM */}
-      <section style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1e1a35 0%, #1a1625 100%)' }}>
+      <section style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #1a1625 100%)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROBLÉM KTERÝ ŘEŠÍME</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
@@ -89,7 +89,7 @@ export default function LandingPage() {
               { n: '02', title: 'Žádné složité hledání', desc: 'Hosté nemusí scrollovat stovkami cizích tváří. Systém je pozná a ukáže jim v soukromé galerii jen jejich snímky.' },
               { n: '03', title: 'Žádné narušení zábavy', desc: 'Zapomeňte na fronty u statických boxů. Naši fotografové jsou v centru dění.' },
             ].map(c => (
-              <div key={c.n} style={{ background: 'linear-gradient(135deg, #1e1a35 0%, #1a1625 100%)', padding: '40px 32px' }}>
+              <div key={c.n} style={{ background: 'linear-gradient(135deg, #1f1530 0%, #1a1625 100%)', padding: '40px 32px' }}>
                 <div style={{ fontSize: 64, fontWeight: 800, color: 'rgba(183,233,76,0.06)', lineHeight: 1, marginBottom: 20 }}>{c.n}</div>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 10 }}>{c.title}</div>
                 <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{c.desc}</div>
@@ -101,7 +101,7 @@ export default function LandingPage() {
 
       {/* JAK TO FUNGUJE — kiosk demo */}
       <section id="jak-to-funguje" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: '85vh' }}>
-        <div style={{ padding: '80px 64px', background: '#16122a', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ padding: '80px 64px', background: '#191224', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>TECHNOLOGIE KTERÁ NEPŘEKÁŽÍ ZÁBAVĚ</p>
           <h2 style={{ fontSize: 'clamp(32px, 3.5vw, 50px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 20px' }}>
             Jednou zadáte e-mail.<br />
@@ -126,15 +126,15 @@ export default function LandingPage() {
           ))}
         </div>
 
-        <div style={{ background: 'linear-gradient(135deg, #221840 0%, #16122a 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60 }}>
+        <div style={{ background: 'linear-gradient(135deg, #251840 0%, #191224 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 60 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            <div style={{ width: 260, background: '#16122a', borderRadius: 24, padding: '32px 24px', border: '1px solid rgba(183,233,76,0.15)', textAlign: 'center', boxShadow: '0 0 60px rgba(45,31,78,0.6)' }}>
+            <div style={{ width: 260, background: '#191224', borderRadius: 24, padding: '32px 24px', border: '1px solid rgba(183,233,76,0.15)', textAlign: 'center', boxShadow: '0 0 60px rgba(45,31,78,0.6)' }}>
               <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 6 }}>
                 Piclio<span style={{ width: 6, height: 6, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', marginLeft: 2, verticalAlign: 'super' }}></span>
               </div>
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 24, lineHeight: 1.5 }}>Zadejte svůj e-mail<br />pro příjem fotek z večera</div>
               <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '11px 14px', fontSize: 12, color: 'rgba(255,255,255,0.25)', marginBottom: 10, textAlign: 'left', border: '1px solid rgba(255,255,255,0.08)' }}>vas@email.cz</div>
-              <div style={{ background: '#b7e94c', color: '#16122a', borderRadius: 12, padding: 11, fontSize: 13, fontWeight: 700 }}>Pokračovat →</div>
+              <div style={{ background: '#b7e94c', color: '#191224', borderRadius: 12, padding: 11, fontSize: 13, fontWeight: 700 }}>Pokračovat →</div>
               <div style={{ display: 'flex', gap: 7, justifyContent: 'center', marginTop: 18 }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#b7e94c' }} />
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'rgba(255,255,255,0.15)' }} />
@@ -143,7 +143,7 @@ export default function LandingPage() {
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
               {['01','02','03','04'].map(n => (
-                <div key={n} style={{ width: 52, height: 52, background: '#fff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14, color: '#16122a' }}>{n}</div>
+                <div key={n} style={{ width: 52, height: 52, background: '#fff', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14, color: '#191224' }}>{n}</div>
               ))}
             </div>
             <div style={{ background: 'rgba(20,14,38,0.97)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: '12px 18px', width: '100%' }}>
@@ -201,7 +201,7 @@ export default function LandingPage() {
       </section>
 
       {/* ATRAKCE */}
-      <section id="atrakce" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1e1a35 0%, #16122a 100%)' }}>
+      <section id="atrakce" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>ZÁŽITKOVÉ FOTOSLUŽBY NA KLÍČ</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 48px' }}>
@@ -234,8 +234,8 @@ export default function LandingPage() {
                 price: 'od 4 900 Kč', sub: 'Lze přidat k libovolnému balíčku',
               },
             ].map(a => (
-              <div key={a.name} style={{ background: a.featured ? 'linear-gradient(135deg, #1e1640 0%, #1e1a35 100%)' : 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 40, border: a.featured ? '1px solid rgba(183,233,76,0.25)' : '1px solid rgba(255,255,255,0.07)' }}>
-                <div style={{ display: 'inline-block', fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, padding: '4px 12px', borderRadius: 100, background: a.featured ? '#b7e94c' : 'rgba(183,233,76,0.1)', color: a.featured ? '#16122a' : '#b7e94c', marginBottom: 20 }}>{a.badge}</div>
+              <div key={a.name} style={{ background: a.featured ? 'linear-gradient(135deg, #1e1640 0%, #1f1530 100%)' : 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 40, border: a.featured ? '1px solid rgba(183,233,76,0.25)' : '1px solid rgba(255,255,255,0.07)' }}>
+                <div style={{ display: 'inline-block', fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, padding: '4px 12px', borderRadius: 100, background: a.featured ? '#b7e94c' : 'rgba(183,233,76,0.1)', color: a.featured ? '#191224' : '#b7e94c', marginBottom: 20 }}>{a.badge}</div>
                 <h3 style={{ fontSize: 28, fontWeight: 700, color: '#fff', margin: '0 0 14px', letterSpacing: '-0.02em' }}>{a.name}</h3>
                 <p style={{ fontSize: 13, lineHeight: 1.75, color: 'rgba(255,255,255,0.5)', margin: '0 0 28px' }}>{a.desc}</p>
                 <div style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>{a.price}</div>
@@ -267,7 +267,7 @@ export default function LandingPage() {
       </section>
 
       {/* CENÍK SAAS */}
-      <section id="ceník" style={{ padding: '100px 48px', background: '#16122a' }}>
+      <section id="ceník" style={{ padding: '100px 48px', background: '#191224' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PRO FOTOGRAFY · SAAS</p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, gap: 32 }}>
@@ -281,7 +281,7 @@ export default function LandingPage() {
               { tag: 'MĚSÍČNÍ', price: '2 990 Kč', period: 'měsíčně · neomezené akce', features: ['Neomezené akce','10 000 fotek / měsíc','Prioritní podpora'], pop: false },
               { tag: 'ROČNÍ', price: '24 900 Kč', period: 'ročně · vše neomezené', features: ['API přístup','White label','Custom integrace','Dedicated support'], pop: false },
             ].map(p => (
-              <div key={p.tag} style={{ background: p.pop ? 'linear-gradient(135deg, #1e1640 0%, #1e1a35 100%)' : 'rgba(255,255,255,0.03)', border: p.pop ? '1px solid rgba(183,233,76,0.35)' : '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '28px 24px' }}>
+              <div key={p.tag} style={{ background: p.pop ? 'linear-gradient(135deg, #1e1640 0%, #1f1530 100%)' : 'rgba(255,255,255,0.03)', border: p.pop ? '1px solid rgba(183,233,76,0.35)' : '1px solid rgba(255,255,255,0.07)', borderRadius: 20, padding: '28px 24px' }}>
                 <div style={{ fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, color: p.pop ? '#b7e94c' : 'rgba(255,255,255,0.4)', marginBottom: 16 }}>{p.tag}</div>
                 <div style={{ fontSize: 36, fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', marginBottom: 4 }}>{p.price}</div>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginBottom: 24 }}>{p.period}</div>
@@ -292,7 +292,7 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/login" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 100, fontSize: 13, fontWeight: p.pop ? 700 : 500, textDecoration: 'none', background: p.pop ? '#b7e94c' : 'transparent', color: p.pop ? '#16122a' : 'rgba(255,255,255,0.6)', border: p.pop ? 'none' : '1px solid rgba(255,255,255,0.12)' }}>Začít →</Link>
+                <Link href="/login" style={{ display: 'block', textAlign: 'center', padding: '12px', borderRadius: 100, fontSize: 13, fontWeight: p.pop ? 700 : 500, textDecoration: 'none', background: p.pop ? '#b7e94c' : 'transparent', color: p.pop ? '#191224' : 'rgba(255,255,255,0.6)', border: p.pop ? 'none' : '1px solid rgba(255,255,255,0.12)' }}>Začít →</Link>
               </div>
             ))}
           </div>
@@ -312,7 +312,7 @@ export default function LandingPage() {
       </section>
 
       {/* SROVNÁNÍ */}
-      <section style={{ padding: '80px 48px', background: 'linear-gradient(135deg, #1e1a35 0%, #16122a 100%)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <section style={{ padding: '80px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROČ PICLIO?</p>
           <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 40px' }}>Vlastnost po vlastnosti.</h2>
@@ -340,7 +340,7 @@ export default function LandingPage() {
       </section>
 
       {/* TÝM */}
-      <section style={{ padding: '100px 48px', background: '#16122a', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <section style={{ padding: '100px 48px', background: '#191224', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>O NÁS</p>
           <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
@@ -371,7 +371,7 @@ export default function LandingPage() {
               },
             ].map(p => (
               <div key={p.name} style={{
-                background: 'linear-gradient(135deg, #221840 0%, #1e1a35 100%)',
+                background: 'linear-gradient(135deg, #251840 0%, #1f1530 100%)',
                 border: '1px solid rgba(255,255,255,0.07)',
                 borderRadius: 24,
                 padding: '36px 32px',
@@ -412,7 +412,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section style={{ padding: '0 48px 80px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#16122a', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Udělejte z vaší další akce zážitek, o kterém se bude mluvit.</h2>
+          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#191224', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Udělejte z vaší další akce zážitek, o kterém se bude mluvit.</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end', minWidth: 340 }}>
             <p style={{ fontSize: 13, color: 'rgba(10,10,10,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>
               Pro firmy, event agentury<br />i profesionální fotografy.<br />Praha a celá ČR.
@@ -424,7 +424,7 @@ export default function LandingPage() {
                 width: '100%', padding: '12px 18px', borderRadius: 12,
                 border: '1.5px solid rgba(10,10,10,0.15)',
                 background: 'rgba(255,255,255,0.6)',
-                fontSize: 14, outline: 'none', color: '#16122a',
+                fontSize: 14, outline: 'none', color: '#191224',
                 backdropFilter: 'blur(8px)',
               }}
             />
@@ -435,7 +435,7 @@ export default function LandingPage() {
                 width: '100%', padding: '12px 18px', borderRadius: 12,
                 border: '1.5px solid rgba(10,10,10,0.15)',
                 background: 'rgba(255,255,255,0.6)',
-                fontSize: 14, outline: 'none', color: '#16122a',
+                fontSize: 14, outline: 'none', color: '#191224',
                 backdropFilter: 'blur(8px)',
               }}
             />
@@ -446,7 +446,7 @@ export default function LandingPage() {
                 width: '100%', padding: '12px 18px', borderRadius: 12,
                 border: '1.5px solid rgba(10,10,10,0.15)',
                 background: 'rgba(255,255,255,0.6)',
-                fontSize: 14, outline: 'none', color: '#16122a',
+                fontSize: 14, outline: 'none', color: '#191224',
                 resize: 'none', fontFamily: 'inherit',
                 backdropFilter: 'blur(8px)',
               }}
@@ -460,7 +460,7 @@ export default function LandingPage() {
               }}
               style={{
                 width: '100%', padding: '14px 28px', borderRadius: 100,
-                background: '#16122a', color: '#fff',
+                background: '#191224', color: '#fff',
                 fontSize: 14, fontWeight: 700, cursor: 'pointer',
                 border: 'none', letterSpacing: '0.01em',
               }}
