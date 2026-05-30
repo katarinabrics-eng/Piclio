@@ -35,7 +35,13 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     if (data.photos) setEventPhotos(data.photos)
   }, [token])
 
-  useEffect(() => { fetchEventPhotos() }, [fetchEventPhotos])
+  useEffect(() => {
+    fetchEventPhotos()
+    // Refresh vlastních fotek
+    fetch(`/api/gallery/${token}`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => { if (d.photos) setPhotos(d.photos) })
+  }, [fetchEventPhotos, token])
 
   useEffect(() => {
     const photosRef = { current: photos }
@@ -47,7 +53,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'photo_guests' },
         async () => {
-          const res = await fetch(`/api/gallery/${token}`)
+          const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
           const data = await res.json()
           if (data.photos) {
             const currentIds = new Set(photosRef.current.map(p => p.id))
