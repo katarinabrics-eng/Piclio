@@ -31,12 +31,17 @@ export async function POST(req: NextRequest) {
 
   if (pgError) return NextResponse.json({ error: pgError.message }, { status: 500 })
 
-  const { error: statusError } = await supabaseAdmin
+  const { data: updatedPhotos, error: statusError } = await supabaseAdmin
     .from('photos')
     .update({ status: 'matched' })
     .eq('id', photoId)
+    .select('id, status')
 
   if (statusError) return NextResponse.json({ error: statusError.message }, { status: 500 })
+  if (!updatedPhotos || updatedPhotos.length === 0) {
+    console.error('assign: UPDATE photos status=matched affected 0 rows for photoId', photoId)
+    return NextResponse.json({ error: 'Photo not found or status not updated' }, { status: 500 })
+  }
 
   // Only increment photo_count for new assignments, not re-assigns
   if (isNewAssignment) {
