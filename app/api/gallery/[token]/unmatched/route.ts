@@ -24,7 +24,7 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     .from('photos')
     .select('id, filename, storage_path, original_path, taken_at, uploaded_at, ocr_number, status, event_id')
     .eq('event_id', guest.event_id)
-    .not('status', 'eq', 'incoming')
+    .eq('status', 'unmatched')
     .neq('is_deleted', true)
 
   if (myPhotoIds.length > 0) {
