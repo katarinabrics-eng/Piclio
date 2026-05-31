@@ -433,6 +433,12 @@ export function PhotographerClient() {
         setOverlayApproved(newApproved)
         setOverlayNotes(newNotes)
         setInfoNotes(fresh.info_notes ?? null)
+        setSelectedEvent(prev => prev ? {
+          ...prev,
+          unmatchedCount: fresh.unmatchedCount ?? prev.unmatchedCount,
+          photoCount: fresh.photoCount ?? prev.photoCount,
+        } : prev)
+        setEvents(prev => prev.map(e => e.id === fresh.id ? { ...e, unmatchedCount: fresh.unmatchedCount, photoCount: fresh.photoCount } : e))
       } catch {
         // polling failure — silent
       }
