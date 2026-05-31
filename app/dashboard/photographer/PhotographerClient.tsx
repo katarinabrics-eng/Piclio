@@ -599,12 +599,9 @@ export function PhotographerClient() {
     setGuests(gData.guests ?? [])
     setUnmatched(uData.photos ?? [])
 
-    // Aktualizuj počítadla přímo z unmatched výsledků
     const actualUnmatched = uData.photos ?? []
-    setSelectedEvent(prev => prev ? {
-      ...prev,
-      unmatchedCount: actualUnmatched.length,
-    } : prev)
+    setUnmatched(actualUnmatched)
+    // NEPREPISUJ unmatchedCount — bere se z events API které má správné číslo
   }
 
   async function deleteUnmatchedPhoto(photoId: string) {
@@ -686,6 +683,20 @@ export function PhotographerClient() {
     ))
     setAssigningPhoto(null)
     setAssignTarget(prev => { const n = { ...prev }; delete n[photoId]; return n })
+    // Reload čerstvých dat po přiřazení
+    if (selectedEvent) {
+      const [gRes, uRes, evRes] = await Promise.all([
+        fetch(`/api/photographer/events/${selectedEvent.id}/guests`, { cache: 'no-store' }),
+        fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' }),
+        fetch('/api/photographer/events', { cache: 'no-store' }),
+      ])
+      const [gData, uData, evData] = await Promise.all([gRes.json(), uRes.json(), evRes.json()])
+      setGuests(gData.guests ?? [])
+      setUnmatched(uData.photos ?? [])
+      setEvents(evData.events ?? [])
+      const freshEvent = (evData.events ?? []).find((e: EventWithStats) => e.id === selectedEvent.id)
+      if (freshEvent) setSelectedEvent(prev => prev ? { ...prev, ...freshEvent } : prev)
+    }
   }
 
   if (loading) {
