@@ -13,15 +13,18 @@ export async function GET(req: NextRequest) {
 
   const eventId = req.nextUrl.searchParams.get('eventId')
 
-  const baseQuery = supabaseAdmin
+  let query = supabaseAdmin
     .from('photos')
     .select('id, filename, storage_path, original_path, uploaded_at, ocr_number, event_id, status')
     .eq('status', 'unmatched')
+    .neq('is_deleted', true)
     .order('uploaded_at', { ascending: false })
 
-  const { data: photos, error } = eventId
-    ? await baseQuery.eq('event_id', eventId).neq('is_deleted', true)
-    : await baseQuery.neq('is_deleted', true)
+  if (eventId) {
+    query = query.eq('event_id', eventId)
+  }
+
+  const { data: photos, error } = await query
 
   console.log('[unmatched] eventId:', eventId, '| count:', photos?.length ?? 0, '| error:', error?.message ?? null)
   console.log('[unmatched] statuses:', photos?.map(p => p.status + ':' + p.filename).join(', '))
