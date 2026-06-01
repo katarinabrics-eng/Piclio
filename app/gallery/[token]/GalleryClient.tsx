@@ -46,6 +46,20 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   }, [fetchEventPhotos, token])
 
   useEffect(() => {
+    const interval = setInterval(async () => {
+      const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
+      const data = await res.json()
+      if (data.photos) {
+        setPhotos(prev => {
+          if (prev.length !== data.photos.length) return data.photos
+          return prev
+        })
+      }
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [token])
+
+  useEffect(() => {
     const photosRef = { current: photos }
     photosRef.current = photos
 
@@ -101,12 +115,23 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   async function claimPhoto(photoId: string) {
     setClaiming(photoId)
     try {
-      await fetch(`/api/gallery/${token}/claim`, {
+      const res = await fetch(`/api/gallery/${token}/claim`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ photoId }),
       })
-      setEventPhotos(prev => prev.filter(p => p.id !== photoId))
+      if (!res.ok) {
+        console.error('claimPhoto failed:', await res.text())
+        return
+      }
+      // Reload obou tabů po úspěšném přidání
+      const [myRes, eventRes] = await Promise.all([
+        fetch(`/api/gallery/${token}`, { cache: 'no-store' }),
+        fetch(`/api/gallery/${token}/unmatched?t=${Date.now()}`, { cache: 'no-store' }),
+      ])
+      const [myData, eventData] = await Promise.all([myRes.json(), eventRes.json()])
+      if (myData.photos) setPhotos(myData.photos)
+      if (eventData.photos) setEventPhotos(eventData.photos)
     } finally {
       setClaiming(null)
     }
