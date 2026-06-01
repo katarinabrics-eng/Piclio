@@ -879,7 +879,15 @@ export function PhotographerClient() {
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
-                  onClick={() => setTab(key)}
+                  onClick={() => {
+                    setTab(key)
+                    if (key === 'unmatched' && selectedEvent) {
+                      fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' })
+                        .then(r => r.json())
+                        .then(d => setUnmatched(d.photos ?? []))
+                        .catch(() => {})
+                    }
+                  }}
                   style={{
                     padding: '7px 16px', borderRadius: 8, border: 'none',
                     cursor: 'pointer', fontSize: 14, fontWeight: 600,
