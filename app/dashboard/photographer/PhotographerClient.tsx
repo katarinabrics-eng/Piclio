@@ -477,16 +477,43 @@ export function PhotographerClient() {
     if (tab !== 'galerie' || !selectedEvent) return
     setGalleryLoading(true)
     setSelectedPhotoIds(new Set())
+
     fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => {
         let photos = d.photos ?? []
-        if (galleryTab === 'unassigned') photos = photos.filter((p: any) => p.status === 'unmatched')
+
+        // Filtr dle záložky
+        if (galleryTab === 'unassigned') {
+          photos = photos.filter((p: any) => p.status === 'unmatched')
+        } else if (galleryTab === 'by-guest' && selectedGuestFilter !== 'all') {
+          // Pro filtr dle hosta načti photo_guests pro daného hosta
+          fetch(`/api/photographer/events/${selectedEvent.id}/guests`, { cache: 'no-store' })
+            .then(r => r.json())
+            .then(gData => {
+              const guest = (gData.guests ?? []).find((g: any) => g.id === selectedGuestFilter)
+              if (guest) {
+                fetch(`/api/gallery/${guest.gallery_token}`, { cache: 'no-store' })
+                  .then(r => r.json())
+                  .then(gPhotos => {
+                    let guestPhotos = (gPhotos.photos ?? []).map((p: any) => ({ ...p, guest_name: guest.name ?? guest.email }))
+                    if (gallerySort === 'oldest') guestPhotos = guestPhotos.reverse()
+                    setGalleryPhotos(guestPhotos)
+                    setGalleryLoading(false)
+                  })
+              }
+            })
+          return
+        }
+
+        // Sort
+        if (gallerySort === 'oldest') photos = [...photos].reverse()
+
         setGalleryPhotos(photos)
       })
       .catch(() => setGalleryPhotos([]))
       .finally(() => setGalleryLoading(false))
-  }, [tab, selectedEvent?.id, galleryTab])
+  }, [tab, selectedEvent?.id, galleryTab, gallerySort, selectedGuestFilter])
 
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
