@@ -25,9 +25,6 @@ export async function GET(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
-  // DEBUG: log raw DB statuses
-  console.log('DB raw statuses:', photos.map(p => p.filename + '=' + p.status).join(', '))
-
   const validPhotos = photos.filter(p => p.storage_path && p.storage_path.trim() !== '')
   const { data: deleted } = await supabaseAdmin.from('deleted_photos').select('storage_path')
   const deletedPaths = new Set((deleted ?? []).map((d: any) => d.storage_path))
@@ -35,10 +32,19 @@ export async function GET(req: NextRequest) {
 
   if (filtered.length === 0) return NextResponse.json({ photos: [] })
 
+  // Zachovaj status mapu pred signPhotosRobust (status môže byť stratený)
+  const statusMap = new Map(filtered.map(p => [p.id, p.status]))
+
   const photosWithUrls = await signPhotosRobust(filtered, 86400)
 
+  // Explicitne nastav status z pôvodného DB query
+  const result = photosWithUrls.map((p: any) => ({
+    ...p,
+    status: statusMap.get(p.id) ?? p.status,
+  }))
+
   return NextResponse.json(
-    { photos: photosWithUrls },
+    { photos: result },
     { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
   )
 }
