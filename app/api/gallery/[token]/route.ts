@@ -25,27 +25,32 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     return NextResponse.json({ error: 'Event nenalezen' }, { status: 404 })
   }
 
-  const { data: photoGuests } = await supabaseAdmin
+  const { data: photoGuests, error: pgError } = await supabaseAdmin
     .from('photo_guests')
     .select('photo_id')
     .eq('guest_id', guest.id)
+    .limit(1000)
+
+  console.log('gallery guest_id:', guest.id,
+    '| photo_guests rows:', photoGuests?.length ?? 0,
+    '| pgError:', pgError?.message ?? null,
+    '| photo_ids:', (photoGuests ?? []).map(pg => pg.photo_id).join(','))
 
   const photoIds = (photoGuests ?? []).map(pg => pg.photo_id)
 
-  const { data: photosData } = photoIds.length > 0
+  const { data: photosData, error: photosError } = photoIds.length > 0
     ? await supabaseAdmin
         .from('photos')
         .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
         .in('id', photoIds)
         .neq('is_deleted', true)
-    : { data: [] }
+        .limit(1000)
+    : { data: [], error: null }
 
   const photos = photosData ?? []
 
-  console.log('gallery guest_id:', guest.id,
-    '| photo_guests rows:', photoGuests?.length ?? 0,
-    '| photoIds:', photoIds.length,
-    '| photos resolved:', photos.length)
+  console.log('photos resolved:', photos.length,
+    '| photosError:', photosError?.message ?? null)
 
   if (photos.length === 0) {
     return NextResponse.json(
