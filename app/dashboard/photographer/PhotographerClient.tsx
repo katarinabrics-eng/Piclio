@@ -1801,6 +1801,38 @@ export function PhotographerClient() {
                   />
                 </div>
 
+                {/* Nebezpečná zóna */}
+                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', border: '1px solid #fecaca' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#ef4444', margin: '0 0 8px' }}>Nebezpečná zóna</h2>
+                  <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>
+                    Smaže všechny fotky, photo_guests záznamy a Storage soubory tohoto eventu. Hosté zůstanou zachováni.
+                  </p>
+                  <button
+                    onClick={async () => {
+                      if (!selectedEvent) return
+                      if (!confirm('Smazat všechny fotky tohoto eventu? Tato akce je nevratná.')) return
+                      const res = await fetch(`/api/photographer/events/${selectedEvent.id}/clear`, { method: 'DELETE' })
+                      const data = await res.json()
+                      if (data.success) {
+                        alert(`Smazáno ${data.deleted} fotek.`)
+                        setUnmatched([])
+                        setGalleryPhotos([])
+                        setPlaylistPhotos([])
+                        setSelectedEvent(prev => prev ? { ...prev, photoCount: 0, unmatchedCount: 0 } : prev)
+                        setEvents(prev => prev.map(e => e.id === selectedEvent.id ? { ...e, photoCount: 0, unmatchedCount: 0 } : e))
+                        setGuests(prev => prev.map(g => ({ ...g, photo_count: 0 })))
+                      }
+                    }}
+                    style={{
+                      background: '#ef4444', color: '#fff', border: 'none',
+                      borderRadius: 8, padding: '10px 20px',
+                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                    }}
+                  >
+                    🗑 Vyčistit všechny fotky eventu
+                  </button>
+                </div>
+
               </div>
             )}
 
