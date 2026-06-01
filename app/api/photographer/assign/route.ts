@@ -15,51 +15,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'photoId and guestId are required' }, { status: 400 })
   }
 
-  // Check if this photo→guest link already exists (to avoid double-incrementing photo_count)
-  const { data: existingPg } = await supabaseAdmin
-    .from('photo_guests')
-    .select('photo_id')
-    .eq('photo_id', photoId)
-    .eq('guest_id', guestId)
-    .maybeSingle()
-
-  const isNewAssignment = !existingPg
-
   const { error: pgError } = await supabaseAdmin
     .from('photo_guests')
     .upsert({ photo_id: photoId, guest_id: guestId, assigned_by: 'manual' }, { onConflict: 'photo_id,guest_id' })
 
   if (pgError) return NextResponse.json({ error: pgError.message }, { status: 500 })
 
-  const { data: updatedPhotos, error: statusError } = await supabaseAdmin
-    .from('photos')
-    .update({ status: 'matched' })
-    .eq('id', photoId)
-    .select('id, status')
-
-  if (statusError) return NextResponse.json({ error: statusError.message }, { status: 500 })
-  if (!updatedPhotos || updatedPhotos.length === 0) {
-    console.error('assign: UPDATE photos status=matched affected 0 rows for photoId', photoId)
-    return NextResponse.json({ error: 'Photo not found or status not updated' }, { status: 500 })
-  }
-
-  // Only increment photo_count for new assignments, not re-assigns
-  if (isNewAssignment) {
-    const { error: rpcError } = await supabaseAdmin.rpc('increment_photo_count', { guest_id_arg: guestId })
-    if (rpcError) {
-      const { data: guestData } = await supabaseAdmin
-        .from('guests')
-        .select('photo_count')
-        .eq('id', guestId)
-        .single()
-      if (guestData) {
-        await supabaseAdmin
-          .from('guests')
-          .update({ photo_count: (guestData.photo_count ?? 0) + 1 })
-          .eq('id', guestId)
-      }
-    }
-  }
+  // status='matched' nastavuje automaticky DB trigger po upsert do photo_guests
+  // photo_count se počítá živě z photo_guests — není třeba aktualizovat
 
   // Index face into Rekognition — best-effort, never blocks the response
   try {

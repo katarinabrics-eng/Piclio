@@ -32,20 +32,8 @@ export async function POST(req: NextRequest, { params }: { params: { token: stri
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Nastav status = 'matched' aby fotka zmizela z unmatched listu
-  if (!error) {
-    await supabaseAdmin
-      .from('photos')
-      .update({ status: 'matched' })
-      .eq('id', photoId)
-
-    await supabaseAdmin
-      .from('guests')
-      .update({ photo_count: guest.photo_count + 1 })
-      .eq('id', guest.id)
-  } else {
-    // duplicate insert (23505) — photo_count neměnit, status už je matched
-  }
+  // status='matched' nastavuje automaticky DB trigger
+  // photo_count se počítá živě z photo_guests — není třeba aktualizovat
 
   return NextResponse.json({ ok: true })
 }
