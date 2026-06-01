@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
     : await baseQuery.neq('is_deleted', true)
 
   console.log('[unmatched] eventId:', eventId, '| count:', photos?.length ?? 0, '| error:', error?.message ?? null)
+  console.log('[unmatched] statuses:', photos?.map(p => p.status + ':' + p.filename).join(', '))
 
   if (error) {
     console.error('unmatched query error:', error)
