@@ -18,16 +18,22 @@ export async function GET(req: NextRequest, { params }: { params: { eventId: str
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Přepočítej photo_count přímo z photo_guests (spolehlivější než cached hodnota)
-  const guestsWithRealCount = await Promise.all((guests ?? []).map(async (g) => {
-    const { count } = await supabaseAdmin
-      .from('photo_guests')
-      .select('photo_id', { count: 'exact', head: true })
-      .eq('guest_id', g.id)
-    return { ...g, photo_count: count ?? 0 }
+  // Jeden dotaz pro všechny hosty místo N+1
+  const { data: photoGuestsCounts } = await supabaseAdmin
+    .from('photo_guests')
+    .select('guest_id, photo_id')
+    .in('guest_id', (guests ?? []).map(g => g.id))
+
+  const countMap = new Map<string, number>()
+  for (const pg of photoGuestsCounts ?? []) {
+    countMap.set(pg.guest_id, (countMap.get(pg.guest_id) ?? 0) + 1)
+  }
+  const guestsWithCount = (guests ?? []).map(g => ({
+    ...g,
+    photo_count: countMap.get(g.id) ?? 0,
   }))
 
-  return NextResponse.json({ guests: guestsWithRealCount })
+  return NextResponse.json({ guests: guestsWithCount })
 }
 
 export async function POST(req: NextRequest, { params }: { params: { eventId: string } }) {

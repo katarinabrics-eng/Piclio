@@ -683,19 +683,18 @@ export function PhotographerClient() {
     ))
     setAssigningPhoto(null)
     setAssignTarget(prev => { const n = { ...prev }; delete n[photoId]; return n })
-    // Reload čerstvých dat po přiřazení
+    // Reload pouze hostů a unmatched — ne celý events list (pomalé při 200 hostech)
     if (selectedEvent) {
-      const [gRes, uRes, evRes] = await Promise.all([
+      const [gRes, uRes] = await Promise.all([
         fetch(`/api/photographer/events/${selectedEvent.id}/guests`, { cache: 'no-store' }),
         fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' }),
-        fetch('/api/photographer/events', { cache: 'no-store' }),
       ])
-      const [gData, uData, evData] = await Promise.all([gRes.json(), uRes.json(), evRes.json()])
+      const [gData, uData] = await Promise.all([gRes.json(), uRes.json()])
       setGuests(gData.guests ?? [])
       setUnmatched(uData.photos ?? [])
-      setEvents(evData.events ?? [])
-      const freshEvent = (evData.events ?? []).find((e: EventWithStats) => e.id === selectedEvent.id)
-      if (freshEvent) setSelectedEvent(prev => prev ? { ...prev, ...freshEvent } : prev)
+      const newUnmatchedCount = uData.photos?.length ?? 0
+      setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: newUnmatchedCount } : prev)
+      setEvents(prev => prev.map(e => e.id === selectedEvent.id ? { ...e, unmatchedCount: newUnmatchedCount } : e))
     }
   }
 
