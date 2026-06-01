@@ -31,6 +31,11 @@ export async function GET(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   if (!photos || photos.length === 0) return NextResponse.json({ photos: [] })
 
+  // DEBUG: return raw data immediately to check what DB returns
+  const luka7020 = photos.find(p => p.filename === 'LUKA7020.JPG')
+  if (luka7020) console.log('LUKA7020 raw from DB:', luka7020.status)
+  return NextResponse.json({ raw: photos.map(p => ({ f: p.filename, s: p.status })) })
+
   const validPhotos = photos.filter(p => p.storage_path && p.storage_path.trim() !== '')
   const { data: deleted } = await supabaseAdmin.from('deleted_photos').select('storage_path')
   const deletedPaths = new Set((deleted ?? []).map((d: any) => d.storage_path))
