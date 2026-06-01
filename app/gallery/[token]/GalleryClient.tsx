@@ -43,28 +43,29 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
 
 
   useEffect(() => {
-    const photosRef = { current: photos }
-    photosRef.current = photos
-
     const channel = supabase
       .channel(`gallery-${token}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'photo_guests' },
-        async () => {
-          const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
+        async (payload: any) => {
+          // Načti jen novou fotku — nepřepisuj celé pole
+          const newPhotoId = payload.new?.photo_id
+          if (!newPhotoId) return
+
+          const res = await fetch(`/api/gallery/${token}/single/${newPhotoId}`, { cache: 'no-store' })
+          if (!res.ok) return
           const data = await res.json()
-          if (data.photos) {
-            const currentIds = new Set(photosRef.current.map(p => p.id))
-            const fresh = data.photos as GalleryPhoto[]
-            const addedIds = new Set(fresh.filter(p => !currentIds.has(p.id)).map(p => p.id))
-            setPhotos(fresh)
-            if (addedIds.size > 0) {
-              setNewPhotoIds(addedIds)
-              setTimeout(() => setNewPhotoIds(new Set()), 2000)
-            }
-            fetchEventPhotos()
-          }
+          if (!data.photo) return
+
+          setPhotos(prev => {
+            if (prev.find(p => p.id === newPhotoId)) return prev // už existuje
+            const fresh = [...prev, data.photo]
+            setNewPhotoIds(new Set([newPhotoId]))
+            setTimeout(() => setNewPhotoIds(new Set()), 2000)
+            return fresh
+          })
+          fetchEventPhotos()
         }
       )
       .subscribe()
