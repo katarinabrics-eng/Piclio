@@ -461,7 +461,7 @@ export function PhotographerClient() {
           const photos = d.photos ?? []
           setUnmatched(photos)
           // Keep badge count in sync with actual array length from server
-          setSelectedEvent(prev => prev ? { ...prev, unmatchedCount: photos.length } : prev)
+          // unmatchedCount se bere z events API — neprepisuj délkou pole fotek z eventu
         })
         .catch(() => {})
     }
@@ -642,7 +642,7 @@ export function PhotographerClient() {
       // Aktualizuj počítadla — unmatchedCount ze serveru, photoCount odečti smazané
       setSelectedEvent(prev => prev ? {
         ...prev,
-        unmatchedCount: newUnmatched.length,
+        unmatchedCount: newUnmatched.filter((p: any) => p.status === 'unmatched').length,
         photoCount: Math.max(0, prev.photoCount - deletedCount),
       } : prev)
     }
@@ -778,7 +778,7 @@ export function PhotographerClient() {
                     <div style={{ display: 'flex', gap: 24 }}>
                       <Stat label="Hosté" value={event.guestCount} />
                       <Stat label="Fotky" value={event.photoCount} />
-                      <Stat label="Nespárované" value={event.unmatchedCount} warn={event.unmatchedCount > 0} />
+                      <Stat label="Bez galerie" value={event.unmatchedCount} warn={event.unmatchedCount > 0} />
                       <Stat label="Doručeno" value={event.deliveredCount} />
                     </div>
                     <button
@@ -862,7 +862,7 @@ export function PhotographerClient() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 28 }}>
               <StatCard label="Hosté" value={selectedEvent.guestCount} />
               <StatCard label="Fotky celkem" value={selectedEvent.photoCount} />
-              <StatCard label="Nespárované" value={selectedEvent.unmatchedCount} />
+              <StatCard label="Bez galerie" value={selectedEvent.unmatchedCount} />
               <StatCard label="Doručeno" value={selectedEvent.deliveredCount} />
             </div>
 
@@ -870,7 +870,7 @@ export function PhotographerClient() {
             <div style={{ display: 'flex', gap: 4, marginBottom: 20, flexWrap: 'wrap' }}>
               {([
                 { key: 'guests',   label: `Hosté (${guests.length})` },
-                { key: 'unmatched', label: `Fotky z eventu (${selectedEvent?.unmatchedCount ?? 0})` },
+                { key: 'unmatched', label: `Fotky z eventu (${selectedEvent?.photoCount ?? 0})` },
                 { key: 'upload',   label: uploadedCount > 0 ? `Nahrát fotky (${uploadedCount})` : 'Nahrát fotky' },
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
