@@ -46,5 +46,7 @@ export async function GET(req: NextRequest) {
 
   const photosWithUrls = await signPhotosRobust(filtered, 86400)
 
-  return NextResponse.json({ photos: photosWithUrls })
+  return NextResponse.json({ photos: photosWithUrls }, {
+    headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' }
+  })
 }
