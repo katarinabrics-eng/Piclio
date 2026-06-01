@@ -145,7 +145,51 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                 <div style={{ fontSize: 13, marginTop: 6 }}>Fotky se objeví automaticky po přiřazení</div>
               </div>
             ) : (
-              <PhotoGrid photos={photos} onPhotoClick={setLightboxIndex} newPhotoIds={new Set()} onDownload={downloadOne} />
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+                {photos.map(photo => (
+                  <div key={photo.id} style={{ position: 'relative' }}>
+                    <img
+                      src={photo.url}
+                      alt={photo.filename}
+                      onClick={() => setLightboxIndex(photos.indexOf(photo))}
+                      style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block', cursor: 'pointer' }}
+                    />
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation()
+                        if (!confirm('Odebrat fotku z galerie?')) return
+                        await fetch(`/api/gallery/${token}/remove`, {
+                          method: 'DELETE',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ photoId: photo.id }),
+                        })
+                        setPhotos(prev => prev.filter(p => p.id !== photo.id))
+                      }}
+                      title="Odebrat z galerie"
+                      style={{
+                        position: 'absolute', top: 4, right: 4,
+                        background: 'rgba(239,68,68,0.85)', border: 'none',
+                        borderRadius: 6, padding: '4px 7px',
+                        cursor: 'pointer', color: '#fff', fontSize: 13,
+                      }}
+                    >
+                      🗑
+                    </button>
+                    <button
+                      onClick={() => downloadOne(photo)}
+                      title="Stáhnout"
+                      style={{
+                        position: 'absolute', bottom: 4, right: 4,
+                        background: 'rgba(0,0,0,0.5)', border: 'none',
+                        borderRadius: 6, padding: '4px 7px',
+                        cursor: 'pointer', color: '#fff', fontSize: 13,
+                      }}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </>
