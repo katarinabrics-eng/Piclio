@@ -15,13 +15,11 @@ interface Props {
 
 export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos }: Props) {
   const [photos, setPhotos] = useState<GalleryPhoto[]>(initialPhotos)
-  const [newPhotoIds, setNewPhotoIds] = useState<Set<string>>(new Set())
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [downloading, setDownloading] = useState(false)
   const [activeTab, setActiveTab] = useState<'moje' | 'event'>('moje')
   const [eventPhotos, setEventPhotos] = useState<UnmatchedPhoto[]>([])
   const [claiming, setClaiming] = useState<string | null>(null)
-  const [hiddenPhotoIds, setHiddenPhotoIds] = useState<Set<string>>(new Set())
 
   const supabase = useRef(
     createBrowserClient(
@@ -30,8 +28,13 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     )
   ).current
 
+  const fetchMyPhotos = useCallback(async () => {
+    const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
+    const data = await res.json()
+    if (data.photos) setPhotos(data.photos)
+  }, [token])
+
   const fetchEventPhotos = useCallback(async () => {
-    setEventPhotos([])  // Clear před fetchem
     const res = await fetch(`/api/gallery/${token}/unmatched?t=${Date.now()}`, { cache: 'no-store' })
     const data = await res.json()
     if (data.photos) setEventPhotos(data.photos)
@@ -41,37 +44,36 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     fetchEventPhotos()
   }, [fetchEventPhotos])
 
-
   useEffect(() => {
     const channel = supabase
       .channel(`gallery-${token}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'photo_guests' },
-        async (payload: any) => {
-          // Načti jen novou fotku — nepřepisuj celé pole
-          const newPhotoId = payload.new?.photo_id
-          if (!newPhotoId) return
-
-          const res = await fetch(`/api/gallery/${token}/single/${newPhotoId}`, { cache: 'no-store' })
-          if (!res.ok) return
-          const data = await res.json()
-          if (!data.photo) return
-
-          setPhotos(prev => {
-            if (prev.find(p => p.id === newPhotoId)) return prev // už existuje
-            const fresh = [...prev, data.photo]
-            setNewPhotoIds(new Set([newPhotoId]))
-            setTimeout(() => setNewPhotoIds(new Set()), 2000)
-            return fresh
-          })
-          fetchEventPhotos()
+        async () => {
+          await fetchMyPhotos()
+          await fetchEventPhotos()
         }
       )
       .subscribe()
-
     return () => { supabase.removeChannel(channel) }
-  }, [token, supabase, fetchEventPhotos])
+  }, [token, supabase, fetchMyPhotos, fetchEventPhotos])
+
+  async function claimPhoto(photoId: string) {
+    setClaiming(photoId)
+    try {
+      const res = await fetch(`/api/gallery/${token}/claim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ photoId }),
+      })
+      if (!res.ok) return
+      await fetchMyPhotos()
+      await fetchEventPhotos()
+    } finally {
+      setClaiming(null)
+    }
+  }
 
   async function downloadOne(photo: GalleryPhoto) {
     const res = await fetch(photo.url)
@@ -96,43 +98,14 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     }
   }
 
-  async function claimPhoto(photoId: string) {
-    setClaiming(photoId)
-    try {
-      const res = await fetch(`/api/gallery/${token}/claim`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photoId }),
-      })
-      if (!res.ok) {
-        console.error('claimPhoto failed:', await res.text())
-        return
-      }
-      // Reload obou tabů po úspěšném přidání
-      const [myRes, eventRes] = await Promise.all([
-        fetch(`/api/gallery/${token}`, { cache: 'no-store' }),
-        fetch(`/api/gallery/${token}/unmatched?t=${Date.now()}`, { cache: 'no-store' }),
-      ])
-      const [myData, eventData] = await Promise.all([myRes.json(), eventRes.json()])
-      if (myData.photos) setPhotos(myData.photos)
-      if (eventData.photos) setEventPhotos(eventData.photos)
-    } finally {
-      setClaiming(null)
-    }
-  }
-
   const brandColor = initialEvent.brand_color ?? '#111827'
 
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb' }}>
-      {/* Header */}
       <div style={{ background: brandColor, color: '#fff', padding: '24px 20px 20px' }}>
         {initialEvent.client_logo_url && (
-          <img
-            src={initialEvent.client_logo_url}
-            alt={initialEvent.client_name ?? ''}
-            style={{ height: 40, marginBottom: 12, objectFit: 'contain' }}
-          />
+          <img src={initialEvent.client_logo_url} alt={initialEvent.client_name ?? ''}
+            style={{ height: 40, marginBottom: 12, objectFit: 'contain' }} />
         )}
         <div style={{ fontSize: 20, fontWeight: 700 }}>{initialEvent.name}</div>
         <div style={{ fontSize: 14, opacity: 0.75, marginTop: 4 }}>
@@ -140,44 +113,30 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
         </div>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
         {(['moje', 'event'] as const).map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
+          <button key={tab} onClick={() => setActiveTab(tab)}
             style={{
               flex: 1, padding: '12px 0', border: 'none', background: 'none',
               fontWeight: 600, fontSize: 14, cursor: 'pointer',
               borderBottom: activeTab === tab ? `3px solid ${brandColor}` : '3px solid transparent',
               color: activeTab === tab ? brandColor : '#6b7280',
-            }}
-          >
-            {tab === 'moje' ? 'Moje fotky' : 'Fotky z eventu'}
-            {tab === 'event' && eventPhotos.length > 0 && ` (${eventPhotos.length - hiddenPhotoIds.size})`}
+            }}>
+            {tab === 'moje' ? 'Moje fotky' : `Fotky z eventu${eventPhotos.length > 0 ? ` (${eventPhotos.length})` : ''}`}
           </button>
         ))}
       </div>
 
-      {/* Tab: Moje fotky */}
       {activeTab === 'moje' && (
         <>
           {photos.length > 0 && (
             <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                onClick={downloadAll}
-                disabled={downloading}
-                style={{
-                  background: brandColor, color: '#fff', border: 'none',
-                  borderRadius: 8, padding: '8px 18px', cursor: 'pointer',
-                  fontSize: 14, fontWeight: 600, opacity: downloading ? 0.6 : 1,
-                }}
-              >
+              <button onClick={downloadAll} disabled={downloading}
+                style={{ background: brandColor, color: '#fff', border: 'none', borderRadius: 8, padding: '8px 18px', cursor: 'pointer', fontSize: 14, fontWeight: 600, opacity: downloading ? 0.6 : 1 }}>
                 {downloading ? 'Stahuji…' : 'Stáhnout vše'}
               </button>
             </div>
           )}
-
           <div style={{ padding: '8px 12px 40px' }}>
             {photos.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '80px 20px', color: '#9ca3af' }}>
@@ -186,18 +145,12 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                 <div style={{ fontSize: 13, marginTop: 6 }}>Fotky se objeví automaticky po přiřazení</div>
               </div>
             ) : (
-              <PhotoGrid
-                photos={photos}
-                onPhotoClick={setLightboxIndex}
-                newPhotoIds={newPhotoIds}
-                onDownload={downloadOne}
-              />
+              <PhotoGrid photos={photos} onPhotoClick={setLightboxIndex} newPhotoIds={new Set()} onDownload={downloadOne} />
             )}
           </div>
         </>
       )}
 
-      {/* Tab: Fotky z eventu */}
       {activeTab === 'event' && (
         <div style={{ padding: '8px 12px 40px' }}>
           {eventPhotos.length === 0 ? (
@@ -206,33 +159,13 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
               <div style={{ marginTop: 12, fontSize: 16 }}>Žádné další fotky z eventu</div>
             </div>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-              gap: 8,
-            }}>
-              {eventPhotos.filter(p => p.url && p.url.length > 0).map(photo => (
-                <div key={photo.id} id={`ep-${photo.id}`}>
-                  <img
-                    src={photo.url}
-                    alt={photo.filename}
-                    onError={() => {
-                      const el = document.getElementById(`ep-${photo.id}`)
-                      if (el) el.style.display = 'none'
-                      setHiddenPhotoIds(prev => new Set(prev).add(photo.id))
-                    }}
-                    style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block' }}
-                  />
-                  <button
-                    onClick={() => claimPhoto(photo.id)}
-                    disabled={claiming === photo.id}
-                    style={{
-                      marginTop: 6, width: '100%', background: brandColor, color: '#fff',
-                      border: 'none', borderRadius: 6, padding: '6px 0',
-                      fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                      opacity: claiming === photo.id ? 0.6 : 1,
-                    }}
-                  >
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+              {eventPhotos.map(photo => (
+                <div key={photo.id}>
+                  <img src={photo.url} alt={photo.filename}
+                    style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block' }} />
+                  <button onClick={() => claimPhoto(photo.id)} disabled={claiming === photo.id}
+                    style={{ marginTop: 6, width: '100%', background: brandColor, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 0', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: claiming === photo.id ? 0.6 : 1 }}>
                     {claiming === photo.id ? '…' : 'Přidat do své galerie'}
                   </button>
                 </div>
@@ -243,13 +176,10 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
       )}
 
       {lightboxIndex !== null && (
-        <PhotoLightbox
-          photos={photos}
-          currentIndex={lightboxIndex}
+        <PhotoLightbox photos={photos} currentIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onPrev={() => setLightboxIndex(i => Math.max(0, (i ?? 0) - 1))}
-          onNext={() => setLightboxIndex(i => Math.min(photos.length - 1, (i ?? 0) + 1))}
-        />
+          onNext={() => setLightboxIndex(i => Math.min(photos.length - 1, (i ?? 0) + 1))} />
       )}
     </div>
   )

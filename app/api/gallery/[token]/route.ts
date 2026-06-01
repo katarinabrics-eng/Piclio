@@ -7,82 +7,49 @@ export const dynamic = 'force-dynamic'
 export async function GET(_req: NextRequest, { params }: { params: { token: string } }) {
   const { data: guest } = await supabaseAdmin
     .from('guests')
-    .select('id, email, name, badge_number, gallery_token, photo_count, event_id')
+    .select('id, email, name, badge_number, gallery_token, photo_count, event_id, email_sent_at, registered_at')
     .eq('gallery_token', params.token)
     .single()
 
-  if (!guest) {
-    return NextResponse.json({ error: 'Galerie nenalezena' }, { status: 404 })
-  }
+  if (!guest) return NextResponse.json({ error: 'Galerie nenalezena' }, { status: 404 })
 
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, date, location, client_name, client_logo_url, brand_color')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, client_logo_url, brand_color, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, overlay_mode, event_type, gallery_public, slideshow_pin, slideshow_playlist, public_gallery, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation, slideshow_layout')
     .eq('id', guest.event_id)
     .single()
 
-  if (!event) {
-    return NextResponse.json({ error: 'Event nenalezen' }, { status: 404 })
-  }
+  if (!event) return NextResponse.json({ error: 'Event nenalezen' }, { status: 404 })
 
-  const { data: photoGuests, error: pgError } = await supabaseAdmin
+  const { data: photoGuests } = await supabaseAdmin
     .from('photo_guests')
     .select('photo_id')
     .eq('guest_id', guest.id)
-    .limit(1000)
 
-  console.log('gallery guest_id:', guest.id,
-    '| photo_guests rows:', photoGuests?.length ?? 0,
-    '| pgError:', pgError?.message ?? null,
-    '| photo_ids:', (photoGuests ?? []).map(pg => pg.photo_id).join(','))
+  const photoIds = (photoGuests ?? []).map((pg: any) => pg.photo_id)
 
-  const photoIds = (photoGuests ?? []).map(pg => pg.photo_id)
+  let photos: any[] = []
+  if (photoIds.length > 0) {
+    const { data: photosData } = await supabaseAdmin
+      .from('photos')
+      .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
+      .in('id', photoIds)
+      .neq('is_deleted', true)
 
-  const { data: photosData, error: photosError } = photoIds.length > 0
-    ? await supabaseAdmin
-        .from('photos')
-        .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
-        .in('id', photoIds)
-        .neq('is_deleted', true)
-        .limit(1000)
-    : { data: [], error: null }
-
-  const photos = photosData ?? []
-
-  console.log('photos resolved:', photos.length,
-    '| photosError:', photosError?.message ?? null)
-
-  if (photos.length === 0) {
-    return NextResponse.json(
-      { guest, event, photos: [] },
-      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
-    )
+    if (photosData && photosData.length > 0) {
+      const signed = await signPhotosRobust(photosData, 172800)
+      photos = signed.map((p: any) => ({
+        id: p.id,
+        url: p.url,
+        filename: p.filename,
+        taken_at: p.taken_at,
+        uploaded_at: p.uploaded_at,
+      }))
+    }
   }
 
-  // Use signPhotosRobust: array-indexed (immune to null item.path), original_path fallback
-  const photosWithSignedUrls = await signPhotosRobust(photos, 172800)
-
-  // Log per-photo URL result so we can spot which path fails
-  photosWithSignedUrls.forEach((p: any) => {
-    console.log('gallery sign:',
-      p.filename,
-      '| path:', p.storage_path,
-      '| url:', p.url ? 'OK' : 'EMPTY')
-  })
-
-  const photosWithUrls = photosWithSignedUrls.map((p: any) => ({
-    id: p.id,
-    url: p.url,
-    filename: p.filename,
-    taken_at: p.taken_at,
-    uploaded_at: p.uploaded_at,
-  }))
-
-  console.log('gallery returning:', photosWithUrls.length, 'photos,',
-    photosWithUrls.filter(p => !p.url).length, 'with empty URL')
-
   return NextResponse.json(
-    { guest, event, photos: photosWithUrls },
-    { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+    { guest, event, photos },
+    { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
   )
 }

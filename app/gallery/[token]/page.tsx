@@ -4,6 +4,7 @@ import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 import { GalleryClient } from './GalleryClient'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface Props {
   params: { token: string }
@@ -31,28 +32,27 @@ export default async function GalleryPage({ params }: Props) {
     .select('photo_id')
     .eq('guest_id', guest.id)
 
-  const photoIds = (photoGuests ?? []).map((pg: { photo_id: string }) => pg.photo_id)
+  const photoIds = (photoGuests ?? []).map((pg: any) => pg.photo_id)
 
-  const { data: photosData } = photoIds.length > 0
-    ? await supabaseAdmin
-        .from('photos')
-        .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
-        .in('id', photoIds)
-        .neq('is_deleted', true)
-    : { data: [] }
+  let initialPhotos: any[] = []
+  if (photoIds.length > 0) {
+    const { data: photosData } = await supabaseAdmin
+      .from('photos')
+      .select('id, filename, storage_path, original_path, taken_at, uploaded_at')
+      .in('id', photoIds)
+      .neq('is_deleted', true)
 
-  const photos = photosData ?? []
-  const photosWithUrls = photos.length > 0
-    ? await signPhotosRobust(photos, 172800)
-    : []
-
-  const initialPhotos = photosWithUrls.map((p: any) => ({
-    id: p.id,
-    url: p.url,
-    filename: p.filename,
-    taken_at: p.taken_at,
-    uploaded_at: p.uploaded_at,
-  }))
+    if (photosData && photosData.length > 0) {
+      const signed = await signPhotosRobust(photosData, 172800)
+      initialPhotos = signed.map((p: any) => ({
+        id: p.id,
+        url: p.url,
+        filename: p.filename,
+        taken_at: p.taken_at,
+        uploaded_at: p.uploaded_at,
+      }))
+    }
+  }
 
   return (
     <GalleryClient
