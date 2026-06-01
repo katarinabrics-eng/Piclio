@@ -88,14 +88,16 @@ export async function GET(req: NextRequest) {
       { count: deliveredCount },
       { count: photoCount },
       { count: unmatchedCount },
+      { count: matchedCount },
     ] = await Promise.all([
       supabaseAdmin.from('guests').select('*', { count: 'exact', head: true }).eq('event_id', event.id),
       supabaseAdmin.from('guests').select('*', { count: 'exact', head: true }).eq('event_id', event.id).not('email_sent_at', 'is', null),
       supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id).neq('is_deleted', true),
       supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id).eq('status', 'unmatched').neq('is_deleted', true),
+      supabaseAdmin.from('photos').select('*', { count: 'exact', head: true }).eq('event_id', event.id).eq('status', 'matched').neq('is_deleted', true),
     ])
 
-    return { ...event, guestCount: guestCount ?? 0, photoCount: photoCount ?? 0, unmatchedCount: unmatchedCount ?? 0, deliveredCount: deliveredCount ?? 0 }
+    return { ...event, guestCount: guestCount ?? 0, photoCount: photoCount ?? 0, unmatchedCount: unmatchedCount ?? 0, matchedCount: matchedCount ?? 0, deliveredCount: deliveredCount ?? 0 }
   }))
 
   return NextResponse.json({ events: eventsWithStats })
