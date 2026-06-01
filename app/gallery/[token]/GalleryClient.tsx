@@ -39,23 +39,14 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
 
   useEffect(() => {
     fetchEventPhotos()
-    // Refresh vlastních fotek
-    fetch(`/api/gallery/${token}`, { cache: 'no-store' })
-      .then(r => r.json())
-      .then(d => { if (d.photos) setPhotos(d.photos) })
-  }, [fetchEventPhotos, token])
+  }, [fetchEventPhotos])
 
   useEffect(() => {
     const interval = setInterval(async () => {
       const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
       const data = await res.json()
-      if (data.photos) {
-        setPhotos(prev => {
-          if (prev.length !== data.photos.length) return data.photos
-          return prev
-        })
-      }
-    }, 10000)
+      if (data.photos) setPhotos(data.photos)
+    }, 15000)
     return () => clearInterval(interval)
   }, [token])
 
