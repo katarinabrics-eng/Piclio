@@ -41,14 +41,6 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     fetchEventPhotos()
   }, [fetchEventPhotos])
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const res = await fetch(`/api/gallery/${token}`, { cache: 'no-store' })
-      const data = await res.json()
-      if (data.photos) setPhotos(data.photos)
-    }, 15000)
-    return () => clearInterval(interval)
-  }, [token])
 
   useEffect(() => {
     const photosRef = { current: photos }

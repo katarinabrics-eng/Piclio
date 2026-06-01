@@ -48,7 +48,10 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
     '| photos resolved:', photos.length)
 
   if (photos.length === 0) {
-    return NextResponse.json({ guest, event, photos: [] })
+    return NextResponse.json(
+      { guest, event, photos: [] },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
+    )
   }
 
   // Use signPhotosRobust: array-indexed (immune to null item.path), original_path fallback
@@ -73,5 +76,8 @@ export async function GET(_req: NextRequest, { params }: { params: { token: stri
   console.log('gallery returning:', photosWithUrls.length, 'photos,',
     photosWithUrls.filter(p => !p.url).length, 'with empty URL')
 
-  return NextResponse.json({ guest, event, photos: photosWithUrls })
+  return NextResponse.json(
+    { guest, event, photos: photosWithUrls },
+    { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate' } }
+  )
 }
