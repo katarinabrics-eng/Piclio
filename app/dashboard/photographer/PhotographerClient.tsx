@@ -477,14 +477,12 @@ export function PhotographerClient() {
     if (tab !== 'galerie' || !selectedEvent) return
     setGalleryLoading(true)
     setSelectedPhotoIds(new Set())
-    const p = new URLSearchParams({ tab: galleryTab, sort: gallerySort })
-    if (galleryTab === 'by-guest' && selectedGuestFilter !== 'all') p.set('guest_id', selectedGuestFilter)
-    fetch(`/api/events/${selectedEvent.slug}/gallery-photos?${p}`)
+    fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => setGalleryPhotos(d.photos ?? []))
       .catch(() => setGalleryPhotos([]))
       .finally(() => setGalleryLoading(false))
-  }, [tab, galleryTab, gallerySort, selectedGuestFilter, selectedEvent])
+  }, [tab, selectedEvent?.id])
 
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
