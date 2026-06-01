@@ -453,23 +453,25 @@ export function PhotographerClient() {
   useEffect(() => {
     if (tab !== 'unmatched' || !selectedEvent) return
     const eventId = selectedEvent.id
+    let polling = true
 
     function fetchUnmatched() {
       fetch(`/api/photographer/unmatched?eventId=${eventId}`, { cache: 'no-store' })
         .then(r => r.json())
         .then(d => {
           const photos = d.photos ?? []
-          console.log('fetchUnmatched count:', photos.length)
-          photos.forEach((p: any) => console.log(' -', p.filename, '| status:', p.status))
           setUnmatched(photos)
-          // unmatchedCount se bere z events API — neprepisuj délkou pole fotek z eventu
+          // Ak nie sú žiadne fotky, zastav polling — niet čo sledovať
+          if (photos.length === 0) polling = false
         })
         .catch(() => {})
     }
 
-    fetchUnmatched()                               // immediate on tab open
-    const interval = setInterval(fetchUnmatched, 15000)
-    return () => clearInterval(interval)           // stop when tab changes or event changes
+    fetchUnmatched()
+    const interval = setInterval(() => {
+      if (polling) fetchUnmatched()
+    }, 15000)
+    return () => clearInterval(interval)
   }, [tab, selectedEvent?.id])                     // dep: id only, avoids loop from setSelectedEvent
 
   // Fetch gallery photos when galerie tab is active
