@@ -479,10 +479,14 @@ export function PhotographerClient() {
     setSelectedPhotoIds(new Set())
     fetch(`/api/photographer/unmatched?eventId=${selectedEvent.id}`, { cache: 'no-store' })
       .then(r => r.json())
-      .then(d => setGalleryPhotos(d.photos ?? []))
+      .then(d => {
+        let photos = d.photos ?? []
+        if (galleryTab === 'unassigned') photos = photos.filter((p: any) => p.status === 'unmatched')
+        setGalleryPhotos(photos)
+      })
       .catch(() => setGalleryPhotos([]))
       .finally(() => setGalleryLoading(false))
-  }, [tab, selectedEvent?.id])
+  }, [tab, selectedEvent?.id, galleryTab])
 
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
@@ -1951,7 +1955,7 @@ export function PhotographerClient() {
                         background: galleryTab === t ? '#111827' : '#f3f4f6',
                         color: galleryTab === t ? '#fff' : '#6b7280', border: 'none',
                       }}>
-                        {t === 'all' ? 'Všechny' : t === 'by-guest' ? 'Dle hosta' : 'Nezařazené'}
+                        {t === 'all' ? 'Všechny' : t === 'by-guest' ? 'Dle hosta' : 'Bez galerie'}
                       </button>
                     ))}
 
