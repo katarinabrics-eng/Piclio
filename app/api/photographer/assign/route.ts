@@ -1,7 +1,7 @@
-export const dynamic = 'force-dynamic'
-
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+
+export const dynamic = 'force-dynamic'
 
 function isAuthorized(req: NextRequest) {
   return req.cookies.get('photographer_token')?.value === process.env.PHOTOGRAPHER_TOKEN
@@ -15,16 +15,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'photoId and guestId are required' }, { status: 400 })
   }
 
+  // Zkopíruj fotku do galerie hosta (upsert = bezpečné při opakování)
   const { error: pgError } = await supabaseAdmin
     .from('photo_guests')
-    .upsert({ photo_id: photoId, guest_id: guestId, assigned_by: 'manual' }, { onConflict: 'photo_id,guest_id' })
+    .upsert(
+      { photo_id: photoId, guest_id: guestId, assigned_by: 'manual' },
+      { onConflict: 'photo_id,guest_id' }
+    )
 
   if (pgError) return NextResponse.json({ error: pgError.message }, { status: 500 })
 
-  // status='matched' nastavuje automaticky DB trigger po upsert do photo_guests
-  // photo_count se počítá živě z photo_guests — není třeba aktualizovat
+  // DB trigger automaticky nastaví status='matched'
+  // photo_count se počítá živě z photo_guests
 
-  // Index face into Rekognition — best-effort, never blocks the response
+  // Index face do Rekognition — best-effort
   try {
     const { data: photo } = await supabaseAdmin
       .from('photos')
