@@ -459,7 +459,8 @@ export function PhotographerClient() {
         .then(r => r.json())
         .then(d => {
           const photos = d.photos ?? []
-          console.log('fetchUnmatched photos:', photos.map((p: any) => p.filename + '|' + p.status))
+          console.log('fetchUnmatched count:', photos.length)
+          photos.forEach((p: any) => console.log(' -', p.filename, '| status:', p.status))
           setUnmatched(photos)
           // unmatchedCount se bere z events API — neprepisuj délkou pole fotek z eventu
         })
