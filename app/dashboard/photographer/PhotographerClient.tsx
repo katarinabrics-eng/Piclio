@@ -875,7 +875,7 @@ export function PhotographerClient() {
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
                 { key: 'projekce', label: 'Projekce' },
-                { key: 'galerie',  label: 'Galerie eventu' },
+                { key: 'galerie',  label: 'Playlist' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
