@@ -459,8 +459,8 @@ export function PhotographerClient() {
         .then(r => r.json())
         .then(d => {
           const photos = d.photos ?? []
+          console.log('fetchUnmatched photos:', photos.map((p: any) => p.filename + '|' + p.status))
           setUnmatched(photos)
-          // Keep badge count in sync with actual array length from server
           // unmatchedCount se bere z events API — neprepisuj délkou pole fotek z eventu
         })
         .catch(() => {})
