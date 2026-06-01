@@ -870,7 +870,7 @@ export function PhotographerClient() {
             <div style={{ display: 'flex', gap: 4, marginBottom: 20, flexWrap: 'wrap' }}>
               {([
                 { key: 'guests',   label: `Hosté (${guests.length})` },
-                { key: 'unmatched', label: `Nespárované (${selectedEvent?.unmatchedCount ?? unmatched.length})` },
+                { key: 'unmatched', label: `Nespárované (${selectedEvent?.unmatchedCount ?? 0})` },
                 { key: 'upload',   label: uploadedCount > 0 ? `Nahrát fotky (${uploadedCount})` : 'Nahrát fotky' },
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
