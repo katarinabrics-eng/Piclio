@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { signPhotosRobust } from '@/lib/supabase/signPhotosRobust'
 
@@ -15,7 +16,12 @@ export async function GET(req: NextRequest) {
   if (!eventId) return NextResponse.json({ photos: [] })
 
   // Galerie eventu = VŠECHNY fotky eventu (ne jen unmatched)
-  const { data: photos, error } = await supabaseAdmin
+  // Používáme fresh klienta aby se předešlo stale singleton state
+  const freshClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+  const { data: photos, error } = await freshClient
     .from('photos')
     .select('id, filename, storage_path, original_path, uploaded_at, ocr_number, event_id, status')
     .eq('event_id', eventId)
