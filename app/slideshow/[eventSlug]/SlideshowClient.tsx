@@ -230,7 +230,9 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         zIndex: 50, padding: '40px 20px',
       }}>
-        <div style={{ position: 'absolute', top: 20, left: 24, color: '#b7e94c', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
+        <div style={{ position: 'absolute', top: 20, left: 24 }}>
+          <img src="/logo01.png" alt="Piclio" style={{ height: 32, objectFit: 'contain' }} />
+        </div>
 
         <div style={{ textAlign: 'center', maxWidth: 800 }}>
           {initialEvent.event_category && (
@@ -282,7 +284,9 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           </div>
         </div>
 
-        <div style={{ position: 'absolute', bottom: 20, right: 24, color: 'rgba(183,233,76,0.3)', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
+        <div style={{ position: 'absolute', bottom: 20, right: 24, opacity: 0.3 }}>
+          <img src="/logo01.png" alt="Piclio" style={{ height: 24, objectFit: 'contain' }} />
+        </div>
       </div>
     )}
 
@@ -293,7 +297,9 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         zIndex: 50, padding: '28px 20px', overflowY: 'auto',
       }}>
-        <div style={{ position: 'absolute', top: 20, left: 24, color: '#b7e94c', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
+        <div style={{ position: 'absolute', top: 20, left: 24 }}>
+          <img src="/logo01.png" alt="Piclio" style={{ height: 32, objectFit: 'contain' }} />
+        </div>
 
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{initialEvent.name}</div>
@@ -404,7 +410,9 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           </div>
         </div>
 
-        <div style={{ position: 'absolute', bottom: 16, right: 20, color: 'rgba(183,233,76,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
+        <div style={{ position: 'absolute', bottom: 16, right: 20, opacity: 0.3 }}>
+          <img src="/logo01.png" alt="Piclio" style={{ height: 24, objectFit: 'contain' }} />
+        </div>
       </div>
     )}
 
