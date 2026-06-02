@@ -2004,10 +2004,10 @@ export function PhotographerClient() {
                         rel="noopener noreferrer"
                         style={{ flex: 1, fontSize: 13, color: '#6366f1', textDecoration: 'underline', wordBreak: 'break-all' }}
                       >
-                        {typeof window !== 'undefined' ? window.location.origin : ''}/slideshow/{selectedEvent!.slug}
+                        {APP_URL}/slideshow/{selectedEvent!.slug}
                       </a>
                       <button
-                        onClick={() => navigator.clipboard.writeText(`${window.location.origin}/slideshow/${selectedEvent!.slug}`)}
+                        onClick={() => navigator.clipboard.writeText(`${APP_URL}/slideshow/${selectedEvent!.slug}`)}
                         style={{ flexShrink: 0, background: '#111827', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 12px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
                       >
                         Kopírovat
