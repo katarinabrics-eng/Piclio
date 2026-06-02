@@ -43,6 +43,10 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [showPhotoModal, setShowPhotoModal] = useState(false)
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<Set<string>>(new Set(photos.map(p => p.id)))
   const [slideshowContent, setSlideshowContent] = useState<'all' | 'selected' | 'by-guest'>('all')
+
+  const activePhotos = slideshowContent === 'selected'
+    ? photos.filter(p => selectedPhotoIds.has(p.id))
+    : photos
   const [slideshowOrder, setSlideshowOrder] = useState<'random' | 'newest' | 'oldest'>('random')
   const [slideshowEffect, setSlideshowEffect] = useState<'fade' | 'slide' | 'kenburns' | 'none'>('fade')
   const [slideshowInterval, setSlideshowInterval] = useState(5)
@@ -51,7 +55,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photosRef = useRef(photos)
-  useEffect(() => { photosRef.current = photos }, [photos])
+  useEffect(() => { photosRef.current = activePhotos }, [activePhotos])
 
   const intervalMs = (initialSettings.interval ?? 5) * 1000
 
@@ -105,10 +109,10 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   }, [initialSettings.animation])
 
   useEffect(() => {
-    if (!playing || photos.length <= 1) return
+    if (!playing || activePhotos.length <= 1) return
     const id = setInterval(() => advance(1), intervalMs)
     return () => clearInterval(id)
-  }, [playing, photos.length, intervalMs, advance])
+  }, [playing, activePhotos.length, intervalMs, advance])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -137,13 +141,13 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   }, [])
 
   const layout = initialSettings.layout
-  const n = Math.max(photos.length, 1)
-  const photo  = photos[current]
-  const photo2 = photos[(current + 1) % n]
-  const photo3 = photos[(current + 2) % n]
+  const n = Math.max(activePhotos.length, 1)
+  const photo  = activePhotos[current]
+  const photo2 = activePhotos[(current + 1) % n]
+  const photo3 = activePhotos[(current + 2) % n]
 
   function renderContent() {
-    if (photos.length === 0) {
+    if (activePhotos.length === 0) {
       return (
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.25)', fontSize: 16, letterSpacing: '0.1em' }}>
           Čeká se na fotky…
@@ -458,7 +462,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         <button onClick={() => setPlaying(p => !p)} style={ctrlBtn}>{playing ? '⏸' : '▶'}</button>
         <button onClick={() => advance(1)} style={ctrlBtn}>›</button>
         <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, margin: '0 4px', userSelect: 'none' }}>
-          {photos.length > 0 ? `${current + 1} / ${photos.length}` : '0'}
+          {activePhotos.length > 0 ? `${current + 1} / ${activePhotos.length}` : '0'}
         </span>
         <button onClick={() => window.location.reload()} style={ctrlBtn} title="Reload">↺</button>
         <button onClick={() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()} style={ctrlBtn} title="Fullscreen">⛶</button>
