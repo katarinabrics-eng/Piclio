@@ -40,6 +40,8 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [showIntro, setShowIntro] = useState(true)
   const [introDismissed, setIntroDismissed] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  const [showPhotoModal, setShowPhotoModal] = useState(false)
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<Set<string>>(new Set(photos.map(p => p.id)))
   const [slideshowContent, setSlideshowContent] = useState<'all' | 'selected' | 'by-guest'>('all')
   const [slideshowOrder, setSlideshowOrder] = useState<'random' | 'newest' | 'oldest'>('random')
   const [slideshowEffect, setSlideshowEffect] = useState<'fade' | 'slide' | 'kenburns' | 'none'>('fade')
@@ -315,12 +317,26 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             {/* Obsah */}
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Obsah</div>
-              {([['all', 'Všechny fotky'], ['selected', 'Výběr fotek'], ['by-guest', 'Dle galerie hosta']] as const).map(([val, label]) => (
+              {(['all', 'by-guest'] as const).map(val => (
                 <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 6 }} onClick={() => setSlideshowContent(val)}>
                   <div style={{ width: 13, height: 13, borderRadius: '50%', background: slideshowContent === val ? '#b7e94c' : 'transparent', border: slideshowContent === val ? 'none' : '1px solid rgba(255,255,255,0.25)', flexShrink: 0 }} />
-                  <span style={{ fontSize: 12, color: slideshowContent === val ? '#fff' : 'rgba(255,255,255,0.5)' }}>{label}</span>
+                  <span style={{ fontSize: 12, color: slideshowContent === val ? '#fff' : 'rgba(255,255,255,0.5)' }}>
+                    {val === 'all' ? 'Všechny fotky' : 'Dle galerie hosta'}
+                  </span>
                 </label>
               ))}
+              <label key="selected" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 6 }} onClick={() => setSlideshowContent('selected')}>
+                <div style={{ width: 13, height: 13, borderRadius: '50%', background: slideshowContent === 'selected' ? '#b7e94c' : 'transparent', border: slideshowContent === 'selected' ? 'none' : '1px solid rgba(255,255,255,0.25)', flexShrink: 0 }} />
+                <span style={{ fontSize: 12, color: slideshowContent === 'selected' ? '#fff' : 'rgba(255,255,255,0.5)' }}>
+                  Výběr fotek
+                  <span
+                    onClick={(e) => { e.stopPropagation(); setShowPhotoModal(true) }}
+                    style={{ color: '#b7e94c', fontSize: 11, marginLeft: 6, cursor: 'pointer' }}
+                  >
+                    → otevřít výběr
+                  </span>
+                </span>
+              </label>
             </div>
 
             {/* Pořadí */}
@@ -456,6 +472,75 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           ? <img src={initialEvent.client_logo_url} alt="" style={{ height: 32, objectFit: 'contain', maxWidth: 140 }} />
           : <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 12, letterSpacing: '0.15em' }}>PICLIO</span>
         }
+      </div>
+    )}
+
+    {/* Modal — výběr fotek */}
+    {showPhotoModal && (
+      <div style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)',
+        zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div style={{
+          background: '#111', border: '1px solid rgba(255,255,255,0.15)',
+          borderRadius: 12, padding: 24, width: '90%', maxWidth: 600,
+          maxHeight: '80vh', display: 'flex', flexDirection: 'column',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <div style={{ fontSize: 15, color: '#fff', fontWeight: 700 }}>Výběr fotek do slideshow</div>
+            <button onClick={() => setShowPhotoModal(false)}
+              style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', fontSize: 20, cursor: 'pointer' }}>×</button>
+          </div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 12 }}>
+            Kliknutím vyberte fotky. Zelené = zařazeny do slideshow.
+          </div>
+          <div style={{ overflowY: 'auto', flex: 1 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6 }}>
+              {photos.map(photo => {
+                const isSelected = selectedPhotoIds.has(photo.id)
+                return (
+                  <div key={photo.id}
+                    onClick={() => {
+                      setSelectedPhotoIds(prev => {
+                        const next = new Set(prev)
+                        next.has(photo.id) ? next.delete(photo.id) : next.add(photo.id)
+                        return next
+                      })
+                    }}
+                    style={{
+                      aspectRatio: '1', borderRadius: 6, overflow: 'hidden', cursor: 'pointer',
+                      border: `2px solid ${isSelected ? '#b7e94c' : 'transparent'}`,
+                      position: 'relative', background: 'rgba(255,255,255,0.05)',
+                    }}>
+                    <img src={photo.url} alt={photo.filename}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    {isSelected && (
+                      <div style={{
+                        position: 'absolute', top: 4, right: 4,
+                        background: '#b7e94c', borderRadius: '50%',
+                        width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 11, color: '#1a1225', fontWeight: 700,
+                      }}>✓</div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ fontSize: 11, color: '#b7e94c' }}>Vybráno: {selectedPhotoIds.size} fotek</div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setSelectedPhotoIds(new Set(photos.map(p => p.id)))}
+                style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: 'none', borderRadius: 6, padding: '7px 14px', fontSize: 11, cursor: 'pointer' }}>
+                Vybrat vše
+              </button>
+              <button onClick={() => { setSlideshowContent('selected'); setShowPhotoModal(false) }}
+                style={{ background: '#b7e94c', color: '#1a1225', border: 'none', borderRadius: 6, padding: '7px 16px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>
+                Potvrdit výběr
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     )}
   </div>
