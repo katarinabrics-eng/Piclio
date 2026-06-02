@@ -15,6 +15,8 @@ interface SlideshowEvent {
   name: string
   slideshow_welcome_text?: string | null
   event_category?: string | null
+  client_logo_url?: string | null
+  client_name?: string | null
 }
 
 interface SlideshowSettings {
@@ -447,10 +449,15 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
       </div>
     )}
 
-    {/* Piclio logo */}
-    <div style={{ position: 'absolute', bottom: 18, right: 20, opacity: 0.3, pointerEvents: 'none', userSelect: 'none' }}>
-      <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 12, letterSpacing: '0.15em' }}>PICLIO</span>
-    </div>
+    {/* Logo klienta vlevo nahoře během projekce */}
+    {!showIntro && (
+      <div style={{ position: 'absolute', top: 16, left: 20, opacity: 0.5, pointerEvents: 'none', userSelect: 'none' }}>
+        {initialEvent.client_logo_url
+          ? <img src={initialEvent.client_logo_url} alt="" style={{ height: 32, objectFit: 'contain', maxWidth: 140 }} />
+          : <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 12, letterSpacing: '0.15em' }}>PICLIO</span>
+        }
+      </div>
+    )}
   </div>
 )
 

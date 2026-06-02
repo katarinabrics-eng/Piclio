@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(_req: NextRequest, { params }: { params: { eventSlug: string } }) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, brand_color, slideshow_content, slideshow_selected_guests, slideshow_interval, slideshow_animation, slideshow_output, slideshow_layout, slideshow_welcome_text')
+    .select('id, name, slug, date, brand_color, client_logo_url, client_name, slideshow_content, slideshow_selected_guests, slideshow_interval, slideshow_animation, slideshow_output, slideshow_layout, slideshow_welcome_text')
     .eq('slug', params.eventSlug)
     .single()
 
