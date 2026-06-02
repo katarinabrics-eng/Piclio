@@ -1960,6 +1960,21 @@ export function PhotographerClient() {
                     />
                   </div>
 
+                  {/* Slideshow box */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #1a1225 0%, #2d1b4e 100%)',
+                    borderRadius: 12,
+                    padding: '20px 24px',
+                    marginBottom: 20,
+                    border: '1px solid rgba(183,233,76,0.3)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                      <span style={{ fontSize: 16 }}>▶</span>
+                      <h3 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#b7e94c', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        Nastavení slideshow
+                      </h3>
+                    </div>
+
                   {/* Typ akce */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
@@ -2019,6 +2034,8 @@ export function PhotographerClient() {
                       </div>
                     )}
                   </div>
+
+                  </div>{/* /Slideshow box */}
 
                   {/* Poznámky pro fotografa — interní, nezobrazuje se zadavateli */}
                   <div>
