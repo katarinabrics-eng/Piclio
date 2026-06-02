@@ -78,11 +78,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
       })
   }, [eventSlug])
 
-  useEffect(() => {
-    if (introDismissed) return
-    const t = setTimeout(() => setShowIntro(false), 5000)
-    return () => clearTimeout(t)
-  }, [introDismissed])
+  // Intro se nezavírá automaticky — uživatel klikne na Spustit
 
   const advance = useCallback((dir: 1 | -1 = 1) => {
     if (photosRef.current.length === 0) return
@@ -112,6 +108,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
+      if (showIntro) return  // blokuj všechny klávesy na intro/nastavení obrazovce
       if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); setPlaying(p => !p) }
       if (e.key === 'ArrowRight') advance(1)
       if (e.key === 'ArrowLeft') advance(-1)
