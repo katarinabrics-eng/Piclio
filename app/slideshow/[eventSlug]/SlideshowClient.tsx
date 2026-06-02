@@ -211,234 +211,244 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   }
 
   return (
-    <div
-      style={{ height: '100vh', background: '#000', position: 'relative', overflow: 'hidden' }}
-      onMouseMove={resetHideTimer}
-    >
-      <style>{`
-        @keyframes kenburns {
-          0%   { transform: scale(1)    translate(0, 0); }
-          100% { transform: scale(1.12) translate(-2%, -1%); }
-        }
-        @keyframes slideInRight {
-          from { transform: translateX(100%); }
-          to   { transform: translateX(0); }
-        }
-        @keyframes slideOutLeft {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-100%); }
-        }
-      `}</style>
+  <div
+    style={{ height: '100vh', background: '#000', position: 'relative', overflow: 'hidden' }}
+    onMouseMove={resetHideTimer}
+  >
+    <style>{`
+      @keyframes kenburns {
+        0%   { transform: scale(1)    translate(0, 0); }
+        100% { transform: scale(1.12) translate(-2%, -1%); }
+      }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to   { transform: translateX(0); }
+      }
+    `}</style>
 
-      {renderContent()}
+    {/* OBRAZOVKA 1 — Uvítání */}
+    {showIntro && !showSettings && (
+      <div style={{
+        position: 'absolute', inset: 0, background: '#000',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        zIndex: 50, padding: '40px 20px',
+      }}>
+        <div style={{ position: 'absolute', top: 20, left: 24, color: '#b7e94c', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
 
-      {/* Uvítací obrazovka */}
-      {showIntro && !showSettings && (
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: '#000',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          zIndex: 50, padding: '28px 20px',
-        }}>
-          <div style={{ position: 'absolute', top: 16, left: 20, color: '#b7e94c', fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
+        <div style={{ textAlign: 'center', maxWidth: 800 }}>
+          {initialEvent.event_category && (
+            <div style={{ display: 'inline-block', background: 'rgba(183,233,76,0.12)', border: '1px solid rgba(183,233,76,0.3)', borderRadius: 20, padding: '5px 16px', fontSize: 11, color: '#b7e94c', letterSpacing: '0.15em', marginBottom: 28 }}>
+              {initialEvent.event_category.toUpperCase()}
+            </div>
+          )}
+          <div style={{ fontSize: 'clamp(32px, 6vw, 72px)', fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 16 }}>
+            {initialEvent.name}
+          </div>
+          {initialEvent.slideshow_welcome_text && (
+            <div style={{ fontSize: 'clamp(14px, 2vw, 20px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6, marginBottom: 48, whiteSpace: 'pre-line' }}>
+              {initialEvent.slideshow_welcome_text}
+            </div>
+          )}
 
-          <div style={{ textAlign: 'center', marginBottom: 40 }}>
-            {initialEvent.event_category && (
-              <div style={{ display: 'inline-block', background: 'rgba(183,233,76,0.12)', border: '1px solid rgba(183,233,76,0.25)', borderRadius: 20, padding: '3px 12px', fontSize: 10, color: '#b7e94c', letterSpacing: '0.12em', marginBottom: 12 }}>
-                {initialEvent.event_category.toUpperCase()}
+          {/* Shrnutí nastavení */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
+            {[
+              { label: 'OBSAH', value: slideshowContent === 'all' ? 'Všechny fotky' : slideshowContent === 'selected' ? 'Výběr fotek' : 'Dle hosta' },
+              { label: 'EFEKT', value: slideshowEffect === 'fade' ? 'Fade' : slideshowEffect === 'slide' ? 'Slide' : slideshowEffect === 'kenburns' ? 'Ken Burns' : 'Bez efektu' },
+              { label: 'INTERVAL', value: `${slideshowInterval} sekund` },
+              { label: 'LAYOUT', value: slideshowLayout === 'single' ? 'Jedna fotka' : slideshowLayout === 'grid' ? 'Mozaika' : 'Střídání' },
+            ].map(item => (
+              <div key={item.label} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '12px 20px', minWidth: 120 }}>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', marginBottom: 4 }}>{item.label}</div>
+                <div style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>{item.value}</div>
               </div>
-            )}
-            <div style={{ fontSize: 32, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 8 }}>{initialEvent.name}</div>
-            {initialEvent.slideshow_welcome_text && (
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.35)' }}>{initialEvent.slideshow_welcome_text}</div>
-            )}
+            ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', alignItems: 'center' }}>
-            <button
-              onClick={() => setShowSettings(true)}
-              style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: '14px 32px', fontSize: 15, fontWeight: 500, cursor: 'pointer' }}
-            >
-              Nastavení
-            </button>
-            <button
-              onClick={() => { setShowIntro(false); setIntroDismissed(true); setPlaying(true) }}
-              style={{ background: '#b7e94c', color: '#1a1225', border: 'none', borderRadius: 8, padding: '14px 40px', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
-            >
-              Spustit slideshow
-            </button>
+          {/* Tlačítka */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button
+                onClick={() => setShowSettings(true)}
+                style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: '14px 32px', fontSize: 15, fontWeight: 500, cursor: 'pointer' }}
+              >
+                Nastavení
+              </button>
+              <button
+                onClick={() => { setShowIntro(false); setIntroDismissed(true); setPlaying(true) }}
+                style={{ background: '#b7e94c', color: '#1a1225', border: 'none', borderRadius: 8, padding: '14px 40px', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
+              >
+                Spustit slideshow
+              </button>
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)' }}>nebo stiskni Enter</div>
           </div>
-
-          <div style={{ position: 'absolute', bottom: 14, right: 18, color: 'rgba(183,233,76,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
         </div>
-      )}
 
-      {/* Nastavení obrazovka */}
-      {showIntro && showSettings && (
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: '#000',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          zIndex: 50, padding: '28px 20px',
-        }}>
-          <div style={{ position: 'absolute', top: 16, left: 20, color: '#b7e94c', fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
+        <div style={{ position: 'absolute', bottom: 20, right: 24, color: 'rgba(183,233,76,0.3)', fontSize: 11, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
+      </div>
+    )}
 
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ fontSize: 28, fontWeight: 500, color: '#fff', lineHeight: 1.2, marginBottom: 6 }}>{initialEvent.name}</div>
-          </div>
+    {/* OBRAZOVKA 2 — Nastavení */}
+    {showIntro && showSettings && (
+      <div style={{
+        position: 'absolute', inset: 0, background: '#000',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        zIndex: 50, padding: '28px 20px', overflowY: 'auto',
+      }}>
+        <div style={{ position: 'absolute', top: 20, left: 24, color: '#b7e94c', fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', opacity: 0.7 }}>PICLIO</div>
 
-          <div style={{ display: 'flex', gap: 14, width: '100%', maxWidth: 660, alignItems: 'flex-start' }}>
-            <div style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: 16 }}>
-              <div style={{ fontSize: 10, color: '#b7e94c', letterSpacing: '0.12em', marginBottom: 14, fontWeight: 700 }}>NASTAVENÍ</div>
+        <div style={{ textAlign: 'center', marginBottom: 24 }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{initialEvent.name}</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>Nastavení slideshow</div>
+        </div>
 
-              {/* Obsah */}
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Obsah</div>
-                {(['all', 'selected', 'by-guest'] as const).map(opt => (
-                  <label key={opt} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 4 }}>
-                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: slideshowContent === opt ? '#b7e94c' : 'transparent', border: slideshowContent === opt ? 'none' : '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }} onClick={() => setSlideshowContent(opt)} />
-                    <span style={{ fontSize: 11, color: slideshowContent === opt ? '#fff' : 'rgba(255,255,255,0.5)' }}>
-                      {opt === 'all' ? 'Všechny fotky' : opt === 'selected' ? 'Výběr fotek' : 'Dle galerie hosta'}
-                    </span>
-                  </label>
+        <div style={{ display: 'flex', gap: 14, width: '100%', maxWidth: 700, alignItems: 'flex-start' }}>
+          <div style={{ flex: 1, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: 18 }}>
+            <div style={{ fontSize: 10, color: '#b7e94c', letterSpacing: '0.12em', marginBottom: 16, fontWeight: 700 }}>NASTAVENÍ</div>
+
+            {/* Obsah */}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Obsah</div>
+              {([['all', 'Všechny fotky'], ['selected', 'Výběr fotek'], ['by-guest', 'Dle galerie hosta']] as const).map(([val, label]) => (
+                <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', marginBottom: 6 }} onClick={() => setSlideshowContent(val)}>
+                  <div style={{ width: 13, height: 13, borderRadius: '50%', background: slideshowContent === val ? '#b7e94c' : 'transparent', border: slideshowContent === val ? 'none' : '1px solid rgba(255,255,255,0.25)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, color: slideshowContent === val ? '#fff' : 'rgba(255,255,255,0.5)' }}>{label}</span>
+                </label>
+              ))}
+            </div>
+
+            {/* Pořadí */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14, marginBottom: 14 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Pořadí</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {([['random', 'Náhodné'], ['newest', 'Nejnovější'], ['oldest', 'Nejstarší']] as const).map(([val, label]) => (
+                  <div key={val} onClick={() => setSlideshowOrder(val)}
+                    style={{ background: slideshowOrder === val ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowOrder === val ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 12px', fontSize: 11, fontWeight: slideshowOrder === val ? 700 : 400, cursor: 'pointer' }}>
+                    {label}
+                  </div>
                 ))}
               </div>
+            </div>
 
-              {/* Pořadí */}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12, marginBottom: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Pořadí</div>
-                <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' as const }}>
-                  {(['random', 'newest', 'oldest'] as const).map(opt => (
-                    <div key={opt} onClick={() => setSlideshowOrder(opt)}
-                      style={{ background: slideshowOrder === opt ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowOrder === opt ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 5, padding: '3px 9px', fontSize: 10, fontWeight: slideshowOrder === opt ? 700 : 400, cursor: 'pointer' }}>
-                      {opt === 'random' ? 'Náhodné' : opt === 'newest' ? 'Nejnovější' : 'Nejstarší'}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Efekt */}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12, marginBottom: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Efekt přechodu</div>
-                <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' as const }}>
-                  {(['fade', 'slide', 'kenburns', 'none'] as const).map(opt => (
-                    <div key={opt} onClick={() => setSlideshowEffect(opt)}
-                      style={{ background: slideshowEffect === opt ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowEffect === opt ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 5, padding: '3px 9px', fontSize: 10, fontWeight: slideshowEffect === opt ? 700 : 400, cursor: 'pointer' }}>
-                      {opt === 'fade' ? 'Fade' : opt === 'slide' ? 'Slide' : opt === 'kenburns' ? 'Ken Burns' : 'Bez efektu'}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Interval */}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12, marginBottom: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Interval</div>
-                <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' as const }}>
-                  {[3, 4, 5, 7, 10].map(s => (
-                    <div key={s} onClick={() => setSlideshowInterval(s)}
-                      style={{ background: slideshowInterval === s ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowInterval === s ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 5, padding: '3px 9px', fontSize: 10, fontWeight: slideshowInterval === s ? 700 : 400, cursor: 'pointer' }}>
-                      {s} s
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Layout */}
-              <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 12 }}>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Layout</div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
-                  {([
-                    { key: 'single', label: 'Jedna fotka', preview: 'single' },
-                    { key: 'grid', label: 'Mozaika', preview: 'grid' },
-                    { key: 'alternating', label: 'Střídání', preview: 'alternating' },
-                  ] as const).map(opt => (
-                    <div key={opt.key} onClick={() => setSlideshowLayout(opt.key)}
-                      style={{ background: slideshowLayout === opt.key ? 'rgba(183,233,76,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.1)'}`, borderRadius: 6, padding: 7, cursor: 'pointer', textAlign: 'center' as const }}>
-                      {opt.preview === 'single' && <div style={{ width: '100%', height: 22, background: 'rgba(255,255,255,0.15)', borderRadius: 2, marginBottom: 4 }} />}
-                      {opt.preview === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, height: 22, marginBottom: 4 }}><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div>}
-                      {opt.preview === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 2, height: 22, marginBottom: 4 }}><div style={{ height: 12, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 2, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div></div>}
-                      <div style={{ fontSize: 9, color: slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.4)' }}>{opt.label}</div>
-                    </div>
-                  ))}
-                </div>
+            {/* Efekt */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14, marginBottom: 14 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Efekt přechodu</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {([['fade', 'Fade'], ['slide', 'Slide'], ['kenburns', 'Ken Burns'], ['none', 'Bez efektu']] as const).map(([val, label]) => (
+                  <div key={val} onClick={() => setSlideshowEffect(val)}
+                    style={{ background: slideshowEffect === val ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowEffect === val ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 12px', fontSize: 11, fontWeight: slideshowEffect === val ? 700 : 400, cursor: 'pointer' }}>
+                    {label}
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10, minWidth: 130 }}>
-              <button onClick={() => { setShowIntro(false); setIntroDismissed(true); setPlaying(true) }}
-                style={{ background: '#b7e94c', color: '#1a1225', border: 'none', borderRadius: 8, padding: '13px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', width: '100%' }}>
-                ▶ Spustit
-              </button>
-              <button onClick={() => setShowSettings(false)}
-                style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: '10px 16px', fontSize: 12, cursor: 'pointer', width: '100%', marginTop: 8 }}>
-                ← Zpět
-              </button>
-              <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: 10 }}>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 6, textAlign: 'center' as const }}>NÁHLED</div>
-                <div style={{ width: '100%', height: 70, background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative' as const, overflow: 'hidden' }}>
-                  <div style={{ position: 'absolute' as const, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {slideshowLayout === 'single' && <div style={{ width: '70%', height: '80%', background: 'rgba(255,255,255,0.12)', borderRadius: 3 }} />}
-                    {slideshowLayout === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3, width: '85%', height: '85%' }}><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div>}
-                    {slideshowLayout === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 3, width: '85%', height: '85%' }}><div style={{ height: '55%', background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 3, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div></div>}
+            {/* Interval */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14, marginBottom: 14 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Interval</div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {[3, 4, 5, 7, 10].map(s => (
+                  <div key={s} onClick={() => setSlideshowInterval(s)}
+                    style={{ background: slideshowInterval === s ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowInterval === s ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 12px', fontSize: 11, fontWeight: slideshowInterval === s ? 700 : 400, cursor: 'pointer' }}>
+                    {s} s
                   </div>
-                </div>
-                <div style={{ marginTop: 6, display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.3)' }}>
-                  <span>{slideshowEffect} · {slideshowInterval}s</span>
-                  <span>{slideshowOrder === 'random' ? 'Náhodné' : slideshowOrder === 'newest' ? 'Nejnovější' : 'Nejstarší'}</span>
-                </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Layout */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Layout</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                {([
+                  { key: 'single', label: 'Jedna fotka' },
+                  { key: 'grid', label: 'Mozaika' },
+                  { key: 'alternating', label: 'Střídání' },
+                ] as const).map(opt => (
+                  <div key={opt.key} onClick={() => setSlideshowLayout(opt.key)}
+                    style={{ background: slideshowLayout === opt.key ? 'rgba(183,233,76,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, padding: 8, cursor: 'pointer', textAlign: 'center' }}>
+                    {opt.key === 'single' && <div style={{ width: '100%', height: 24, background: 'rgba(255,255,255,0.15)', borderRadius: 3, marginBottom: 5 }} />}
+                    {opt.key === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, height: 24, marginBottom: 5 }}><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div>}
+                    {opt.key === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column', gap: 2, height: 24, marginBottom: 5 }}><div style={{ height: '55%', background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 2, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div></div>}
+                    <div style={{ fontSize: 10, color: slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.4)' }}>{opt.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
-          <div style={{ position: 'absolute', bottom: 14, right: 18, color: 'rgba(183,233,76,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
-        </div>
-      )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 140 }}>
+            <button
+              onClick={() => { setShowIntro(false); setIntroDismissed(true); setPlaying(true) }}
+              style={{ background: '#b7e94c', color: '#1a1225', border: 'none', borderRadius: 8, padding: '13px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', width: '100%' }}
+            >
+              ▶ Spustit
+            </button>
+            <button
+              onClick={() => setShowSettings(false)}
+              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '10px 16px', fontSize: 12, cursor: 'pointer', width: '100%' }}
+            >
+              ← Zpět
+            </button>
 
-      {/* Event name */}
-      <div style={{
-        position: 'absolute', top: 16, left: 20,
-        color: 'rgba(183,233,76,0.5)', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em',
-        pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s',
-      }}>
+            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: 10, marginTop: 4 }}>
+              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 6, textAlign: 'center' }}>NÁHLED</div>
+              <div style={{ width: '100%', height: 70, background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {slideshowLayout === 'single' && <div style={{ width: '70%', height: '75%', background: 'rgba(255,255,255,0.12)', borderRadius: 3 }} />}
+                {slideshowLayout === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3, width: '85%', height: '80%' }}><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div>}
+                {slideshowLayout === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column', gap: 3, width: '85%', height: '80%' }}><div style={{ height: '55%', background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 3, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div></div>}
+              </div>
+              <div style={{ marginTop: 5, display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.3)' }}>
+                <span>{slideshowEffect} · {slideshowInterval}s</span>
+                <span>{slideshowOrder === 'random' ? 'Náh.' : slideshowOrder === 'newest' ? 'Nej.' : 'Star.'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ position: 'absolute', bottom: 16, right: 20, color: 'rgba(183,233,76,0.3)', fontSize: 10, fontWeight: 700, letterSpacing: '0.15em' }}>PICLIO</div>
+      </div>
+    )}
+
+    {/* SLIDESHOW — fotky */}
+    {!showIntro && renderContent()}
+
+    {/* Event name */}
+    {!showIntro && (
+      <div style={{ position: 'absolute', top: 16, left: 20, color: 'rgba(183,233,76,0.5)', fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s' }}>
         {initialEvent.name}
       </div>
+    )}
 
-      {/* Keyboard hint */}
-      <div style={{
-        position: 'absolute', top: 16, right: 20,
-        fontSize: 11, color: 'rgba(255,255,255,0.2)',
-        pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s',
-      }}>
+    {/* Keyboard hint */}
+    {!showIntro && (
+      <div style={{ position: 'absolute', top: 16, right: 20, fontSize: 11, color: 'rgba(255,255,255,0.2)', pointerEvents: 'none', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s' }}>
         Space · ← → · F · ESC
       </div>
+    )}
 
-      {/* Controls */}
-      <div style={{
-        position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', alignItems: 'center', gap: 10,
-        background: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: '8px 18px',
-        opacity: showControls ? 1 : 0, transition: 'opacity 0.4s',
-        pointerEvents: showControls ? 'auto' : 'none',
-      }}>
+    {/* Controls */}
+    {!showIntro && (
+      <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: '8px 18px', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s', pointerEvents: showControls ? 'auto' : 'none' }}>
         <button onClick={() => advance(-1)} style={ctrlBtn}>‹</button>
         <button onClick={() => setPlaying(p => !p)} style={ctrlBtn}>{playing ? '⏸' : '▶'}</button>
         <button onClick={() => advance(1)} style={ctrlBtn}>›</button>
         <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, margin: '0 4px', userSelect: 'none' }}>
           {photos.length > 0 ? `${current + 1} / ${photos.length}` : '0'}
         </span>
-        <button onClick={() => window.location.reload()} style={ctrlBtn} title="Reload nastavení">↺</button>
-        <button
-          onClick={() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()}
-          style={ctrlBtn} title="Fullscreen (F)"
-        >⛶</button>
+        <button onClick={() => window.location.reload()} style={ctrlBtn} title="Reload">↺</button>
+        <button onClick={() => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()} style={ctrlBtn} title="Fullscreen">⛶</button>
       </div>
+    )}
 
-      {/* Piclio logo */}
-      <div style={{ position: 'absolute', bottom: 18, right: 20, opacity: 0.3, pointerEvents: 'none', userSelect: 'none' }}>
-        <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 12, letterSpacing: '0.15em' }}>PICLIO</span>
-      </div>
+    {/* Piclio logo */}
+    <div style={{ position: 'absolute', bottom: 18, right: 20, opacity: 0.3, pointerEvents: 'none', userSelect: 'none' }}>
+      <span style={{ color: '#b7e94c', fontWeight: 800, fontSize: 12, letterSpacing: '0.15em' }}>PICLIO</span>
     </div>
-  )
+  </div>
+)
+
 }
 
 const ctrlBtn: React.CSSProperties = {
