@@ -13,6 +13,7 @@ interface SlideshowPhoto {
 interface SlideshowEvent {
   id: string
   name: string
+  slideshow_welcome_text?: string | null
 }
 
 interface SlideshowSettings {
@@ -33,6 +34,8 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [current, setCurrent] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [visible, setVisible] = useState(true)
+  const [showIntro, setShowIntro] = useState(true)
+  const [introDismissed, setIntroDismissed] = useState(false)
   const [animating, setAnimating] = useState(false)
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -67,6 +70,12 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         if (data.photos?.length > 0) setPhotos(data.photos)
       })
   }, [eventSlug])
+
+  useEffect(() => {
+    if (introDismissed) return
+    const t = setTimeout(() => setShowIntro(false), 5000)
+    return () => clearTimeout(t)
+  }, [introDismissed])
 
   const advance = useCallback((dir: 1 | -1 = 1) => {
     if (photosRef.current.length === 0) return
@@ -215,6 +224,36 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
       `}</style>
 
       {renderContent()}
+
+      {/* Welcome intro overlay */}
+      {showIntro && (
+        <div
+          onClick={() => { setShowIntro(false); setIntroDismissed(true) }}
+          style={{
+            position: 'absolute', inset: 0,
+            background: '#000',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            zIndex: 50, cursor: 'pointer',
+            opacity: showIntro ? 1 : 0,
+            transition: 'opacity 0.8s ease',
+          }}
+        >
+          <div style={{ color: 'rgba(183,233,76,0.6)', fontSize: 11, fontWeight: 700, letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: 32 }}>
+            PICLIO
+          </div>
+          <div style={{ fontSize: 'clamp(28px, 5vw, 64px)', fontWeight: 800, color: '#fff', textAlign: 'center', maxWidth: '80%', lineHeight: 1.2, marginBottom: 20 }}>
+            {initialEvent.name}
+          </div>
+          {initialEvent.slideshow_welcome_text && (
+            <div style={{ fontSize: 'clamp(14px, 2vw, 22px)', color: 'rgba(255,255,255,0.55)', textAlign: 'center', maxWidth: '60%', lineHeight: 1.6 }}>
+              {initialEvent.slideshow_welcome_text}
+            </div>
+          )}
+          <div style={{ position: 'absolute', bottom: 32, color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>
+            Kliknutím přeskočit
+          </div>
+        </div>
+      )}
 
       {/* Event name */}
       <div style={{

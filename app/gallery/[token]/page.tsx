@@ -58,7 +58,7 @@ export default async function GalleryPage({ params }: Props) {
     <GalleryClient
       token={params.token}
       initialGuest={guest}
-      initialEvent={event}
+      initialEvent={{ ...event, event_category: null, slideshow_welcome_text: null } as any}
       initialPhotos={initialPhotos}
     />
   )

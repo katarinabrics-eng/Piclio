@@ -24,6 +24,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   const [existingBadgeNumber, setExistingBadgeNumber] = useState<number | null>(null)
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [badgeNumber, setBadgeNumber] = useState<number | null>(null)
+  const [gdprChecked, setGdprChecked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(10)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -54,7 +55,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
     setStep(1); setEmail(''); setEmailError(''); setShowEmailConfirm(false)
     setShowReturningGuest(false); setExistingBadgeNumber(null); setIsCheckingEmail(false)
     setBadgeNumber(null); setPhotoTaken(false)
-    setPhotoBase64(''); setCountdown(10)
+    setPhotoBase64(''); setCountdown(10); setGdprChecked(false)
   }
 
   async function startCamera() {
@@ -71,6 +72,9 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   }
 
   async function handleEmailContinue() {
+    if (!gdprChecked) {
+      setEmailError('Prosím potvrďte souhlas se zpracováním osobních údajů'); return
+    }
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setEmailError('Zadejte platný e-mail'); return
     }
@@ -218,11 +222,24 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
                 onFocus={e => (e.currentTarget.style.borderColor = '#b7e94c')}
                 onBlur={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)')}
               />
+              {/* GDPR souhlas */}
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 12, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={gdprChecked}
+                  onChange={e => { setGdprChecked(e.target.checked); setEmailError('') }}
+                  style={{ width: 20, height: 20, marginTop: 2, accentColor: '#b7e94c', flexShrink: 0, cursor: 'pointer' }}
+                />
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+                  Souhlasím se zpracováním osobních údajů (e-mail a fotografie) za účelem zaslání fotografií z akce v souladu s GDPR.
+                </span>
+              </label>
               {emailError && (
                 <p style={{ color: '#ff6b6b', textAlign: 'center', margin: 0, fontSize: 15 }}>{emailError}</p>
               )}
-              <button onClick={handleEmailContinue} disabled={isCheckingEmail}
-                style={{ ...btnPrimary, opacity: isCheckingEmail ? 0.7 : 1 }}>
+              <button onClick={handleEmailContinue} disabled={isCheckingEmail || !gdprChecked}
+                style={{ ...btnPrimary, opacity: (isCheckingEmail || !gdprChecked) ? 0.5 : 1 }}
+              >
                 {isCheckingEmail ? 'Kontroluji…' : 'Pokračovat →'}
               </button>
             </>

@@ -107,7 +107,7 @@ export async function PATCH(req: NextRequest) {
   if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json()
-  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, overlayMode, description, photographerNotes, infoNotes, emailBannerUrl, emailSubject, emailBody, emailBtnTextColor, emailHeaderColor } = body
+  const { id, name, date, location, maxGuests, clientName, clientEmail, brandColor, overlayPortraitUrl, overlayLandscapeUrl, overlayStatus, overlayApprovedBy, overlayMode, description, photographerNotes, infoNotes, emailBannerUrl, emailSubject, emailBody, emailBtnTextColor, emailHeaderColor, eventCategory, slideshowWelcomeText } = body
 
   if (!id) return NextResponse.json({ error: 'Chybí id' }, { status: 400 })
 
@@ -139,6 +139,8 @@ export async function PATCH(req: NextRequest) {
   if (emailBody !== undefined) updatePayload.email_body = emailBody
   if (emailBtnTextColor !== undefined) updatePayload.email_btn_text_color = emailBtnTextColor
   if (emailHeaderColor !== undefined) updatePayload.email_header_color = emailHeaderColor
+  if (eventCategory !== undefined) updatePayload.event_category = eventCategory
+  if (slideshowWelcomeText !== undefined) updatePayload.slideshow_welcome_text = slideshowWelcomeText
 
   const { data: event, error } = await supabaseAdmin
     .from('events')

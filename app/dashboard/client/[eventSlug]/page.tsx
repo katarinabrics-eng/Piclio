@@ -91,6 +91,8 @@ export default async function ClientDashboardPage({ params }: Props) {
         slideshow_layout: (event.slideshow_layout ?? 'single') as 'single' | 'slide' | 'kenburns' | 'grid',
         event_type: (event.event_type ?? 'ai') as 'ai' | 'simple',
         gallery_public: event.gallery_public ?? false,
+        event_category: (event as any).event_category ?? null,
+        slideshow_welcome_text: (event as any).slideshow_welcome_text ?? null,
       }}
       guests={guestList}
       stats={{

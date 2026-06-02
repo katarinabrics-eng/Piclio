@@ -164,6 +164,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                           body: JSON.stringify({ photoId: photo.id }),
                         })
                         setPhotos(prev => prev.filter(p => p.id !== photo.id))
+                        await fetchEventPhotos()
                       }}
                       title="Odebrat z galerie"
                       style={{

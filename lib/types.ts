@@ -30,6 +30,8 @@ export interface PiclioEvent {
   slideshow_layout: 'single' | 'slide' | 'kenburns' | 'grid'
   event_type: 'ai' | 'simple'
   gallery_public: boolean
+  event_category: string | null
+  slideshow_welcome_text: string | null
 }
 
 export interface Guest {

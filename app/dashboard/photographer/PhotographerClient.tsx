@@ -8,7 +8,7 @@ import { PhotoUploader } from '@/components/piclio/PhotoUploader'
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
 
-type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings' | 'projekce' | 'galerie'
+type Tab = 'events' | 'guests' | 'unmatched' | 'upload' | 'project' | 'settings' | 'galerie'
 
 interface GalleryPhoto {
   id: string
@@ -75,7 +75,7 @@ export function PhotographerClient() {
   const emailBannerRef = useRef<HTMLInputElement>(null)
 
   const [projectForm, setProjectForm] = useState({
-    name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '',
+    name: '', date: '', location: '', maxGuests: '', description: '', photographerNotes: '', eventCategory: '', slideshowWelcomeText: '',
   })
   const [projectSaving, setProjectSaving] = useState(false)
   const [projectSaveMsg, setProjectSaveMsg] = useState('')
@@ -159,6 +159,8 @@ export function PhotographerClient() {
           maxGuests: parseInt(projectForm.maxGuests) || undefined,
           description: projectForm.description,
           photographerNotes: projectForm.photographerNotes,
+          eventCategory: projectForm.eventCategory,
+          slideshowWelcomeText: projectForm.slideshowWelcomeText,
         }),
       })
       if (!res.ok) throw new Error((await res.json()).error ?? 'Chyba')
@@ -614,6 +616,8 @@ export function PhotographerClient() {
       maxGuests: String(event.max_guests ?? ''),
       description: (event as any).description ?? '',
       photographerNotes: (event as any).photographer_notes ?? '',
+      eventCategory: (event as any).event_category ?? '',
+      slideshowWelcomeText: (event as any).slideshow_welcome_text ?? '',
     })
     setSlideshowContent((event as any).slideshow_content ?? 'random')
     setSlideshowSelectedGuests((event as any).slideshow_selected_guests ?? [])
@@ -906,8 +910,6 @@ export function PhotographerClient() {
                 { key: 'upload',   label: uploadedCount > 0 ? `Nahrát fotky (${uploadedCount})` : 'Nahrát fotky' },
                 { key: 'project',  label: 'O projektu' },
                 { key: 'settings', label: 'Nastavení' },
-                { key: 'projekce', label: 'Projekce' },
-                { key: 'galerie',  label: 'Playlist' },
               ] as { key: Tab; label: string }[]).map(({ key, label }) => (
                 <button
                   key={key}
@@ -1958,6 +1960,66 @@ export function PhotographerClient() {
                     />
                   </div>
 
+                  {/* Typ akce */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Typ akce
+                    </label>
+                    <select
+                      value={projectForm.eventCategory}
+                      onChange={e => updateProjectForm('eventCategory', e.target.value)}
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', background: '#fff' }}
+                    >
+                      <option value="">— Vyberte typ —</option>
+                      <option value="Networking">Networking</option>
+                      <option value="Ples">Ples</option>
+                      <option value="Večírek">Večírek</option>
+                      <option value="Firemní akce">Firemní akce</option>
+                      <option value="Konference">Konference</option>
+                      <option value="Vlastní">Vlastní</option>
+                    </select>
+                  </div>
+
+                  {/* Uvítací text slideshow */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                      Uvítací text slideshow
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={projectForm.slideshowWelcomeText}
+                      onChange={e => updateProjectForm('slideshowWelcomeText', e.target.value)}
+                      placeholder="Zobrazí se na úvodní obrazovce projekce…"
+                      style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
+                    />
+                  </div>
+
+                  {/* Slideshow odkaz + PIN */}
+                  <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 10, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 10 }}>Odkaz na projekci</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                      <a
+                        href={`/slideshow/${selectedEvent!.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ flex: 1, fontSize: 13, color: '#6366f1', textDecoration: 'underline', wordBreak: 'break-all' }}
+                      >
+                        {typeof window !== 'undefined' ? window.location.origin : ''}/slideshow/{selectedEvent!.slug}
+                      </a>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(`${window.location.origin}/slideshow/${selectedEvent!.slug}`)}
+                        style={{ flexShrink: 0, background: '#111827', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 12px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        Kopírovat
+                      </button>
+                    </div>
+                    {selectedEvent!.slideshow_pin && (
+                      <div style={{ fontSize: 13, color: '#6b7280' }}>
+                        PIN: <strong style={{ color: '#111827', fontFamily: 'monospace', fontSize: 15 }}>{selectedEvent!.slideshow_pin}</strong>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Poznámky pro fotografa — interní, nezobrazuje se zadavateli */}
                   <div>
                     <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 4 }}>
@@ -2127,169 +2189,6 @@ export function PhotographerClient() {
                   </div>
                 </div>
 
-              </div>
-            )}
-
-            {/* Projekce tab */}
-            {tab === 'projekce' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 20px' }}>Nastavení slideshow</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-
-                    <div>
-                      <label style={projLabel}>Obsah slideshow</label>
-                      <select value={slideshowContent} onChange={e => setSlideshowContent(e.target.value as any)} style={projSelect}>
-                        <option value="random">Náhodný kolotoč</option>
-                        <option value="photographer">Fotograf vybírá</option>
-                        <option value="client">Zadavatel vybírá</option>
-                        <option value="selected_guests">Vybrané galerie hostů</option>
-                      </select>
-                    </div>
-
-                    {slideshowContent === 'selected_guests' && (
-                      <div>
-                        <label style={projLabel}>Vybrané galerie ({slideshowSelectedGuests.length} / {guests.length} hostů)</label>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: 8, padding: 8 }}>
-                          {guests.length === 0 && (
-                            <div style={{ fontSize: 13, color: '#9ca3af', padding: 8 }}>Nejsou žádní hosté</div>
-                          )}
-                          {guests.map(g => (
-                            <label key={g.id} style={{
-                              display: 'flex', alignItems: 'center', gap: 8,
-                              padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
-                              background: slideshowSelectedGuests.includes(g.id) ? '#f0fdf4' : 'transparent',
-                            }}>
-                              <input
-                                type="checkbox"
-                                checked={slideshowSelectedGuests.includes(g.id)}
-                                onChange={e => setSlideshowSelectedGuests(prev =>
-                                  e.target.checked ? [...prev, g.id] : prev.filter(id => id !== g.id)
-                                )}
-                              />
-                              <span style={{ fontSize: 13 }}>
-                                {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
-                              </span>
-                              <span style={{ fontSize: 11, color: '#9ca3af', marginLeft: 'auto' }}>
-                                {g.photo_count} fotek
-                              </span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Layout výběr */}
-                    <div>
-                      <label style={projLabel}>Rozvržení snímků</label>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        {([
-                          { key: 'single',   label: 'Jedna fotka',  desc: 'Plné plátno, jedna fotka' },
-                          { key: 'slide',    label: 'Posouvání',    desc: 'Fotky se sunou ze strany' },
-                          { key: 'kenburns', label: 'Ken Burns',    desc: 'Pomalý zoom, filmový efekt' },
-                          { key: 'grid',     label: 'Mozaika',      desc: '2 portréty + 1 krajina' },
-                        ] as const).map(({ key, label, desc }) => (
-                          <button key={key} onClick={() => setSlideshowLayout(key as any)}
-                            style={{
-                              border: slideshowLayout === key ? '2px solid #b7e94c' : '1px solid #e5e7eb',
-                              borderRadius: 10, padding: '12px 14px', cursor: 'pointer',
-                              background: slideshowLayout === key ? '#f7ffe0' : '#fff',
-                              textAlign: 'left' as const, transition: 'all 0.15s',
-                            }}>
-                            <div style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{label}</div>
-                            <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{desc}</div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Animace přechodu */}
-                    <div>
-                      <label style={projLabel}>Animace přechodu</label>
-                      <div style={{ display: 'flex', gap: 10 }}>
-                        {([
-                          { key: 'fade',  label: 'Prolínačka', desc: 'Plynulý přechod' },
-                          { key: 'slide', label: 'Posouvání',  desc: 'Zleva doprava' },
-                          { key: 'none',  label: 'Žádná',      desc: 'Okamžitý střih' },
-                        ] as const).map(({ key, label, desc }) => (
-                          <button key={key} onClick={() => setSlideshowAnimation(key)}
-                            style={{
-                              flex: 1,
-                              border: slideshowAnimation === key ? '2px solid #b7e94c' : '1px solid #e5e7eb',
-                              borderRadius: 10, padding: '10px 12px', cursor: 'pointer',
-                              background: slideshowAnimation === key ? '#f7ffe0' : '#fff',
-                              textAlign: 'center' as const, transition: 'all 0.15s',
-                            }}>
-                            <div style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>{label}</div>
-                            <div style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{desc}</div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={projLabel}>Výstup</label>
-                      <select value={slideshowOutput} onChange={e => setSlideshowOutput(e.target.value as any)} style={projSelect}>
-                        <option value="slideshow">Slideshow</option>
-                        <option value="download">Stáhnout vše</option>
-                        <option value="both">Obojí</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label style={projLabel}>Interval: {slideshowInterval} s</label>
-                      <input
-                        type="range" min={2} max={30} value={slideshowInterval}
-                        onChange={e => setSlideshowInterval(Number(e.target.value))}
-                        style={{ width: '100%', marginBottom: 4 }}
-                      />
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#9ca3af' }}>
-                        <span>2s</span><span>30s</span>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', paddingTop: 4, borderTop: '1px solid #f3f4f6' }}>
-                      <button
-                        onClick={saveSlideshow}
-                        disabled={savingSlideshow}
-                        style={{
-                          background: savingSlideshow ? '#e5e7eb' : '#b7e94c',
-                          color: savingSlideshow ? '#9ca3af' : '#1a1225',
-                          border: 'none', borderRadius: 8, padding: '10px 22px',
-                          fontSize: 14, fontWeight: 700,
-                          cursor: savingSlideshow ? 'not-allowed' : 'pointer',
-                        }}
-                      >
-                        {savingSlideshow ? 'Ukládám…' : 'Uložit nastavení'}
-                      </button>
-                      <a
-                        href={`/slideshow/${selectedEvent.slug}`}
-                        target="_blank" rel="noopener noreferrer"
-                        style={{
-                          background: '#111827', color: '#fff', border: 'none', borderRadius: 8,
-                          padding: '10px 22px', fontSize: 14, fontWeight: 700, textDecoration: 'none',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        ▶ Spustit slideshow
-                      </a>
-                      {(slideshowOutput === 'download' || slideshowOutput === 'both') && (
-                        <button style={{
-                          background: '#fff', border: '1px solid #e5e7eb', borderRadius: 8,
-                          padding: '10px 22px', fontSize: 14, fontWeight: 600, cursor: 'pointer', color: '#374151',
-                        }}>
-                          ↓ Stáhnout ZIP
-                        </button>
-                      )}
-                      {slideshowMsg && (
-                        <span style={{ fontSize: 13, color: slideshowMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
-                          {slideshowMsg}
-                        </span>
-                      )}
-                    </div>
-
-                  </div>
-                </div>
               </div>
             )}
 
