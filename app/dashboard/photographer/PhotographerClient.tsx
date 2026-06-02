@@ -1977,7 +1977,7 @@ export function PhotographerClient() {
 
                   {/* Typ akce */}
                   <div>
-                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 6 }}>
                       Typ akce
                     </label>
                     <select
@@ -1997,16 +1997,19 @@ export function PhotographerClient() {
 
                   {/* Uvítací text slideshow */}
                   <div>
-                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>
+                    <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 6 }}>
                       Uvítací text slideshow
                     </label>
                     <textarea
                       rows={2}
                       value={projectForm.slideshowWelcomeText}
                       onChange={e => updateProjectForm('slideshowWelcomeText', e.target.value)}
-                      placeholder="Zobrazí se na úvodní obrazovce projekce…"
+                      placeholder="např. Vítejte na firemním večírku společnosti Limetka · Vítejte na plese Avokada · Dobrý večer, vítáme vás na networkingu"
                       style={{ width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, color: '#111827', outline: 'none', resize: 'vertical' }}
                     />
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>
+                      Tento text se zobrazí na úvodní obrazovce slideshow před spuštěním prezentace.
+                    </div>
                   </div>
 
                   {/* Slideshow odkaz + PIN */}
