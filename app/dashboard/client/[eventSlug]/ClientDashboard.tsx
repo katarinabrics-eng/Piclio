@@ -23,29 +23,24 @@ interface Props {
   eventSlug: string
 }
 
-type Tab = 'overview' | 'guests' | 'unmatched' | 'branding' | 'projekcia' | 'gallery_public'
+const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
 
-const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.vercel.app'
+type Tab = 'overview' | 'links' | 'albums' | 'branding'
+
+interface Album {
+  id: string
+  name: string
+  photoIds: string[]
+}
 
 export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhotos, eventSlug }: Props) {
   const [tab, setTab] = useState<Tab>('overview')
 
-  // ── Live state (SSR-initialised, refreshed by polling) ─────────────────────
+  // ── Live state ──────────────────────────────────────────────────────────────
   const [liveStats, setLiveStats] = useState(stats)
   const [liveGuests, setLiveGuests] = useState(guests)
 
-  async function deleteGuest(guestId: string, email: string) {
-    if (!confirm(`Smazat hosta ${email}?\nSmaže se i jeho galerie a všechny přiřazené fotky.`)) return
-    try {
-      const res = await fetch(`/api/photographer/guests/${guestId}`, { method: 'DELETE' })
-      if (res.ok) setLiveGuests(prev => prev.filter(g => g.id !== guestId))
-    } catch {}
-  }
-
-  const [liveUnmatched, setLiveUnmatched] = useState(unmatchedPhotos)
-  const [liveAllPhotos, setLiveAllPhotos] = useState(allPhotos)
-
-  // Poll stats + guests every 15s (always active)
+  // Poll stats + guests every 15s
   useEffect(() => {
     const tick = () =>
       fetch(`/api/client/${eventSlug}/live?include=stats,guests`)
@@ -59,243 +54,205 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
     return () => clearInterval(id)
   }, [eventSlug])
 
-  // Poll unmatched photos every 15s when that tab is active
-  useEffect(() => {
-    if (tab !== 'unmatched') return
-    const tick = () =>
-      fetch(`/api/client/${eventSlug}/live?include=unmatched`)
-        .then(r => r.json())
-        .then(d => { if (d.unmatchedPhotos) setLiveUnmatched(d.unmatchedPhotos) })
-        .catch(() => {})
-    tick()
-    const id = setInterval(tick, 15000)
-    return () => clearInterval(id)
-  }, [eventSlug, tab])
+  // ── Albums ──────────────────────────────────────────────────────────────────
+  const [albums, setAlbums] = useState<Album[]>(() => {
+    if (typeof window === 'undefined') return []
+    try { return JSON.parse(localStorage.getItem(`piclio-albums-${eventSlug}`) ?? '[]') } catch { return [] }
+  })
+  const [newAlbumName, setNewAlbumName] = useState('')
+  const [editingAlbum, setEditingAlbum] = useState<string | null>(null)
+  const [albumPhotos, setAlbumPhotos] = useState<PlaylistPhoto[]>(allPhotos)
+  const [loadingPhotos, setLoadingPhotos] = useState(false)
 
-  // Poll allPhotos every 15s when projekcia or gallery_public tab is active
   useEffect(() => {
-    if (tab !== 'projekcia' && tab !== 'gallery_public') return
-    const tick = () =>
-      fetch(`/api/client/${eventSlug}/live?include=photos`)
-        .then(r => r.json())
-        .then(d => { if (d.allPhotos) setLiveAllPhotos(d.allPhotos) })
-        .catch(() => {})
-    tick()
-    const id = setInterval(tick, 15000)
-    return () => clearInterval(id)
-  }, [eventSlug, tab])
-
-  // Sync unmatched content immediately when stats count changes while on the unmatched tab.
-  // Prevents badge showing "0" while the content list still shows stale photos.
-  useEffect(() => {
-    if (tab !== 'unmatched') return
-    fetch(`/api/client/${eventSlug}/live?include=unmatched`)
+    if (tab !== 'albums') return
+    setLoadingPhotos(true)
+    fetch(`/api/events/${eventSlug}/gallery-photos`)
       .then(r => r.json())
-      .then(d => { if (d.unmatchedPhotos) setLiveUnmatched(d.unmatchedPhotos) })
+      .then(d => { if (d.photos) setAlbumPhotos(d.photos) })
       .catch(() => {})
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventSlug, liveStats.unmatchedCount])
+      .finally(() => setLoadingPhotos(false))
+  }, [eventSlug, tab])
+
+  function saveAlbums(next: Album[]) {
+    setAlbums(next)
+    localStorage.setItem(`piclio-albums-${eventSlug}`, JSON.stringify(next))
+  }
+
+  function createAlbum() {
+    const name = newAlbumName.trim()
+    if (!name) return
+    const album: Album = { id: crypto.randomUUID(), name, photoIds: [] }
+    saveAlbums([...albums, album])
+    setNewAlbumName('')
+    setEditingAlbum(album.id)
+  }
+
+  function deleteAlbum(id: string) {
+    if (!confirm('Smazat album?')) return
+    saveAlbums(albums.filter(a => a.id !== id))
+    if (editingAlbum === id) setEditingAlbum(null)
+  }
+
+  function togglePhotoInAlbum(albumId: string, photoId: string) {
+    saveAlbums(albums.map(a => {
+      if (a.id !== albumId) return a
+      const has = a.photoIds.includes(photoId)
+      return { ...a, photoIds: has ? a.photoIds.filter(id => id !== photoId) : [...a.photoIds, photoId] }
+    }))
+  }
+
+  // ── Branding state ──────────────────────────────────────────────────────────
   const [brandColor, setBrandColor] = useState(event.brand_color ?? '#1a1225')
   const [logoUrl, setLogoUrl] = useState(event.client_logo_url ?? '')
   const [logoFile, setLogoFile] = useState<File | null>(null)
   const [savingBranding, setSavingBranding] = useState(false)
   const [brandingMsg, setBrandingMsg] = useState('')
-
   const [description, setDescription] = useState((event as any).description ?? '')
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState('')
-
   const [overlayApproved, setOverlayApproved] = useState(event.overlay_approved ?? false)
   const [overlayNotes, setOverlayNotes] = useState(event.overlay_notes ?? '')
   const [savingOverlay, setSavingOverlay] = useState(false)
   const [overlayMsg, setOverlayMsg] = useState('')
   const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
-
-  const [playlist, setPlaylist] = useState<Set<string>>(
-    new Set(Array.isArray(event.slideshow_playlist) ? event.slideshow_playlist : [])
-  )
-  const [savingPlaylist, setSavingPlaylist] = useState(false)
-  const [playlistMsg, setPlaylistMsg] = useState('')
-
-  const [publicGallery, setPublicGallery] = useState(event.public_gallery ?? false)
-  const [savingPublic, setSavingPublic] = useState(false)
-
-  const [clientSelectedGuests, setClientSelectedGuests] = useState<string[]>(
-    Array.isArray((event as any).slideshow_selected_guests) ? (event as any).slideshow_selected_guests : []
-  )
-  const [savingClientSlideshow, setSavingClientSlideshow] = useState(false)
-  const [clientSlideshowMsg, setClientSlideshowMsg] = useState('')
-
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const accent = brandColor
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
+  // ── Handlers ────────────────────────────────────────────────────────────────
+
+  function copyLink(key: string, text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key)
+      setTimeout(() => setCopiedKey(null), 2000)
+    })
+  }
 
   async function saveInfo() {
-    setSavingInfo(true)
-    setInfoMsg('')
+    setSavingInfo(true); setInfoMsg('')
     try {
       const res = await fetch(`/api/client/${eventSlug}/branding`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ description }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
       setInfoMsg('✓ Uloženo')
-    } catch (e: any) {
-      setInfoMsg(`✗ ${e.message}`)
-    } finally {
-      setSavingInfo(false)
-    }
+    } catch (e: any) { setInfoMsg(`✗ ${e.message}`) }
+    finally { setSavingInfo(false) }
   }
 
   async function saveBranding() {
-    setSavingBranding(true)
-    setBrandingMsg('')
+    setSavingBranding(true); setBrandingMsg('')
     try {
       const form = new FormData()
       form.append('brand_color', brandColor)
-      if (logoFile) {
-        form.append('logo', logoFile)
-      } else {
-        form.append('client_logo_url', logoUrl)
-      }
+      if (logoFile) form.append('logo', logoFile)
+      else form.append('client_logo_url', logoUrl)
       const res = await fetch(`/api/client/${eventSlug}/branding`, { method: 'PUT', body: form })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
       if (json.client_logo_url) setLogoUrl(json.client_logo_url)
       if (json.brand_color) setBrandColor(json.brand_color)
-      console.log('BEFORE RELOAD — brand_color from response:', json.brand_color)
-      console.log('BEFORE RELOAD — current brandColor state:', brandColor)
       setBrandingMsg('✓ Branding uložen')
       window.location.reload()
-    } catch (e: any) {
-      setBrandingMsg(`✗ Chyba: ${e.message}`)
-    } finally {
-      setSavingBranding(false)
-    }
+    } catch (e: any) { setBrandingMsg(`✗ Chyba: ${e.message}`) }
+    finally { setSavingBranding(false) }
   }
 
   async function saveOverlay(approved: boolean) {
-    setSavingOverlay(true)
-    setOverlayMsg('')
+    setSavingOverlay(true); setOverlayMsg('')
     try {
       const res = await fetch(`/api/client/${eventSlug}/approve-overlay`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ approved, notes: overlayNotes }),
       })
       if (!res.ok) throw new Error((await res.json()).error)
       setOverlayApproved(approved)
       setOverlayMsg(approved ? '✓ Overlay schválen' : '✓ Žádost o změnu odeslána')
-    } catch (e: any) {
-      setOverlayMsg(`✗ Chyba: ${e.message}`)
-    } finally {
-      setSavingOverlay(false)
+    } catch (e: any) { setOverlayMsg(`✗ Chyba: ${e.message}`) }
+    finally { setSavingOverlay(false) }
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+
+  function formatDate(d: string) {
+    return new Date(d).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
+  }
+
+  function statusBadge(status: string) {
+    const map: Record<string, { label: string; bg: string; color: string }> = {
+      active:    { label: 'Aktivní',   bg: '#dcfce7', color: '#16a34a' },
+      draft:     { label: 'Příprava',  bg: '#fef9c3', color: '#92400e' },
+      paused:    { label: 'Pozastaveno', bg: '#fee2e2', color: '#dc2626' },
+      completed: { label: 'Dokončeno', bg: '#f3f4f6', color: '#6b7280' },
+      archived:  { label: 'Archiv',    bg: '#f3f4f6', color: '#9ca3af' },
     }
+    const s = map[status] ?? { label: status, bg: '#f3f4f6', color: '#6b7280' }
+    return (
+      <span style={{ display: 'inline-block', background: s.bg, color: s.color, borderRadius: 20, padding: '3px 12px', fontSize: 12, fontWeight: 700 }}>
+        {s.label}
+      </span>
+    )
   }
 
-  async function saveClientSlideshow() {
-    setSavingClientSlideshow(true)
-    setClientSlideshowMsg('')
-    try {
-      const res = await fetch(`/api/events/${eventSlug}/slideshow-settings`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slideshow_selected_guests: clientSelectedGuests }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
-      setClientSlideshowMsg(`✓ Uloženo (${clientSelectedGuests.length} hostů)`)
-    } catch (e: any) {
-      setClientSlideshowMsg(`✗ ${e.message}`)
-    } finally {
-      setSavingClientSlideshow(false)
-    }
-  }
-
-  async function savePlaylist() {
-    setSavingPlaylist(true)
-    setPlaylistMsg('')
-    try {
-      const res = await fetch(`/api/client/${eventSlug}/playlist`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playlist: Array.from(playlist) }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
-      setPlaylistMsg(`✓ Playlist uložen (${playlist.size} fotek)`)
-    } catch (e: any) {
-      setPlaylistMsg(`✗ Chyba: ${e.message}`)
-    } finally {
-      setSavingPlaylist(false)
-    }
-  }
-
-  async function togglePublicGallery(val: boolean) {
-    setSavingPublic(true)
-    setPublicGallery(val)
-    await fetch(`/api/client/${eventSlug}/branding`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ public_gallery: val }),
-    })
-    setSavingPublic(false)
-  }
-
-  function togglePhoto(id: string) {
-    setPlaylist(prev => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  function selectAll() { setPlaylist(new Set(liveAllPhotos.map(p => p.id))) }
-  function selectNone() { setPlaylist(new Set()) }
-
-  // ── Tabs config ────────────────────────────────────────────────────────────
-
-  const TABS: [Tab, string][] = [
-    ['overview',       'Přehled'],
-    ['guests',         `Hosté (${liveStats.guestCount})`],
-    ['unmatched',      `Nespárované (${liveStats.unmatchedCount})`],
-    ['branding',       'Branding'],
-    ['projekcia',      'Projekce'],
-    ['gallery_public', 'Veřejná galerie'],
+  const LINKS = [
+    {
+      key: 'kiosk',
+      icon: '📱',
+      label: 'Kiosk — registrace hostů',
+      desc: 'Zobrazte na tabletu u vstupu. Hosté zadají e-mail a dostanou odznak.',
+      url: `${APP_URL}/kiosk/${eventSlug}`,
+    },
+    {
+      key: 'slideshow',
+      icon: '▶',
+      label: 'Slideshow — projekce',
+      desc: event.slideshow_pin ? `PIN pro obsluhu: ${event.slideshow_pin}` : 'Živá projekce fotek na plátno nebo TV.',
+      url: `${APP_URL}/slideshow/${eventSlug}`,
+    },
+    {
+      key: 'gallery',
+      icon: '🖼',
+      label: 'Veřejná galerie eventu',
+      desc: 'Odkaz pro sdílení — zobrazuje všechny spárované fotky bez přihlášení.',
+      url: `${APP_URL}/event/${eventSlug}/gallery`,
+    },
   ]
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb' }}>
+    <div style={{ minHeight: '100vh', background: '#f5f3ee', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
 
       {/* Header */}
-      <div style={{ background: accent, color: '#fff', padding: '20px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          {logoUrl && (
-            <img src={logoUrl} alt="" style={{ height: 36, objectFit: 'contain', borderRadius: 4 }} />
-          )}
-          <div>
-            <div style={{ fontSize: 18, fontWeight: 700 }}>{event.name}</div>
-            <div style={{ fontSize: 13, opacity: 0.7, marginTop: 2 }}>
-              {new Date(event.date).toLocaleDateString('cs-CZ')}
-              {event.location ? ` · ${event.location}` : ''}
-            </div>
+      <div style={{ background: accent, padding: '18px 28px', display: 'flex', alignItems: 'center', gap: 16 }}>
+        {logoUrl && <img src={logoUrl} alt="" style={{ height: 36, objectFit: 'contain', borderRadius: 4 }} />}
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{event.name}</div>
+          <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>
+            {formatDate(event.date)}{event.location ? ` · ${event.location}` : ''}
           </div>
         </div>
+        {statusBadge(event.status)}
       </div>
 
-      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '28px 20px' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '28px 20px' }}>
 
-        {/* Tabs */}
-        <div style={{ display: 'flex', gap: 4, marginBottom: 28, flexWrap: 'wrap' }}>
-          {TABS.map(([key, label]) => (
+        {/* Tab nav */}
+        <div style={{ display: 'flex', gap: 4, marginBottom: 28, background: '#e8e5df', borderRadius: 12, padding: 4 }}>
+          {([
+            ['overview', 'Přehled'],
+            ['links',    'Linky'],
+            ['albums',   'Alba'],
+            ['branding', 'Branding'],
+          ] as [Tab, string][]).map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)} style={{
-              padding: '7px 16px', borderRadius: 8, border: 'none', cursor: 'pointer',
+              flex: 1, padding: '8px 0', borderRadius: 9, border: 'none', cursor: 'pointer',
               fontSize: 13, fontWeight: 600,
-              background: tab === key ? accent : '#e5e7eb',
-              color: tab === key ? '#fff' : '#374151',
+              background: tab === key ? '#fff' : 'transparent',
+              color: tab === key ? '#111827' : '#6b7280',
+              boxShadow: tab === key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
               transition: 'all 0.15s',
             }}>
               {label}
@@ -305,27 +262,42 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
 
         {/* ── PŘEHLED ── */}
         {tab === 'overview' && (
-          <div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 28 }}>
-              <StatCard label="Registrovaní hosté" value={liveStats.guestCount} />
-              <StatCard label="Fotky celkem" value={liveStats.photoCount} />
-              <StatCard label="Doručené galerie" value={liveStats.deliveredCount} accent />
-              <StatCard label="Nespárované fotky" value={liveStats.unmatchedCount} />
-              <StatCard label="Ø fotky / host" value={liveStats.avgPhotosPerGuest} sublabel="průměr" />
-              <StatCard label="Otevřeli galerii" value={liveStats.galleryOpenedCount} sublabel={`z ${liveStats.guestCount} hostů`} />
-              <StatCard label="Ve veřejné galerii" value={liveStats.publicPhotoCount} sublabel="spárovaných fotek" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+            {/* Info o eventu */}
+            <div style={card}>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <InfoTile label="Název akce" value={event.name} />
+                <InfoTile label="Datum" value={formatDate(event.date)} />
+                {event.location && <InfoTile label="Místo" value={event.location} />}
+                <InfoTile label="Max hostů" value={String(event.max_guests ?? '—')} />
+                <InfoTile label="Stav" value={event.status} />
+              </div>
             </div>
-            <div style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-              <div style={{ fontWeight: 700, marginBottom: 16, fontSize: 15 }}>Rychlé odkazy</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {([
-                  ['Slideshow / projekce', `${APP_URL}/slideshow/${eventSlug}`],
-                  ['Registrace kiosk', `${APP_URL}/kiosk`],
-                  ...(publicGallery ? [['Veřejná galerie', `${APP_URL}/event/${eventSlug}/gallery`]] : []),
-                ] as [string, string][]).map(([lbl, url]) => (
-                  <div key={url} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f9fafb', borderRadius: 8 }}>
-                    <span style={{ fontSize: 14, color: '#374151' }}>{lbl}</span>
-                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 13, color: accent, fontWeight: 600, textDecoration: 'none' }}>Otevřít →</a>
+
+            {/* Stat karty */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
+              <StatCard label="Hosté celkem" value={liveStats.guestCount} />
+              <StatCard label="Fotky celkem" value={liveStats.photoCount} />
+              <StatCard label="Spárované" value={liveStats.publicPhotoCount} accent />
+              <StatCard label="Doručeno" value={liveStats.deliveredCount} accent />
+              <StatCard label="Ø fotky / host" value={liveStats.avgPhotosPerGuest} sublabel="průměr" />
+              <StatCard label="Nespárované" value={liveStats.unmatchedCount} />
+            </div>
+
+            {/* Rychlé linky */}
+            <div style={card}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#374151', marginBottom: 12, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>Rychlé linky</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {LINKS.map(l => (
+                  <div key={l.key} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', background: '#f9f8f5', borderRadius: 8 }}>
+                    <span style={{ fontSize: 14, color: '#374151' }}>{l.icon} {l.label}</span>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button onClick={() => copyLink(l.key, l.url)} style={btnOutline(accent)}>
+                        {copiedKey === l.key ? '✓ Zkopírováno' : 'Kopírovat'}
+                      </button>
+                      <a href={l.url} target="_blank" rel="noopener noreferrer" style={{ ...btnOutline(accent), textDecoration: 'none' }}>Otevřít →</a>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -333,82 +305,154 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
           </div>
         )}
 
-        {/* ── HOSTÉ ── */}
-        {tab === 'guests' && (
-          <div style={{ background: '#fff', borderRadius: 12, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-            {liveGuests.length === 0 ? (
-              <div style={{ padding: 40, textAlign: 'center', color: '#9ca3af' }}>Žádní hosté</div>
-            ) : (
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-                <thead>
-                  <tr style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-                    {['#', 'Jméno', 'E-mail', 'Fotky', 'Doručené', 'Galerie', 'Akce'].map(h => (
-                      <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontWeight: 600, color: '#374151' }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {liveGuests.map(g => (
-                    <tr key={g.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                      <td style={{ padding: '10px 16px', color: '#9ca3af' }}>{g.badge_number ?? '—'}</td>
-                      <td style={{ padding: '10px 16px', fontWeight: 500 }}>{g.name ?? '—'}</td>
-                      <td style={{ padding: '10px 16px', color: '#6b7280' }}>{g.email}</td>
-                      <td style={{ padding: '10px 16px' }}>{g.photo_count}</td>
-                      <td style={{ padding: '10px 16px' }}>
-                        {g.email_sent_at
-                          ? <span style={{ color: '#16a34a', fontSize: 12 }}>✓ {new Date(g.email_sent_at).toLocaleDateString('cs-CZ')}</span>
-                          : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>}
-                      </td>
-                      <td style={{ padding: '10px 16px' }}>
-                        {g.gallery_token
-                          ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: accent, fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
-                          : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
-                      </td>
-                      <td style={{ padding: '10px 16px' }}>
-                        <button
-                          onClick={() => deleteGuest(g.id, g.email)}
-                          title="Smazat hosta"
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#ef4444' }}
-                        >
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                          </svg>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+        {/* ── LINKY ── */}
+        {tab === 'links' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {LINKS.map(l => (
+              <div key={l.key} style={{ ...card, display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: '#f0fde8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+                  {l.icon}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: '#111827', marginBottom: 3 }}>{l.label}</div>
+                  <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 10 }}>{l.desc}</div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' as const }}>
+                    <code style={{ fontSize: 12, background: '#f3f4f6', padding: '6px 10px', borderRadius: 6, color: '#374151', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
+                      {l.url}
+                    </code>
+                    <button onClick={() => copyLink(l.key, l.url)} style={btnPrimary(accent)}>
+                      {copiedKey === l.key ? '✓ Zkopírováno' : 'Kopírovat'}
+                    </button>
+                    <a href={l.url} target="_blank" rel="noopener noreferrer" style={{ ...btnOutline(accent), textDecoration: 'none' }}>
+                      Otevřít →
+                    </a>
+                  </div>
+                  {l.key === 'slideshow' && event.slideshow_pin && (
+                    <div style={{ marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 8, background: '#f0fde8', border: '1px solid #b7e94c', borderRadius: 8, padding: '6px 14px' }}>
+                      <span style={{ fontSize: 11, color: '#4a7c00', fontWeight: 600, letterSpacing: '0.05em' }}>PIN:</span>
+                      <span style={{ fontSize: 20, fontWeight: 900, letterSpacing: 4, color: '#111827', fontFamily: 'monospace' }}>{event.slideshow_pin}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
-        {/* ── NESPÁROVANÉ ── */}
-        {tab === 'unmatched' && (
-          <div>
-            {liveUnmatched.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af' }}>Žádné nespárované fotky ✓</div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
-                {liveUnmatched.map(photo => (
-                  <div key={photo.id} style={{ borderRadius: 10, overflow: 'hidden', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                    <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block' }} />
-                    {photo.ocr_number && (
-                      <div style={{ padding: '6px 10px', fontSize: 12, color: '#6b7280' }}>OCR: #{photo.ocr_number}</div>
+        {/* ── ALBA ── */}
+        {tab === 'albums' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+            {/* Vytvoření nového alba */}
+            {editingAlbum === null && (
+              <div style={card}>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#111827', marginBottom: 12 }}>Vytvořit album</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Název alba (např. Večeře, Tanec, VIP…)"
+                    value={newAlbumName}
+                    onChange={e => setNewAlbumName(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && createAlbum()}
+                    style={inputStyle}
+                  />
+                  <button onClick={createAlbum} disabled={!newAlbumName.trim()} style={btnPrimary(accent)}>
+                    + Vytvořit
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Existující alba */}
+            {albums.length === 0 && editingAlbum === null && (
+              <div style={{ textAlign: 'center', padding: 60, color: '#9ca3af', background: '#fff', borderRadius: 12 }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>📂</div>
+                <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>Zatím žádná alba</div>
+                <div style={{ fontSize: 13 }}>Vytvořte album a přidejte do něj fotky z eventu.</div>
+              </div>
+            )}
+
+            {editingAlbum === null && albums.map(album => (
+              <div key={album.id} style={card}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>{album.name}</div>
+                    <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2 }}>{album.photoIds.length} fotek</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={() => setEditingAlbum(album.id)} style={btnPrimary(accent)}>Upravit</button>
+                    <button onClick={() => deleteAlbum(album.id)} style={{ ...btnOutline('#dc2626'), color: '#dc2626' }}>Smazat</button>
+                  </div>
+                </div>
+                {album.photoIds.length > 0 && (
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' as const }}>
+                    {album.photoIds.slice(0, 8).map(pid => {
+                      const p = albumPhotos.find(x => x.id === pid)
+                      return p ? (
+                        <img key={pid} src={p.url} alt="" style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 6 }} />
+                      ) : null
+                    })}
+                    {album.photoIds.length > 8 && (
+                      <div style={{ width: 60, height: 60, borderRadius: 6, background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#6b7280', fontWeight: 700 }}>
+                        +{album.photoIds.length - 8}
+                      </div>
                     )}
                   </div>
-                ))}
+                )}
               </div>
-            )}
+            ))}
+
+            {/* Editor alba */}
+            {editingAlbum !== null && (() => {
+              const album = albums.find(a => a.id === editingAlbum)
+              if (!album) return null
+              return (
+                <div style={card}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+                    <button onClick={() => setEditingAlbum(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#6b7280', padding: 0 }}>←</button>
+                    <div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>{album.name}</div>
+                      <div style={{ fontSize: 12, color: '#9ca3af' }}>{album.photoIds.length} fotek vybráno</div>
+                    </div>
+                    <button onClick={() => setEditingAlbum(null)} style={{ marginLeft: 'auto', ...btnOutline(accent) }}>
+                      ✓ Hotovo
+                    </button>
+                  </div>
+                  {loadingPhotos ? (
+                    <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Načítám fotky…</div>
+                  ) : albumPhotos.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Zatím nejsou k dispozici žádné fotky</div>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 8 }}>
+                      {albumPhotos.map(photo => {
+                        const selected = album.photoIds.includes(photo.id)
+                        return (
+                          <div key={photo.id} onClick={() => togglePhotoInAlbum(album.id, photo.id)} style={{
+                            borderRadius: 8, overflow: 'hidden', cursor: 'pointer', position: 'relative',
+                            border: `2px solid ${selected ? accent : 'transparent'}`,
+                            aspectRatio: '1',
+                          }}>
+                            <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                            {selected && (
+                              <div style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderRadius: '50%', background: accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#1a1225', fontWeight: 700 }}>
+                                ✓
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
           </div>
         )}
 
         {/* ── BRANDING ── */}
         {tab === 'branding' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
             <section style={card}>
               <h2 style={sectionTitle}>Logo a barva eventu</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
@@ -441,7 +485,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                     {logoUrl && <img src={logoUrl} alt="" style={{ height: 32, objectFit: 'contain' }} onError={e => (e.currentTarget.style.display = 'none')} />}
                     <div>
                       <div style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{event.name}</div>
-                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{new Date(event.date).toLocaleDateString('cs-CZ')}</div>
+                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{formatDate(event.date)}</div>
                     </div>
                   </div>
                 </div>
@@ -467,15 +511,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 </div>
                 <div>
                   <div style={labelStyle}>Datum</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>
-                    {event.date ? new Date(event.date).toLocaleDateString('cs-CZ') : '—'}
-                  </div>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: 12, marginBottom: 20 }}>
-                <div>
-                  <div style={labelStyle}>Počet hostů</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.max_guests ?? '—'}</div>
+                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{formatDate(event.date)}</div>
                 </div>
               </div>
               <div style={{ marginBottom: 16 }}>
@@ -501,47 +537,34 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 {overlayApproved ? '✅ Overlay byl schválen' : '⏳ Overlay čeká na schválení'}
               </div>
               {event.overlay_portrait_url || event.overlay_landscape_url ? (
-                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: 16 }}>
-                  {/* Portrait composite */}
+                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' as const, marginBottom: 16 }}>
                   {event.overlay_portrait_url && (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div
-                        onClick={() => setOverlayFullscreen('portrait')}
-                        title="Kliknutím zobrazit větší náhled"
-                        style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
-                      >
-                        {/* Demo background */}
+                      <div onClick={() => setOverlayFullscreen('portrait')} title="Kliknutím zobrazit větší náhled"
+                        style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}>
                         <img src="/demo/demo-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </div>
-                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Portrét</span>
+                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Portrét</span>
                     </div>
                   )}
-                  {/* Landscape composite */}
                   {event.overlay_landscape_url && (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div
-                        onClick={() => setOverlayFullscreen('landscape')}
-                        title="Kliknutím zobrazit větší náhled"
-                        style={{ aspectRatio: '3/2', height: 133, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}
-                      >
+                      <div onClick={() => setOverlayFullscreen('landscape')} title="Kliknutím zobrazit větší náhled"
+                        style={{ aspectRatio: '3/2', height: 133, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}>
                         <img src="/demo/demo-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
                         <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </div>
-                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Krajina</span>
+                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Krajina</span>
                     </div>
                   )}
                 </div>
               ) : (
                 <div style={{ marginBottom: 16, padding: '14px 16px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, color: '#6b7280' }}>
-                  <em>Náhled overlay šablony — fotograf zatím nenahrál žádnou šablonu.</em>
+                  <em>Fotograf zatím nenahrál žádnou overlay šablonu.</em>
                 </div>
               )}
               <label style={labelStyle}>Komentář / žádost o změny</label>
-              <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 8, lineHeight: 1.6, marginTop: 0 }}>
-                Popište požadované změny — informace o akci, úpravy textu na fotografiích nebo jakékoliv
-                další přání. Fotograf se na váš komentář co nejdříve ozve.
-              </p>
               <textarea style={{ ...inputStyle, height: 80, resize: 'vertical' as const }}
                 value={overlayNotes} onChange={e => setOverlayNotes(e.target.value)}
                 placeholder="Např.: prosím zvětšit logo, změnit pozici čísla..." />
@@ -553,211 +576,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 {overlayMsg && <span style={{ fontSize: 13, color: overlayMsg.startsWith('✓') ? '#16a34a' : '#dc2626', alignSelf: 'center' }}>{overlayMsg}</span>}
               </div>
             </section>
-          </div>
-        )}
 
-        {/* ── PROJEKCE ── */}
-        {tab === 'projekcia' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-
-            {/* Nastavení projekce */}
-            <section style={card}>
-              <h2 style={sectionTitle}>Nastavení projekce</h2>
-              {(event as any).slideshow_content === 'client' ? (
-                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>
-                  Fotograf vám dal právo vybírat obsah slideshow. Vyberte hosty níže.
-                </p>
-              ) : (
-                <div style={{ padding: '12px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
-                  Nastavení slideshow spravuje fotograf. Aktuální obsah:{' '}
-                  <strong>
-                    {({'random': 'náhodný kolotoč', 'photographer': 'fotograf vybírá', 'client': 'zadavatel vybírá', 'selected_guests': 'vybrané galerie'} as Record<string, string>)[(event as any).slideshow_content ?? 'random'] ?? 'náhodný kolotoč'}
-                  </strong>
-                </div>
-              )}
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <a
-                  href={`${APP_URL}/slideshow/${eventSlug}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{ ...btnPrimary(accent), textDecoration: 'none' }}
-                >
-                  ▶ Spustit slideshow
-                </a>
-                <button
-                  style={btnSecondary}
-                  onClick={() => navigator.clipboard.writeText(`${APP_URL}/slideshow/${eventSlug}`)}
-                >
-                  Kopírovat odkaz
-                </button>
-              </div>
-            </section>
-
-            {/* Guest multiselect — jen pokud fotograf dal právo klientovi */}
-            {(event as any).slideshow_content === 'client' && (
-              <section style={card}>
-                <h2 style={sectionTitle}>Vybrané galerie hostů ({clientSelectedGuests.length} / {liveGuests.length})</h2>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 260, overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: 8, padding: 8, marginBottom: 14 }}>
-                  {liveGuests.length === 0 && (
-                    <div style={{ fontSize: 13, color: '#9ca3af', padding: 8 }}>Žádní hosté</div>
-                  )}
-                  {liveGuests.map(g => (
-                    <label key={g.id} style={{
-                      display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
-                      background: clientSelectedGuests.includes(g.id) ? '#f0fdf4' : 'transparent',
-                    }}>
-                      <input
-                        type="checkbox"
-                        checked={clientSelectedGuests.includes(g.id)}
-                        onChange={e => setClientSelectedGuests(prev =>
-                          e.target.checked ? [...prev, g.id] : prev.filter(id => id !== g.id)
-                        )}
-                      />
-                      <span style={{ fontSize: 13 }}>
-                        {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
-                      </span>
-                      <span style={{ fontSize: 11, color: '#9ca3af', marginLeft: 'auto' }}>
-                        {g.photo_count} fotek
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                  <button
-                    style={btnPrimary(accent)}
-                    onClick={saveClientSlideshow}
-                    disabled={savingClientSlideshow}
-                  >
-                    {savingClientSlideshow ? 'Ukládám…' : 'Uložit výběr'}
-                  </button>
-                  {clientSlideshowMsg && (
-                    <span style={{ fontSize: 13, color: clientSlideshowMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>
-                      {clientSlideshowMsg}
-                    </span>
-                  )}
-                </div>
-              </section>
-            )}
-
-            <section style={card}>
-              <h2 style={sectionTitle}>Slideshow / projekce</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 16, alignItems: 'center' }}>
-                <div>
-                  <div style={labelStyle}>Odkaz na projekci</div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <code style={{ fontSize: 13, background: '#f3f4f6', padding: '8px 12px', borderRadius: 8, flex: 1 }}>
-                      {APP_URL}/slideshow/{eventSlug}
-                    </code>
-                    <a href={`${APP_URL}/slideshow/${eventSlug}`} target="_blank" rel="noopener noreferrer"
-                      style={{ ...btnPrimary(accent), textDecoration: 'none', fontSize: 13 }}>
-                      Otevřít →
-                    </a>
-                  </div>
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={labelStyle}>PIN pro obsluhu</div>
-                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: 8, color: accent, background: '#f3f4f6', padding: '10px 20px', borderRadius: 10 }}>
-                    {event.slideshow_pin ?? '1234'}
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section style={card}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <h2 style={{ ...sectionTitle, margin: 0 }}>Playlist ({playlist.size} / {liveAllPhotos.length})</h2>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button style={btnSecondary} onClick={selectAll}>Všechny</button>
-                  <button style={btnSecondary} onClick={selectNone}>Žádné</button>
-                  <button style={btnPrimary(accent)} onClick={savePlaylist} disabled={savingPlaylist}>
-                    {savingPlaylist ? 'Ukládám...' : 'Uložit playlist'}
-                  </button>
-                </div>
-              </div>
-              {playlistMsg && <div style={{ marginBottom: 14, fontSize: 13, color: playlistMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{playlistMsg}</div>}
-              {liveAllPhotos.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Zatím nejsou k dispozici žádné spárované fotky</div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
-                  {liveAllPhotos.map(photo => {
-                    const selected = playlist.has(photo.id)
-                    return (
-                      <div key={photo.id} onClick={() => togglePhoto(photo.id)} style={{
-                        borderRadius: 10, overflow: 'hidden', cursor: 'pointer', position: 'relative',
-                        border: `3px solid ${selected ? accent : 'transparent'}`,
-                        boxShadow: selected ? `0 0 0 2px ${accent}40` : '0 1px 4px rgba(0,0,0,0.08)',
-                        transition: 'all 0.15s',
-                      }}>
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#000', height: 120 }}>
-                          <img src={photo.url} alt={photo.filename} style={{ width: '100%', maxHeight: 120, objectFit: 'contain', display: 'block' }} />
-                        </div>
-                        <div style={{
-                          position: 'absolute', top: 6, right: 6, width: 22, height: 22, borderRadius: '50%',
-                          background: selected ? accent : 'rgba(255,255,255,0.85)',
-                          border: `2px solid ${selected ? accent : '#ccc'}`,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontSize: 12, color: selected ? '#fff' : '#ccc', fontWeight: 700,
-                        }}>
-                          {selected ? '✓' : ''}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </section>
-          </div>
-        )}
-
-        {/* ── VEŘEJNÁ GALERIE ── */}
-        {tab === 'gallery_public' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-            <section style={card}>
-              <h2 style={sectionTitle}>Veřejná galerie eventu</h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-                <button onClick={() => togglePublicGallery(!publicGallery)} disabled={savingPublic} style={{
-                  width: 52, height: 28, borderRadius: 14, border: 'none', cursor: 'pointer',
-                  background: publicGallery ? accent : '#d1d5db', position: 'relative', transition: 'background 0.2s', flexShrink: 0,
-                }}>
-                  <span style={{
-                    position: 'absolute', top: 3, left: publicGallery ? 26 : 4, width: 22, height: 22,
-                    borderRadius: '50%', background: '#fff', transition: 'left 0.2s', display: 'block',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                  }} />
-                </button>
-                <span style={{ fontSize: 15, fontWeight: 600, color: publicGallery ? '#111827' : '#9ca3af' }}>
-                  {publicGallery ? 'Veřejná galerie je ZAPNUTÁ' : 'Veřejná galerie je vypnutá'}
-                </span>
-                {savingPublic && <span style={{ fontSize: 13, color: '#9ca3af' }}>Ukládám...</span>}
-              </div>
-              {publicGallery ? (
-                <div>
-                  <div style={labelStyle}>Odkaz na veřejnou galerii</div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 20 }}>
-                    <code style={{ fontSize: 13, background: '#f3f4f6', padding: '8px 12px', borderRadius: 8, flex: 1 }}>
-                      {APP_URL}/event/{eventSlug}/gallery
-                    </code>
-                    <a href={`${APP_URL}/event/${eventSlug}/gallery`} target="_blank" rel="noopener noreferrer"
-                      style={{ ...btnPrimary(accent), textDecoration: 'none', fontSize: 13 }}>Otevřít →</a>
-                    <button style={btnSecondary}
-                      onClick={() => navigator.clipboard.writeText(`${APP_URL}/event/${eventSlug}/gallery`)}>
-                      Kopírovat
-                    </button>
-                  </div>
-                  <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-                    <StatCard label="Fotky ve veřejné galerii" value={liveStats.publicPhotoCount} accent />
-                    <StatCard label="Doručených hostů" value={liveStats.deliveredCount} />
-                  </div>
-                  <div style={{ padding: '12px 16px', background: '#f0fdf4', borderRadius: 8, fontSize: 13, color: '#166534' }}>
-                    Veřejná galerie zobrazuje všechny spárované fotky eventu bez rozdělení podle hostů.
-                  </div>
-                </div>
-              ) : (
-                <div style={{ padding: '20px 24px', background: '#f9fafb', borderRadius: 10, color: '#9ca3af', fontSize: 14 }}>
-                  Zapněte veřejnou galerii, aby si fotky mohl prohlížet kdokoliv s odkazem.
-                </div>
-              )}
-            </section>
           </div>
         )}
 
@@ -768,33 +587,17 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
         const isPortrait = overlayFullscreen === 'portrait'
         const overlaySrc = isPortrait ? event.overlay_portrait_url : event.overlay_landscape_url
         return (
-          <div
-            onClick={() => setOverlayFullscreen(null)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              style={{
-                position: 'relative', overflow: 'hidden', borderRadius: 10,
-                aspectRatio: isPortrait ? '2/3' : '3/2',
-                ...(isPortrait
-                  ? { width: 'min(calc(80vh * 2 / 3), 90vw)' }
-                  : { height: 'min(80vh, calc(90vw * 2 / 3))' }),
-              }}
-            >
-              <img
-                src={isPortrait ? '/demo/demo-portrait.jpg' : '/demo/demo-krajina.jpg'}
-                alt=""
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              {overlaySrc && (
-                <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-              )}
+          <div onClick={() => setOverlayFullscreen(null)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div onClick={e => e.stopPropagation()}
+              style={{ position: 'relative', overflow: 'hidden', borderRadius: 10, aspectRatio: isPortrait ? '2/3' : '3/2', ...(isPortrait ? { width: 'min(calc(80vh * 2 / 3), 90vw)' } : { height: 'min(80vh, calc(90vw * 2 / 3))' }) }}>
+              <img src={isPortrait ? '/demo/demo-portrait.jpg' : '/demo/demo-krajina.jpg'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              {overlaySrc && <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />}
             </div>
-            <button
-              onClick={() => setOverlayFullscreen(null)}
-              style={{ position: 'fixed', top: 16, right: 16, zIndex: 1001, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8, color: 'white', fontSize: 22, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >×</button>
+            <button onClick={() => setOverlayFullscreen(null)}
+              style={{ position: 'fixed', top: 16, right: 16, zIndex: 1001, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8, color: 'white', fontSize: 22, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              ×
+            </button>
           </div>
         )
       })()}
@@ -802,10 +605,21 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   )
 }
 
+// ── Helper components ─────────────────────────────────────────────────────────
+
+function InfoTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div style={{ background: '#f5f3ee', borderRadius: 8, padding: '10px 16px', minWidth: 130 }}>
+      <div style={{ fontSize: 10, fontWeight: 600, color: '#9ca3af', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 4 }}>{label}</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{value}</div>
+    </div>
+  )
+}
+
 // ── Style helpers ─────────────────────────────────────────────────────────────
 
 const card: React.CSSProperties = {
-  background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
 }
 const sectionTitle: React.CSSProperties = {
   fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 20px',
@@ -819,7 +633,10 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 8, fontSize: 14, outline: 'none', boxSizing: 'border-box',
 }
 function btnPrimary(bg: string): React.CSSProperties {
-  return { padding: '9px 18px', background: bg, color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }
+  return { padding: '9px 18px', background: bg, color: bg === '#16a34a' ? '#fff' : '#1a1225', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' as const }
+}
+function btnOutline(color: string): React.CSSProperties {
+  return { padding: '7px 14px', background: 'transparent', color, border: `1px solid ${color}`, borderRadius: 7, fontSize: 12, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' as const }
 }
 const btnSecondary: React.CSSProperties = {
   padding: '9px 18px', background: '#fff', color: '#374151', border: '1px solid #e5e7eb',
