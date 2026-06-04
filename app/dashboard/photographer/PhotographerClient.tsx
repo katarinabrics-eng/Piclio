@@ -1450,7 +1450,7 @@ export function PhotographerClient() {
 
                 {/* Overlay mode switcher */}
                 <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Režim overlaya</h2>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Grafika pro fotky — režim</h2>
                   <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>
                     Zvolte, jaká grafika bude aplikována na fotky před doručením hostům.
                     {savingOverlayMode && <span style={{ marginLeft: 8, color: '#9ca3af' }}>Ukládám…</span>}
@@ -1488,7 +1488,7 @@ export function PhotographerClient() {
 
                 {/* Section header */}
                 <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
-                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Overlay súbory</h2>
+                  <h2 style={{ fontSize: 16, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Grafika pro fotky</h2>
                   <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>
                     Nahrajte PNG overlay vrstvené přes fotografie hostů. Každá orientace vyžaduje samostatný soubor.
                   </p>
@@ -1732,8 +1732,85 @@ export function PhotographerClient() {
                   )
                 })()}
 
+              {/* Grafika pro galerii / slideshow */}
+              <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', marginTop: 0 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Grafika pro galerii / slideshow</h3>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>Vizuální styl projekce a galerie hostů.</p>
 
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>Pozadí slideshow</label>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {([['dark', '⬛ Tmavé'], ['light', '⬜ Světlé'], ['brand', '🎨 Barva klienta']] as const).map(([val, label]) => (
+                      <button key={val}
+                        onClick={() => {
+                          fetch('/api/photographer/events', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: selectedEvent?.id, slideshowBg: val }),
+                          })
+                          setSelectedEvent(prev => prev ? { ...prev, slideshow_bg: val } : prev)
+                        }}
+                        style={{
+                          padding: '8px 16px', borderRadius: 8, fontSize: 13, cursor: 'pointer', fontWeight: 500,
+                          background: (selectedEvent as any)?.slideshow_bg === val ? '#111827' : '#f3f4f6',
+                          color: (selectedEvent as any)?.slideshow_bg === val ? '#fff' : '#374151',
+                          border: (selectedEvent as any)?.slideshow_bg === val ? 'none' : '1px solid #e5e7eb',
+                        }}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>Horní lišta s logem</label>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 13, color: '#374151' }}>
+                      <input type="checkbox"
+                        checked={(selectedEvent as any)?.slideshow_bar_enabled ?? false}
+                        onChange={e => {
+                          fetch('/api/photographer/events', {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: selectedEvent?.id, slideshowBarEnabled: e.target.checked }),
+                          })
+                          setSelectedEvent(prev => prev ? { ...prev, slideshow_bar_enabled: e.target.checked } : prev)
+                        }}
+                      />
+                      Zobrazit horní lištu s logem klienta a názvem eventu
+                    </label>
+                  </div>
+                </div>
+
+                {(selectedEvent as any)?.slideshow_bar_enabled && (
+                  <div>
+                    <label style={{ fontSize: 12, fontWeight: 600, color: '#374151', display: 'block', marginBottom: 8 }}>Barva lišty</label>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      {([['transparent', '⬜ Průhledná'], ['brand', '🎨 Barva klienta'], ['#000000', '⬛ Černá'], ['#ffffff', '⬜ Bílá']] as const).map(([val, label]) => (
+                        <button key={val}
+                          onClick={() => {
+                            fetch('/api/photographer/events', {
+                              method: 'PATCH',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ id: selectedEvent?.id, slideshowBarColor: val }),
+                            })
+                            setSelectedEvent(prev => prev ? { ...prev, slideshow_bar_color: val } : prev)
+                          }}
+                          style={{
+                            padding: '6px 12px', borderRadius: 8, fontSize: 12, cursor: 'pointer',
+                            background: (selectedEvent as any)?.slideshow_bar_color === val ? '#111827' : '#f3f4f6',
+                            color: (selectedEvent as any)?.slideshow_bar_color === val ? '#fff' : '#374151',
+                            border: (selectedEvent as any)?.slideshow_bar_color === val ? 'none' : '1px solid #e5e7eb',
+                          }}>
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
+
+            </div>
             )}
 
             {/* Upload tab */}

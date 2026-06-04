@@ -32,6 +32,9 @@ export interface PiclioEvent {
   gallery_public: boolean
   event_category: string | null
   slideshow_welcome_text: string | null
+  slideshow_bg?: string
+  slideshow_bar_color?: string
+  slideshow_bar_enabled?: boolean
 }
 
 export interface Guest {

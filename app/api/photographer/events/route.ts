@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
 
   const { data: events } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, overlay_mode, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body, email_btn_text_color, email_header_color, event_type, gallery_public')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, brand_color, client_logo_url, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_approved_by, overlay_notes, overlay_approved, overlay_mode, description, photographer_notes, info_notes, email_banner_url, email_subject, email_body, email_btn_text_color, email_header_color, event_type, gallery_public, slideshow_bg, slideshow_bar_color, slideshow_bar_enabled')
     .order('date', { ascending: false })
 
   if (!events) return NextResponse.json({ events: [] })
@@ -141,6 +141,9 @@ export async function PATCH(req: NextRequest) {
   if (emailHeaderColor !== undefined) updatePayload.email_header_color = emailHeaderColor
   if (eventCategory !== undefined) updatePayload.event_category = eventCategory
   if (slideshowWelcomeText !== undefined) updatePayload.slideshow_welcome_text = slideshowWelcomeText
+  if (body.slideshowBg !== undefined) updatePayload.slideshow_bg = body.slideshowBg
+  if (body.slideshowBarEnabled !== undefined) updatePayload.slideshow_bar_enabled = body.slideshowBarEnabled
+  if (body.slideshowBarColor !== undefined) updatePayload.slideshow_bar_color = body.slideshowBarColor
 
   const { data: event, error } = await supabaseAdmin
     .from('events')
