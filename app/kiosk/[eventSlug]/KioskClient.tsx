@@ -25,6 +25,7 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
   const [badgeNumber, setBadgeNumber] = useState<number | null>(null)
   const [gdprChecked, setGdprChecked] = useState(false)
+  const [manualBadge, setManualBadge] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [countdown, setCountdown] = useState(10)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -134,7 +135,12 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
       const res = await fetch('/api/kiosk/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, eventId, faceImageBase64: photoBase64 || null }),
+        body: JSON.stringify({
+          email,
+          eventId,
+          faceImageBase64: photoBase64 || null,
+          manualBadgeNumber: manualBadge ? parseInt(manualBadge) : null,
+        }),
       })
       const data = await res.json()
       if (data.badgeNumber) { setBadgeNumber(data.badgeNumber); stopCamera(); setStep(3) }
@@ -321,6 +327,20 @@ export function KioskClient({ eventId, eventName, eventDate }: Props) {
                   </button>
                 </div>
               )}
+              <div style={{ marginBottom: 12 }}>
+                <input
+                  type="number"
+                  placeholder="Číslo placky (volitelné — jen pro test)"
+                  value={manualBadge}
+                  onChange={e => setManualBadge(e.target.value)}
+                  style={{
+                    width: '100%', padding: '12px 16px', borderRadius: 12,
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    background: 'rgba(255,255,255,0.06)', color: '#fff',
+                    fontSize: 16, boxSizing: 'border-box',
+                  }}
+                />
+              </div>
               <button onClick={() => handleRegister()} disabled={isLoading} style={{
                 background: 'transparent', color: 'rgba(255,255,255,0.35)',
                 border: 'none', fontSize: 14, cursor: 'pointer', padding: 8, textDecoration: 'underline',

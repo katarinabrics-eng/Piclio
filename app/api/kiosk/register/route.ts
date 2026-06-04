@@ -88,7 +88,7 @@ async function sendRegistrationEmail(
 }
 
 export async function POST(req: NextRequest) {
-  const { email, faceImageBase64, eventId } = await req.json()
+  const { email, faceImageBase64, eventId, manualBadgeNumber } = await req.json()
 
   if (!email || !email.includes('@')) {
     return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
     .limit(1)
     .single()
 
-  const nextBadgeNumber = (lastGuest?.badge_number ?? 0) + 1
+  const nextBadgeNumber = manualBadgeNumber ?? (lastGuest?.badge_number ?? 0) + 1
 
   // Create guest
   const { data: newGuest, error } = await supabase
