@@ -25,7 +25,7 @@ interface Props {
 
 const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://piclio.cz'
 
-type Tab = 'overview' | 'links' | 'albums' | 'branding'
+type Tab = 'overview' | 'links' | 'albums' | 'branding' | 'photos'
 
 interface Album {
   id: string
@@ -35,6 +35,20 @@ interface Album {
 
 export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhotos, eventSlug }: Props) {
   const [tab, setTab] = useState<Tab>('overview')
+
+  // ── Photos state ────────────────────────────────────────────────────────────
+  const [eventPhotos, setEventPhotos] = useState<any[]>([])
+  const [photosLoading, setPhotosLoading] = useState(false)
+
+  useEffect(() => {
+    if (tab !== 'photos') return
+    setPhotosLoading(true)
+    fetch(`/api/photographer/unmatched?eventId=${event.id}`, { cache: 'no-store' })
+      .then(r => r.json())
+      .then(d => setEventPhotos(d.photos ?? []))
+      .catch(() => setEventPhotos([]))
+      .finally(() => setPhotosLoading(false))
+  }, [tab, event.id])
 
   // ── Live state ──────────────────────────────────────────────────────────────
   const [liveStats, setLiveStats] = useState(stats)
@@ -245,6 +259,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
             ['overview', 'Přehled'],
             ['links',    'Linky'],
             ['albums',   'Alba'],
+            ['photos',   'Fotky z eventu'],
             ['branding', 'Branding'],
           ] as [Tab, string][]).map(([key, label]) => (
             <button key={key} onClick={() => setTab(key)} style={{
@@ -446,6 +461,46 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 </div>
               )
             })()}
+          </div>
+        )}
+
+        {/* ── FOTKY Z EVENTU ── */}
+        {tab === 'photos' && (
+          <div style={{ padding: '24px 0' }}>
+            {photosLoading ? (
+              <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Načítám fotky…</div>
+            ) : eventPhotos.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>📷</div>
+                <div style={{ fontSize: 15 }}>Zatím žádné fotky z eventu</div>
+              </div>
+            ) : (
+              <>
+                <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
+                  Celkem {eventPhotos.length} fotek z eventu
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+                  {eventPhotos.map((photo: any) => (
+                    <div key={photo.id} style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', aspectRatio: '1' }}>
+                      <img
+                        src={photo.url}
+                        alt={photo.filename}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
+                      {photo.status === 'unmatched' && (
+                        <div style={{
+                          position: 'absolute', top: 4, left: 4,
+                          background: '#f59e0b', color: '#fff',
+                          fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                        }}>
+                          Bez galerie
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
