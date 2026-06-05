@@ -1428,6 +1428,60 @@ export function PhotographerClient() {
                     </div>
                   </div>
                 )}
+
+                <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: 16, marginTop: 16 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 4 }}>PNG overlay pro slideshow</div>
+                  <p style={{ fontSize: 12, color: '#6b7280', margin: '0 0 12px' }}>
+                    Grafika vrstvená pod nebo přes fotky během projekce. Formát 16:9, min 1920 × 1080 px.
+                  </p>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                    {([['under', 'Pod fotky'], ['over', 'Přes fotky'], ['none', 'Bez grafiky']] as const).map(([val, label]) => (
+                      <button key={val}
+                        onClick={() => {
+                          fetch('/api/photographer/events', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedEvent?.id, slideshowOverlayMode: val }) })
+                          setSelectedEvent(prev => prev ? { ...prev, slideshow_overlay_mode: val } : prev)
+                        }}
+                        style={{ padding: '6px 14px', borderRadius: 8, fontSize: 12, cursor: 'pointer', fontWeight: 500, background: (selectedEvent as any)?.slideshow_overlay_mode === val ? '#111827' : '#f3f4f6', color: (selectedEvent as any)?.slideshow_overlay_mode === val ? '#fff' : '#374151', border: (selectedEvent as any)?.slideshow_overlay_mode === val ? 'none' : '1px solid #e5e7eb' }}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                  <div style={{ border: '2px dashed #d1d5db', borderRadius: 10, padding: '20px', textAlign: 'center' as const, background: '#fafafa', cursor: 'pointer' }}
+                    onClick={() => document.getElementById('slideshow-overlay-input')?.click()}>
+                    {(selectedEvent as any)?.slideshow_overlay_url ? (
+                      <div>
+                        <img src={(selectedEvent as any).slideshow_overlay_url} alt="overlay" style={{ maxHeight: 80, maxWidth: '100%', objectFit: 'contain', marginBottom: 8 }} />
+                        <div style={{ fontSize: 12, color: '#16a34a', fontWeight: 600 }}>✓ Overlay nahraný</div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div style={{ fontSize: 24, marginBottom: 6 }}>📽️</div>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Klikněte pro výběr PNG souboru</div>
+                        <div style={{ fontSize: 12, color: '#9ca3af' }}>PNG · 16:9 · min 1920 × 1080 px · max 10 MB</div>
+                      </div>
+                    )}
+                  </div>
+                  <input id="slideshow-overlay-input" type="file" accept="image/png" style={{ display: 'none' }}
+                    onChange={async e => {
+                      const file = e.target.files?.[0]
+                      if (!file || !selectedEvent) return
+                      const form = new FormData()
+                      form.append('slideshow_overlay', file)
+                      form.append('event_id', selectedEvent.id)
+                      const res = await fetch(`/api/client/${selectedEvent.slug}/branding`, { method: 'PUT', body: form })
+                      const data = await res.json()
+                      if (data.slideshow_overlay_url) {
+                        setSelectedEvent(prev => prev ? { ...prev, slideshow_overlay_url: data.slideshow_overlay_url } : prev)
+                      }
+                    }}
+                  />
+                  <div style={{ marginTop: 12, padding: '10px 14px', background: '#f9fafb', borderRadius: 8, fontSize: 12, color: '#6b7280', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>Stav schválení grafiky pro projekci: <span style={{ color: '#d97706', fontWeight: 600 }}>⏳ Čeká</span></span>
+                    <button onClick={async () => { alert('Odesláno ke schválení zadavateli') }} style={{ background: '#111827', color: '#fff', border: 'none', borderRadius: 6, padding: '5px 12px', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+                      Odeslat ke schválení →
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
