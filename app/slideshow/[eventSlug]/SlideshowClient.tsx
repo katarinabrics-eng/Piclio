@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 
 interface SlideshowPhoto {
@@ -63,7 +63,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photosRef = useRef(photos)
-  const orderedPhotos = React.useMemo(() => {
+  const orderedPhotos = useMemo(() => {
     const arr = [...activePhotos]
     if (slideshowOrder === 'newest') return arr.sort((a, b) => new Date(b.uploaded_at).getTime() - new Date(a.uploaded_at).getTime())
     if (slideshowOrder === 'oldest') return arr.sort((a, b) => new Date(a.uploaded_at).getTime() - new Date(b.uploaded_at).getTime())
@@ -216,7 +216,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               objectFit: 'contain',
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: slideshowEffect === 'fade' ? 'opacity 0.35s ease' : 'none',
-              animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
+              animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
               transform: slideshowEffect === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
             }}
           />
