@@ -109,14 +109,14 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
       setVisible(false)
       setTimeout(() => {
         setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
-        setVisible(true)
-      }, 350)
+        setTimeout(() => setVisible(true), 50)
+      }, 400)
     } else if (slideshowEffect === 'slide') {
       setAnimating(true)
       setTimeout(() => {
         setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
         setAnimating(false)
-      }, 400)
+      }, 500)
     } else {
       setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
     }
@@ -212,9 +212,8 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               overflow: 'hidden',
               boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: slideshowEffect === 'fade' ? 'opacity 0.35s ease' : 'none',
-              animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
-              transform: slideshowEffect === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
+              transition: slideshowEffect === 'fade' ? 'opacity 0.6s ease-in-out' : 'none',
+              animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : slideshowEffect === 'slide' && animating ? 'slideOutLeft 0.5s ease forwards' : 'none',
             }}
           />
         </div>
@@ -257,12 +256,20 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   >
     <style>{`
       @keyframes kenburns {
-        0%   { transform: scale(1)    translate(0, 0); }
-        100% { transform: scale(1.12) translate(-2%, -1%); }
+        0%   { transform: scale(1) translate(0, 0); }
+        100% { transform: scale(1.08) translate(-1.5%, -1%); }
       }
       @keyframes slideInRight {
-        from { transform: translateX(100%); }
-        to   { transform: translateX(0); }
+        from { transform: translateX(105%); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutLeft {
+        from { transform: translateX(0); opacity: 1; }
+        to   { transform: translateX(-105%); opacity: 0; }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
       }
     `}</style>
 
@@ -296,7 +303,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 48 }}>
             {[
               { label: 'OBSAH', value: slideshowContent === 'all' ? 'Všechny fotky' : slideshowContent === 'selected' ? 'Výběr fotek' : 'Dle hosta' },
-              { label: 'EFEKT', value: slideshowEffect === 'fade' ? 'Fade' : slideshowEffect === 'slide' ? 'Slide' : slideshowEffect === 'kenburns' ? 'Ken Burns' : 'Bez efektu' },
+              { label: 'EFEKT', value: slideshowEffect === 'fade' ? 'Prolínačka' : slideshowEffect === 'slide' ? 'Kolotoč' : slideshowEffect === 'kenburns' ? 'Zoom' : 'Bez efektu' },
               { label: 'INTERVAL', value: `${slideshowInterval} sekund` },
               { label: 'LAYOUT', value: slideshowLayout === 'single' ? 'Jedna fotka' : slideshowLayout === 'grid' ? 'Mozaika' : 'Střídání' },
             ].map(item => (
@@ -395,7 +402,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14, marginBottom: 14 }}>
               <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Efekt přechodu</div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {([['fade', 'Fade'], ['slide', 'Slide'], ['kenburns', 'Ken Burns'], ['none', 'Bez efektu']] as const).map(([val, label]) => (
+                {([['fade', 'Prolínačka'], ['slide', 'Kolotoč'], ['kenburns', 'Zoom'], ['none', 'Bez efektu']] as const).map(([val, label]) => (
                   <div key={val} onClick={() => setSlideshowEffect(val)}
                     style={{ background: slideshowEffect === val ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowEffect === val ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 12px', fontSize: 11, fontWeight: slideshowEffect === val ? 700 : 400, cursor: 'pointer' }}>
                     {label}
