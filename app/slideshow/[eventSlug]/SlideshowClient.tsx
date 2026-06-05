@@ -203,7 +203,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         {overlayUrl && overlayMode === 'under' && (
           <img src={overlayUrl} alt="" style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'contain', pointerEvents: 'none', zIndex: 0,
+            objectFit: 'cover', pointerEvents: 'none', zIndex: 0,
           }} />
         )}
         <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1 }}>
@@ -234,7 +234,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         {overlayUrl && overlayMode === 'over' && (
           <img src={overlayUrl} alt="" style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'contain', pointerEvents: 'none', zIndex: 2,
+            objectFit: 'cover', pointerEvents: 'none', zIndex: 2,
           }} />
         )}
       </>
