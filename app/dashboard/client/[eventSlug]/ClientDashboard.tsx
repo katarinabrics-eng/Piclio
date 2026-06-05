@@ -495,19 +495,19 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
             <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
               <h3 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Grafika pro fotky</h3>
               <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Náhled jak budou vypadat fotky s aplikovanou grafikou.</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, maxWidth: 400 }}>
                 {event.overlay_portrait_url ? (
-                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '2/3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '2/3', maxHeight: 160, maxWidth: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src={event.overlay_portrait_url} alt="Portrét overlay" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    <div style={{ position: 'absolute', bottom: 8, left: 8, fontSize: 11, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 8px', borderRadius: 4 }}>Portrét</div>
+                    <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 10, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 6px', borderRadius: 4 }}>Portrét</div>
                   </div>
-                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '2/3' as const, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#9ca3af', textAlign: 'center' as const, padding: 16 }}>Grafika pro portrét<br/>nenalezena</div>}
+                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '2/3' as const, maxHeight: 160, maxWidth: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#9ca3af', textAlign: 'center' as const, padding: 12 }}>Portrét<br/>nenalezen</div>}
                 {event.overlay_landscape_url ? (
-                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '3/2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '3/2', maxHeight: 120, maxWidth: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img src={event.overlay_landscape_url} alt="Krajina overlay" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                    <div style={{ position: 'absolute', bottom: 8, left: 8, fontSize: 11, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 8px', borderRadius: 4 }}>Krajina</div>
+                    <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 10, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 6px', borderRadius: 4 }}>Krajina</div>
                   </div>
-                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '3/2' as const, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#9ca3af', textAlign: 'center' as const, padding: 16 }}>Grafika pro krajinu<br/>nenalezena</div>}
+                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '3/2' as const, maxHeight: 120, maxWidth: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#9ca3af', textAlign: 'center' as const, padding: 12 }}>Krajina<br/>nenalezena</div>}
               </div>
             </div>
 

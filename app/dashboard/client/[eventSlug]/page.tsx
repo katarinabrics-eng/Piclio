@@ -24,7 +24,7 @@ async function signPhotos(photos: any[], expiresIn: number): Promise<any[]> {
 export default async function ClientDashboardPage({ params }: Props) {
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_approved_by, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_mode, description, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation, slideshow_layout, event_type, gallery_public')
+    .select('id, name, slug, date, location, status, max_guests, client_name, client_email, client_logo_url, brand_color, slideshow_pin, slideshow_playlist, public_gallery, overlay_approved, overlay_approved_by, overlay_notes, overlay_portrait_url, overlay_landscape_url, overlay_status, overlay_mode, description, slideshow_content, slideshow_selected_guests, slideshow_output, slideshow_interval, slideshow_animation, slideshow_layout, event_type, gallery_public, email_header_color, email_banner_url, slideshow_bg, slideshow_bar_color, slideshow_bar_enabled, slideshow_overlay_url, slideshow_overlay_mode, event_category, slideshow_welcome_text')
     .eq('slug', params.eventSlug)
     .single()
 
