@@ -125,11 +125,7 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
   const [description, setDescription] = useState((event as any).description ?? '')
   const [savingInfo, setSavingInfo] = useState(false)
   const [infoMsg, setInfoMsg] = useState('')
-  const [overlayApproved, setOverlayApproved] = useState(event.overlay_approved ?? false)
   const [overlayNotes, setOverlayNotes] = useState(event.overlay_notes ?? '')
-  const [savingOverlay, setSavingOverlay] = useState(false)
-  const [overlayMsg, setOverlayMsg] = useState('')
-  const [overlayFullscreen, setOverlayFullscreen] = useState<'portrait' | 'landscape' | null>(null)
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const accent = brandColor
@@ -172,20 +168,6 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
       window.location.reload()
     } catch (e: any) { setBrandingMsg(`✗ Chyba: ${e.message}`) }
     finally { setSavingBranding(false) }
-  }
-
-  async function saveOverlay(approved: boolean) {
-    setSavingOverlay(true); setOverlayMsg('')
-    try {
-      const res = await fetch(`/api/client/${eventSlug}/approve-overlay`, {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ approved, notes: overlayNotes }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
-      setOverlayApproved(approved)
-      setOverlayMsg(approved ? '✓ Overlay schválen' : '✓ Žádost o změnu odeslána')
-    } catch (e: any) { setOverlayMsg(`✗ Chyba: ${e.message}`) }
-    finally { setSavingOverlay(false) }
   }
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -507,156 +489,105 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
 
         {/* ── BRANDING ── */}
         {tab === 'branding' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 0' }}>
 
-            <section style={card}>
-              <h2 style={sectionTitle}>Logo a barva eventu</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                <div>
-                  <label style={labelStyle}>Logo URL</label>
-                  <input style={inputStyle} value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://..." />
-                  <div style={{ marginTop: 8 }}>
-                    <button style={btnSecondary} onClick={() => fileRef.current?.click()}>📁 Nahrát soubor</button>
-                    <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
-                      onChange={e => {
-                        const f = e.target.files?.[0]
-                        if (f) { setLogoFile(f); setLogoUrl(URL.createObjectURL(f)) }
-                      }} />
-                    {logoFile && <span style={{ fontSize: 12, color: '#6b7280', marginLeft: 10 }}>{logoFile.name}</span>}
+            {/* Náhled grafiky pro fotky */}
+            <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Grafika pro fotky</h3>
+              <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Náhled jak budou vypadat fotky s aplikovanou grafikou.</p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                {event.overlay_portrait_url ? (
+                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '2/3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={event.overlay_portrait_url} alt="Portrét overlay" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <div style={{ position: 'absolute', bottom: 8, left: 8, fontSize: 11, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 8px', borderRadius: 4 }}>Portrét</div>
                   </div>
-                </div>
-                <div>
-                  <label style={labelStyle}>Brand barva</label>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <input type="color" value={brandColor} onChange={e => setBrandColor(e.target.value)}
-                      style={{ width: 52, height: 40, border: 'none', borderRadius: 8, cursor: 'pointer', padding: 2 }} />
-                    <input style={{ ...inputStyle, width: 120 }} value={brandColor} onChange={e => setBrandColor(e.target.value)} maxLength={7} />
+                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '2/3' as const, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#9ca3af', textAlign: 'center' as const, padding: 16 }}>Grafika pro portrét<br/>nenalezena</div>}
+                {event.overlay_landscape_url ? (
+                  <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', background: '#f9fafb', aspectRatio: '3/2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={event.overlay_landscape_url} alt="Krajina overlay" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <div style={{ position: 'absolute', bottom: 8, left: 8, fontSize: 11, color: '#6b7280', background: 'rgba(255,255,255,0.9)', padding: '2px 8px', borderRadius: 4 }}>Krajina</div>
                   </div>
-                </div>
+                ) : <div style={{ background: '#f9fafb', borderRadius: 8, aspectRatio: '3/2' as const, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#9ca3af', textAlign: 'center' as const, padding: 16 }}>Grafika pro krajinu<br/>nenalezena</div>}
               </div>
-              {(logoUrl || brandColor) && (
-                <div style={{ marginTop: 20 }}>
-                  <div style={labelStyle}>Náhled headeru</div>
-                  <div style={{ background: brandColor, borderRadius: 10, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
-                    {logoUrl && <img src={logoUrl} alt="" style={{ height: 32, objectFit: 'contain' }} onError={e => (e.currentTarget.style.display = 'none')} />}
-                    <div>
-                      <div style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{event.name}</div>
-                      <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>{formatDate(event.date)}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button style={btnPrimary(accent)} onClick={saveBranding} disabled={savingBranding}>
-                  {savingBranding ? 'Ukládám...' : 'Uložit branding'}
-                </button>
-                {brandingMsg && <span style={{ fontSize: 13, color: brandingMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{brandingMsg}</span>}
-              </div>
-            </section>
+            </div>
 
-            <section style={card}>
-              <h2 style={sectionTitle}>Informace o akci</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}>
-                <div>
-                  <div style={labelStyle}>Název akce</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.name}</div>
+            {/* Náhled emailu */}
+            <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Náhled emailu pro hosty</h3>
+              <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Email který hosté obdrží s odkazem na galerii.</p>
+              <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #e5e7eb', maxWidth: 480 }}>
+                <div style={{ background: (event as any).email_header_color ?? '#1a1225', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 56 }}>
+                  {event.client_logo_url
+                    ? <img src={event.client_logo_url} alt="" style={{ maxHeight: 36, maxWidth: 160, objectFit: 'contain' }} />
+                    : <span style={{ color: '#b7e94c', fontWeight: 700, fontSize: 16 }}>Piclio</span>}
                 </div>
-                <div>
-                  <div style={labelStyle}>Místo konání</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{event.location ?? '—'}</div>
+                <div style={{ height: 4, background: event.brand_color ?? '#b7e94c' }} />
+                {(event as any).email_banner_url
+                  ? <img src={(event as any).email_banner_url} alt="" style={{ width: '100%', height: 80, objectFit: 'cover', display: 'block' }} />
+                  : <div style={{ height: 60, background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: 11, color: '#9ca3af' }}>banner eventu</span></div>}
+                <div style={{ padding: '16px 20px', background: '#fff' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#111827', marginBottom: 10 }}>Vaše fotografie z akce {event.name} jsou připraveny</div>
+                  <div style={{ fontSize: 12, color: '#374151', lineHeight: 1.6, marginBottom: 14 }}>Dobrý den,<br/>připravili jsme pro vás fotografie z akce {event.name}.<br/>Klikněte na odkaz níže a prohlédněte si svoji galerii.</div>
+                  <div style={{ background: event.brand_color ?? '#b7e94c', color: '#1a1225', padding: '10px 16px', borderRadius: 8, fontWeight: 700, textAlign: 'center' as const, fontSize: 13 }}>Otevřít galerii →</div>
                 </div>
-                <div>
-                  <div style={labelStyle}>Datum</div>
-                  <div style={{ ...inputStyle, background: '#f9fafb', color: '#6b7280' }}>{formatDate(event.date)}</div>
-                </div>
+                <div style={{ padding: '10px 20px', background: '#f9fafb', borderTop: '1px solid #f3f4f6', fontSize: 11, color: '#9ca3af', textAlign: 'center' as const }}>Piclio by Lucifera Studio</div>
               </div>
-              <div style={{ marginBottom: 16 }}>
-                <label style={labelStyle}>Popis akce</label>
-                <textarea
-                  style={{ ...inputStyle, height: 100, resize: 'vertical' as const, marginBottom: 12 }}
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
-                  placeholder="Stručný popis akce, program, speciální požadavky…"
-                />
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <button style={btnPrimary(accent)} onClick={saveInfo} disabled={savingInfo}>
-                    {savingInfo ? 'Ukládám...' : 'Požádat o změny'}
-                  </button>
-                  {infoMsg && <span style={{ fontSize: 13, color: infoMsg.startsWith('✓') ? '#16a34a' : '#dc2626' }}>{infoMsg}</span>}
-                </div>
-              </div>
-            </section>
+            </div>
 
-            <section style={card}>
-              <h2 style={sectionTitle}>Schválení overlay</h2>
-              <div style={{ marginBottom: 16, padding: '12px 16px', background: overlayApproved ? '#f0fdf4' : '#fef9c3', borderRadius: 8, fontSize: 14 }}>
-                {overlayApproved ? '✅ Overlay byl schválen' : '⏳ Overlay čeká na schválení'}
-              </div>
-              {event.overlay_portrait_url || event.overlay_landscape_url ? (
-                <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', flexWrap: 'wrap' as const, marginBottom: 16 }}>
-                  {event.overlay_portrait_url && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div onClick={() => setOverlayFullscreen('portrait')} title="Kliknutím zobrazit větší náhled"
-                        style={{ aspectRatio: '2/3', width: 133, position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}>
-                        <img src="/demo/demo-portrait.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                        <img src={event.overlay_portrait_url} alt="Overlay portrét" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-                      </div>
-                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Portrét</span>
-                    </div>
-                  )}
-                  {event.overlay_landscape_url && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div onClick={() => setOverlayFullscreen('landscape')} title="Kliknutím zobrazit větší náhled"
-                        style={{ aspectRatio: '3/2', height: 133, width: 'auto', position: 'relative', overflow: 'hidden', borderRadius: 10, flexShrink: 0, cursor: 'zoom-in' }}>
-                        <img src="/demo/demo-krajina.jpg" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-                        <img src={event.overlay_landscape_url} alt="Overlay krajina" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
-                      </div>
-                      <span style={{ fontSize: 11, color: '#6b7280', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Krajina</span>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div style={{ marginBottom: 16, padding: '14px 16px', background: '#f3f4f6', borderRadius: 8, fontSize: 13, color: '#6b7280' }}>
-                  <em>Fotograf zatím nenahrál žádnou overlay šablonu.</em>
-                </div>
-              )}
-              <label style={labelStyle}>Komentář / žádost o změny</label>
-              <textarea style={{ ...inputStyle, height: 80, resize: 'vertical' as const }}
-                value={overlayNotes} onChange={e => setOverlayNotes(e.target.value)}
-                placeholder="Např.: prosím zvětšit logo, změnit pozici čísla..." />
-              <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-                {!overlayApproved && (
-                  <button style={btnPrimary('#16a34a')} onClick={() => saveOverlay(true)} disabled={savingOverlay}>✓ Schválit overlay</button>
+            {/* Náhled slideshow */}
+            <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Náhled slideshow / galerie</h3>
+              <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Vizuální styl projekce nastavený fotografem.</p>
+              <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #e5e7eb', aspectRatio: '16/9', position: 'relative', background: (event as any).slideshow_bg === 'light' ? '#fff' : (event as any).slideshow_bg === 'brand' ? (event.brand_color ?? '#000') : '#000' }}>
+                {(event as any).slideshow_bar_enabled && (
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 44, background: (event as any).slideshow_bar_color === 'brand' ? (event.brand_color ?? '#1a1225') : (event as any).slideshow_bar_color === 'transparent' ? 'rgba(0,0,0,0.3)' : ((event as any).slideshow_bar_color ?? '#1a1225'), display: 'flex', alignItems: 'center', padding: '0 16px', justifyContent: 'space-between' }}>
+                    {event.client_logo_url
+                      ? <img src={event.client_logo_url} alt="" style={{ height: 24, objectFit: 'contain', maxWidth: 100 }} />
+                      : <span style={{ color: '#fff', fontWeight: 700, fontSize: 12 }}>LOGO</span>}
+                    <span style={{ color: '#fff', fontSize: 11, opacity: 0.7 }}>{event.name}</span>
+                  </div>
                 )}
-                <button style={{ ...btnSecondary, borderColor: '#dc2626', color: '#dc2626' }} onClick={() => saveOverlay(false)} disabled={savingOverlay}>✗ Požádat o změny</button>
-                {overlayMsg && <span style={{ fontSize: 13, color: overlayMsg.startsWith('✓') ? '#16a34a' : '#dc2626', alignSelf: 'center' }}>{overlayMsg}</span>}
+                {(event as any).slideshow_overlay_url && (
+                  <img src={(event as any).slideshow_overlay_url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', opacity: 0.6 }} />
+                )}
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: '40%', height: '70%', background: 'rgba(255,255,255,0.1)', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }}>fotka</span>
+                  </div>
+                </div>
               </div>
-            </section>
+            </div>
+
+            {/* Poznámky pro fotografa */}
+            <div style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 4px' }}>Poznámky pro fotografa</h3>
+              <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 12px' }}>Zde můžete napsat požadavky nebo připomínky k zapracování.</p>
+              <textarea
+                rows={4}
+                value={overlayNotes}
+                onChange={e => setOverlayNotes(e.target.value)}
+                placeholder="Např. Prosím o úpravu barvy loga, nebo jiné poznámky pro fotografa..."
+                style={{ width: '100%', boxSizing: 'border-box' as const, padding: '10px 12px', borderRadius: 8, border: '1px solid #d1d5db', fontSize: 14, resize: 'vertical' as const, outline: 'none' }}
+              />
+              <button
+                onClick={async () => {
+                  await fetch(`/api/client/${eventSlug}/approve-overlay`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ approved: true, notes: overlayNotes }),
+                  })
+                  setBrandingMsg('✓ Poznámky odeslány fotografovi')
+                }}
+                style={{ marginTop: 10, background: '#111827', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 20px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+              >
+                Odeslat poznámky fotografovi
+              </button>
+              {brandingMsg && <span style={{ marginLeft: 12, fontSize: 13, color: '#16a34a' }}>{brandingMsg}</span>}
+            </div>
 
           </div>
         )}
 
       </div>
-
-      {/* Overlay fullscreen modal */}
-      {overlayFullscreen && (() => {
-        const isPortrait = overlayFullscreen === 'portrait'
-        const overlaySrc = isPortrait ? event.overlay_portrait_url : event.overlay_landscape_url
-        return (
-          <div onClick={() => setOverlayFullscreen(null)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div onClick={e => e.stopPropagation()}
-              style={{ position: 'relative', overflow: 'hidden', borderRadius: 10, aspectRatio: isPortrait ? '2/3' : '3/2', ...(isPortrait ? { width: 'min(calc(80vh * 2 / 3), 90vw)' } : { height: 'min(80vh, calc(90vw * 2 / 3))' }) }}>
-              <img src={isPortrait ? '/demo/demo-portrait.jpg' : '/demo/demo-krajina.jpg'} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-              {overlaySrc && <img src={overlaySrc} alt="Overlay" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />}
-            </div>
-            <button onClick={() => setOverlayFullscreen(null)}
-              style={{ position: 'fixed', top: 16, right: 16, zIndex: 1001, background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 8, color: 'white', fontSize: 22, width: 40, height: 40, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              ×
-            </button>
-          </div>
-        )
-      })()}
     </div>
   )
 }

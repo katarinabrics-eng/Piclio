@@ -21,6 +21,8 @@ interface SlideshowEvent {
   slideshow_bar_color?: string | null
   slideshow_bar_enabled?: boolean | null
   brand_color?: string | null
+  slideshow_overlay_url?: string | null
+  slideshow_overlay_mode?: string | null
 }
 
 interface SlideshowSettings {
@@ -190,13 +192,19 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     // single / kenburns / slide layout
     return (
       <>
+        {overlayUrl && overlayMode === 'under' && (
+          <img src={overlayUrl} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'contain', pointerEvents: 'none', zIndex: 0,
+          }} />
+        )}
         <img
           key={photo?.id}
           src={photo?.url}
           alt=""
           style={{
             position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'contain',
+            objectFit: 'contain', zIndex: 1,
             opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
             transition: initialSettings.animation === 'fade' ? 'opacity 0.35s ease' : 'none',
             animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
@@ -210,10 +218,16 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             alt=""
             style={{
               position: 'absolute', inset: 0, width: '100%', height: '100%',
-              objectFit: 'contain',
+              objectFit: 'contain', zIndex: 1,
               animation: 'slideInRight 0.4s ease forwards',
             }}
           />
+        )}
+        {overlayUrl && overlayMode === 'over' && (
+          <img src={overlayUrl} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'contain', pointerEvents: 'none', zIndex: 2,
+          }} />
         )}
       </>
     )
@@ -234,6 +248,8 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   })()
 
   const textColor = initialEvent.slideshow_bg === 'light' ? '#111827' : '#ffffff'
+  const overlayUrl = initialEvent.slideshow_overlay_url ?? null
+  const overlayMode = initialEvent.slideshow_overlay_mode ?? 'none'
 
   return (
   <div
