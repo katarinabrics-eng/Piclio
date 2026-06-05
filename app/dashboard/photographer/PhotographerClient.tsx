@@ -1220,28 +1220,84 @@ export function PhotographerClient() {
             {/* PODKLADY OD ZADAVATELE */}
             {key === 'podklady' && (
               <div style={{ paddingTop: 16 }}>
-                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Logo a barva nahrané zadavatelem v jeho dashboardu.</p>
-                {selectedEvent?.client_logo_url ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 8 }}>Logo</div>
-                      <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '16px 20px', display: 'inline-flex', alignItems: 'center', gap: 20 }}>
-                        <img src={selectedEvent.client_logo_url} alt="Logo" style={{ maxHeight: 80, maxWidth: 200, objectFit: 'contain' }} />
-                        <a href={selectedEvent.client_logo_url} download style={{ background: '#111827', color: '#fff', textDecoration: 'none', borderRadius: 8, padding: '8px 16px', fontSize: 13, fontWeight: 600 }}>↓ Stáhnout logo</a>
-                      </div>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>
+                  Logo a brand barva eventu. Nahráno fotografem, zadavatel potvrdí platnost ve svém dashboardu.
+                </p>
+
+                {/* Logo */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#374151', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 8 }}>Logo klienta / firmy</div>
+                  <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                    <div
+                      onClick={() => document.getElementById('client-logo-input')?.click()}
+                      style={{ border: '2px dashed #d1d5db', borderRadius: 10, padding: '14px 20px', cursor: 'pointer', textAlign: 'center' as const, background: '#fafafa', minWidth: 160 }}
+                    >
+                      {selectedEvent?.client_logo_url ? (
+                        <img src={selectedEvent.client_logo_url} alt="" style={{ maxHeight: 60, maxWidth: 160, objectFit: 'contain', display: 'block', margin: '0 auto 8px' }} />
+                      ) : (
+                        <div style={{ fontSize: 22, marginBottom: 4 }}>🖼</div>
+                      )}
+                      <div style={{ fontSize: 12, color: '#6b7280' }}>PNG nebo SVG · průhledné<br/>doporučeno 400 × 120 px</div>
                     </div>
-                    {selectedEvent.brand_color && (
-                      <div>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 8 }}>Brand barva</div>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 16px' }}>
-                          <div style={{ width: 28, height: 28, borderRadius: 6, background: selectedEvent.brand_color, border: '1px solid rgba(0,0,0,0.1)' }} />
-                          <span style={{ fontSize: 14, fontFamily: 'monospace', fontWeight: 600, color: '#111827' }}>{selectedEvent.brand_color}</span>
-                        </div>
+                    <input id="client-logo-input" type="file" accept="image/png,image/svg+xml,image/jpeg" style={{ display: 'none' }}
+                      onChange={async e => {
+                        const file = e.target.files?.[0]
+                        if (!file || !selectedEvent) return
+                        const form = new FormData()
+                        form.append('logo', file)
+                        const res = await fetch(`/api/client/${selectedEvent.slug}/branding`, { method: 'PUT', body: form })
+                        const data = await res.json()
+                        if (data.client_logo_url) {
+                          setSelectedEvent(prev => prev ? { ...prev, client_logo_url: data.client_logo_url } : prev)
+                        }
+                      }}
+                    />
+                    {selectedEvent?.client_logo_url && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <a href={selectedEvent.client_logo_url} download style={{ background: '#111827', color: '#fff', textDecoration: 'none', borderRadius: 8, padding: '8px 14px', fontSize: 12, fontWeight: 600 }}>↓ Stáhnout</a>
+                        <button onClick={async () => {
+                          if (!selectedEvent) return
+                          await fetch('/api/photographer/events', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedEvent.id, clientLogoUrl: null }) })
+                          setSelectedEvent(prev => prev ? { ...prev, client_logo_url: '' } : prev)
+                        }} style={{ background: 'none', border: '1px solid #e5e7eb', borderRadius: 8, padding: '8px 14px', fontSize: 12, color: '#6b7280', cursor: 'pointer' }}>Odebrat</button>
                       </div>
                     )}
                   </div>
-                ) : (
-                  <div style={{ padding: '14px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13, color: '#9ca3af' }}>Zadavatel zatím nenahrál podklady.</div>
+                </div>
+
+                {/* Brand barva */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#374151', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 8 }}>Brand barva</div>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' as const }}>
+                    {['#b7e94c', '#1a1225', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#000000', '#ffffff'].map(c => (
+                      <button key={c} onClick={async () => {
+                        if (!selectedEvent) return
+                        await fetch('/api/photographer/events', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedEvent.id, brandColor: c }) })
+                        setSelectedEvent(prev => prev ? { ...prev, brand_color: c } : prev)
+                      }} style={{ width: 32, height: 32, borderRadius: '50%', background: c, border: selectedEvent?.brand_color === c ? '3px solid #111827' : '2px solid #e5e7eb', cursor: 'pointer', flexShrink: 0, boxShadow: selectedEvent?.brand_color === c ? '0 0 0 2px #fff inset' : 'none' }} />
+                    ))}
+                    <input type="color" value={selectedEvent?.brand_color ?? '#b7e94c'}
+                      onChange={async e => {
+                        if (!selectedEvent) return
+                        const c = e.target.value
+                        await fetch('/api/photographer/events', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedEvent.id, brandColor: c }) })
+                        setSelectedEvent(prev => prev ? { ...prev, brand_color: c } : prev)
+                      }}
+                      style={{ width: 32, height: 32, border: '1px solid #d1d5db', borderRadius: '50%', padding: 2, cursor: 'pointer' }}
+                    />
+                    <span style={{ fontSize: 13, fontFamily: 'monospace', color: '#374151' }}>{selectedEvent?.brand_color ?? '#b7e94c'}</span>
+                  </div>
+                </div>
+
+                {/* Náhled */}
+                {selectedEvent?.client_logo_url && (
+                  <div style={{ padding: '12px 16px', background: '#f9fafb', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <img src={selectedEvent.client_logo_url} alt="" style={{ height: 32, objectFit: 'contain', maxWidth: 120 }} />
+                    {selectedEvent.brand_color && (
+                      <div style={{ width: 24, height: 24, borderRadius: '50%', background: selectedEvent.brand_color, border: '1px solid rgba(0,0,0,0.1)' }} />
+                    )}
+                    <span style={{ fontSize: 12, color: '#6b7280' }}>Náhled kombinace loga a barvy</span>
+                  </div>
                 )}
               </div>
             )}
