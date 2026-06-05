@@ -174,21 +174,21 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
         <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 8, padding: 8 }}>
           <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain',
+              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
           <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo2?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain',
+              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
           <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo3?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain',
+              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
@@ -213,7 +213,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             alt=""
             style={{
               width: '100%', height: '100%',
-              objectFit: 'contain',
+              objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: slideshowEffect === 'fade' ? 'opacity 0.35s ease' : 'none',
               animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
@@ -227,7 +227,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               key={(photo2?.id ?? '') + '-in'}
               src={photo2?.url}
               alt=""
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16 }}
             />
           </div>
         )}
