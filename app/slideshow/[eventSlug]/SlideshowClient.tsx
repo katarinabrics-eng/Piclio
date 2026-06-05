@@ -171,7 +171,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
     if (layout === 'grid') {
       return (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 8, padding: 8 }}>
+        <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, display: 'flex', gap: 8 }}>
           <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <img src={photo?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
@@ -200,7 +200,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     // single / kenburns / slide layout
     return (
       <>
-        <div style={{ position: 'absolute', inset: 16, zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             key={photo?.id}
             src={photo?.url}
@@ -219,7 +219,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           />
         </div>
         {slideshowEffect === 'slide' && animating && (
-          <div style={{ position: 'absolute', inset: 16, zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'slideInRight 0.4s ease forwards' }}>
+          <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'slideInRight 0.4s ease forwards' }}>
             <img
               key={(photo2?.id ?? '') + '-in'}
               src={photo2?.url}
