@@ -172,21 +172,21 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     if (layout === 'grid') {
       return (
         <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 8, padding: 8 }}>
-          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <img src={photo?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
-          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <img src={photo2?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
-          <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <img src={photo3?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
@@ -200,14 +200,17 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     // single / kenburns / slide layout
     return (
       <>
-        <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1 }}>
+        <div style={{ position: 'absolute', inset: 16, zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             key={photo?.id}
             src={photo?.url}
             alt=""
             style={{
-              width: '100%', height: '100%',
+              maxWidth: '100%', maxHeight: '100%',
+              width: 'auto', height: 'auto',
               objectFit: 'contain', borderRadius: 16,
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
               opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: slideshowEffect === 'fade' ? 'opacity 0.35s ease' : 'none',
               animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
@@ -216,12 +219,12 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           />
         </div>
         {slideshowEffect === 'slide' && animating && (
-          <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1, animation: 'slideInRight 0.4s ease forwards' }}>
+          <div style={{ position: 'absolute', inset: 16, zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'slideInRight 0.4s ease forwards' }}>
             <img
               key={(photo2?.id ?? '') + '-in'}
               src={photo2?.url}
               alt=""
-              style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16 }}
+              style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}
             />
           </div>
         )}
@@ -527,7 +530,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
     {/* Controls */}
     {!showIntro && (
-      <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: '8px 18px', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s', pointerEvents: showControls ? 'auto' : 'none' }}>
+      <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(0,0,0,0.6)', borderRadius: 12, padding: '8px 18px', opacity: showControls ? 1 : 0, transition: 'opacity 0.4s', pointerEvents: showControls ? 'auto' : 'none', zIndex: 10 }}>
         <button onClick={() => advance(-1)} style={ctrlBtn}>‹</button>
         <button onClick={() => setPlaying(p => !p)} style={ctrlBtn}>{playing ? '⏸' : '▶'}</button>
         <button onClick={() => advance(1)} style={ctrlBtn}>›</button>
