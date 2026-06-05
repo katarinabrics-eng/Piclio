@@ -52,6 +52,8 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
   const activePhotos = slideshowContent === 'selected'
     ? photos.filter(p => selectedPhotoIds.has(p.id))
+    : slideshowContent === 'by-guest'
+    ? photos.filter(p => selectedPhotoIds.has(p.id))
     : photos
   const [slideshowOrder, setSlideshowOrder] = useState<'random' | 'newest' | 'oldest'>('random')
   const [slideshowEffect, setSlideshowEffect] = useState<'fade' | 'slide' | 'kenburns' | 'none'>('fade')
@@ -61,9 +63,16 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const photosRef = useRef(photos)
-  useEffect(() => { photosRef.current = activePhotos }, [activePhotos])
+  const orderedPhotos = React.useMemo(() => {
+    const arr = [...activePhotos]
+    if (slideshowOrder === 'newest') return arr.sort((a, b) => new Date(b.uploaded_at).getTime() - new Date(a.uploaded_at).getTime())
+    if (slideshowOrder === 'oldest') return arr.sort((a, b) => new Date(a.uploaded_at).getTime() - new Date(b.uploaded_at).getTime())
+    return arr.sort(() => Math.random() - 0.5)
+  }, [activePhotos, slideshowOrder])
 
-  const intervalMs = (initialSettings.interval ?? 5) * 1000
+  useEffect(() => { photosRef.current = orderedPhotos }, [orderedPhotos])
+
+  const intervalMs = slideshowInterval * 1000
 
   const supabase = useRef(
     createBrowserClient(
@@ -96,14 +105,13 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
   const advance = useCallback((dir: 1 | -1 = 1) => {
     if (photosRef.current.length === 0) return
-    const anim = initialSettings.animation
-    if (anim === 'fade') {
+    if (slideshowEffect === 'fade') {
       setVisible(false)
       setTimeout(() => {
         setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
         setVisible(true)
       }, 350)
-    } else if (anim === 'slide') {
+    } else if (slideshowEffect === 'slide') {
       setAnimating(true)
       setTimeout(() => {
         setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
@@ -112,13 +120,13 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     } else {
       setCurrent(i => (i + dir + photosRef.current.length) % photosRef.current.length)
     }
-  }, [initialSettings.animation])
+  }, [slideshowEffect])
 
   useEffect(() => {
-    if (!playing || activePhotos.length <= 1) return
+    if (!playing || orderedPhotos.length <= 1) return
     const id = setInterval(() => advance(1), intervalMs)
     return () => clearInterval(id)
-  }, [playing, activePhotos.length, intervalMs, advance])
+  }, [playing, orderedPhotos.length, intervalMs, advance])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -146,14 +154,14 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const layout = initialSettings.layout
-  const n = Math.max(activePhotos.length, 1)
-  const photo  = activePhotos[current]
-  const photo2 = activePhotos[(current + 1) % n]
-  const photo3 = activePhotos[(current + 2) % n]
+  const layout = slideshowLayout
+  const n = Math.max(orderedPhotos.length, 1)
+  const photo  = orderedPhotos[current]
+  const photo2 = orderedPhotos[(current + 1) % n]
+  const photo3 = orderedPhotos[(current + 2) % n]
 
   function renderContent() {
-    if (activePhotos.length === 0) {
+    if (orderedPhotos.length === 0) {
       return (
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(183,233,76,0.25)', fontSize: 16, letterSpacing: '0.1em' }}>
           Čeká se na fotky…
@@ -167,21 +175,21 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
           <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain',
-              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
           <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo2?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain',
-              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
           <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo3?.url} alt="" style={{
               width: '100%', height: '100%', objectFit: 'contain',
-              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
@@ -206,14 +214,14 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             style={{
               width: '100%', height: '100%',
               objectFit: 'contain',
-              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: initialSettings.animation === 'fade' ? 'opacity 0.35s ease' : 'none',
+              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
+              transition: slideshowEffect === 'fade' ? 'opacity 0.35s ease' : 'none',
               animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
-              transform: initialSettings.animation === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
+              transform: slideshowEffect === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
             }}
           />
         </div>
-        {initialSettings.animation === 'slide' && animating && (
+        {slideshowEffect === 'slide' && animating && (
           <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1, animation: 'slideInRight 0.4s ease forwards' }}>
             <img
               key={(photo2?.id ?? '') + '-in'}
