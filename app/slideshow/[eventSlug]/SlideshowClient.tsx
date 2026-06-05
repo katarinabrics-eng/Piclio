@@ -200,12 +200,6 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     // single / kenburns / slide layout
     return (
       <>
-        {overlayUrl && overlayMode === 'under' && (
-          <img src={overlayUrl} alt="" style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover', pointerEvents: 'none', zIndex: 0,
-          }} />
-        )}
         <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1 }}>
           <img
             key={photo?.id}
@@ -230,12 +224,6 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16 }}
             />
           </div>
-        )}
-        {overlayUrl && overlayMode === 'over' && (
-          <img src={overlayUrl} alt="" style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover', pointerEvents: 'none', zIndex: 2,
-          }} />
         )}
       </>
     )
@@ -483,7 +471,25 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     )}
 
     {/* SLIDESHOW — fotky */}
-    {!showIntro && renderContent()}
+    {!showIntro && (
+      <>
+        {overlayUrl && overlayMode === 'under' && (
+          <img src={overlayUrl} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', pointerEvents: 'none', zIndex: 1,
+          }} />
+        )}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+          {renderContent()}
+        </div>
+        {overlayUrl && overlayMode === 'over' && (
+          <img src={overlayUrl} alt="" style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: 'cover', pointerEvents: 'none', zIndex: 3,
+          }} />
+        )}
+      </>
+    )}
 
     {/* Horní lišta s logem */}
     {!showIntro && initialEvent.slideshow_bar_enabled && (
