@@ -13,12 +13,14 @@ export async function GET(_req: NextRequest, { params }: { params: { eventSlug: 
   if (!event) return NextResponse.json({ error: 'Event not found' }, { status: 404 })
 
   // Načítaj VŠETKY fotky eventu priamo
-  const { data: photos } = await supabaseAdmin
+  const { data: photos, error: photosError } = await supabaseAdmin
     .from('photos')
     .select('id, filename, storage_path, status, uploaded_at')
     .eq('event_id', event.id)
-    .neq('status', 'deleted')
+    .neq('is_deleted', true)
     .order('uploaded_at', { ascending: false })
+
+  console.log(`[slideshow] event=${event.id} photos=${photos?.length ?? 0} error=${photosError?.message ?? 'none'}`)
 
   // Vygeneruj signed URLs
   const photosWithUrls = await Promise.all(
