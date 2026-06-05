@@ -17,6 +17,10 @@ interface SlideshowEvent {
   event_category?: string | null
   client_logo_url?: string | null
   client_name?: string | null
+  slideshow_bg?: string | null
+  slideshow_bar_color?: string | null
+  slideshow_bar_enabled?: boolean | null
+  brand_color?: string | null
 }
 
 interface SlideshowSettings {
@@ -215,9 +219,25 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
     )
   }
 
+  const bgColor = (() => {
+    if (initialEvent.slideshow_bg === 'light') return '#ffffff'
+    if (initialEvent.slideshow_bg === 'brand') return initialEvent.brand_color ?? '#000000'
+    return '#000000' // dark (default)
+  })()
+
+  const barColor = (() => {
+    if (initialEvent.slideshow_bar_color === 'brand') return initialEvent.brand_color ?? '#1a1225'
+    if (initialEvent.slideshow_bar_color === 'transparent') return 'transparent'
+    if (initialEvent.slideshow_bar_color === '#ffffff') return '#ffffff'
+    if (initialEvent.slideshow_bar_color === '#000000') return '#000000'
+    return 'transparent'
+  })()
+
+  const textColor = initialEvent.slideshow_bg === 'light' ? '#111827' : '#ffffff'
+
   return (
   <div
-    style={{ height: '100vh', background: '#000', position: 'relative', overflow: 'hidden' }}
+    style={{ height: '100vh', background: bgColor, position: 'relative', overflow: 'hidden' }}
     onMouseMove={resetHideTimer}
   >
     <style>{`
@@ -440,6 +460,26 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
     {/* SLIDESHOW — fotky */}
     {!showIntro && renderContent()}
+
+    {/* Horní lišta s logem */}
+    {!showIntro && initialEvent.slideshow_bar_enabled && (
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10,
+        background: barColor,
+        backdropFilter: barColor === 'transparent' ? 'blur(8px)' : 'none',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '10px 24px', height: 60,
+        borderBottom: barColor === 'transparent' ? '1px solid rgba(255,255,255,0.1)' : 'none',
+      }}>
+        {initialEvent.client_logo_url
+          ? <img src={initialEvent.client_logo_url} alt="" style={{ height: 36, objectFit: 'contain', maxWidth: 180 }} />
+          : <span style={{ color: textColor, fontWeight: 800, fontSize: 16, letterSpacing: '0.1em' }}>PICLIO</span>
+        }
+        <span style={{ color: textColor, fontSize: 14, fontWeight: 600, opacity: 0.7 }}>
+          {initialEvent.name}
+        </span>
+      </div>
+    )}
 
     {/* Event name */}
     {!showIntro && (
