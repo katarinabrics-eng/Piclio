@@ -39,6 +39,21 @@ export async function PUT(req: NextRequest, { params }: { params: { eventSlug: s
       return NextResponse.json({ ok: true, email_banner_url: emailBannerUrl })
     }
 
+    // Slideshow overlay upload
+    const slideshowOverlay = form.get('slideshow_overlay') as File | null
+    if (slideshowOverlay && slideshowOverlay.size > 0) {
+      const buffer = Buffer.from(await slideshowOverlay.arrayBuffer())
+      const path = `${params.eventSlug}/slideshow-overlay.png`
+      await supabaseAdmin.storage.createBucket('overlays', { public: true }).catch(() => {})
+      const { error } = await supabaseAdmin.storage
+        .from('overlays')
+        .upload(path, buffer, { contentType: 'image/png', upsert: true })
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const { data: urlData } = supabaseAdmin.storage.from('overlays').getPublicUrl(path)
+      await supabaseAdmin.from('events').update({ slideshow_overlay_url: urlData.publicUrl }).eq('id', event.id)
+      return NextResponse.json({ ok: true, slideshow_overlay_url: urlData.publicUrl })
+    }
+
     const file = form.get('logo') as File | null
     if (file && file.size > 0) {
       // Smaž staré logo pokud existuje

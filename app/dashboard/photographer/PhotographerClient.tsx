@@ -1368,15 +1368,6 @@ export function PhotographerClient() {
                     {!overlayLandscapeUrl && <button onClick={() => handleOverlayUpload('landscape')} disabled={!overlayLandscape || !!overlayLandscapeError || overlayLandscapeUploading} style={{ background: overlayLandscape && !overlayLandscapeError ? '#b7e94c' : '#e5e7eb', color: overlayLandscape && !overlayLandscapeError ? '#1a1225' : '#9ca3af', border: 'none', borderRadius: 8, padding: '10px', fontSize: 13, fontWeight: 700, cursor: overlayLandscape && !overlayLandscapeError ? 'pointer' : 'not-allowed' }}>{overlayLandscapeUploading ? 'Nahrávám…' : 'Nahrát do Piclio'}</button>}
                   </div>
                 </div>
-                <div style={{ marginTop: 16, padding: '12px 16px', background: '#f9fafb', borderRadius: 8, display: 'flex', gap: 12, alignItems: 'center' }}>
-                  <div style={{ fontSize: 13 }}>
-                    <span style={{ fontWeight: 600, color: '#374151' }}>Stav schválení: </span>
-                    <span style={{ color: overlayApproved ? '#16a34a' : '#d97706' }}>{overlayApproved ? '✅ Schváleno zadavatelem' : '⏳ Čeká na schválení'}</span>
-                  </div>
-                  <button onClick={async () => { if (!selectedEvent) return; await fetch('/api/photographer/events', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selectedEvent.id, overlayStatus: 'pending_client' }) }); alert('Odesláno ke schválení') }} style={{ marginLeft: 'auto', background: '#111827', color: '#fff', border: 'none', borderRadius: 6, padding: '6px 14px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
-                    Odeslat ke schválení →
-                  </button>
-                </div>
               </div>
             )}
 
@@ -1475,12 +1466,6 @@ export function PhotographerClient() {
                       }
                     }}
                   />
-                  <div style={{ marginTop: 12, padding: '10px 14px', background: '#f9fafb', borderRadius: 8, fontSize: 12, color: '#6b7280', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>Stav schválení grafiky pro projekci: <span style={{ color: '#d97706', fontWeight: 600 }}>⏳ Čeká</span></span>
-                    <button onClick={async () => { alert('Odesláno ke schválení zadavateli') }} style={{ background: '#111827', color: '#fff', border: 'none', borderRadius: 6, padding: '5px 12px', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
-                      Odeslat ke schválení →
-                    </button>
-                  </div>
                 </div>
               </div>
             )}
@@ -1488,22 +1473,7 @@ export function PhotographerClient() {
             {/* POZNÁMKY A SCHVÁLENÍ */}
             {key === 'poznamky' && (
               <div style={{ paddingTop: 16 }}>
-                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Poznámky od zadavatele a stav schválení grafiky.</p>
-                {overlayNotes && (
-                  <div style={{ padding: '12px 16px', background: '#fefce8', border: '1px solid #fde047', borderRadius: 8, fontSize: 13, color: '#854d0e', marginBottom: 16 }}>
-                    💬 {overlayNotes}
-                  </div>
-                )}
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <div style={{ flex: 1, padding: '12px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13 }}>
-                    <div style={{ fontWeight: 600, color: '#374151', marginBottom: 4 }}>Grafika pro fotky</div>
-                    <div style={{ color: overlayApproved ? '#16a34a' : '#d97706' }}>{overlayApproved ? '✅ Schváleno' : '⏳ Čeká na schválení'}</div>
-                  </div>
-                  <div style={{ flex: 1, padding: '12px 16px', background: '#f9fafb', borderRadius: 8, fontSize: 13 }}>
-                    <div style={{ fontWeight: 600, color: '#374151', marginBottom: 4 }}>Grafika pro projekci</div>
-                    <div style={{ color: '#9ca3af' }}>⏳ Čeká na schválení</div>
-                  </div>
-                </div>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: 0 }}>Poznámky od zadavatele se zobrazí zde.</p>
               </div>
             )}
 
