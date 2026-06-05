@@ -163,24 +163,24 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
 
     if (layout === 'grid') {
       return (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 4, padding: 4 }}>
-          <div style={{ flex: 1, overflow: 'hidden', borderRadius: 4 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', gap: 8, padding: 8 }}>
+          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'cover',
+              width: '100%', height: '100%', objectFit: 'contain',
               opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
-          <div style={{ flex: 1, overflow: 'hidden', borderRadius: 4 }}>
+          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo2?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'cover',
+              width: '100%', height: '100%', objectFit: 'contain',
               opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
           </div>
-          <div style={{ flex: 2, overflow: 'hidden', borderRadius: 4 }}>
+          <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden' }}>
             <img src={photo3?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'cover',
+              width: '100%', height: '100%', objectFit: 'contain',
               opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
               transition: 'opacity 0.35s ease',
             }} />
@@ -198,30 +198,30 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
             objectFit: 'contain', pointerEvents: 'none', zIndex: 0,
           }} />
         )}
-        <img
-          key={photo?.id}
-          src={photo?.url}
-          alt=""
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'contain', zIndex: 1,
-            opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
-            transition: initialSettings.animation === 'fade' ? 'opacity 0.35s ease' : 'none',
-            animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
-            transform: initialSettings.animation === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
-          }}
-        />
-        {initialSettings.animation === 'slide' && animating && (
+        <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1 }}>
           <img
-            key={(photo2?.id ?? '') + '-in'}
-            src={photo2?.url}
+            key={photo?.id}
+            src={photo?.url}
             alt=""
             style={{
-              position: 'absolute', inset: 0, width: '100%', height: '100%',
-              objectFit: 'contain', zIndex: 1,
-              animation: 'slideInRight 0.4s ease forwards',
+              width: '100%', height: '100%',
+              objectFit: 'contain',
+              opacity: initialSettings.animation === 'fade' ? (visible ? 1 : 0) : 1,
+              transition: initialSettings.animation === 'fade' ? 'opacity 0.35s ease' : 'none',
+              animation: layout === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : 'none',
+              transform: initialSettings.animation === 'slide' && animating ? 'translateX(-100%)' : 'translateX(0)',
             }}
           />
+        </div>
+        {initialSettings.animation === 'slide' && animating && (
+          <div style={{ position: 'absolute', inset: 8, borderRadius: 16, overflow: 'hidden', zIndex: 1, animation: 'slideInRight 0.4s ease forwards' }}>
+            <img
+              key={(photo2?.id ?? '') + '-in'}
+              src={photo2?.url}
+              alt=""
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </div>
         )}
         {overlayUrl && overlayMode === 'over' && (
           <img src={overlayUrl} alt="" style={{
