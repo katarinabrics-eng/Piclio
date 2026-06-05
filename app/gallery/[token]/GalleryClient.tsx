@@ -145,15 +145,17 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                 <div style={{ fontSize: 13, marginTop: 6 }}>Fotky se objeví automaticky po přiřazení</div>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
                 {photos.map(photo => (
                   <div key={photo.id} style={{ position: 'relative' }}>
-                    <img
-                      src={photo.url}
-                      alt={photo.filename}
-                      onClick={() => setLightboxIndex(photos.indexOf(photo))}
-                      style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block', cursor: 'pointer' }}
-                    />
+                    <div style={{ height: 220, background: '#f5f3ee', borderRadius: 8, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                      onClick={() => setLightboxIndex(photos.indexOf(photo))}>
+                      <img
+                        src={photo.url}
+                        alt={photo.filename}
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
+                      />
+                    </div>
                     <button
                       onClick={async (e) => {
                         e.stopPropagation()
@@ -204,11 +206,13 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
               <div style={{ marginTop: 12, fontSize: 16 }}>Žádné další fotky z eventu</div>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
               {eventPhotos.map(photo => (
                 <div key={photo.id}>
-                  <img src={photo.url} alt={photo.filename}
-                    style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: 8, display: 'block' }} />
+                  <div style={{ height: 220, background: '#f5f3ee', borderRadius: 8, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={photo.url} alt={photo.filename}
+                      style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
+                  </div>
                   <button onClick={() => claimPhoto(photo.id)} disabled={claiming === photo.id}
                     style={{ marginTop: 6, width: '100%', background: brandColor, color: '#fff', border: 'none', borderRadius: 6, padding: '6px 0', fontSize: 13, fontWeight: 600, cursor: 'pointer', opacity: claiming === photo.id ? 0.6 : 1 }}>
                     {claiming === photo.id ? '…' : 'Přidat do své galerie'}

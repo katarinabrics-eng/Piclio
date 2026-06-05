@@ -2207,7 +2207,7 @@ export function PhotographerClient() {
                   </div>
 
                   {/* Grid fotek */}
-                  <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8 }}>
+                  <div style={{ flex: 1, overflowY: 'auto', padding: 12, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
                     {galleryLoading && (
                       <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>Načítám…</div>
                     )}
@@ -2227,11 +2227,13 @@ export function PhotographerClient() {
                           })
                         }} style={{
                           position: 'relative', borderRadius: 8, overflow: 'hidden',
-                          cursor: inPlaylist ? 'default' : 'pointer', aspectRatio: '3/2',
+                          cursor: inPlaylist ? 'default' : 'pointer',
+                          height: 220, background: '#f5f3ee',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
                           border: selected ? '2px solid #b7e94c' : inPlaylist ? '2px solid #6b7280' : '2px solid transparent',
                           opacity: inPlaylist ? 0.5 : 1,
                         }}>
-                          <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                          <img src={photo.url} alt={photo.filename} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
                           {selected && (
                             <div style={{ position: 'absolute', top: 4, right: 4, background: '#b7e94c', borderRadius: '50%', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#1a1225' }}>✓</div>
                           )}

@@ -438,16 +438,17 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                   ) : albumPhotos.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af' }}>Zatím nejsou k dispozici žádné fotky</div>
                   ) : (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 8 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
                       {albumPhotos.map(photo => {
                         const selected = album.photoIds.includes(photo.id)
                         return (
                           <div key={photo.id} onClick={() => togglePhotoInAlbum(album.id, photo.id)} style={{
                             borderRadius: 8, overflow: 'hidden', cursor: 'pointer', position: 'relative',
                             border: `2px solid ${selected ? accent : 'transparent'}`,
-                            aspectRatio: '1',
+                            height: 220, background: '#f5f3ee',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}>
-                            <img src={photo.url} alt={photo.filename} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                            <img src={photo.url} alt={photo.filename} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />
                             {selected && (
                               <div style={{ position: 'absolute', top: 5, right: 5, width: 20, height: 20, borderRadius: '50%', background: accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#1a1225', fontWeight: 700 }}>
                                 ✓
@@ -479,13 +480,13 @@ export function ClientDashboard({ event, guests, stats, unmatchedPhotos, allPhot
                 <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 16 }}>
                   Celkem {eventPhotos.length} fotek z eventu
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
                   {eventPhotos.map((photo: any) => (
-                    <div key={photo.id} style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', aspectRatio: '1' }}>
+                    <div key={photo.id} style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', height: 220, background: '#f5f3ee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <img
                         src={photo.url}
                         alt={photo.filename}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
                       />
                       {photo.status === 'unmatched' && (
                         <div style={{
