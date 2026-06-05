@@ -190,11 +190,11 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
                 transform: `translateX(${translateX}%) scale(${scale})`,
                 transition: 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease',
                 opacity, zIndex: zIdx,
-                width: '55%', aspectRatio: '3/2',
+                width: '55%', maxHeight: '80%',
                 borderRadius: 16, overflow: 'hidden',
                 boxShadow: isCenter ? '0 16px 48px rgba(0,0,0,0.4)' : '0 4px 16px rgba(0,0,0,0.2)',
               }}>
-                {p && <img src={p.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+                {p && <img src={p.url} alt="" style={{ width: '100%', height: 'auto', maxHeight: '100%', objectFit: 'contain', display: 'block' }} />}
               </div>
             )
           })}
