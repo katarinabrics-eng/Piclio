@@ -58,7 +58,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   const [slideshowOrder, setSlideshowOrder] = useState<'random' | 'newest' | 'oldest'>('random')
   const [slideshowEffect, setSlideshowEffect] = useState<'fade' | 'slide' | 'kenburns' | 'none'>('fade')
   const [slideshowInterval, setSlideshowInterval] = useState(5)
-  const [slideshowLayout, setSlideshowLayout] = useState<'single' | 'grid' | 'alternating'>('single')
+  const [slideshowLayout, setSlideshowLayout] = useState<'single' | 'carousel'>('single')
   const [animating, setAnimating] = useState(false)
   const [showControls, setShowControls] = useState(true)
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -154,11 +154,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const layout = slideshowLayout
   const n = Math.max(orderedPhotos.length, 1)
-  const photo  = orderedPhotos[current]
-  const photo2 = orderedPhotos[(current + 1) % n]
-  const photo3 = orderedPhotos[(current + 2) % n]
 
   function renderContent() {
     if (orderedPhotos.length === 0) {
@@ -169,64 +165,58 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
       )
     }
 
-    if (layout === 'grid') {
+    const topOffset = initialEvent.slideshow_bar_enabled ? 76 : 16
+
+    if (slideshowLayout === 'carousel') {
+      const items = [-2, -1, 0, 1, 2].map(offset => {
+        const idx = (current + offset + orderedPhotos.length) % orderedPhotos.length
+        return { photo: orderedPhotos[idx], offset }
+      })
       return (
-        <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, display: 'flex', gap: 8 }}>
-          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
-            <img src={photo?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
-              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: 'opacity 0.35s ease',
-            }} />
-          </div>
-          <div style={{ flex: 1, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
-            <img src={photo2?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
-              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: 'opacity 0.35s ease',
-            }} />
-          </div>
-          <div style={{ flex: 2, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
-            <img src={photo3?.url} alt="" style={{
-              width: '100%', height: '100%', objectFit: 'contain', borderRadius: 16,
-              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: 'opacity 0.35s ease',
-            }} />
-          </div>
+        <div style={{
+          position: 'absolute', top: topOffset, left: 0, right: 0, bottom: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          overflow: 'hidden',
+        }}>
+          {items.map(({ photo: p, offset }) => {
+            const isCenter = offset === 0
+            const scale = isCenter ? 1 : Math.abs(offset) === 1 ? 0.72 : 0.52
+            const translateX = offset * 36
+            const opacity = Math.abs(offset) === 2 ? 0.25 : Math.abs(offset) === 1 ? 0.6 : 1
+            const zIdx = isCenter ? 5 : Math.abs(offset) === 1 ? 3 : 1
+            return (
+              <div key={p?.id ?? offset} style={{
+                position: 'absolute',
+                transform: `translateX(${translateX}%) scale(${scale})`,
+                transition: 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease',
+                opacity, zIndex: zIdx,
+                width: '55%', aspectRatio: '3/2',
+                borderRadius: 16, overflow: 'hidden',
+                boxShadow: isCenter ? '0 16px 48px rgba(0,0,0,0.4)' : '0 4px 16px rgba(0,0,0,0.2)',
+              }}>
+                {p && <img src={p.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+              </div>
+            )
+          })}
         </div>
       )
     }
 
-    // single / kenburns / slide layout
+    // single layout
+    const photo = orderedPhotos[current]
     return (
       <>
-        <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img
-            key={photo?.id}
-            src={photo?.url}
-            alt=""
-            style={{
-              maxWidth: '100%', maxHeight: '100%',
-              width: 'auto', height: 'auto',
-              objectFit: 'contain', borderRadius: 16,
-              overflow: 'hidden',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-              opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
-              transition: slideshowEffect === 'fade' ? 'opacity 0.6s ease-in-out' : 'none',
-              animation: slideshowEffect === 'kenburns' ? 'kenburns 8s ease-in-out infinite alternate' : slideshowEffect === 'slide' && animating ? 'slideOutLeft 0.5s ease forwards' : 'none',
-            }}
-          />
-        </div>
-        {slideshowEffect === 'slide' && animating && (
-          <div style={{ position: 'absolute', top: initialEvent.slideshow_bar_enabled ? 76 : 16, left: 16, right: 16, bottom: 16, zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'slideInRight 0.4s ease forwards' }}>
-            <img
-              key={(photo2?.id ?? '') + '-in'}
-              src={photo2?.url}
-              alt=""
-              style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}
-            />
-          </div>
-        )}
+        <img key={photo?.id} src={photo?.url} alt=""
+          style={{
+            position: 'absolute', top: topOffset, left: 16, right: 16, bottom: 16,
+            width: 'calc(100% - 32px)', height: `calc(100% - ${topOffset + 16}px)`,
+            objectFit: 'contain', borderRadius: 16,
+            opacity: slideshowEffect === 'fade' ? (visible ? 1 : 0) : 1,
+            transition: slideshowEffect === 'fade' ? 'opacity 0.8s ease-in-out' : 'none',
+            animation: slideshowEffect === 'kenburns' ? 'kenburns 10s ease-in-out infinite alternate' : 'none',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+          }}
+        />
       </>
     )
   }
@@ -305,7 +295,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               { label: 'OBSAH', value: slideshowContent === 'all' ? 'Všechny fotky' : slideshowContent === 'selected' ? 'Výběr fotek' : 'Dle hosta' },
               { label: 'EFEKT', value: slideshowEffect === 'fade' ? 'Prolínačka' : slideshowEffect === 'slide' ? 'Kolotoč' : slideshowEffect === 'kenburns' ? 'Zoom' : 'Bez efektu' },
               { label: 'INTERVAL', value: `${slideshowInterval} sekund` },
-              { label: 'LAYOUT', value: slideshowLayout === 'single' ? 'Jedna fotka' : slideshowLayout === 'grid' ? 'Mozaika' : 'Střídání' },
+              { label: 'LAYOUT', value: slideshowLayout === 'single' ? 'Jedna fotka' : 'Kolotoč' },
             ].map(item => (
               <div key={item.label} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '12px 20px', minWidth: 120 }}>
                 <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', marginBottom: 4 }}>{item.label}</div>
@@ -398,17 +388,47 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               </div>
             </div>
 
-            {/* Efekt */}
+            {/* Režim prezentace + Efekt */}
             <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14, marginBottom: 14 }}>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Efekt přechodu</div>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {([['fade', 'Prolínačka'], ['slide', 'Kolotoč'], ['kenburns', 'Zoom'], ['none', 'Bez efektu']] as const).map(([val, label]) => (
-                  <div key={val} onClick={() => setSlideshowEffect(val)}
-                    style={{ background: slideshowEffect === val ? '#b7e94c' : 'rgba(255,255,255,0.08)', color: slideshowEffect === val ? '#1a1225' : 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '4px 12px', fontSize: 11, fontWeight: slideshowEffect === val ? 700 : 400, cursor: 'pointer' }}>
-                    {label}
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Režim prezentace</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 14 }}>
+                {([
+                  { key: 'single', label: 'Jedna fotka', desc: 'Fotky sa striedajú na celej ploche' },
+                  { key: 'carousel', label: 'Kolotoč', desc: 'Pas fotek posúvajúci sa do strany' },
+                ] as const).map(opt => (
+                  <div key={opt.key} onClick={() => setSlideshowLayout(opt.key)}
+                    style={{
+                      background: slideshowLayout === opt.key ? 'rgba(183,233,76,0.12)' : 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.1)'}`,
+                      borderRadius: 8, padding: '10px 12px', cursor: 'pointer',
+                    }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: slideshowLayout === opt.key ? '#b7e94c' : '#fff', marginBottom: 3 }}>{opt.label}</div>
+                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>{opt.desc}</div>
                   </div>
                 ))}
               </div>
+              {slideshowLayout === 'single' && (
+                <>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Efekt přechodu</div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' as const }}>
+                    {([
+                      ['fade', 'Prolínačka'],
+                      ['kenburns', 'Zoom'],
+                      ['none', 'Bez efektu'],
+                    ] as const).map(([val, label]) => (
+                      <div key={val} onClick={() => setSlideshowEffect(val)}
+                        style={{
+                          background: slideshowEffect === val ? '#b7e94c' : 'rgba(255,255,255,0.08)',
+                          color: slideshowEffect === val ? '#1a1225' : 'rgba(255,255,255,0.5)',
+                          borderRadius: 6, padding: '4px 12px', fontSize: 11,
+                          fontWeight: slideshowEffect === val ? 700 : 400, cursor: 'pointer',
+                        }}>
+                        {label}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Interval */}
@@ -424,25 +444,6 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               </div>
             </div>
 
-            {/* Layout */}
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 14 }}>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>Layout</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                {([
-                  { key: 'single', label: 'Jedna fotka' },
-                  { key: 'grid', label: 'Mozaika' },
-                  { key: 'alternating', label: 'Střídání' },
-                ] as const).map(opt => (
-                  <div key={opt.key} onClick={() => setSlideshowLayout(opt.key)}
-                    style={{ background: slideshowLayout === opt.key ? 'rgba(183,233,76,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.1)'}`, borderRadius: 8, padding: 8, cursor: 'pointer', textAlign: 'center' }}>
-                    {opt.key === 'single' && <div style={{ width: '100%', height: 24, background: 'rgba(255,255,255,0.15)', borderRadius: 3, marginBottom: 5 }} />}
-                    {opt.key === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, height: 24, marginBottom: 5 }}><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div>}
-                    {opt.key === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column', gap: 2, height: 24, marginBottom: 5 }}><div style={{ height: '55%', background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 2, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }} /></div></div>}
-                    <div style={{ fontSize: 10, color: slideshowLayout === opt.key ? '#b7e94c' : 'rgba(255,255,255,0.4)' }}>{opt.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 140 }}>
@@ -463,8 +464,7 @@ export function SlideshowClient({ eventSlug, initialEvent, initialPhotos, initia
               <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginBottom: 6, textAlign: 'center' }}>NÁHLED</div>
               <div style={{ width: '100%', height: 70, background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {slideshowLayout === 'single' && <div style={{ width: '70%', height: '75%', background: 'rgba(255,255,255,0.12)', borderRadius: 3 }} />}
-                {slideshowLayout === 'grid' && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3, width: '85%', height: '80%' }}><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div>}
-                {slideshowLayout === 'alternating' && <div style={{ display: 'flex', flexDirection: 'column', gap: 3, width: '85%', height: '80%' }}><div style={{ height: '55%', background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ display: 'flex', gap: 3, flex: 1 }}><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /><div style={{ flex: 1, background: 'rgba(255,255,255,0.12)', borderRadius: 2 }} /></div></div>}
+                {slideshowLayout === 'carousel' && <div style={{ display: 'flex', gap: 3, alignItems: 'center', width: '90%', height: '70%' }}><div style={{ flex: 1, height: '60%', background: 'rgba(255,255,255,0.07)', borderRadius: 2 }} /><div style={{ flex: 2, height: '100%', background: 'rgba(255,255,255,0.12)', borderRadius: 3 }} /><div style={{ flex: 1, height: '60%', background: 'rgba(255,255,255,0.07)', borderRadius: 2 }} /></div>}
               </div>
               <div style={{ marginTop: 5, display: 'flex', justifyContent: 'space-between', fontSize: 9, color: 'rgba(255,255,255,0.3)' }}>
                 <span>{slideshowEffect} · {slideshowInterval}s</span>
