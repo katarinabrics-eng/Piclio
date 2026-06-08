@@ -237,7 +237,7 @@ export default function HomePage() {
       </article>
 
       <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
+        <div class="bg"><img src="/lp-assets/realniscena.jpg" alt="Prémiová reálná scéna — Gatsby"></div>
         <span class="pill alt">Na míru</span>
         <h3>Prémiová reálná scéna</h3>
         <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
