@@ -73,7 +73,7 @@ export default function HomePage() {
           <div class="avs">
             <img src="/lp-assets/hero-portrait.jpg" alt="">
             <img src="/lp-assets/hero-01.png" alt="">
-            <img src="/lp-assets/hero-piclio05.jpg" alt="">
+            <img src="/lp-assets/04tisky.jpeg" alt="">
           </div>
           <span>300+ hostů na akci sdílí své fotky ještě ze sálu — ve chvíli největší euforie.</span>
         </div>
@@ -83,7 +83,7 @@ export default function HomePage() {
         <div class="collage" id="collage">
           <div class="ph p1" data-par="22"><img src="/lp-assets/hero-01.png" alt="Foto z eventu"></div>
           <div class="ph p2" data-par="-30"><img src="/lp-assets/hero-portrait.jpg" alt="Portrét hosta"></div>
-          <div class="ph p3" data-par="14"><img src="/lp-assets/hero-piclio05.jpg" alt="Atmosféra akce"></div>
+          <div class="ph p3" data-par="14"><img src="/lp-assets/04tisky.jpeg" alt="Atmosféra akce"></div>
           <div class="ph p4" data-par="-18"><img src="/lp-assets/hero-event01.png" alt="Detail z akce"></div>
           <div class="live-card" data-par="40">
             <img class="thumb" src="/lp-assets/hero-event01.png" alt="">
