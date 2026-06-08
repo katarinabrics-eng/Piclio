@@ -1,14 +1,4 @@
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Piclio — AI fotogalerie pro vaše eventy',
-  description: 'Hosté najdou své fotky okamžitě. Sdílení, slideshow a tisk na místě.',
-}
-
-export default function HomePage() {
-  return (
-    <div
-      dangerouslySetInnerHTML={{ __html: `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="utf-8">
@@ -893,7 +883,4 @@ export default function HomePage() {
 
 <script src="/lp-motion.js"></script>
 </body>
-</html>` }}
-    />
-  )
-}
+</html>
