@@ -937,9 +937,9 @@ export default function HomePage() {
         message: document.getElementById("cf-message").value,
       };
       try {
-        const res = await fetch("https://formspree.io/f/xwpbvqkd", {
+        const res = await fetch("/api/contact", {
           method: "POST",
-          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data)
         });
         if (res.ok) {
