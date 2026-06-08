@@ -1,643 +1,1006 @@
-'use client'
+import type { Metadata } from 'next'
 
-import { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+export const metadata: Metadata = {
+  title: 'Piclio — Člověk tvoří emoce. Systém je okamžitě doručuje.',
+  description: 'Piclio by Lucifera: profesionální event fotografie s AI doručením v reálném čase. Fotky v telefonu hosta do 30 sekund.',
+}
 
-const STEPS = [
-  { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', notif: 'E-mail zaregistrován · Galerie připravena' },
-  { n: '02', title: 'Připne si číslovaný odznáček', desc: 'Každý host dostane odznáček s unikátním číslem. Záloha pro 100% přesnost — AI páruje obličej i číslo.', img: '/demo/demo-portrait.jpg', notif: 'Odznáček #014 přiřazen · Připraven k focení' },
-  { n: '03', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', notif: 'Fotka pořízena · Odesílám na server...' },
-  { n: '04', title: 'Fotka přibyde do galerie', desc: 'Do 30 sekund AI rozpozná hosta a fotka se objeví v jeho soukromé galerii — ještě v sále.', img: '/demo/Piclio03.jpg', notif: 'Přibyla do vaší galerie automaticky' },
-  { n: '05', title: 'Host sdílí s přáteli', desc: 'Host otevře odkaz, vidí všechny své fotky z celého večera a sdílí je okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', notif: 'Sdíleno · 3 přátelé viděli vaši fotku' },
-]
-
-export default function LandingPage() {
-  const [activeStep, setActiveStep] = useState(1)
-  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  function goToStep(idx: number) {
-    setActiveStep(idx + 1)
-    const img = document.getElementById('step-preview-img') as HTMLImageElement
-    const notifEl = document.getElementById('step-notif-text')
-    if (img) img.src = STEPS[idx].img
-    if (notifEl) notifEl.textContent = STEPS[idx].notif
-  }
-
-  function resetAuto() {
-    if (autoRef.current) clearInterval(autoRef.current)
-    autoRef.current = setInterval(() => {
-      setActiveStep(prev => {
-        const next = prev % STEPS.length
-        const img = document.getElementById('step-preview-img') as HTMLImageElement
-        const notifEl = document.getElementById('step-notif-text')
-        if (img) img.src = STEPS[next].img
-        if (notifEl) notifEl.textContent = STEPS[next].notif
-        return next + 1
-      })
-    }, 2800)
-  }
-
-  useEffect(() => {
-    resetAuto()
-    return () => { if (autoRef.current) clearInterval(autoRef.current) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+export default function HomePage() {
   return (
-    <div style={{ background: '#191224', color: '#f0f0f0', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
+    <div
+      dangerouslySetInnerHTML={{
+        __html: `<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piclio — Člověk tvoří emoce. Systém je okamžitě doručuje.</title>
+<meta name="description" content="Piclio by Lucifera: profesionální event fotografie s AI doručením v reálném čase. Fotky v telefonu hosta do 30 sekund. Software pro fotografy, fotostanice, AI-FX, kiosky i stálé expozice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/lp-styles.css">
+<link rel="stylesheet" href="/lp-sections.css">
+</head>
+<body>
 
-      <style>{`
-        @keyframes scroll-gallery {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .gallery-track {
-          display: flex;
-          animation: scroll-gallery 20s linear infinite;
-          width: max-content;
-        }
-        .gallery-track:hover { animation-play-state: paused; }
+<div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
-        @media (max-width: 768px) {
-          .hero-content { padding: 0 24px 40px !important; }
-          .hero-tag { margin-top: 80px !important; margin-bottom: 14px !important; }
-          .hero-h1 { font-size: 42px !important; margin-bottom: 20px !important; }
-          .hero-sub { display: none !important; }
-          .hero-scroll { display: none !important; }
-          .hero-btns a, .hero-btns button { padding: 12px 22px !important; font-size: 13px !important; }
-          .hero-bottom { flex-direction: column !important; gap: 16px !important; align-items: flex-start !important; }
-          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .stats-grid > div { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.06) !important; }
-          .problem-grid { grid-template-columns: 1fr !important; }
-          .kiosk-grid { grid-template-columns: 1fr !important; }
-          .gallery-tile { width: 200px !important; height: 280px !important; }
-          .atrakce-grid { grid-template-columns: 1fr !important; }
-          .cenik-grid { grid-template-columns: 1fr !important; }
-          .cenik-header { flex-direction: column !important; gap: 16px !important; }
-          .cenik-sub { text-align: left !important; }
-          .cta-inner { flex-direction: column !important; gap: 32px !important; padding: 48px 28px !important; }
-          .cta-form { align-items: flex-start !important; min-width: unset !important; width: 100% !important; }
-          .team-grid { grid-template-columns: 1fr !important; }
-          .contact-bar { flex-direction: column !important; gap: 16px !important; }
-          .footer-inner { flex-direction: column !important; gap: 20px !important; text-align: center !important; }
-          .nav-links-desktop { display: none !important; }
-          .nav-mobile-btn { display: block !important; }
-          .section-pad { padding: 64px 24px !important; }
-        }
+<!-- ===================== NAV ===================== -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
+  <ul class="nav-links">
+    <li><a href="#atrakce">Atrakce</a></li>
+    <li><a href="#vystupy">Výstupy</a></li>
+    <li><a href="#pro-fotografy">Pro fotografy</a></li>
+    <li><a href="#jak-to-funguje">Jak to funguje</a></li>
+    <li><a href="#formaty">Formáty</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a class="nav-login" href="https://www.piclio.cz/login">Přihlásit se</a>
+    <a class="btn btn-primary" href="#kontakt">Poptat event <span class="arr">→</span></a>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-        @media (min-width: 769px) and (max-width: 1100px) {
-          .hero-h1 { font-size: 56px !important; }
-          .hero-content { padding: 0 48px 56px !important; }
-          .stats-grid > div { padding: 28px 24px !important; }
-          .kiosk-grid { min-height: auto !important; }
-          .atrakce-grid { grid-template-columns: 1fr 1fr !important; }
-          .cenik-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .section-pad { padding: 80px 32px !important; }
-        }
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#atrakce">Atrakce</a>
+  <a href="#vystupy">Výstupy</a>
+  <a href="#pro-fotografy">Pro fotografy</a>
+  <a href="#jak-to-funguje">Jak to funguje</a>
+  <a href="#formaty">Formáty</a>
+  <a href="#kontakt">Kontakt</a>
+  <a class="btn btn-primary" href="#kontakt">Poptat event →</a>
+</div>
 
-        .nav-mobile-btn { display: none; }
-      `}</style>
-
-      {/* NAV */}
-      <nav style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 48px', height: 64,
-        background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        <Image src="/logo01.png" alt="Piclio" width={100} height={32} style={{ objectFit: 'contain' }} />
-        <div className="nav-links-desktop" style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
-          {['Jak to funguje','Atrakce','Ceník','Kontakt'].map(l => (
-            <a key={l} href={'#'+l.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ /g,'-')} style={{ color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontSize: 13 }}>{l}</a>
-          ))}
+<!-- ===================== 1 · HERO ===================== -->
+<header class="hero" id="top" data-screen-label="Hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="hero-badge reveal"><span class="live"></span>Piclio by Lucifera</span>
+        <h1 class="reveal" data-d="1">
+          <span class="ln">Člověk tvoří</span>
+          <span class="ln">emoce.</span>
+          <span class="ln grad-text">Piclio je doručí.</span>
+        </h1>
+        <p class="sub reveal" data-d="2">Zahoďte flashdisky. Spojili jsme profesionální oko živého fotografa s neviditelnou AI asistencí — roztříděné fotky doručíme přímo do telefonů hostů.</p>
+        <div class="hero-actions reveal" data-d="3">
+          <a class="btn btn-primary" href="#kontakt">Poptat event na klíč <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#pro-fotografy">Vyzkoušet software (Beta)</a>
         </div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <a href="/login" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontSize: 13, padding: '8px 16px' }}>Přihlásit se</a>
-          <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 13, fontWeight: 700, padding: '9px 20px', borderRadius: 100 }}>Poptat akci →</Link>
+        <div class="hero-trust reveal" data-d="4">
+          <div class="avs">
+            <img src="/lp-assets/hero-portrait.jpg" alt="">
+            <img src="/lp-assets/hero-01.png" alt="">
+            <img src="/lp-assets/hero-piclio05.jpg" alt="">
+          </div>
+          <span>300+ hostů na akci sdílí své fotky ještě ze sálu — ve chvíli největší euforie.</span>
         </div>
-        <button
-          className="nav-mobile-btn"
-          onClick={() => {
-            const menu = document.getElementById('mobile-menu')
-            if (menu) menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex'
-          }}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', fontSize: 24, padding: 8 }}
-        >
-          ☰
-        </button>
-      </nav>
-
-      {/* MOBILE MENU */}
-      <div id="mobile-menu" style={{
-        display: 'none', flexDirection: 'column',
-        position: 'fixed', top: 64, left: 0, right: 0, zIndex: 99,
-        background: 'rgba(25,18,36,0.98)', backdropFilter: 'blur(12px)',
-        padding: '24px 24px', gap: 20,
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
-      }}>
-        {['Jak to funguje','Atrakce','Ceník','Kontakt'].map(l => (
-          <a key={l}
-            href={'#'+l.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ /g,'-')}
-            onClick={() => { const m = document.getElementById('mobile-menu'); if(m) m.style.display = 'none' }}
-            style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: 16, fontWeight: 500 }}
-          >{l}</a>
-        ))}
-        <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 15, fontWeight: 700, padding: '12px 20px', borderRadius: 100, textAlign: 'center' }}>
-          Poptat akci →
-        </Link>
       </div>
 
-      {/* HERO */}
-      <section style={{ position: 'relative', height: '78vh', minHeight: 520, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-        <Image src="/demo/Hero-01.png" alt="Fotograf na eventu" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} priority />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(25,18,36,0.1) 0%, rgba(25,18,36,0.35) 45%, rgba(25,18,36,0.92) 78%, rgba(25,18,36,0.99) 100%)' }} />
-        <div className="hero-content hero-bottom" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '0 96px 52px', maxWidth: 1400, margin: '0 auto', width: '100%' }}>
-          <div style={{ maxWidth: 620 }}>
-            <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', fontWeight: 500, margin: '0 0 20px' }}>PICLIO BY LUCIFERA · KAMPA, PRAHA</p>
-            <h1 className="hero-h1" style={{ fontSize: 'clamp(48px, 5.5vw, 82px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em', color: '#fff', margin: '0 0 28px', maxWidth: 600 }}>
-              Akce skončí.<br />
-              <span style={{ color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>Zážitek</span><br />
-              zůstane.
-            </h1>
-            <p style={{ fontSize: 16, lineHeight: 1.65, color: 'rgba(255,255,255,0.85)', margin: '0 0 36px', maxWidth: 520 }}>
-              Profesionální fotky v telefonu každého hosta — doručené do 30 sekund. Bez aplikací. Bez čekání.
-            </p>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link href="/login" style={{ background: '#b7e94c', color: '#191224', textDecoration: 'none', fontSize: 14, fontWeight: 700, padding: '14px 30px', borderRadius: 100, display: 'inline-block' }}>Poptat akci na klíč →</Link>
-              <a href="#jak-to-funguje" style={{ color: '#fff', textDecoration: 'none', fontSize: 14, padding: '14px 30px', borderRadius: 100, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.07)', display: 'inline-block' }}>Vyzkoušet software (Beta)</a>
-            </div>
-          </div>
-          <div className="hero-sub" style={{ textAlign: 'right', paddingBottom: 4 }}>
-            <div className="hero-scroll" style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: '0.1em', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
-              <div style={{ width: 40, height: 1, background: 'rgba(255,255,255,0.12)' }} />SCROLL
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <section style={{ borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', maxWidth: 1200, margin: '0 auto' }}>
-          {[
-            { n: '30s', l: 'OD ZÁVĚRKY K DORUČENÍ' },
-            { n: '300+', l: 'HOSTŮ NA JEDNÉ AKCI' },
-            { n: '52', l: 'LET ZKUŠENOSTÍ TÝMU' },
-            { n: '0', l: 'STAŽENÝCH APLIKACÍ' },
-          ].map((s, i) => (
-            <div key={i} style={{ padding: '36px 48px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
-              <div style={{ fontSize: 52, fontWeight: 800, color: '#b7e94c', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: 8 }}>{s.n}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 500 }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PROBLÉM */}
-      <section className="section-pad" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #1a1625 100%)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROBLÉM KTERÝ ŘEŠÍME</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
-            Konec éry<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>„Kdy už mi pošleš ty fotky?"</span>
-          </h2>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 56px', maxWidth: 560 }}>
-            Tradiční fotokoutky a reportáže narážejí na překážky, které Piclio odstraňuje:
-          </p>
-          <div className="problem-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, background: 'rgba(255,255,255,0.05)' }}>
-            {[
-              { n: '01', title: 'Žádné týdny čekání', desc: 'Fotky nedoručujeme po akci na USB, ale v reálném čase, kdy jsou emoce nejživější.' },
-              { n: '02', title: 'Žádné složité hledání', desc: 'Hosté nemusí scrollovat stovkami cizích tváří. Systém je pozná a ukáže jim v soukromé galerii jen jejich snímky.' },
-              { n: '03', title: 'Žádné narušení zábavy', desc: 'Zapomeňte na fronty u statických boxů. Naši fotografové jsou v centru dění.' },
-            ].map(c => (
-              <div key={c.n} style={{ background: 'linear-gradient(135deg, #1f1530 0%, #1a1625 100%)', padding: '40px 32px' }}>
-                <div style={{ fontSize: 64, fontWeight: 800, color: 'rgba(183,233,76,0.06)', lineHeight: 1, marginBottom: 20 }}>{c.n}</div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 10 }}>{c.title}</div>
-                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{c.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* JAK TO FUNGUJE */}
-      <section id="jak-to-funguje" style={{ padding: '80px 48px', background: '#191224' }} className="section-pad">
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 16, fontWeight: 500 }}>JAK TO FUNGUJE</p>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 12px', lineHeight: 1.05 }}>
-            Jednou zadáte e-mail.<br />
-            <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Zbytek udělá Piclio.</span>
-          </h2>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', marginBottom: 48, lineHeight: 1.6 }}>Od vstupu po sdílení — vše automaticky.</p>
-
-          <style>{`
-            .steps-accordion { display: none; }
-            .steps-desktop { display: grid; }
-            @media (max-width: 768px) {
-              .steps-accordion { display: flex; flex-direction: column; gap: 4px; }
-              .steps-desktop { display: none !important; }
-              .acc-item { border-radius: 14px; overflow: hidden; }
-              .acc-header { display: flex; align-items: center; gap: 14px; padding: 16px 18px; cursor: pointer; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; background: rgba(255,255,255,0.03); }
-              .acc-header.open { background: rgba(183,233,76,0.07); border-color: rgba(183,233,76,0.15); border-radius: 14px 14px 0 0; }
-              .acc-num { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); }
-              .acc-num.open { background: rgba(183,233,76,0.15); color: #b7e94c; }
-              .acc-title { font-size: 15px; font-weight: 600; color: rgba(255,255,255,0.5); flex: 1; }
-              .acc-title.open { color: #fff; }
-              .acc-chevron { color: rgba(255,255,255,0.25); font-size: 14px; }
-              .acc-chevron.open { color: #b7e94c; transform: rotate(90deg); }
-              .acc-body { display: none; background: rgba(255,255,255,0.02); border: 1px solid rgba(183,233,76,0.12); border-top: none; border-radius: 0 0 14px 14px; overflow: hidden; }
-              .acc-body.open { display: block; }
-              .acc-photo { aspect-ratio: 16/9; background: #2a1f42; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-              .acc-photo img { width: 100%; height: 100%; object-fit: cover; }
-              .acc-notif { position: absolute; bottom: 10px; left: 10px; right: 10px; background: rgba(25,18,36,0.92); border-radius: 10px; padding: 9px 12px; border: 1px solid rgba(255,255,255,0.08); }
-              .acc-notif-top { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 0.07em; margin-bottom: 3px; }
-              .acc-notif-val { font-size: 12px; font-weight: 600; color: #b7e94c; display: flex; align-items: center; gap: 5px; }
-              .acc-notif-dot { width: 6px; height: 6px; background: #b7e94c; border-radius: 50%; flex-shrink: 0; }
-              .acc-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.65; padding: 14px 18px 18px; }
-            }
-          `}</style>
-
-          {/* DESKTOP — 2 sloupce */}
-          <div className="steps-desktop" style={{ gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'start' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {[
-                ...STEPS
-              ].map((step, i) => (
-                <div
-                  key={step.n}
-                  onMouseEnter={() => { goToStep(i); resetAuto() }}
-                  style={{
-                    display: 'flex', gap: 16, padding: '20px 18px',
-                    borderRadius: 14, cursor: 'pointer',
-                    border: activeStep === i + 1 ? '1px solid rgba(183,233,76,0.3)' : '1px solid rgba(255,255,255,0.06)',
-                    background: activeStep === i + 1 ? 'rgba(183,233,76,0.07)' : 'transparent',
-                    opacity: activeStep === i + 1 ? 1 : 0.4,
-                    transition: 'all 0.2s',
-                    borderLeft: activeStep === i + 1 ? '3px solid #b7e94c' : '3px solid transparent',
-                  }}
-                >
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                    background: activeStep === i + 1 ? 'rgba(183,233,76,0.15)' : 'rgba(255,255,255,0.06)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 12, fontWeight: 700,
-                    color: activeStep === i + 1 ? '#b7e94c' : 'rgba(255,255,255,0.35)',
-                  }}>{step.n}</div>
-                  <div>
-                    <div style={{ fontSize: 15, fontWeight: 600, color: activeStep === i + 1 ? '#fff' : 'rgba(255,255,255,0.6)', marginBottom: 5 }}>{step.title}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>{step.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{ position: 'sticky', top: 100 }}>
-              <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', aspectRatio: '4/5', position: 'relative', background: '#160f28' }}>
-                <img id="step-preview-img" src="/demo/Piclio01.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'opacity 0.3s' }} />
-                <div style={{ position: 'absolute', bottom: 20, left: 20, right: 20, background: 'rgba(25,18,36,0.92)', backdropFilter: 'blur(12px)', borderRadius: 14, padding: '12px 16px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', marginBottom: 4, letterSpacing: '0.08em' }}>NOVÁ FOTKA · PRÁVĚ TEĎ</div>
-                  <div id="step-notif-text" style={{ fontSize: 13, fontWeight: 600, color: '#b7e94c', display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}></span>
-                    E-mail zaregistrován · Galerie připravena
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* MOBIL — accordion */}
-          <div className="steps-accordion">
-            {[
-              { n: '01', title: 'Host přijde ke kiosku', desc: 'Zadá e-mail a udělá rychlé selfie v prohlížeči. Žádná aplikace, žádná registrace. Připne si číslovaný odznáček.', img: '/demo/Piclio01.jpg', open: true },
-              { n: '02', title: 'Fotograf fotí volně', desc: 'Pohybuje se v davu, zachycuje přirozené momenty. Profesionální technika, žádné fronty.', img: '/demo/Hero-01.png', open: false },
-              { n: '03', title: 'AI spáruje do 30 sekund', desc: 'Systém rozpozná hosta a fotka automaticky přibude do jeho galerie.', img: '/demo/hero-02.png', open: false },
-              { n: '04', title: 'Fotka přibyde do galerie', desc: 'Host vidí fotky jak přibývají — celý večer, v reálném čase.', img: '/demo/Piclio03.jpg', open: false },
-              { n: '05', title: 'Host sdílí s přáteli', desc: 'Otevře odkaz a sdílí okamžitě. Bez čekání, bez USB disků.', img: '/demo/demo-krajina.jpg', open: false },
-            ].map((step) => (
-              <div key={step.n} className="acc-item">
-                <div
-                  className={`acc-header ${step.open ? 'open' : ''}`}
-                  onClick={(e) => {
-                    const item = (e.currentTarget as HTMLElement).closest('.acc-item')!
-                    const body = item.querySelector('.acc-body') as HTMLElement
-                    const isOpen = body.classList.contains('open')
-                    document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'))
-                    document.querySelectorAll('.acc-header').forEach(h => h.classList.remove('open'))
-                    document.querySelectorAll('.acc-num').forEach(n => n.classList.remove('open'))
-                    document.querySelectorAll('.acc-title').forEach(t => t.classList.remove('open'))
-                    document.querySelectorAll('.acc-chevron').forEach(c => c.classList.remove('open'))
-                    if (!isOpen) {
-                      body.classList.add('open')
-                      e.currentTarget.classList.add('open')
-                      item.querySelector('.acc-num')?.classList.add('open')
-                      item.querySelector('.acc-title')?.classList.add('open')
-                      item.querySelector('.acc-chevron')?.classList.add('open')
-                    }
-                  }}
-                >
-                  <div className={`acc-num ${step.open ? 'open' : ''}`}>{step.n}</div>
-                  <div className={`acc-title ${step.open ? 'open' : ''}`}>{step.title}</div>
-                  <span className={`acc-chevron ${step.open ? 'open' : ''}`}>▶</span>
-                </div>
-                <div className={`acc-body ${step.open ? 'open' : ''}`}>
-                  <div className="acc-photo">
-                    <img src={step.img} alt={step.title} />
-                    <div className="acc-notif">
-                      <div className="acc-notif-top">NOVÁ FOTKA · PRÁVĚ TEĎ</div>
-                      <div className="acc-notif-val"><span className="acc-notif-dot"></span>Přibyla do vaší galerie automaticky</div>
-                    </div>
-                  </div>
-                  <div className="acc-desc">{step.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* GALERIE STRIP */}
-      <section style={{ overflow: 'hidden', position: 'relative' }}>
-        <div className="gallery-track">
-          {[
-            '/demo/Hero-01.png',
-            '/demo/demo-portrait.jpg',
-            '/demo/Piclio01.jpg',
-            '/demo/hero-02.png',
-            '/demo/Piclio03.jpg',
-            '/demo/demo-krajina.jpg',
-            '/demo/Piclio05.jpg',
-            '/demo/Piclio-event01.png',
-            '/demo/Hero-01.png',
-            '/demo/demo-portrait.jpg',
-            '/demo/Piclio01.jpg',
-            '/demo/hero-02.png',
-            '/demo/Piclio03.jpg',
-            '/demo/demo-krajina.jpg',
-            '/demo/Piclio05.jpg',
-            '/demo/Piclio-event01.png',
-          ].map((src, i) => (
-            <div key={i} className="gallery-tile" style={{ width: 280, height: 380, flexShrink: 0, marginRight: 3, position: 'relative', overflow: 'hidden' }}>
-              <Image src={src} alt="Foto z eventu" fill style={{ objectFit: 'cover', objectPosition: 'center' }} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ATRAKCE */}
-      <section id="atrakce" className="section-pad" style={{ padding: '100px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>ZÁŽITKOVÉ FOTOSLUŽBY NA KLÍČ</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 48px' }}>
-            Profesionální produkce<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>pro váš event.</span>
-          </h2>
-          <div className="atrakce-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            {[
-              { badge: 'BESTSELLER', featured: true, name: 'The AI Magic Corner', desc: 'Náš bestseller. Generativní AI v reálném čase promění hosty v hrdiny nebo je přenese do jiných světů. Zahrnuje technika, obsluhu a okamžitý tisk.', price: '19 000 Kč', sub: '3 hodiny · obsluha v ceně · okamžitý tisk' },
-              { badge: 'FULL SERVICE', featured: false, name: 'Fotoreportáž Piclio', desc: 'Živý fotograf zachycuje autentické emoce přímo v davu. Zahrnuje unikátní hybridní identifikační systém (Face Recognition + ID jmenovky pro 100% spolehlivost), hosting a individuální grafiku galerie.', price: '21 000 Kč', sub: '4 hodiny · AI doručení v ceně' },
-              { badge: 'NA MÍRU', featured: false, name: 'Prémiová reálná scéna', desc: 'Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu (Gatsby, džungle, brand).', price: 'od 25 000 Kč', sub: 'Individuální nabídka' },
-              { badge: 'DOPLNĚK', featured: false, name: 'Živé promítání', desc: 'Okamžitý přenos právě pořízených fotografií na obrazovky v sále pro maximální zapojení publika.', price: 'od 4 900 Kč', sub: 'Lze přidat k libovolnému balíčku' },
-            ].map(a => (
-              <div key={a.name} style={{ background: a.featured ? 'linear-gradient(135deg, #1e1640 0%, #1f1530 100%)' : 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 40, border: a.featured ? '1px solid rgba(183,233,76,0.25)' : '1px solid rgba(255,255,255,0.07)' }}>
-                <div style={{ display: 'inline-block', fontSize: 10, letterSpacing: '0.12em', fontWeight: 600, padding: '4px 12px', borderRadius: 100, background: a.featured ? '#b7e94c' : 'rgba(183,233,76,0.1)', color: a.featured ? '#191224' : '#b7e94c', marginBottom: 20 }}>{a.badge}</div>
-                <h3 style={{ fontSize: 28, fontWeight: 700, color: '#fff', margin: '0 0 14px', letterSpacing: '-0.02em' }}>{a.name}</h3>
-                <p style={{ fontSize: 13, lineHeight: 1.75, color: 'rgba(255,255,255,0.5)', margin: '0 0 28px' }}>{a.desc}</p>
-                <div style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>{a.price}</div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 4 }}>{a.sub}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 32, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 24, padding: '36px 40px' }}>
-            <p style={{ fontSize: 11, letterSpacing: '0.16em', color: '#b7e94c', fontWeight: 600, margin: '0 0 16px' }}>BALÍČKY OKAMŽITÉHO TISKU · termosublimační tisk přímo na místě</p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-              {[
-                { tag: 'S', desc: 'do 200 ks fotek', price: '3 000 Kč' },
-                { tag: 'M', desc: 'do 500 ks fotek', price: '6 500 Kč' },
-                { tag: 'L', desc: 'do 1 000 ks fotek', price: '11 000 Kč' },
-              ].map(t => (
-                <div key={t.tag} style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '16px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)' }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(183,233,76,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 800, color: '#b7e94c', flexShrink: 0 }}>{t.tag}</div>
-                  <div>
-                    <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginBottom: 3 }}>{t.desc}</div>
-                    <div style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>{t.price}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CENÍK SAAS */}
-      <section id="ceník" style={{ padding: '100px 48px', background: '#0d0b14' }} className="section-pad">
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }} className="kiosk-grid">
-
-            {/* Levá strana — text */}
+      <div class="hero-visual reveal" data-d="2">
+        <div class="collage" id="collage">
+          <div class="ph p1" data-par="22"><img src="/lp-assets/hero-01.png" alt="Foto z eventu"></div>
+          <div class="ph p2" data-par="-30"><img src="/lp-assets/hero-portrait.jpg" alt="Portrét hosta"></div>
+          <div class="ph p3" data-par="14"><img src="/lp-assets/hero-piclio05.jpg" alt="Atmosféra akce"></div>
+          <div class="ph p4" data-par="-18"><img src="/lp-assets/hero-event01.png" alt="Detail z akce"></div>
+          <div class="live-card" data-par="40">
+            <img class="thumb" src="/lp-assets/hero-event01.png" alt="">
             <div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(183,233,76,0.1)', border: '1px solid rgba(183,233,76,0.25)', borderRadius: 100, padding: '6px 16px', marginBottom: 28 }}>
-                <span style={{ width: 7, height: 7, background: '#b7e94c', borderRadius: '50%', display: 'inline-block' }}></span>
-                <span style={{ fontSize: 11, color: '#b7e94c', fontWeight: 600, letterSpacing: '0.12em' }}>PRÁVĚ PŘIPRAVUJEME · BRZY SPOUŠTÍME</span>
-              </div>
-              <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1.05, margin: '0 0 20px' }}>
-                Buďte mezi prvními.<br />
-                <span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Za zvýhodněných podmínek.</span>
-              </h2>
-              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: '0 0 32px', maxWidth: 440 }}>
-                Piclio SaaS platforma pro fotografy je v závěrečné fázi vývoje. Máte jedinečnou příležitost být jedni z prvních, kteří ji vyzkouší — a získat přístup za speciálních podmínek.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
-                {[
-                  'Přístup do beta verze ještě před veřejným spuštěním',
-                  'Zvýhodněná cena platná napořád pro early adopters',
-                  'Přímý vliv na vývoj — vaše zpětná vazba formuje produkt',
-                  'Osobní onboarding a podpora od našeho týmu',
-                ].map(f => (
-                  <div key={f} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                    <span style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(183,233,76,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
-                      <span style={{ fontSize: 10, color: '#b7e94c', fontWeight: 700 }}>✓</span>
-                    </span>
-                    <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>{f}</span>
-                  </div>
-                ))}
-              </div>
-              <a href="mailto:ahoj@piclio.cz?subject=Zájem o beta přístup Piclio SaaS" style={{
-                display: 'inline-block', background: '#b7e94c', color: '#0d0b14',
-                padding: '14px 32px', borderRadius: 100, fontSize: 14, fontWeight: 700,
-                textDecoration: 'none', letterSpacing: '0.01em',
-              }}>
-                Mám zájem o beta přístup →
-              </a>
-            </div>
-
-            {/* Pravá strana — Kristína karta */}
-            <div style={{
-              background: '#191224',
-              border: '1px solid rgba(183,233,76,0.2)',
-              borderRadius: 28, padding: '40px 36px',
-            }}>
-              <div style={{ fontSize: 11, letterSpacing: '0.15em', color: '#b7e94c', fontWeight: 500, marginBottom: 28 }}>VÁŠ KONTAKT PRO FOTOGRAFY</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 }}>
-                <img src="/demo/kristina.png" alt="Kristína" style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', border: '2px solid rgba(183,233,76,0.25)' }} />
-                <div>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Kristína</div>
-                  <div style={{ fontSize: 12, color: '#b7e94c', fontWeight: 500 }}>Péče o zákazníka · Koordinace</div>
-                </div>
-              </div>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.75, margin: '0 0 28px' }}>
-                Ráda vám sdělí vše o tom, jak vám Piclio může pomoci. Domluvíme se na podmínkách přímo pro vás.
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <a href="mailto:ahoj@piclio.cz?subject=Zájem o Piclio SaaS pro fotografy" style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  background: 'rgba(183,233,76,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
-                }}>
-                  <span style={{ fontSize: 16 }}>✉</span>
-                  <div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 2 }}>E-MAIL</div>
-                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 500 }}>ahoj@piclio.cz</div>
-                  </div>
-                </a>
-                <a href="tel:+420604750776" style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  background: 'rgba(183,233,76,0.04)', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 14, padding: '14px 18px', textDecoration: 'none',
-                }}>
-                  <span style={{ fontSize: 16 }}>📞</span>
-                  <div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 2 }}>TELEFON</div>
-                    <div style={{ fontSize: 14, color: '#fff', fontWeight: 500 }}>+420 604 750 776</div>
-                  </div>
-                </a>
-              </div>
-              <div style={{ marginTop: 24, padding: '14px 16px', background: 'rgba(183,233,76,0.06)', borderRadius: 12, border: '1px solid rgba(183,233,76,0.12)' }}>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
-                  💬 <em>&quot;Napište nám a domluvíme se na podmínkách — osobně, bez automatů.&quot;</em>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* SROVNÁNÍ */}
-      <section className="section-pad" style={{ padding: '80px 48px', background: 'linear-gradient(135deg, #1f1530 0%, #191224 100%)', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>PROČ PICLIO?</p>
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 40px' }}>Vlastnost po vlastnosti.</h2>
-          <div style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', background: 'rgba(255,255,255,0.04)' }}>
-              <div style={{ padding: '16px 28px', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 600 }}>VLASTNOST</div>
-              <div style={{ padding: '16px 28px', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em', fontWeight: 600, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>BĚŽNÝ FOTOKOUTEK</div>
-              <div style={{ padding: '16px 28px', fontSize: 11, color: '#b7e94c', letterSpacing: '0.1em', fontWeight: 600, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>PICLIO BY LUCIFERA</div>
-            </div>
-            {[
-              { prop: 'Doručení fotek', old: 'USB po akci / hledání v galerii', new: 'Okamžitě do telefonu' },
-              { prop: 'Identifikace hostů', old: 'Ruční zadávání / žádná', new: 'Face Recognition + Hybrid ID' },
-              { prop: 'Způsob fotografování', old: 'Statické místo v rohu', new: 'Mobilní studio v centru dění' },
-              { prop: 'AI Magie', old: 'Statický Green Screen', new: 'Generativní AI v reálném čase' },
-            ].map((r, i) => (
-              <div key={r.prop} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', borderTop: '1px solid rgba(255,255,255,0.05)', background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)' }}>
-                <div style={{ padding: '18px 28px', fontSize: 14, fontWeight: 600, color: '#e0e0e0' }}>{r.prop}</div>
-                <div style={{ padding: '18px 28px', fontSize: 13, color: 'rgba(255,255,255,0.35)', borderLeft: '1px solid rgba(255,255,255,0.06)' }}>{r.old}</div>
-                <div style={{ padding: '18px 28px', fontSize: 13, color: '#b7e94c', fontWeight: 500, borderLeft: '1px solid rgba(255,255,255,0.06)' }}>{r.new}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TÝM */}
-      <section className="section-pad" style={{ padding: '100px 48px', background: '#191224', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <p style={{ fontSize: 11, letterSpacing: '0.2em', color: '#b7e94c', marginBottom: 20, fontWeight: 500 }}>O NÁS</p>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 54px)', fontWeight: 800, lineHeight: 1.05, color: '#fff', letterSpacing: '-0.03em', margin: '0 0 16px' }}>
-            52 let zkušeností.<br /><span style={{ color: 'rgba(255,255,255,0.28)', fontWeight: 300 }}>Nejsme jen agentura, jsme studio.</span>
-          </h2>
-          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: '0 0 64px', maxWidth: 540 }}>
-            Za projektem stojí duo z ateliéru na Kampě, které spojuje precizní práci se světlem a moderní AI digitální ekosystém.
-          </p>
-          <div className="team-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-            {[
-              { name: 'Katarína', role: 'Obraz · Strategie · AI', desc: '26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.', foto: '/demo/katarina.png' },
-              { name: 'Luboš', role: 'Světlo · Kompozice · Technologie', desc: '26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup bude vypadat profesionálně.', foto: '/demo/lubos.png' },
-              { name: 'Kristína', role: 'Péče o zákazníka · Koordinace', desc: 'Vaše hlavní spojka s projektem. Stará se o průběh akce, zákazníky a brand DNA.', foto: '/demo/kristina.png' },
-            ].map(p => (
-              <div key={p.name} style={{ background: 'linear-gradient(135deg, #251840 0%, #1f1530 100%)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 24, padding: '36px 32px' }}>
-                <img src={p.foto} alt={p.name} style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', marginBottom: 20, border: '2px solid rgba(183,233,76,0.2)', display: 'block' }} />
-                <div style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 6, letterSpacing: '-0.02em' }}>{p.name}</div>
-                <div style={{ fontSize: 12, color: '#b7e94c', marginBottom: 16, letterSpacing: '0.03em', fontWeight: 500 }}>{p.role}</div>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, margin: 0 }}>{p.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="contact-bar" style={{ marginTop: 48, padding: '32px 40px', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}>
-            <div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Lucifera Studio</div>
-              <div style={{ fontSize: 15, color: '#fff', fontWeight: 500 }}>Kampa, Praha</div>
-            </div>
-            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.08)' }} />
-            <div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>E-mail</div>
-              <a href="mailto:ahoj@piclio.cz" style={{ fontSize: 15, color: '#b7e94c', textDecoration: 'none', fontWeight: 500 }}>ahoj@piclio.cz</a>
-            </div>
-            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.08)' }} />
-            <div>
-              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Telefon</div>
-              <a href="tel:+420604750776" style={{ fontSize: 15, color: '#fff', textDecoration: 'none', fontWeight: 500 }}>+420 604 750 776</a>
+              <div class="lc-t"><span class="dot"></span>Nová fotka · právě teď</div>
+              <div class="lc-s">Doručeno do galerie · dnes 21:12</div>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* CTA */}
-      <section style={{ padding: '0 48px 80px' }}>
-        <div className="cta-inner" style={{ maxWidth: 1200, margin: '0 auto', background: '#b7e94c', borderRadius: 28, padding: '80px 64px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap' }}>
-          <h2 style={{ fontSize: 'clamp(28px, 3.5vw, 52px)', fontWeight: 800, lineHeight: 1.05, color: '#191224', letterSpacing: '-0.04em', margin: 0, maxWidth: 480 }}>Udělejte z vaší další akce zážitek, o kterém se bude mluvit.</h2>
-          <div className="cta-form" style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-end', minWidth: 340 }}>
-            <p style={{ fontSize: 13, color: 'rgba(10,10,10,0.55)', textAlign: 'right', lineHeight: 1.7, margin: 0 }}>
-              Pro firmy, event agentury<br />i profesionální fotografy.<br />Praha a celá ČR.
-            </p>
-            <input type="text" placeholder="Vaše jméno" style={{ width: '100%', padding: '12px 18px', borderRadius: 12, border: '1.5px solid rgba(10,10,10,0.15)', background: 'rgba(255,255,255,0.6)', fontSize: 14, outline: 'none', color: '#191224', backdropFilter: 'blur(8px)' }} />
-            <input type="email" placeholder="Váš e-mail" style={{ width: '100%', padding: '12px 18px', borderRadius: 12, border: '1.5px solid rgba(10,10,10,0.15)', background: 'rgba(255,255,255,0.6)', fontSize: 14, outline: 'none', color: '#191224', backdropFilter: 'blur(8px)' }} />
-            <textarea placeholder="Popište vaši akci — datum, počet hostů, typ eventu..." rows={3} style={{ width: '100%', padding: '12px 18px', borderRadius: 12, border: '1.5px solid rgba(10,10,10,0.15)', background: 'rgba(255,255,255,0.6)', fontSize: 14, outline: 'none', color: '#191224', resize: 'none', fontFamily: 'inherit', backdropFilter: 'blur(8px)' }} />
-            <button
-              onClick={() => {
-                const name = (document.querySelector('input[placeholder="Vaše jméno"]') as HTMLInputElement)?.value
-                const email = (document.querySelector('input[placeholder="Váš e-mail"]') as HTMLInputElement)?.value
-                const msg = (document.querySelector('textarea') as HTMLTextAreaElement)?.value
-                window.location.href = `mailto:ahoj@piclio.cz?subject=Poptávka od ${name}&body=Jméno: ${name}%0AE-mail: ${email}%0A%0A${msg}`
-              }}
-              style={{ width: '100%', padding: '14px 28px', borderRadius: 100, background: '#191224', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', border: 'none', letterSpacing: '0.01em' }}
-            >
-              Odeslat poptávku →
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '40px 48px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <Image src="/logo01.png" alt="Piclio" width={80} height={26} style={{ objectFit: 'contain', display: 'block', marginBottom: 8 }} />
-            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)' }}>Piclio by Lucifera – Vaše značka a zážitky v novém světle.</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>ahoj@piclio.cz · +420 604 750 776</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.18)', marginTop: 4 }}>© 2026 Studio Lucifera · Kampa, Praha</div>
-          </div>
-          <div style={{ display: 'flex', gap: 24 }}>
-            {['Jak to funguje','Atrakce','Ceník'].map(l => (
-              <a key={l} href={'#'+l.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ /g,'-')} style={{ fontSize: 12, color: 'rgba(255,255,255,0.22)', textDecoration: 'none' }}>{l}</a>
-            ))}
-          </div>
-        </div>
-        </div>
-      </footer>
-
+      </div>
     </div>
+
+    <div class="scroll-hint reveal"><span class="mouse"></span>Scroll</div>
+  </div>
+</header>
+
+<!-- ===================== MARQUEE ===================== -->
+<section class="marquee-band" aria-hidden="true">
+  <div class="marquee-wrap">
+    <div class="marquee row" style="--dur:66s">
+      <div class="mq-item"><img src="/lp-assets/cat-firemni.png" alt=""><span class="tag">Firemní večírek</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-konference.png" alt=""><span class="tag">Konference</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-festival.png" alt=""><span class="tag">Festival</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-galavecer.png" alt=""><span class="tag">Galavečer</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-businessgala.png" alt=""><span class="tag">Business gala</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-firemni.png" alt=""><span class="tag">Firemní večírek</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-konference.png" alt=""><span class="tag">Konference</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-festival.png" alt=""><span class="tag">Festival</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-galavecer.png" alt=""><span class="tag">Galavečer</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-businessgala.png" alt=""><span class="tag">Business gala</span></div>
+    </div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee row rev" style="--dur:78s">
+      <div class="mq-item"><img src="/lp-assets/cat-afterparty.png" alt=""><span class="tag">After party</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-openair.png" alt=""><span class="tag">Open air</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-hostvecera.png" alt=""><span class="tag">Host večera</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-raut.png" alt=""><span class="tag">Raut</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-teambuilding.png" alt=""><span class="tag">Teambuilding</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-ples.png" alt=""><span class="tag">Ples</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-afterparty.png" alt=""><span class="tag">After party</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-openair.png" alt=""><span class="tag">Open air</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-hostvecera.png" alt=""><span class="tag">Host večera</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-raut.png" alt=""><span class="tag">Raut</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-teambuilding.png" alt=""><span class="tag">Teambuilding</span></div>
+      <div class="mq-item"><img src="/lp-assets/cat-ples.png" alt=""><span class="tag">Ples</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 1.5 · KOUZLA (tablet → 6 outputs) ===================== -->
+<section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kouzla fotobudky</span>
+      <h2 class="title">Profík fotí. <span class="grad-text">Kouzla si host přidá sám.</span></h2>
+      <p class="lead">Profesionální kvalita zůstává vždy zachovaná. A když si host zatouží po zábavné proměně, vykouzlí si ji rovnou ve své galerii — z jednoho selfie.</p>
+    </div>
+
+    <div class="magic-layout">
+      <div class="magic-source">
+        <div class="magic-tablet">
+          <img src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
+        </div>
+        <div class="magic-source-cap"><span class="step-dot">1</span><span><b>Rychlé selfie</b> u kiosku</span></div>
+        <div class="magic-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span>a vzniknou kouzla</span>
+        </div>
+      </div>
+
+      <div class="magic-grid">
+        <figure class="magic-out"><span class="badge real">Foto</span><img src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/obalka%20c%CC%8Casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/za%CC%81bavne%CC%81%20postavic%CC%8Cky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2 · PATTERN INTERRUPT ===================== -->
+<section class="section" data-screen-label="Bolest">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Konec čekání</span>
+      <h2 class="title">Hosté nechtějí čekat. Chtějí být <span class="grad-pink">hrdiny právě teď.</span></h2>
+      <p class="lead">Konec éry „Kdy už mi pošleš ty fotky?". Lidé jsou zvyklí na okamžitou odměnu. Tradiční fotokoutky vás i vaši značku připraví o ten nejcennější moment — vrchol atmosféry.</p>
+    </div>
+    <div class="prob-grid">
+      <article class="prob-card reveal" data-d="1">
+        <span class="blob"></span>
+        <div class="n">01</div>
+        <h3>Týdny na flashdisku</h3>
+        <p>Fotky na USB týden po akci? To už nikoho neohromí. Emoce dávno vyprchaly a sdílení se nekoná.</p>
+      </article>
+      <article class="prob-card reveal" data-d="2">
+        <span class="blob"></span>
+        <div class="n">02</div>
+        <h3>Hledání tváře v davu</h3>
+        <p>Úmorné scrollování stovkami cizích snímků. Host to vzdá dřív, než najde sám sebe.</p>
+      </article>
+      <article class="prob-card reveal" data-d="3">
+        <span class="blob"></span>
+        <div class="n">03</div>
+        <h3>Nulový dosah pro značku</h3>
+        <p>Když se nesdílí v reálném čase, vaše značka přichází o organický zásah na sociálních sítích.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3 · PARADIGM ===================== -->
+<section class="section statement" data-screen-label="Paradigma">
+  <div class="wrap">
+    <span class="kick reveal">Změna paradigmatu</span>
+    <h2 class="big reveal" data-d="1">Umělá inteligence řeší objem. Lidé řeší <span class="grad-pink">význam.</span></h2>
+    <p class="lead reveal" data-d="2">V záplavě syntetického obsahu nebude lidsky tvořená fotografie běžná — bude vzácná a exkluzivní. Náš profesionál tvoří umění a okamžitou emoci. Náš algoritmus ji pak nepozorovaně a okamžitě rozešle do světa.</p>
+    <div class="rule reveal" data-d="2"></div>
+  </div>
+</section>
+
+<!-- ===================== 4 · NABÍDKA A (events) ===================== -->
+<section class="section" id="atrakce" data-screen-label="Atrakce">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Zážitkové fotoslužby na klíč</span>
+      <h2 class="title">Profesionální produkce <span class="grad-text">pro váš event.</span></h2>
+      <p class="lead">Ohromte klienty funkcemi, které z běžné akce udělají virální senzaci. Technika, obsluha i doručení v ceně.</p>
+    </div>
+
+    <div class="serv-grid">
+      <article class="serv feature reveal">
+        <div class="bg"><img src="/lp-assets/atrakce-magic-corner.jpeg" alt="AI Magic Corner — Starfall"></div>
+        <span class="pill hot">Bestseller</span>
+        <h3>The AI Magic Corner</h3>
+        <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
+        <div class="price-row"><span class="price">19 000 Kč</span><small>3 hodiny · obsluha v ceně · okamžitý tisk</small></div>
+      </article>
+
+      <article class="serv reveal" data-d="1">
+        <div class="bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Lovci emocí — fotograf na akci"></div>
+        <span class="pill alt">Full service</span>
+        <h3>Lovci emocí</h3>
+        <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
+        <div class="price-row"><span class="price">23 000 Kč</span><small>4 hodiny · AI doručení v ceně</small></div>
+      </article>
+
+      <article class="serv reveal" data-d="1">
+        <div class="bg"><img src="/lp-uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
+        <span class="pill alt">Na míru</span>
+        <h3>Prémiová reálná scéna</h3>
+        <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
+        <div class="price-row"><span class="price">od 29 000 Kč</span><small>individuální nabídka</small></div>
+      </article>
+    </div>
+
+    <article class="serv-band reveal">
+      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
+      <div class="serv-band-copy">
+        <span class="pill">Brand</span>
+        <h3>Brand Everywhere</h3>
+        <p>Každá fotka, tištěná památka i online galerie ponesou vaši firemní identitu — logo, barvy i intro animace.</p>
+        <div class="price-row"><span class="price">v ceně reportáže</span><small>grafika a tisk na míru</small></div>
+      </div>
+    </article>
+
+    <div class="print-band reveal">
+      <div class="print-head">
+        <div class="pt">Balíčky okamžitého tisku</div>
+        <div class="ps">Termosublimační tisk přímo na místě</div>
+      </div>
+      <div class="print-grid">
+        <div class="print-card"><div class="sz">S</div><div class="meta"><div class="q">do 200 ks fotek</div><div class="pr">3 000 Kč</div></div></div>
+        <div class="print-card"><div class="sz">M</div><div class="meta"><div class="q">do 500 ks fotek</div><div class="pr">6 500 Kč</div></div></div>
+        <div class="print-card"><div class="sz">L</div><div class="meta"><div class="q">do 1 000 ks fotek</div><div class="pr">11 000 Kč</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4.6 · VÝSTUPY (gallery) ===================== -->
+<section class="section outputs" id="vystupy" data-screen-label="Výstupy">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Co si host odnese</span>
+      <h2 class="title">Není to jen fotka. Je to <span class="grad-pink">obsah, který letí světem.</span></h2>
+      <p class="lead">Z jediného večera vzejde celá knihovna formátů — AI obálky a filmové plakáty, brandové a produktové fotky, živé animace a videa, profi business portréty i okamžité výtisky. Tady je ochutnávka toho, co host dostane do telefonu.</p>
+    </div>
+
+    <div class="bento-cq reveal">
+      <div class="bento">
+      <article class="bcard big" data-par="10">
+        <span class="ping"></span>
+        <img src="/lp-assets/out-obalka.jpg" alt="Host na obálce magazínu">
+        <div class="meta">
+          <span class="btype pink">AI Magic · obálka</span>
+          <h3>Host na obálce magazínu</h3>
+          <p>Generativní AI promění hosta v hvězdu titulní strany — v plné kvalitě k tisku.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="-14">
+        <img src="/lp-assets/out-film.jpg" alt="Filmový plakát">
+        <div class="meta">
+          <span class="btype">Film</span>
+          <h3>Filmový plakát</h3>
+          <p>Hosté jako hrdinové vlastního blockbusteru — na míru tématu večera.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="8">
+        <span class="ping"></span>
+        <video src="/lp-assets/anim-01.mp4" autoplay loop muted playsinline preload="metadata"></video>
+        <div class="meta">
+          <span class="btype lime">Animace</span>
+          <h3>Živá AI animace</h3>
+          <p>Statická fotka rozhýbaná umělou inteligencí — ideální na stories.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="-8">
+        <img src="/lp-assets/out-business.jpg" alt="Profi business portrét">
+        <div class="meta">
+          <span class="btype lime">Profi business</span>
+          <h3>Business portrét</h3>
+          <p>Studiový headshot rovnou na konferenci — bez ateliéru a čekání.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="-11">
+        <img src="/lp-assets/out-brand.jpg" alt="Fotka s vaším logem">
+        <div class="meta">
+          <span class="btype">Brand</span>
+          <h3>Fotka s vaším logem</h3>
+          <p>Každý snímek nese vaše barvy, logo i claim značky.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="9">
+        <img src="/lp-assets/out-produkt.jpg" alt="Produktová scéna">
+        <div class="meta">
+          <span class="btype">Produkt</span>
+          <h3>Produkt v hlavní roli</h3>
+          <p>Hosté a váš produkt v jednom reklamně vyhlížejícím záběru.</p>
+        </div>
+      </article>
+
+      <article class="bcard tall" data-par="-9">
+        <span class="ping"></span>
+        <video src="/lp-assets/anim-02.mp4" autoplay loop muted playsinline preload="metadata"></video>
+        <div class="meta">
+          <span class="btype lime">Video</span>
+          <h3>Video FX smyčka</h3>
+          <p>Krátké pohyblivé video, které okamžitě letí na sítě.</p>
+        </div>
+      </article>
+
+      <article class="bcard wide" data-par="11">
+        <img src="/lp-assets/out-skupina.jpg" alt="Skupinové foto">
+        <div class="meta">
+          <span class="btype">Skupinové foto</span>
+          <h3>Celá parta na jedné momentce</h3>
+          <p>Ostré, dobře nasvícené a doručené dřív, než parta opustí parket.</p>
+        </div>
+      </article>
+
+      <article class="bcard wide" data-par="12">
+        <img src="/lp-assets/out-tisk.jpg" alt="Okamžitý tisk">
+        <div class="meta">
+          <span class="btype">Okamžitý tisk</span>
+          <h3>Výtisk na ruku</h3>
+          <p>Termosublimační tisk brandované fotky přímo na místě — během chvilky.</p>
+        </div>
+      </article>
+      </div>
+    </div>
+
+    <!-- Auto-scroll caption strip -->
+    <div class="strip-band reveal">
+      <div class="strip-head">
+        <span class="eyebrow">Naše ukázky</span>
+        <h3 class="strip-title">Každou akci uchopíme <span class="grad-text">tematicky.</span></h3>
+        <p class="strip-sub">Gatsby, Hollywood, Divoký západ, Casino Royale nebo vaše značka — ladíme styl, kulisy i AI proměny přesně k tématu večera. Podívejte se na ukázky.</p>
+      </div>
+      <div class="strip-wrap">
+        <div class="strip">
+          <div class="gphoto"><video src="/lp-assets/u-video-1.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><video src="/lp-assets/u-video-2.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><video src="/lp-assets/u-video-3.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><img src="/lp-assets/u-koncert.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-kral.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-bobble-f.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-bobble-m.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-pohadka.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-diner-m.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-diner-f.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-01.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-02.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-03.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-04.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-05.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-06.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-07.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-08.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-09.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-10.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-11.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-12.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-13.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-14.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-15.jpg" alt="" loading="lazy"></div>
+<!-- dup -->
+          <div class="gphoto"><video src="/lp-assets/u-video-1.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><video src="/lp-assets/u-video-2.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><video src="/lp-assets/u-video-3.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
+          <div class="gphoto"><img src="/lp-assets/u-koncert.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-kral.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-bobble-f.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-bobble-m.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-pohadka.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-diner-m.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/u-diner-f.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-01.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-02.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-03.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-04.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-05.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-06.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-07.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-08.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-09.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-10.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-11.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-12.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-13.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-14.jpg" alt="" loading="lazy"></div>
+          <div class="gphoto"><img src="/lp-assets/ukazka-15.jpg" alt="" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4.7 · ZÁŽITKY (use-case carousel) ===================== -->
+<section class="section showcase" id="zazitky" data-screen-label="Zážitky">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow center">Co všechno Piclio umí</span>
+      <h2 class="title">6 zážitků <span class="grad-pink">připravených k akci</span></h2>
+      <p class="lead">Objednejte si Piclio jako službu na klíč — nebo využijte náš software a nabízejte tato kouzla sami. Z fotek pořízených na akci vznikne celá řada produktů, které se prodávají.</p>
+    </div>
+
+    <div class="sc-carousel reveal">
+      <button class="sc-arrow prev" id="scPrev" aria-label="Předchozí">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="sc-viewport">
+        <div class="sc-track" id="scTrack">
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-svatba-a.png" alt="Obálka svatebního časopisu">
+                <img class="layer" src="/lp-assets/o-svatba-b.png" alt="Svatební bulvár">
+                <figcaption class="sc-figcap"><h3>Obálky svatebních časopisů</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Real (zadání jména hosta + výzva)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Každý host se stane hvězdou na obálce. Luxusní suvenýr, který je elegantní a zároveň snadno sdílitelný.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Personalizovaný obrázek na obálku časopisu + živá galerie + tištěné suvenýry</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-koncert.jpg" alt="Koncertní plakát">
+                <img class="layer" src="/lp-assets/u-koncert.jpg" alt="Koncertní plakát">
+                <figcaption class="sc-figcap"><h3>Festivaly &amp; události</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (nahrání reference plakátu + zadání jména hosta + výzva)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Hosté se stávají hlavní hvězdou. Silný moment sdílení na sítích, který vzbuzuje nadšení a zvyšuje dosah.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Značkové plakáty festivalu s AI (digitální + volitelný tisk) + živá galerie + okamžité sdílení</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-narozeniny-a.png" alt="Narozeninový plakát">
+                <img class="layer" src="/lp-assets/o-narozeniny-b.png" alt="Narozeninový plakát">
+                <figcaption class="sc-figcap"><h3>Narozeninová oslava</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX (logo + zadání jména hosta + výzva)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Unikátní, personalizované narozeninové aktivace, které odpovídají tématu oslavy.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Digitální fotografie připravené pro sociální sítě + živá galerie + tištěné suvenýry</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-portret-a.png" alt="Profesionální portrét">
+                <img class="layer" src="/lp-assets/o-portret-b.png" alt="Umělecký portrét">
+                <figcaption class="sc-figcap"><h3>Profesionální portrét</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (profesionální kulisa + vylepšení osvětlení + nápověda)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Okamžité profesionální portréty pro firemní akce, konference a networking. Není potřeba fotograf.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Profesionální portréty ve vysokém rozlišení + okamžité dodání + více pozadí + formáty pro LinkedIn.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-produkt-a.jpg" alt="Produktová kampaň">
+                <img class="layer" src="/lp-assets/o-produkt-b.jpg" alt="Produktová kampaň">
+                <figcaption class="sc-figcap"><h3>Uvedení produktu na trh</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (logo + integrace produktu + výzva)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Působí jako skutečné natáčení reklamy; okamžité sdílení s viditelností pro sponzory.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Značkové obrázky pro sociální sítě + živá galerie + shrnutí analytických dat.</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+          <article class="sc-slide">
+            <div class="sc-card">
+              <figure class="sc-figure">
+                <img class="layer active" src="/lp-assets/o-film-a.png" alt="Filmový plakát">
+                <img class="layer" src="/lp-assets/o-film-b.png" alt="Filmový plakát">
+                <figcaption class="sc-figcap"><h3>Premiéra filmu</h3></figcaption>
+              </figure>
+              <div class="sc-spec">
+                <dl class="sc-list">
+                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (reference k filmovému plakátu + zadání jména hosta + výzva)</dd></div>
+                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Hosté se stávají filmovými hvězdami. Vytváří rozruch kolem premiér díky snadno sdílitelnému obsahu.</dd></div>
+                  <div class="sc-li"><dt>Výsledky</dt><dd>Obrázky ve stylu filmových plakátů + galerie z červeného koberce + integrace sítí + analytika</dd></div>
+                </dl>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+      <button class="sc-arrow next" id="scNext" aria-label="Další">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+    <div class="sc-dots" id="scDots"></div>
+  </div>
+</section>
+
+<!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
+<section class="section" id="pro-fotografy" data-screen-label="Pro fotografy">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:56px">
+      <span class="eyebrow">Software pro fotografy</span>
+      <h2 class="title">Zrychlete workflow. <span class="grad-text">Odemkněte nové příjmy.</span></h2>
+      <p class="lead">Nejrychlejší cesta, jak fotit, brandovat a sdílet. Transformujte svůj byznys s platformou, kterou používáme na vlastních akcích.</p>
+    </div>
+
+    <div class="saas-grid">
+      <div class="saas-visual reveal">
+        <span class="glow-bg"></span>
+        <div class="how-phone">
+          <div class="screen">
+            <div class="notch"></div>
+            <img class="active" src="/lp-assets/ukazka-03.jpg" alt="Ukázka galerie v aplikaci">
+            <div class="phone-toast">
+              <div class="pt-ic">✦</div>
+              <div>
+                <div class="pt-t">Galerie aktualizována</div>
+                <div class="pt-s">+3 nové fotky · sdíleno automaticky</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-rows reveal" data-d="1">
+        <div class="frow">
+          <div class="fi g-cool">⚡</div>
+          <div><h3>SmartLink &amp; Face Recognition</h3><p>Jednou se dotknete displeje a propojíte obličej hosta se systémem. AI ho pak sama celý večer sleduje a páruje.</p></div>
+        </div>
+        <div class="frow">
+          <div class="fi g-hot">📲</div>
+          <div><h3>SmartShare doručení</h3><p>Host zadá e-mail jen jednou. Piclio mu automaticky posílá živě aktualizovanou osobní galerii — ať ho vyfotíte kolikrát chcete.</p></div>
+        </div>
+        <div class="frow">
+          <div class="fi g-violet">💰</div>
+          <div><h3>Monetizační modul <span class="soon">Připravujeme</span></h3><p>Přestaňte nechávat peníze na stole. Uzamkněte fotky a nabídněte hostům nákup jednotlivých snímků i celých prémiových galerií.</p></div>
+        </div>
+        <div style="margin-top:30px">
+          <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Z%C3%A1jem o beta p%C5%99%C3%ADstup Piclio SaaS">Chci beta přístup pro fotografy <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6 · JAK TO FUNGUJE ===================== -->
+<section class="section" id="jak-to-funguje" data-screen-label="Jak to funguje">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:56px">
+      <span class="eyebrow">Jak to funguje</span>
+      <h2 class="title">Vy se bavíte. <span class="grad-pink">Algoritmus doručuje.</span></h2>
+      <p class="lead">Odstranili jsme všechny překážky. Od vstupu po sdílení běží vše hladce a automaticky.</p>
+    </div>
+
+    <div class="flow-wrap reveal">
+      <div class="flow">
+        <article class="flow-card">
+          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01Zachyceni%CC%81%20.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
+          <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
+        </article>
+        <article class="flow-card">
+          <div class="flow-photo"><span class="flow-num">2</span><img src="/lp-assets/flow-02.jpeg" alt="Detekce a propojení hosta"></div>
+          <div class="flow-ic"><img src="/lp-assets/ic-star.png" alt=""></div>
+          <div class="flow-body"><h3>Propojení hosta</h3><p>Jedním selfie propojíte hosta přes Face Recognition. Systém ho pak celý večer sám pozná na každé fotce.</p></div>
+        </article>
+        <article class="flow-card">
+          <div class="flow-photo"><span class="flow-num">3</span><img src="/lp-assets/flow-03.jpeg" alt="SmartShare doručení"></div>
+          <div class="flow-ic"><img src="/lp-assets/ic-share.png" alt=""></div>
+          <div class="flow-body"><h3>SmartShare</h3><p>Host dostane živě aktualizovanou osobní galerii do telefonu. Bez hledání, bez aplikace — do 30 sekund.</p></div>
+        </article>
+        <article class="flow-card">
+          <div class="flow-photo"><span class="flow-num">4</span><img src="/lp-uploads/04tisky%20na%20miste.jpeg" alt="Tisky na místě"></div>
+          <div class="flow-ic"><img src="/lp-assets/ic-bolt.png" alt=""></div>
+          <div class="flow-body"><h3>Tisky na místě</h3><p>Oblíbené památky okamžitě na ruku. Termosublimační tisk brandovaných fotek přímo během akce.</p></div>
+        </article>
+        <article class="flow-card">
+          <div class="flow-photo"><span class="flow-num">5</span><img src="/lp-assets/flow-05.jpeg" alt="Zpeněžení galerie"></div>
+          <div class="flow-ic"><img src="/lp-assets/ic-heart.png" alt=""></div>
+          <div class="flow-body"><h3>Zpeněžení<span class="soon">Již brzy</span></h3><p>Uzamkněte fotky a nabídněte hostům nákup snímků i celých galerií. Nový zdroj příjmů z každé akce.</p></div>
+        </article>
+      </div>
+      <div class="flow-hint"><span class="dots"><i></i><i></i><i></i><i></i><i></i></span>Táhněte pro další</div>
+    </div>
+
+    <!-- Compare table -->
+    <div class="sec-head reveal" style="margin-top:100px">
+      <span class="eyebrow">Proč Piclio?</span>
+      <h2 class="title">Vlastnost <span class="grad-text">po vlastnosti.</span></h2>
+    </div>
+    <div class="compare reveal">
+      <div class="crow head">
+        <div class="feat">Vlastnost</div>
+        <div class="old">Běžný fotokoutek</div>
+        <div class="pic">Piclio by Lucifera</div>
+      </div>
+      <div class="crow">
+        <div class="feat">Doručení fotek</div>
+        <div class="old"><span class="ic no">✕</span>USB po akci, hledání v galerii</div>
+        <div class="pic"><span class="ic yes">✓</span>Okamžitě do telefonu</div>
+      </div>
+      <div class="crow">
+        <div class="feat">Identifikace hostů</div>
+        <div class="old"><span class="ic no">✕</span>Ruční zadávání nebo žádná</div>
+        <div class="pic"><span class="ic yes">✓</span>Face Recognition + Hybrid ID</div>
+      </div>
+      <div class="crow">
+        <div class="feat">Způsob fotografování</div>
+        <div class="old"><span class="ic no">✕</span>Statické místo v rohu</div>
+        <div class="pic"><span class="ic yes">✓</span>Mobilní studio v centru dění</div>
+      </div>
+      <div class="crow">
+        <div class="feat">AI magie</div>
+        <div class="old"><span class="ic no">✕</span>Statický green screen</div>
+        <div class="pic"><span class="ic yes">✓</span>Generativní AI v reálném čase</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4.5 · EKOSYSTÉM FORMÁTŮ ===================== -->
+<section class="section" id="formaty" data-screen-label="Formáty">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Ekosystém formátů</span>
+      <h2 class="title">Jeden systém. <span class="grad-pink">Nekonečně možností.</span></h2>
+      <p class="lead">Ať už chcete živého fotografa v davu, nebo plně automatizovaný zábavní koutek — Piclio bezchybně pohání všechny moderní formáty zážitkové fotografie a videa.</p>
+    </div>
+
+    <div class="eco-grid">
+      <article class="eco-card reveal" data-d="1">
+        <span class="glow"></span>
+        <div class="ico g-full">✦</div>
+        <h3>AI-FX — magie v reálném čase</h3>
+        <p>Náš nejpokročilejší modul. Přeneseme hosty na obálku magazínu, do sci-fi světů, nebo jim vygenerujeme profi business headshoty rovnou na konferenci.</p>
+      </article>
+      <article class="eco-card reveal" data-d="2">
+        <span class="glow"></span>
+        <div class="ico g-hot">▶</div>
+        <h3>Videa, 360° &amp; GIFy</h3>
+        <p>Zastavte čas, nebo ho rozhýbejte. Virální animované GIFy, dynamické VideoFX a oblíbené 360° platformy, které bourají sociální sítě.</p>
+      </article>
+      <article class="eco-card reveal" data-d="3">
+        <span class="glow"></span>
+        <div class="ico g-cool">◎</div>
+        <h3>Fotostanice všeho druhu</h3>
+        <p>Klasika s bleskovým AI motorem. Elegantní iPad budky, prémiové zrcadlové stanice i profesionální DSLR setupy s robotickými rameny.</p>
+      </article>
+      <article class="eco-card reveal" data-d="1">
+        <span class="glow"></span>
+        <div class="ico g-violet">▦</div>
+        <h3>Sdílecí kiosky</h3>
+        <p>Žádné fronty u focení. Dedikované dotykové kiosky, kde si host v klidu prohlédne, vytiskne nebo nasdílí své zážitky.</p>
+      </article>
+      <article class="eco-card reveal" data-d="2">
+        <span class="glow"></span>
+        <div class="ico g-magenta">⌖</div>
+        <h3>Stálé expozice</h3>
+        <p>Dlouhodobé řešení pro klub, restauraci, muzeum či retail. Instalace pracují 24/7, automaticky a bez obsluhy generují brandovaný obsah.</p>
+      </article>
+      <article class="eco-card cta reveal" data-d="3">
+        <h3>Nevíte si rady s výběrem?</h3>
+        <p>Poradíme vám setup na míru typu akce, prostoru i rozpočtu.</p>
+        <a class="btn btn-primary" href="#kontakt">Poradit se <span class="arr">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7 · SOCIAL PROOF & ROI (DOČASNĚ SKRYTO — čeká na reálné reference) ===================== -->
+<section class="section proof" id="reference" data-screen-label="Reference" style="display:none">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow center">Social proof &amp; ROI</span>
+      <h2 class="title">Nekupujete si službu. Investujete do <span class="grad-text">virálního dosahu.</span></h2>
+      <p class="lead">Když host dostane perfektní fotku v momentě absolutní euforie, okamžitě ji sdílí. Naše technologie tvoří prokazatelný organický dosah — a vaše značka roste.</p>
+    </div>
+
+    <div class="logos-band reveal">
+      <div class="logos-label">Důvěřují nám týmy z firem a event agentur</div>
+      <div class="logos">
+        <span>NORTHWIND</span>
+        <span>Lumio</span>
+        <span>VELVET</span>
+        <span>Apex&nbsp;Group</span>
+        <span>Studio&nbsp;9</span>
+        <span>MERIDIAN</span>
+      </div>
+    </div>
+
+    <div class="quotes">
+      <figure class="quote reveal" data-d="1">
+        <span class="mark">"</span>
+        <p>Z dosahu našich fotek na LinkedIn po nasazení Piclio jsme byli uneseni. Všichni je sdíleli ještě ze sálu — kampaň se rozjela sama.</p>
+        <figcaption class="who">
+          <span class="av" style="background:var(--grad-hot)">EM</span>
+          <div><div class="n">Event manažer*</div><div class="r">Firemní konference · 400 hostů</div></div>
+        </figcaption>
+      </figure>
+      <figure class="quote reveal" data-d="2">
+        <span class="mark">"</span>
+        <p>Konečně netrávím víkendy tříděním fotek pro klienty. Galerie se doručí samy a já mám čas fotit další akci.</p>
+        <figcaption class="who">
+          <span class="av" style="background:var(--grad-cool);color:#0c1407">FT</span>
+          <div><div class="n">Fotograf*</div><div class="r">Event &amp; svatební fotografie</div></div>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="placeholder-note reveal">* Ukázkové reference — doplníme vašimi reálnými citacemi a logy klientů.</p>
+  </div>
+</section>
+
+<!-- ===================== 8 · BONUSY A TÝM ===================== -->
+<section class="section" id="o-nas" data-screen-label="Tým">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Partner pro růst</span>
+      <h2 class="title">Získáváte partnera pro růst, <span class="grad-text">ne jen aplikaci.</span></h2>
+      <p class="lead">Vaše akce běží o víkendech? My fungujeme také.</p>
+    </div>
+
+    <div class="benefits" style="margin-top:48px">
+      <div class="benefit reveal" data-d="1"><span class="bi">🛟</span><div class="bt">Nepřetržitá 24/7 podpora</div><p>Jsme s vámi i v pátek večer a v neděli ráno — přesně tehdy, kdy se akce dějí.</p></div>
+      <div class="benefit reveal" data-d="2"><span class="bi">🧩</span><div class="bt">All-in-One platforma</div><p>Vlastní microsites a sdílecí stanice na jednom místě. Bez slepování deseti nástrojů.</p></div>
+      <div class="benefit reveal" data-d="3"><span class="bi">⭐</span><div class="bt">Osobní VIP onboarding</div><p>Provedeme vás softwarem krok za krokem, aby první akce klapla na jedničku.</p></div>
+    </div>
+
+    <div class="sec-head reveal">
+      <span class="eyebrow">Studio z Kampy</span>
+      <h2 class="title">Nejsme agentura. <span class="grad-pink">Jsme studio.</span></h2>
+      <p class="lead">Za projektem stojí duo z ateliéru na Kampě. Propojujeme vizuální tvorbu a práci se světlem s moderními AI technologiemi — a ručíme za vždy profesionální výsledek.</p>
+    </div>
+    <div class="team-grid">
+      <article class="member reveal" data-d="1">
+        <div class="photo sketch"><img src="/lp-assets/team-katarina.png" alt="Katarína"></div>
+        <div class="info"><div class="nm">Katarína</div><div class="rl">Obraz · Strategie · AI</div><p>26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.</p></div>
+      </article>
+      <article class="member reveal" data-d="2">
+        <div class="photo sketch"><img src="/lp-assets/team-lubos.png" alt="Luboš"></div>
+        <div class="info"><div class="nm">Luboš</div><div class="rl">Světlo · Kompozice · Technika</div><p>26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup vypadá profesionálně.</p></div>
+      </article>
+      <article class="member reveal" data-d="3">
+        <div class="photo sketch"><img src="/lp-assets/team-kristina.png" alt="Kristína"></div>
+        <div class="info"><div class="nm">Kristína</div><div class="rl">Péče o zákazníka · Koordinace</div><p>Vaše hlavní spojka s projektem. Postará se o hladký chod akce a dodržení DNA vaší značky.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9 · FAQ ===================== -->
+<section class="section" id="faq" data-screen-label="FAQ">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow center">Časté dotazy</span>
+      <h2 class="title">Všechno, co potřebujete <span class="grad-text">vědět.</span></h2>
+    </div>
+    <div class="faq reveal" id="faqList">
+      <div class="faq-item open">
+        <button class="faq-q">Potřebují si hosté stahovat aplikaci?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Ne. Vše probíhá elegantně přes webový prohlížeč. Host zadá e-mail, vyfotí se a hned může sdílet — žádné stahování, žádné zdržování.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Jak zaručíte, že každý dostane jen své fotky?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Využíváme přesný hybridní systém. Špičková Face Recognition AI se stará o rychlost a chytrý číslovaný odznáček hosta slouží jako absolutní pojistka pro 100% přesnost a soukromí.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">A co bezpečnost a GDPR?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Fotky ukládáme šifrovaně a zpřístupníme je výhradně danému hostovi přes jeho soukromý odkaz. Data zpracováváme v souladu s GDPR, na základě souhlasu uděleného při registraci. Galerie i snímky na vyžádání kdykoliv smažeme a po dohodnuté době je automaticky archivujeme či mažeme.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Můžeme kombinovat živého fotografa a stálou fotostanici na jedné akci?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Ano, a doporučujeme to. Všechny formáty pohání stejný motor, takže fotky z reportáže, AI koutku i sdílecího kiosku přistávají hostům do jediné společné galerie.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Co když na místě vypadne internet?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Systém fotí a páruje i offline — snímky se ukládají lokálně a jakmile se připojení obnoví, automaticky doručí celou frontu. Na klíčové akce vozíme vlastní záložní konektivitu.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Jak je to s cenami a balíčky?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Základní balíčky atrakcí i tisku najdete v sekci Atrakce. Finální nabídku ale vždy ladíme na míru typu akce, počtu hostů a formátů — napište nám a připravíme rozpočet přesně pro vás.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 10 · FINAL CTA ===================== -->
+<section class="section" id="kontakt" data-screen-label="Kontakt">
+  <div class="wrap cta-final">
+    <span class="eyebrow center reveal">Pojďme do toho</span>
+    <h2 class="reveal" data-d="1">Buďte eventem, na který se nezapomíná. <span class="grad-pink">Buďte značkou, kterou si najmou.</span></h2>
+    <p class="lead reveal" data-d="2">Pro firmy, event agentury i profesionální fotografy. Praha a celá ČR.</p>
+    
+    <div class="contact-grid reveal" data-d="2" style="margin-top:48px;text-align:left">
+      <form class="contact-form" id="contactForm" onsubmit="handlePiclioSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cf-name">Jméno a příjmení *</label>
+            <input type="text" id="cf-name" name="name" required placeholder="Jan Novák">
+          </div>
+          <div class="form-group">
+            <label for="cf-email">E-mail *</label>
+            <input type="email" id="cf-email" name="email" required placeholder="jan@firma.cz">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cf-phone">Telefon</label>
+            <input type="tel" id="cf-phone" name="phone" placeholder="+420 600 000 000">
+          </div>
+          <div class="form-group">
+            <label for="cf-type">Typ poptávky</label>
+            <select id="cf-type" name="type">
+              <option value="">Vyberte...</option>
+              <option value="event">Poptávka pro event</option>
+              <option value="beta">Beta přístup pro fotografy</option>
+              <option value="other">Jiné</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cf-message">Zpráva *</label>
+          <textarea id="cf-message" name="message" required rows="4" placeholder="Popište vaši akci — datum, počet hostů, místo..."></textarea>
+        </div>
+        <div class="form-check" style="display:flex;align-items:flex-start;gap:10px;margin:8px 0">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;line-height:1.5">
+            <input type="checkbox" id="cf-robot" required style="width:18px;height:18px;flex-shrink:0;accent-color:#b7e94c;margin-top:2px">
+            Nejsem robot — potvrzuji, že jsem skutečný člověk
+          </label>
+        </div>
+        <div class="form-check" style="display:flex;align-items:flex-start;gap:10px;margin:8px 0 16px">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;line-height:1.5">
+            <input type="checkbox" id="cf-gdpr" required style="width:18px;height:18px;flex-shrink:0;accent-color:#b7e94c;margin-top:2px">
+            Souhlasím se zpracováním osobních údajů pro účely odpovědi na mou poptávku
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary" id="cf-submit">Odeslat poptávku <span class="arr">→</span></button>
+        <div id="cf-msg" style="margin-top:12px;font-size:14px;display:none"></div>
+      </form>
+      <div class="contact-info" style="display:flex;flex-direction:column;gap:24px;padding:32px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <span style="font-size:20px;width:36px;text-align:center;flex-shrink:0">✉</span>
+          <div><div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:2px">E-mail</div><a href="mailto:ahoj@piclio.cz" style="font-size:15px;color:#fff;font-weight:600;text-decoration:none">ahoj@piclio.cz</a></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <span style="font-size:20px;width:36px;text-align:center;flex-shrink:0">☎</span>
+          <div><div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:2px">Telefon</div><a href="tel:+420604750776" style="font-size:15px;color:#fff;font-weight:600;text-decoration:none">+420 604 750 776</a></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <span style="font-size:20px;width:36px;text-align:center;flex-shrink:0">📍</span>
+          <div><div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:2px">Studio</div><span style="font-size:15px;color:#fff;font-weight:600">Kampa, Praha</span></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <span style="font-size:20px;width:36px;text-align:center;flex-shrink:0">🕐</span>
+          <div><div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:2px">Odezva</div><span style="font-size:15px;color:#fff;font-weight:600">Osobně, do 24 hodin</span></div>
+        </div>
+        <a class="btn btn-ghost" href="mailto:ahoj@piclio.cz?subject=Beta p%C5%99%C3%ADstup pro fotografy" style="margin-top:8px">Chci beta přístup pro fotografy</a>
+      </div>
+    </div>
+    <script>
+    async function handlePiclioSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById("cf-submit");
+      const msg = document.getElementById("cf-msg");
+      btn.disabled = true;
+      btn.textContent = "Odesílám...";
+      const data = {
+        name: document.getElementById("cf-name").value,
+        email: document.getElementById("cf-email").value,
+        phone: document.getElementById("cf-phone").value,
+        type: document.getElementById("cf-type").value,
+        message: document.getElementById("cf-message").value,
+      };
+      try {
+        const res = await fetch("https://formspree.io/f/xwpbvqkd", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          msg.style.display = "block";
+          msg.style.background = "rgba(183,233,76,0.1)";
+          msg.style.color = "#b7e94c";
+          msg.style.border = "1px solid rgba(183,233,76,0.3)";
+          msg.style.padding = "12px 16px";
+          msg.style.borderRadius = "8px";
+          msg.textContent = "✓ Zpráva odeslána! Ozveme se do 24 hodin.";
+          document.getElementById("contactForm").reset();
+        } else { throw new Error(); }
+      } catch {
+        msg.style.display = "block";
+        msg.style.background = "rgba(239,68,68,0.1)";
+        msg.style.color = "#f87171";
+        msg.style.border = "1px solid rgba(239,68,68,0.3)";
+        msg.style.padding = "12px 16px";
+        msg.style.borderRadius = "8px";
+        msg.textContent = "✗ Nepodařilo se odeslat. Napište nám na ahoj@piclio.cz";
+      }
+      btn.disabled = false;
+      btn.innerHTML = "Odeslat poptávku <span class="arr">→</span>";
+    }
+    </script>
+
+    <div class="cta-btns reveal" data-d="2" style="display:none">
+      <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Popt%C3%A1vka eventu Piclio">Odeslat poptávku pro event <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="mailto:ahoj@piclio.cz?subject=Beta p%C5%99%C3%ADstup pro fotografy">Chci beta přístup pro fotografy</a>
+    </div>
+    <div class="cta-info reveal" data-d="3">
+      <a href="mailto:ahoj@piclio.cz">ahoj@piclio.cz</a>
+      <a href="tel:+420604750776">+420 604 750 776</a>
+      <span>Osobně, bez automatů.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
+      <ul class="f-links">
+        <li><a href="#atrakce">Atrakce</a></li>
+        <li><a href="#vystupy">Výstupy</a></li>
+        <li><a href="#formaty">Formáty</a></li>
+        <li><a href="#pro-fotografy">Pro fotografy</a></li>
+        <li><a href="#jak-to-funguje">Jak to funguje</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+    </div>
+    <div class="copy">Piclio by Lucifera — člověk tvoří emoce, systém je doručuje. © 2026 Studio Lucifera · Kampa, Praha</div>
+  </div>
+</footer>
+
+<script src="/lp-motion.js"></script>
+</body>
+</html>`
+      }}
+    />
   )
 }
