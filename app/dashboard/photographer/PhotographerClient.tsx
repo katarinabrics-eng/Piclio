@@ -121,6 +121,10 @@ export function PhotographerClient() {
   const [savingEmailSettings, setSavingEmailSettings] = useState(false)
   const [emailSettingsMsg, setEmailSettingsMsg] = useState('')
 
+  // Kiosk settings
+  const [faceDetection, setFaceDetection] = useState(true)
+  const [manualBadgeEntry, setManualBadgeEntry] = useState(false)
+
   function updateProjectForm(key: string, value: string) {
     setProjectForm(prev => ({ ...prev, [key]: value }))
   }
@@ -634,6 +638,8 @@ export function PhotographerClient() {
     setSlideshowAnimation((event as any).slideshow_animation ?? 'fade')
     setSlideshowLayout((event as any).slideshow_layout ?? 'single')
     setSlideshowMsg('')
+    setFaceDetection((event as any).face_detection !== false)
+    setManualBadgeEntry((event as any).manual_badge_entry === true)
     setSelectedUnmatched(new Set())
     const [gRes, uRes] = await Promise.all([
       fetch(`/api/photographer/events/${event.id}/guests`, { cache: 'no-store' }),
@@ -1196,6 +1202,7 @@ export function PhotographerClient() {
       { key: 'grafika-fotky', title: 'Grafika pro fotky', icon: '🖼️' },
       { key: 'grafika-projekce', title: 'Grafika pro galerii / slideshow', icon: '📽️' },
       { key: 'poznamky', title: 'Poznámky od zadavatele a schválení', icon: '✅' },
+      { key: 'kiosk', title: 'Kiosk', icon: '🎛️' },
       { key: 'danger', title: 'Nebezpečná zóna', icon: '⚠️' },
     ].map(({ key, title, icon }) => (
       <div key={key} style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
@@ -1534,6 +1541,94 @@ export function PhotographerClient() {
             )}
 
             {/* NEBEZPEČNÁ ZÓNA */}
+            {key === 'kiosk' && (
+              <div style={{ paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 0 }}>
+                <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 20px' }}>
+                  Nastavení chování kiosku pro tento event. Změny se projeví okamžitě.
+                </p>
+
+                {/* Toggle: Detekce obličeje */}
+                <div style={{
+                  display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+                  gap: 20, padding: '16px 0', borderBottom: '1px solid #f3f4f6',
+                }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#111827', marginBottom: 4 }}>
+                      Detekce obličeje
+                    </div>
+                    <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5 }}>
+                      Hosté nafotí selfie při registraci pro automatické párování fotek
+                    </div>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (!selectedEvent) return
+                      const next = !faceDetection
+                      setFaceDetection(next)
+                      await fetch('/api/photographer/events', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: selectedEvent.id, face_detection: next }),
+                      })
+                    }}
+                    style={{
+                      flexShrink: 0, width: 48, height: 26, borderRadius: 13,
+                      border: 'none', cursor: 'pointer', position: 'relative',
+                      background: faceDetection ? '#22c55e' : '#d1d5db',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    <span style={{
+                      position: 'absolute', top: 3, left: faceDetection ? 25 : 3,
+                      width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                      transition: 'left 0.2s',
+                    }} />
+                  </button>
+                </div>
+
+                {/* Toggle: Ruční zadání čísla odznaku */}
+                <div style={{
+                  display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
+                  gap: 20, padding: '16px 0',
+                }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#111827', marginBottom: 4 }}>
+                      Ruční zadání čísla odznaku hosteskou
+                    </div>
+                    <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.5 }}>
+                      Hosteska zadá číslo odznaku místo automatického přiřazení
+                    </div>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      if (!selectedEvent) return
+                      const next = !manualBadgeEntry
+                      setManualBadgeEntry(next)
+                      await fetch('/api/photographer/events', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: selectedEvent.id, manual_badge_entry: next }),
+                      })
+                    }}
+                    style={{
+                      flexShrink: 0, width: 48, height: 26, borderRadius: 13,
+                      border: 'none', cursor: 'pointer', position: 'relative',
+                      background: manualBadgeEntry ? '#22c55e' : '#d1d5db',
+                      transition: 'background 0.2s',
+                    }}
+                  >
+                    <span style={{
+                      position: 'absolute', top: 3, left: manualBadgeEntry ? 25 : 3,
+                      width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                      transition: 'left 0.2s',
+                    }} />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {key === 'danger' && (
               <div style={{ paddingTop: 16 }}>
                 <p style={{ fontSize: 13, color: '#6b7280', margin: '0 0 16px' }}>Smaže všechny fotky eventu včetně Storage. Hosté zůstanou zachováni.</p>

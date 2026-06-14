@@ -146,6 +146,8 @@ export async function PATCH(req: NextRequest) {
   if (body.slideshowBarColor !== undefined) updatePayload.slideshow_bar_color = body.slideshowBarColor
   if (body.slideshowOverlayMode !== undefined) updatePayload.slideshow_overlay_mode = body.slideshowOverlayMode
   if (body.clientLogoUrl !== undefined) updatePayload.client_logo_url = body.clientLogoUrl
+  if (body.face_detection !== undefined) updatePayload.face_detection = body.face_detection
+  if (body.manual_badge_entry !== undefined) updatePayload.manual_badge_entry = body.manual_badge_entry
 
   const { data: event, error } = await supabaseAdmin
     .from('events')
