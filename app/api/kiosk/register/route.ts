@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
     .from('guests')
     .select('id, badge_number, gallery_token')
     .eq('event_id', activeEvent.id)
-    .eq('email', email)
+    .eq('email', email.toLowerCase().trim())
     .single()
 
   if (existing) {
