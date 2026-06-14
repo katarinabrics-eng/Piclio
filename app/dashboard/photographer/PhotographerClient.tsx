@@ -90,6 +90,8 @@ export function PhotographerClient() {
   const [projectSaving, setProjectSaving] = useState(false)
   const [projectSaveMsg, setProjectSaveMsg] = useState('')
   const [deletingEvent, setDeletingEvent] = useState<string | null>(null)
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState<string | null>(null)
+  const [changingStatus, setChangingStatus] = useState<string | null>(null)
 
   // Slideshow settings
   const [slideshowContent, setSlideshowContent] = useState<'photographer' | 'client' | 'random' | 'selected_guests'>('random')
@@ -535,6 +537,13 @@ export function PhotographerClient() {
 
   // Keyboard navigation for unmatched lightbox
   useEffect(() => {
+    if (!statusDropdownOpen) return
+    function onClickOutside() { setStatusDropdownOpen(null) }
+    window.addEventListener('click', onClickOutside)
+    return () => window.removeEventListener('click', onClickOutside)
+  }, [statusDropdownOpen])
+
+  useEffect(() => {
     if (lightboxIndex === null) return
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') { setLightboxIndex(null); return }
@@ -604,6 +613,46 @@ export function PhotographerClient() {
       }
     } finally {
       setResendingEmail(null)
+    }
+  }
+
+  async function changeEventStatus(eventId: string, newStatus: 'draft' | 'active' | 'done') {
+    if (newStatus === 'active') {
+      const otherActive = events.filter(e => e.id !== eventId && (e as any).status === 'active')
+      if (otherActive.length > 0) {
+        const names = otherActive.map(e => e.name).join(', ')
+        const confirmed = confirm(
+          `Pozor — FTP fotky z kamery půjdou do tohoto eventu.\nOstatní active eventy budou přepnuty na draft automaticky.\n\nBudou přepnuty: ${names}\n\nPokračovat?`
+        )
+        if (!confirmed) { setStatusDropdownOpen(null); return }
+        // Přepni ostatní active eventy na draft
+        await Promise.all(otherActive.map(e =>
+          fetch('/api/photographer/events', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: e.id, status: 'draft' }),
+          })
+        ))
+        setEvents(prev => prev.map(e =>
+          otherActive.find(o => o.id === e.id) ? { ...e, status: 'draft' } : e
+        ))
+      }
+    }
+
+    setChangingStatus(eventId)
+    setStatusDropdownOpen(null)
+    try {
+      const res = await fetch('/api/photographer/events', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: eventId, status: newStatus }),
+      })
+      if (res.ok) {
+        setEvents(prev => prev.map(e => e.id === eventId ? ({ ...e, status: newStatus } as EventWithStats) : e))
+        if (selectedEvent?.id === eventId) setSelectedEvent(prev => prev ? ({ ...prev, status: newStatus } as EventWithStats) : prev)
+      }
+    } finally {
+      setChangingStatus(null)
     }
   }
 
@@ -844,6 +893,59 @@ export function PhotographerClient() {
                         {event.location ? ` · ${event.location}` : ''}
                         {event.client_name ? ` · ${event.client_name}` : ''}
                       </div>
+                    </div>
+                    {/* Status badge + dropdown */}
+                    <div style={{ position: 'relative', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+                      <button
+                        onClick={() => setStatusDropdownOpen(prev => prev === event.id ? null : event.id)}
+                        disabled={changingStatus === event.id}
+                        style={{
+                          fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 100,
+                          border: 'none', cursor: changingStatus === event.id ? 'default' : 'pointer',
+                          letterSpacing: '0.05em', textTransform: 'uppercase',
+                          background: (event as any).status === 'active' ? '#dcfce7'
+                            : (event as any).status === 'done' ? '#dbeafe' : '#f3f4f6',
+                          color: (event as any).status === 'active' ? '#15803d'
+                            : (event as any).status === 'done' ? '#1d4ed8' : '#6b7280',
+                        }}
+                      >
+                        {changingStatus === event.id ? '...' : (event as any).status ?? 'draft'}
+                      </button>
+                      {statusDropdownOpen === event.id && (
+                        <div style={{
+                          position: 'absolute', top: 'calc(100% + 6px)', right: 0,
+                          background: '#fff', borderRadius: 10, boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                          border: '1px solid #e5e7eb', zIndex: 100, minWidth: 180, overflow: 'hidden',
+                        }}>
+                          {([
+                            { value: 'draft', label: 'Draft', color: '#6b7280', bg: '#f3f4f6' },
+                            { value: 'active', label: 'Active', color: '#15803d', bg: '#dcfce7' },
+                            { value: 'done', label: 'Done', color: '#1d4ed8', bg: '#dbeafe' },
+                          ] as const).map(opt => (
+                            <button
+                              key={opt.value}
+                              onClick={() => changeEventStatus(event.id, opt.value)}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 10,
+                                width: '100%', padding: '10px 14px', border: 'none',
+                                background: (event as any).status === opt.value ? '#f9fafb' : '#fff',
+                                cursor: 'pointer', textAlign: 'left', fontSize: 13,
+                                fontWeight: (event as any).status === opt.value ? 700 : 400,
+                                color: '#111827',
+                              }}
+                              onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+                              onMouseLeave={e => (e.currentTarget.style.background = (event as any).status === opt.value ? '#f9fafb' : '#fff')}
+                            >
+                              <span style={{
+                                display: 'inline-block', width: 10, height: 10, borderRadius: '50%',
+                                background: opt.color, flexShrink: 0,
+                              }} />
+                              {opt.label}
+                              {(event as any).status === opt.value && <span style={{ marginLeft: 'auto', color: '#9ca3af', fontSize: 11 }}>✓ aktuální</span>}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                     <div style={{ display: 'flex', gap: 24 }}>
                       <Stat label="Hosté" value={event.guestCount} />

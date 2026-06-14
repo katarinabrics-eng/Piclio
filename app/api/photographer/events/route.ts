@@ -148,6 +148,7 @@ export async function PATCH(req: NextRequest) {
   if (body.clientLogoUrl !== undefined) updatePayload.client_logo_url = body.clientLogoUrl
   if (body.face_detection !== undefined) updatePayload.face_detection = body.face_detection
   if (body.manual_badge_entry !== undefined) updatePayload.manual_badge_entry = body.manual_badge_entry
+  if (body.status !== undefined && ['draft', 'active', 'done'].includes(body.status)) updatePayload.status = body.status
 
   const { data: event, error } = await supabaseAdmin
     .from('events')
