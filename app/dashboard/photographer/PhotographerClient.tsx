@@ -26,6 +26,8 @@ export function PhotographerClient() {
   const [guests, setGuests] = useState<Guest[]>([])
   const [editingGuestId, setEditingGuestId] = useState<string | null>(null)
   const [editingEmail, setEditingEmail] = useState('')
+  const [resendingEmail, setResendingEmail] = useState<string | null>(null)
+  const [resendDone, setResendDone] = useState<Record<string, boolean>>({})
   const [unmatched, setUnmatched] = useState<UnmatchedPhoto[]>([])
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [tab, setTab] = useState<Tab>('events')
@@ -587,6 +589,24 @@ export function PhotographerClient() {
     } catch {}
   }
 
+  async function resendGuestEmail(guestId: string) {
+    setResendingEmail(guestId)
+    try {
+      const res = await fetch('/api/photographer/guests/resend-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestId }),
+      })
+      if (res.ok) {
+        setResendDone(prev => ({ ...prev, [guestId]: true }))
+        setGuests(prev => prev.map(g => g.id === guestId ? { ...g, email_sent_at: new Date().toISOString() } : g))
+        setTimeout(() => setResendDone(prev => { const n = { ...prev }; delete n[guestId]; return n }), 3000)
+      }
+    } finally {
+      setResendingEmail(null)
+    }
+  }
+
   async function resendInvite(eventId: string) {
     setSendingInvite(eventId)
     try {
@@ -1003,9 +1023,26 @@ export function PhotographerClient() {
                             : <span style={{ color: '#9ca3af', fontSize: 12 }}>—</span>}
                         </td>
                         <td style={{ padding: '10px 16px' }}>
-                          {g.gallery_token
-                            ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
-                            : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            {g.gallery_token
+                              ? <a href={`/gallery/${g.gallery_token}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Otevřít →</a>
+                              : <span style={{ color: '#9ca3af', fontSize: 13 }}>—</span>}
+                            <button
+                              onClick={() => resendGuestEmail(g.id)}
+                              disabled={resendingEmail === g.id}
+                              title="Odeslat registrační email"
+                              style={{
+                                fontSize: 11, padding: '2px 8px', borderRadius: 5, border: '1px solid',
+                                cursor: resendingEmail === g.id ? 'default' : 'pointer',
+                                background: resendDone[g.id] ? '#dcfce7' : '#f9fafb',
+                                borderColor: resendDone[g.id] ? '#16a34a' : '#d1d5db',
+                                color: resendDone[g.id] ? '#16a34a' : '#374151',
+                                fontWeight: 500, whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {resendDone[g.id] ? 'Email odeslán ✓' : resendingEmail === g.id ? '...' : 'Odeslat email'}
+                            </button>
+                          </div>
                         </td>
                         <td style={{ padding: '10px 16px' }}>
                           <button
