@@ -258,8 +258,20 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <div style={{ marginTop: 48, fontSize: 12, color: 'rgba(255,255,255,0.2)' }}>
-        Piclio by Lucifera Studio
+      <div style={{ marginTop: 48, textAlign: 'center' }}>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)', marginBottom: 10 }}>
+          Piclio by Lucifera Studio
+        </div>
+        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)', lineHeight: 1.7 }}>
+          Používáním Piclia souhlasíte s{' '}
+          <a href="/obchodni-podminky" style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'underline' }}>
+            Obchodními podmínkami
+          </a>
+          {' '}a{' '}
+          <a href="/gdpr" style={{ color: 'rgba(255,255,255,0.45)', textDecoration: 'underline' }}>
+            Zásadami ochrany osobních údajů
+          </a>
+        </div>
       </div>
     </div>
   )
