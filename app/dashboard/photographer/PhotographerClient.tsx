@@ -1815,7 +1815,7 @@ export function PhotographerClient() {
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                     {([
-                      { label: 'Host',  value: 'piclio-backend.fly.dev' },
+                      { label: 'Host',  value: '169.155.61.122' },
                       { label: 'Port',  value: '02121' },
                       { label: 'User',  value: 'piclio' },
                       { label: 'Heslo', value: 'piclio123' },
