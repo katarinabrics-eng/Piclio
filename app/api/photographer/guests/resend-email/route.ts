@@ -26,18 +26,31 @@ export async function POST(req: NextRequest) {
 
   const { data: event } = await supabaseAdmin
     .from('events')
-    .select('name')
+    .select('name, brand_color, client_logo_url, email_subject, email_banner_url, email_btn_text_color, email_header_color')
     .eq('id', guest.event_id)
     .single()
 
   const eventName = event?.name ?? 'akci'
   const galleryUrl = `${APP_URL}/gallery/${guest.gallery_token}`
+  const color = event?.brand_color || '#b7e94c'
+  const headerBg = event?.email_header_color || '#1a1225'
+  const btnTextColor = event?.email_btn_text_color || '#1a1225'
+  const subject = event?.email_subject || `Vaše fotografie z akce ${eventName}`
+
+  const headerHtml = event?.client_logo_url
+    ? `<img src="${event.client_logo_url}" alt="${eventName}" style="max-height:60px;max-width:220px;object-fit:contain;" />`
+    : `<div style="color:${color};font-size:24px;font-weight:500;letter-spacing:-0.5px;">Piclio</div>
+       <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;">by Lucifera Studio</div>`
+
+  const bannerHtml = event?.email_banner_url
+    ? `<img src="${event.email_banner_url}" alt="" style="width:100%;display:block;max-height:160px;object-fit:cover;" />`
+    : ''
 
   const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
     from: 'Piclio <noreply@piclio.cz>',
     to: [guest.email],
-    subject: `Vaše fotografie z akce ${eventName}`,
+    subject,
     html: `<!DOCTYPE html>
 <html>
 <head>
@@ -45,25 +58,23 @@ export async function POST(req: NextRequest) {
   <style>
     body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
     .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; }
-    .header { background: #1a1225; padding: 32px; text-align: center; }
-    .logo { color: #b7e94c; font-size: 24px; font-weight: 500; letter-spacing: -0.5px; }
-    .logo-sub { color: rgba(255,255,255,0.4); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+    .header { background: ${headerBg}; padding: 32px; text-align: center; }
+    .accent { height: 4px; background: ${color}; }
     .body { padding: 32px; }
     .title { font-size: 20px; color: #1a1225; margin: 0 0 8px; }
     .subtitle { color: #666; font-size: 14px; line-height: 1.6; margin: 0 0 24px; }
-    .badge-box { background: #f9fafb; border: 2px solid #b7e94c; border-radius: 10px; padding: 16px 24px; text-align: center; margin-bottom: 24px; }
+    .badge-box { background: #f9fafb; border: 2px solid ${color}; border-radius: 10px; padding: 16px 24px; text-align: center; margin-bottom: 24px; }
     .badge-label { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; }
     .badge-number { font-size: 40px; font-weight: 900; color: #1a1225; line-height: 1.1; }
-    .btn { display: block; background: #b7e94c; color: #1a1225; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-align: center; font-size: 15px; }
+    .btn { display: block; background: ${color}; color: ${btnTextColor}; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-align: center; font-size: 15px; }
     .footer { padding: 20px 32px; border-top: 1px solid #f0f0f0; font-size: 12px; color: #999; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <div class="logo">Piclio</div>
-      <div class="logo-sub">by Lucifera Studio</div>
-    </div>
+    <div class="header">${headerHtml}</div>
+    <div class="accent"></div>
+    ${bannerHtml}
     <div class="body">
       <h2 class="title">Vítejte na ${eventName}!</h2>
       <p class="subtitle">Byli jste zaregistrováni pod číslem odznaku:</p>
