@@ -28,26 +28,6 @@ function Ul({ items }: { items: string[] }) {
   )
 }
 
-function PriceCard({ plan, price, desc, features }: { plan: string; price: string; desc: string; features: string[] }) {
-  return (
-    <div style={{
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.1)',
-      borderRadius: 12,
-      padding: '20px 24px',
-      marginBottom: 12,
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-        <span style={{ fontWeight: 700, color: '#fff', fontSize: 16 }}>{plan}</span>
-        <span style={{ color: '#b7e94c', fontWeight: 700, fontSize: 16 }}>{price}</span>
-      </div>
-      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, margin: '0 0 10px' }}>{desc}</p>
-      <ul style={{ margin: 0, paddingLeft: 18 }}>
-        {features.map((f, i) => <li key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', marginBottom: 3 }}>{f}</li>)}
-      </ul>
-    </div>
-  )
-}
 
 export default function ObchodniPodminkyPage() {
   return (
@@ -106,28 +86,13 @@ export default function ObchodniPodminkyPage() {
           </P>
         </Section>
 
-        <Section title="4. Ceník a platební podmínky">
-          <PriceCard
-            plan="Starter"
-            price="Zdarma"
-            desc="Pro vyzkoušení a jednorázové eventy"
-            features={['1 event', 'až 50 hostů', 'základní zpracování fotografií']}
-          />
-          <PriceCard
-            plan="Pro"
-            price="990 Kč / měsíc"
-            desc="Pro aktivní fotografy a studia"
-            features={['neomezené eventy', 'až 500 hostů / event', 'AI párování obličejů', 'prioritní email podpora']}
-          />
-          <PriceCard
-            plan="Studio"
-            price="2 490 Kč / měsíc"
-            desc="Pro velké eventy a produkce"
-            features={['neomezení hostí', 'vlastní branding emailů', 'dedikovaná podpora', 'SLA 99 %']}
-          />
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 14, margin: '12px 0 0' }}>
-            Ceny jsou uvedeny bez DPH. Při roční platbě poskytujeme slevu 20&nbsp;%.
-          </p>
+        <Section title="4. Ceny a platební podmínky">
+          <P>
+            Aktuální ceník služeb Piclio je dostupný na{' '}
+            <a href="https://piclio.cz" style={{ color: '#b7e94c', textDecoration: 'none' }}>piclio.cz</a>
+            {' '}nebo na základě individuální poptávky na{' '}
+            <a href="mailto:ahoj@piclio.cz" style={{ color: '#b7e94c', textDecoration: 'none' }}>ahoj@piclio.cz</a>.
+          </P>
         </Section>
 
         <Section title="5. Storno a vrácení plateb">
