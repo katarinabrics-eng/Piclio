@@ -42,56 +42,12 @@ export async function POST(req: NextRequest) {
     : `<div style="color:${color};font-size:24px;font-weight:500;letter-spacing:-0.5px;">Piclio</div>
        <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;">by Lucifera Studio</div>`
 
-  const bannerHtml = event?.email_banner_url
-    ? `<img src="${event.email_banner_url}" alt="" style="width:100%;display:block;max-height:160px;object-fit:cover;" />`
-    : ''
-
   const resend = new Resend(process.env.RESEND_API_KEY)
   await resend.emails.send({
     from: 'Piclio <noreply@piclio.cz>',
     to: [guest.email],
     subject,
-    html: `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; }
-    .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; }
-    .header { background: ${headerBg}; padding: 32px; text-align: center; }
-    .accent { height: 4px; background: ${color}; }
-    .body { padding: 32px; }
-    .title { font-size: 20px; color: #1a1225; margin: 0 0 8px; }
-    .subtitle { color: #666; font-size: 14px; line-height: 1.6; margin: 0 0 24px; }
-    .badge-box { background: #f9fafb; border: 2px solid ${color}; border-radius: 10px; padding: 16px 24px; text-align: center; margin-bottom: 24px; }
-    .badge-label { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; }
-    .badge-number { font-size: 40px; font-weight: 900; color: #1a1225; line-height: 1.1; }
-    .btn { display: block; background: ${color}; color: ${btnTextColor}; text-decoration: none; padding: 14px 24px; border-radius: 8px; font-weight: 600; text-align: center; font-size: 15px; }
-    .footer { padding: 20px 32px; border-top: 1px solid #f0f0f0; font-size: 12px; color: #999; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">${headerHtml}</div>
-    <div class="accent"></div>
-    ${bannerHtml}
-    <div class="body">
-      <h2 class="title">Vítejte na ${eventName}!</h2>
-      <p class="subtitle">Byli jste zaregistrováni pod číslem odznaku:</p>
-      <div class="badge-box">
-        <div class="badge-label">Číslo vašeho odznaku</div>
-        <div class="badge-number">${guest.badge_number}</div>
-      </div>
-      <p class="subtitle">
-        Všechny vaše fotografie z večera najdete na tomto odkazu.
-        Galerie se automaticky doplňuje v průběhu celé akce.
-      </p>
-      <a href="${galleryUrl}" class="btn">Otevřít moji galerii &rarr;</a>
-    </div>
-    <div class="footer">Piclio by Lucifera Studio</div>
-  </div>
-</body>
-</html>`,
+    html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:system-ui,sans-serif;background:#f5f5f5;margin:0;padding:20px;"><div style="max-width:500px;margin:0 auto;background:white;border-radius:12px;overflow:hidden;"><div style="background:${headerBg};padding:32px;text-align:center;">${headerHtml}</div><div style="height:4px;background:${color};"></div>${event?.email_banner_url ? `<img src="${event.email_banner_url}" alt="" style="width:100%;display:block;max-height:160px;object-fit:cover;">` : ''}<div style="padding:32px;"><h2 style="font-size:20px;color:#1a1225;margin:0 0 8px;">Vítejte na ${eventName}!</h2><p style="color:#666;font-size:14px;line-height:1.6;margin:0 0 24px;">Byli jste zaregistrováni pod číslem odznaku:</p><div style="background:#f9fafb;border:2px solid ${color};border-radius:10px;padding:16px 24px;text-align:center;margin-bottom:24px;"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.08em;">Číslo vašeho odznaku</div><div style="font-size:40px;font-weight:900;color:#1a1225;line-height:1.1;">${guest.badge_number}</div></div><p style="color:#666;font-size:14px;line-height:1.6;margin:0 0 24px;">Všechny vaše fotografie z večera najdete na tomto odkazu. Galerie se automaticky doplňuje v průběhu celé akce.</p><a href="${galleryUrl}" style="display:block;background:${color};color:${btnTextColor}!important;text-decoration:none!important;padding:14px 24px;border-radius:8px;font-weight:600;text-align:center;font-size:15px;">Otevřít moji galerii &rarr;</a></div><div style="padding:20px 32px;border-top:1px solid #f0f0f0;font-size:12px;color:#999;">Piclio by Lucifera Studio</div></div></body></html>`,
   })
 
   await supabaseAdmin
