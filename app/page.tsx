@@ -60,14 +60,14 @@ export default function HomePage() {
       <div class="hero-copy">
         <span class="hero-badge reveal"><span class="live"></span>Piclio by Lucifera</span>
         <h1 class="reveal" data-d="1">
-          <span class="ln">Člověk tvoří</span>
-          <span class="ln">emoce.</span>
-          <span class="ln grad-text">Piclio je doručí.</span>
+          <span class="ln">Fotograf fotí.</span>
+          <span class="ln">Hosté dostanou fotky</span>
+          <span class="ln grad-text">během večera.</span>
         </h1>
-        <p class="sub reveal" data-d="2">Zahoďte flashdisky. Spojili jsme profesionální oko živého fotografa s neviditelnou AI asistencí — roztříděné fotky doručíme přímo do telefonů hostů.</p>
+        <p class="sub reveal" data-d="2">Piclio automaticky rozpozná každého hosta na fotografii a pošle mu jeho snímky přímo na email — ještě při akci. Žádné odkazy na úložiště. Žádné hledání.</p>
         <div class="hero-actions reveal" data-d="3">
-          <a class="btn btn-primary" href="#kontakt">Poptat event na klíč <span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#pro-fotografy">Vyzkoušet software (Beta)</a>
+          <a class="btn btn-primary" href="#kontakt">Chci Piclio na svůj event <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#pro-fotografy">Jsem fotograf, chci software</a>
         </div>
         <div class="hero-trust reveal" data-d="4">
           <div class="avs">
@@ -75,7 +75,7 @@ export default function HomePage() {
             <img src="/lp-assets/hero-01.png" alt="">
             <img src="/lp-assets/04tisky.jpeg" alt="">
           </div>
-          <span>300+ hostů na akci sdílí své fotky ještě ze sálu — ve chvíli největší euforie.</span>
+          <span>300+ hostů na jedné akci. Fotky dostanou všichni — automaticky.</span>
         </div>
       </div>
 
@@ -140,9 +140,9 @@ export default function HomePage() {
 <section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">Kouzla fotobudky</span>
-      <h2 class="title">Profík fotí. <span class="grad-text">Kouzla si host přidá sám.</span></h2>
-      <p class="lead">Profesionální kvalita zůstává vždy zachovaná. A když si host zatouží po zábavné proměně, vykouzlí si ji rovnou ve své galerii — z jednoho selfie.</p>
+      <span class="eyebrow">AI efekty v galerii</span>
+      <h2 class="title">Host dostane fotky. <span class="grad-text">A může si je rovnou vylepšit.</span></h2>
+      <p class="lead">Z každé fotky si host může udělat obálku magazínu, karikaturu nebo filmový plakát — přímo ve své galerii. Fotograf nastaví jaké efekty jsou dostupné.</p>
     </div>
 
     <div class="magic-layout">
@@ -173,28 +173,28 @@ export default function HomePage() {
 <section class="section" data-screen-label="Bolest">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Konec čekání</span>
-      <h2 class="title">Hosté nechtějí čekat. Chtějí být <span class="grad-pink">hrdiny právě teď.</span></h2>
-      <p class="lead">Konec éry „Kdy už mi pošleš ty fotky?". Lidé jsou zvyklí na okamžitou odměnu. Tradiční fotokoutky vás i vaši značku připraví o ten nejcennější moment — vrchol atmosféry.</p>
+      <span class="eyebrow">Proč to funguje lépe</span>
+      <h2 class="title">Fotky do týdne? <span class="grad-pink">Hosté je nesdílí.</span></h2>
+      <p class="lead">Sdílení se děje v momentě největší euforie — ne týden po akci. Piclio doručí fotky během večera.</p>
     </div>
     <div class="prob-grid">
       <article class="prob-card reveal" data-d="1">
         <span class="blob"></span>
         <div class="n">01</div>
-        <h3>Týdny na flashdisku</h3>
-        <p>Fotky na USB týden po akci? To už nikoho neohromí. Emoce dávno vyprchaly a sdílení se nekoná.</p>
+        <h3>Flashdisk = mrtvý obsah</h3>
+        <p>Odkaz na Úschovna.cz nebo WeTransfer? Hosté ho nerozkliknou — emoce dávno vyprchaly.</p>
       </article>
       <article class="prob-card reveal" data-d="2">
         <span class="blob"></span>
         <div class="n">02</div>
-        <h3>Hledání tváře v davu</h3>
-        <p>Úmorné scrollování stovkami cizích snímků. Host to vzdá dřív, než najde sám sebe.</p>
+        <h3>Hledání sebe v 500 fotkách = frustrace</h3>
+        <p>Host to vzdá dřív, než najde sám sebe.</p>
       </article>
       <article class="prob-card reveal" data-d="3">
         <span class="blob"></span>
         <div class="n">03</div>
-        <h3>Nulový dosah pro značku</h3>
-        <p>Když se nesdílí v reálném čase, vaše značka přichází o organický zásah na sociálních sítích.</p>
+        <h3>Nesdílení = nulový dosah</h3>
+        <p>Vaše značka přichází o organický zásah na sociálních sítích.</p>
       </article>
     </div>
   </div>
@@ -203,9 +203,9 @@ export default function HomePage() {
 <!-- ===================== 3 · PARADIGM ===================== -->
 <section class="section statement" data-screen-label="Paradigma">
   <div class="wrap">
-    <span class="kick reveal">Změna paradigmatu</span>
-    <h2 class="big reveal" data-d="1">Umělá inteligence řeší objem. Lidé řeší <span class="grad-pink">význam.</span></h2>
-    <p class="lead reveal" data-d="2">V záplavě syntetického obsahu nebude lidsky tvořená fotografie běžná — bude vzácná a exkluzivní. Náš profesionál tvoří umění a okamžitou emoci. Náš algoritmus ji pak nepozorovaně a okamžitě rozešle do světa.</p>
+    <span class="kick reveal">Jak to funguje</span>
+    <h2 class="big reveal" data-d="1">Čtyři kroky. <span class="grad-pink">Plně automaticky.</span></h2>
+    <p class="lead reveal" data-d="2">Žádné flashdisky. Žádné ruční odesílání. Žádné čekání.<br><br>1. Fotograf fotí normálně — bez přerušování a kiosků.<br>2. Systém rozpozná hosta podle odznaku nebo obličeje.<br>3. Host dostane email s odkazem na svoji galerii — do 60 sekund.<br>4. Galerie se doplňuje celý večer automaticky.</p>
     <div class="rule reveal" data-d="2"></div>
   </div>
 </section>
@@ -215,8 +215,8 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Zážitkové fotoslužby na klíč</span>
-      <h2 class="title">Profesionální produkce <span class="grad-text">pro váš event.</span></h2>
-      <p class="lead">Ohromte klienty funkcemi, které z běžné akce udělají virální senzaci. Technika, obsluha i doručení v ceně.</p>
+      <h2 class="title">Co dostanete <span class="grad-text">v ceně</span></h2>
+      <p class="lead">Živý fotograf, AI zpracování a doručení každému hostu. Vše na jednom místě.</p>
     </div>
 
     <div class="serv-grid">
@@ -274,7 +274,7 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Co si host odnese</span>
-      <h2 class="title">Není to jen fotka. Je to <span class="grad-pink">obsah, který letí světem.</span></h2>
+      <h2 class="title">Není to jen fotka. Je to <span class="grad-pink">obsah, který se sdílí.</span></h2>
       <p class="lead">Z jediného večera vzejde celá knihovna formátů — AI obálky a filmové plakáty, brandové a produktové fotky, živé animace a videa, profi business portréty i okamžité výtisky. Tady je ochutnávka toho, co host dostane do telefonu.</p>
     </div>
 
@@ -565,8 +565,8 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Software pro fotografy</span>
-      <h2 class="title">Zrychlete workflow. <span class="grad-text">Odemkněte nové příjmy.</span></h2>
-      <p class="lead">Nejrychlejší cesta, jak fotit, brandovat a sdílet. Transformujte svůj byznys s platformou, kterou používáme na vlastních akcích.</p>
+      <h2 class="title">Používáte Piclio na vlastních akcích? <span class="grad-text">Ušetříte hodiny práce.</span></h2>
+      <p class="lead">Nahrajte fotky — systém je roztřídí a doručí každému hostu automaticky. Žádné ruční odesílání. Žádné flashdisky.</p>
     </div>
 
     <div class="saas-grid">
@@ -613,8 +613,8 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Jak to funguje</span>
-      <h2 class="title">Vy se bavíte. <span class="grad-pink">Algoritmus doručuje.</span></h2>
-      <p class="lead">Odstranili jsme všechny překážky. Od vstupu po sdílení běží vše hladce a automaticky.</p>
+      <h2 class="title">Vy fotíte. <span class="grad-pink">My doručujeme.</span></h2>
+      <p class="lead">Od vstupu po sdílení běží vše hladce a automaticky.</p>
     </div>
 
     <div class="flow-wrap reveal">
@@ -622,27 +622,27 @@ export default function HomePage() {
         <article class="flow-card">
           <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01-zachyceni.jpeg" alt="Zachycení a zpracování"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
-          <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
+          <div class="flow-body"><h3>Fotograf fotí volně</h3><p>Žádné přerušování. Fotograf fotí přirozeně v centru dění.</p></div>
         </article>
         <article class="flow-card">
           <div class="flow-photo"><span class="flow-num">2</span><img src="/lp-assets/flow-02.jpeg" alt="Detekce a propojení hosta"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-star.png" alt=""></div>
-          <div class="flow-body"><h3>Propojení hosta</h3><p>Jedním selfie propojíte hosta přes Face Recognition. Systém ho pak celý večer sám pozná na každé fotce.</p></div>
+          <div class="flow-body"><h3>Systém rozpozná hosta</h3><p>Podle čísla odznaku nebo obličeje. Automaticky, bez zásahu fotografa.</p></div>
         </article>
         <article class="flow-card">
           <div class="flow-photo"><span class="flow-num">3</span><img src="/lp-assets/flow-03.jpeg" alt="SmartShare doručení"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-share.png" alt=""></div>
-          <div class="flow-body"><h3>SmartShare</h3><p>Host dostane živě aktualizovanou osobní galerii do telefonu. Bez hledání, bez aplikace — do 30 sekund.</p></div>
+          <div class="flow-body"><h3>Host dostane galerii</h3><p>Email s odkazem na osobní galerii přijde do 60 sekund.</p></div>
         </article>
         <article class="flow-card">
           <div class="flow-photo"><span class="flow-num">4</span><img src="/lp-uploads/04tisky-na-miste.jpeg" alt="Tisky na místě"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-bolt.png" alt=""></div>
-          <div class="flow-body"><h3>Tisky na místě</h3><p>Oblíbené památky okamžitě na ruku. Termosublimační tisk brandovaných fotek přímo během akce.</p></div>
+          <div class="flow-body"><h3>Galerie se doplňuje</h3><p>Každá další fotka přibývá automaticky celý večer.</p></div>
         </article>
         <article class="flow-card">
           <div class="flow-photo"><span class="flow-num">5</span><img src="/lp-assets/flow-05.jpeg" alt="Zpeněžení galerie"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-heart.png" alt=""></div>
-          <div class="flow-body"><h3>Zpeněžení<span class="soon">Již brzy</span></h3><p>Uzamkněte fotky a nabídněte hostům nákup snímků i celých galerií. Nový zdroj příjmů z každé akce.</p></div>
+          <div class="flow-body"><h3>Okamžitý tisk</h3><p>Oblíbené snímky vytiskneme přímo na místě.</p></div>
         </article>
       </div>
       <div class="flow-hint"><span class="dots"><i></i><i></i><i></i><i></i><i></i></span>Táhněte pro další</div>
@@ -792,8 +792,8 @@ export default function HomePage() {
 
     <div class="sec-head reveal">
       <span class="eyebrow">Studio z Kampy</span>
-      <h2 class="title">Nejsme agentura. <span class="grad-pink">Jsme studio.</span></h2>
-      <p class="lead">Za projektem stojí duo z ateliéru na Kampě. Propojujeme vizuální tvorbu a práci se světlem s moderními AI technologiemi — a ručíme za vždy profesionální výsledek.</p>
+      <h2 class="title">Za Picliem stojí fotografové, <span class="grad-pink">ne programátoři.</span></h2>
+      <p class="lead">Vytvořili jsme nástroj, který sami používáme na vlastních akcích. Víme co fotograf potřebuje a co host ocení.</p>
     </div>
     <div class="team-grid">
       <article class="member reveal" data-d="1">
@@ -852,8 +852,8 @@ export default function HomePage() {
 <section class="section" id="kontakt" data-screen-label="Kontakt">
   <div class="wrap cta-final">
     <span class="eyebrow center reveal">Pojďme do toho</span>
-    <h2 class="reveal" data-d="1">Buďte eventem, na který se nezapomíná. <span class="grad-pink">Buďte značkou, kterou si najmou.</span></h2>
-    <p class="lead reveal" data-d="2">Pro firmy, event agentury i profesionální fotografy. Praha a celá ČR.</p>
+    <h2 class="reveal" data-d="1">Udělejte z akce zážitek, <span class="grad-pink">na který se nezapomíná.</span></h2>
+    <p class="lead reveal" data-d="2">Pro firmy, event agentury i fotografy. Praha a celá ČR.</p>
     
     <div class="cta-btns reveal" data-d="2" style="margin-top:40px">
   <a class="btn btn-primary" href="/kontakt" target="_blank">
@@ -887,7 +887,7 @@ export default function HomePage() {
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
     </div>
-    <div class="copy">Piclio by Lucifera — člověk tvoří emoce, systém je doručuje. © 2026 Studio Lucifera · Kampa, Praha · <a href="/obchodni-podminky" style="color:inherit;opacity:0.6;text-decoration:none;">Obchodní podmínky</a> · <a href="/gdpr" style="color:inherit;opacity:0.6;text-decoration:none;">Zásady ochrany osobních údajů</a></div>
+    <div class="copy">Piclio by Lucifera Studio — fotky každému hostu, automaticky. © 2026 Studio Lucifera · Kampa, Praha · <a href="/obchodni-podminky" style="color:inherit;opacity:0.6;text-decoration:none;">Obchodní podmínky</a> · <a href="/gdpr" style="color:inherit;opacity:0.6;text-decoration:none;">Zásady ochrany osobních údajů</a></div>
   </div>
 </footer>
 
