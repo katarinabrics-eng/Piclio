@@ -1295,6 +1295,13 @@ export function PhotographerClient() {
                           </div>
                           {/* Controls */}
                           <div style={{ padding: '8px 10px' }}>
+                            {(photo.ocr_number != null || photo.assigned_count > 0) && (
+                              <div style={{ fontSize: 11, color: '#9ca3af', padding: '4px 0 6px' }}>
+                                {photo.ocr_number != null && <span>OCR: #{photo.ocr_number}</span>}
+                                {photo.ocr_number != null && photo.assigned_count > 0 && <span> · </span>}
+                                {photo.assigned_count > 0 && <span>V {photo.assigned_count} {photo.assigned_count === 1 ? 'galérii' : 'galériách'}</span>}
+                              </div>
+                            )}
                             <select
                               value={assignTarget[photo.id] ?? ''}
                               onChange={e => setAssignTarget(prev => ({ ...prev, [photo.id]: e.target.value }))}
@@ -1305,8 +1312,13 @@ export function PhotographerClient() {
                             >
                               <option value="">Vybrat hosta…</option>
                               {guests.map(g => (
-                                <option key={g.id} value={g.id}>
-                                  {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
+                                <option
+                                  key={g.id}
+                                  value={g.id}
+                                  disabled={photo.assigned_guest_ids?.includes(g.id)}
+                                  style={{ color: photo.assigned_guest_ids?.includes(g.id) ? '#9ca3af' : undefined }}
+                                >
+                                  {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}{photo.assigned_guest_ids?.includes(g.id) ? ' ✓' : ''}
                                 </option>
                               ))}
                             </select>

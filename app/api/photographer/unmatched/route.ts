@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
   const params = new URLSearchParams({
-    select: 'id,filename,storage_path,original_path,uploaded_at,ocr_number,event_id,status',
+    select: 'id,filename,storage_path,original_path,uploaded_at,ocr_number,event_id,status,photo_guests(guest_id)',
     event_id: `eq.${eventId}`,
     is_deleted: 'neq.true',
     order: 'uploaded_at.desc',
@@ -48,10 +48,16 @@ export async function GET(req: NextRequest) {
 
   const photosWithUrls = await signPhotosRobust(filtered, 86400)
 
-  const result = photosWithUrls.map((p: any) => ({
-    ...p,
-    status: filtered.find((f: any) => f.id === p.id)?.status ?? 'unmatched',
-  }))
+  const result = photosWithUrls.map((p: any) => {
+    const original = filtered.find((f: any) => f.id === p.id)
+    const assigned_guest_ids = (original?.photo_guests ?? []).map((pg: any) => pg.guest_id)
+    return {
+      ...p,
+      status: original?.status ?? 'unmatched',
+      assigned_guest_ids,
+      assigned_count: assigned_guest_ids.length,
+    }
+  })
 
   return NextResponse.json(
     { photos: result },
