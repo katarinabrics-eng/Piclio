@@ -73,6 +73,8 @@ export interface UnmatchedPhoto {
   ocr_number: number | null
   event_id: string
   status: string
+  assigned_guest_ids?: string[]
+  assigned_count?: number
 }
 
 export interface PlaylistPhoto {

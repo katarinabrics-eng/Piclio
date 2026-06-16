@@ -1295,11 +1295,11 @@ export function PhotographerClient() {
                           </div>
                           {/* Controls */}
                           <div style={{ padding: '8px 10px' }}>
-                            {(photo.ocr_number != null || photo.assigned_count > 0) && (
+                            {(photo.ocr_number != null || (photo.assigned_count ?? 0) > 0) && (
                               <div style={{ fontSize: 11, color: '#9ca3af', padding: '4px 0 6px' }}>
                                 {photo.ocr_number != null && <span>OCR: #{photo.ocr_number}</span>}
-                                {photo.ocr_number != null && photo.assigned_count > 0 && <span> · </span>}
-                                {photo.assigned_count > 0 && <span>V {photo.assigned_count} {photo.assigned_count === 1 ? 'galérii' : 'galériách'}</span>}
+                                {photo.ocr_number != null && (photo.assigned_count ?? 0) > 0 && <span> · </span>}
+                                {(photo.assigned_count ?? 0) > 0 && <span>V {photo.assigned_count} {photo.assigned_count === 1 ? 'galérii' : 'galériách'}</span>}
                               </div>
                             )}
                             <select
