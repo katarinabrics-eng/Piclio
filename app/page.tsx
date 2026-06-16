@@ -205,7 +205,7 @@ export default function HomePage() {
     </div>
 
     <article class="serv-band reveal">
-      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
+      <div class="bg"><img src="/lp-assets/brand02.jpeg" alt="Brand Everywhere — tisk a branding"></div>
       <div class="serv-band-copy">
         <span class="pill">Brand</span>
         <h3>Brand Everywhere</h3>
