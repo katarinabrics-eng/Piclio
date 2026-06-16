@@ -157,8 +157,8 @@ export default function HomePage() {
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/obalka%20c%CC%8Casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/za%CC%81bavne%CC%81%20postavic%CC%8Cky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/obalka-casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
       </div>
     </div>
   </div>
@@ -205,7 +205,7 @@ export default function HomePage() {
     </div>
 
     <article class="serv-band reveal">
-      <div class="bg"><img src="/lp-assets/brand02.jpeg" alt="Brand Everywhere — tisk a branding"></div>
+      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
       <div class="serv-band-copy">
         <span class="pill">Brand</span>
         <h3>Brand Everywhere</h3>
@@ -271,7 +271,7 @@ export default function HomePage() {
     <div class="flow-wrap reveal">
       <div class="flow">
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-assets/uploads/01Zachyceni%CC%81%20.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01-zachyceni.jpeg" alt="Zachycení a zpracování"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
           <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
         </article>
