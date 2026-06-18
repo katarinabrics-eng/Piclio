@@ -34,6 +34,8 @@ export function PhotographerClient() {
   const [loading, setLoading] = useState(true)
   const [assigningPhoto, setAssigningPhoto] = useState<string | null>(null)
   const [assignTarget, setAssignTarget] = useState<Record<string, string>>({})
+  const [removeTarget, setRemoveTarget] = useState<Record<string, string>>({})
+  const [removingPhoto, setRemovingPhoto] = useState<string | null>(null)
   const [uploadedCount, setUploadedCount] = useState(0)
   const [showNewEvent, setShowNewEvent] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -780,6 +782,20 @@ export function PhotographerClient() {
     setSavingOverlayMode(false)
   }
 
+  async function removeFromGallery(photoId: string) {
+    const guestId = removeTarget[photoId]
+    if (!guestId) return
+    setRemovingPhoto(photoId)
+    await fetch(`/api/photographer/unmatched/${photoId}?from=guest&guestId=${guestId}`, { method: 'DELETE' })
+    setUnmatched(prev => prev.map(p => {
+      if (p.id !== photoId) return p
+      const newIds = (p.assigned_guest_ids ?? []).filter(id => id !== guestId)
+      return { ...p, assigned_guest_ids: newIds, assigned_count: newIds.length }
+    }))
+    setRemoveTarget(prev => { const n = { ...prev }; delete n[photoId]; return n })
+    setRemovingPhoto(null)
+  }
+
   async function assignPhoto(photoId: string) {
     const guestId = assignTarget[photoId]
     if (!guestId) return
@@ -1334,6 +1350,39 @@ export function PhotographerClient() {
                             >
                               {assigningPhoto === photo.id ? 'Přiřazuji…' : 'Přiřadit'}
                             </button>
+                            {(photo.assigned_count ?? 0) > 0 && (
+                              <div style={{ marginTop: 8 }}>
+                                <select
+                                  value={removeTarget[photo.id] ?? ''}
+                                  onChange={e => setRemoveTarget(prev => ({ ...prev, [photo.id]: e.target.value }))}
+                                  style={{
+                                    width: '100%', padding: '5px 6px', borderRadius: 6,
+                                    border: '1px solid #fca5a5', fontSize: 12, marginBottom: 6,
+                                  }}
+                                >
+                                  <option value="">Odebrat z galerie…</option>
+                                  {guests
+                                    .filter(g => photo.assigned_guest_ids?.includes(g.id))
+                                    .map(g => (
+                                      <option key={g.id} value={g.id}>
+                                        {g.badge_number ? `#${g.badge_number} ` : ''}{g.name ?? g.email}
+                                      </option>
+                                    ))}
+                                </select>
+                                <button
+                                  onClick={() => removeFromGallery(photo.id)}
+                                  disabled={!removeTarget[photo.id] || removingPhoto === photo.id}
+                                  style={{
+                                    width: '100%', background: 'transparent', color: '#ef4444',
+                                    border: '1px solid #fca5a5', borderRadius: 6, padding: '5px',
+                                    fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                    opacity: !removeTarget[photo.id] ? 0.4 : 1,
+                                  }}
+                                >
+                                  {removingPhoto === photo.id ? 'Odebírám…' : 'Odebrat z galerie'}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}
