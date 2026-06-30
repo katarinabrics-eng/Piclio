@@ -138,6 +138,17 @@ export default function PublicGalleryPage() {
                   alt={photo.filename}
                   style={{ width: '100%', aspectRatio: '3/2', objectFit: 'cover', display: 'block' }}
                 />
+                <div style={{
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0,
+                  aspectRatio: '3/2',
+                  pointerEvents: 'none',
+                  overflow: 'hidden',
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='100'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-size='14' font-weight='700' fill='rgba(255,255,255,0.5)' transform='rotate(-30 80 50)'%3EPICLIO%3C/text%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'repeat',
+                  backgroundSize: '160px 100px',
+                  opacity: 0.12,
+                }} />
                 <div style={{ padding: '12px 14px 14px' }}>
                   <button
                     onClick={() => openClaim(photo.id)}
