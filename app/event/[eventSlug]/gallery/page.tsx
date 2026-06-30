@@ -37,6 +37,10 @@ export default function PublicGalleryPage() {
   const [claimLoading, setClaimLoading] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [claimError, setClaimError] = useState('')
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set()
+    try { return new Set(JSON.parse(localStorage.getItem('piclio_favorites') ?? '[]')) } catch { return new Set() }
+  })
 
   useEffect(() => {
     if (!eventSlug) return
@@ -87,6 +91,21 @@ export default function PublicGalleryPage() {
     }
   }
 
+  async function deletePhoto(photoId: string) {
+    if (!confirm('Opravdu chcete tuto fotku odstranit?')) return
+    await fetch(`/api/event/${eventSlug}/photo/${photoId}`, { method: 'DELETE' })
+    setPhotos(prev => prev.filter(p => p.id !== photoId))
+  }
+
+  function toggleFavorite(photoId: string) {
+    setFavorites(prev => {
+      const next = new Set(prev)
+      next.has(photoId) ? next.delete(photoId) : next.add(photoId)
+      localStorage.setItem('piclio_favorites', JSON.stringify([...next]))
+      return next
+    })
+  }
+
   const brandColor = event?.brand_color ?? '#b7e94c'
   const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? ''
 
@@ -108,7 +127,16 @@ export default function PublicGalleryPage() {
       {/* Header */}
       <div style={{ background: '#0f0b1a', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '20px 24px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>{event?.name}</h1>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>{event?.name}</h1>
+            <button
+              onClick={() => console.log('TODO: open email modal')}
+              style={{ background: brandColor, color: '#1a1225', border: 'none', borderRadius: 10,
+                padding: '10px 20px', fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              Chci fotky →
+            </button>
+          </div>
           <p style={{ margin: '4px 0 0', fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>
             Veřejná galerie · {photos.length} fotografií
           </p>
@@ -151,17 +179,19 @@ export default function PublicGalleryPage() {
                   backgroundSize: '160px 100px',
                   opacity: 0.12,
                 }} />
-                <div style={{ padding: '12px 14px 14px' }}>
+                <div style={{ position: 'absolute', top: 8, right: 8, display: 'flex', gap: 6, zIndex: 2 }}>
                   <button
-                    onClick={() => openClaim(photo.id)}
-                    style={{
-                      width: '100%', background: brandColor, color: '#1a1225',
-                      border: 'none', borderRadius: 10, padding: '10px 0',
-                      fontSize: 15, fontWeight: 700, cursor: 'pointer',
-                    }}
-                  >
-                    To jsem já
-                  </button>
+                    onClick={e => { e.stopPropagation(); toggleFavorite(photo.id) }}
+                    style={{ background: favorites.has(photo.id) ? '#e53e3e' : 'rgba(0,0,0,0.5)',
+                      border: 'none', borderRadius: '50%', width: 34, height: 34,
+                      fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >❤️</button>
+                  <button
+                    onClick={e => { e.stopPropagation(); deletePhoto(photo.id) }}
+                    style={{ background: 'rgba(0,0,0,0.5)', border: 'none', borderRadius: '50%',
+                      width: 34, height: 34, fontSize: 16, cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >🗑️</button>
                 </div>
               </div>
             ))}
