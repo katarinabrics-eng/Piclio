@@ -17,6 +17,9 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   const [photos, setPhotos] = useState<GalleryPhoto[]>(initialPhotos)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [downloading, setDownloading] = useState(false)
+  const [orderSelected, setOrderSelected] = useState<Set<string>>(new Set())
+  const [orderSent, setOrderSent] = useState(false)
+  const [orderSending, setOrderSending] = useState(false)
   const [activeTab, setActiveTab] = useState<'moje' | 'event'>('moje')
   const [eventPhotos, setEventPhotos] = useState<UnmatchedPhoto[]>([])
   const [claiming, setClaiming] = useState<string | null>(null)
@@ -41,8 +44,9 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
   }, [token])
 
   useEffect(() => {
+    fetchMyPhotos()
     fetchEventPhotos()
-  }, [fetchEventPhotos])
+  }, [fetchMyPhotos, fetchEventPhotos])
 
   useEffect(() => {
     const channel = supabase
@@ -73,6 +77,18 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
     } finally {
       setClaiming(null)
     }
+  }
+
+  async function submitOrder() {
+    setOrderSending(true)
+    await fetch(`/api/gallery/${token}/order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photoIds: Array.from(orderSelected) }),
+    })
+    setOrderSending(false)
+    setOrderSent(true)
+    setOrderSelected(new Set())
   }
 
   async function downloadOne(photo: GalleryPhoto) {
@@ -108,7 +124,7 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
             style={{ height: 40, marginBottom: 12, objectFit: 'contain' }} />
         )}
         <div style={{ fontSize: 20, fontWeight: 700 }}>{initialEvent.name}</div>
-        <div style={{ fontSize: 14, opacity: 0.75, marginTop: 4 }}>
+        <div style={{ fontSize: 14, opacity: 1, color: '#000', marginTop: 4 }}>
           {initialGuest.name ? `Ahoj, ${initialGuest.name}` : 'Vaše galerie'} · {photos.length} {photos.length === 1 ? 'fotka' : photos.length < 5 ? 'fotky' : 'fotek'}
         </div>
       </div>
@@ -190,11 +206,61 @@ export function GalleryClient({ token, initialGuest, initialEvent, initialPhotos
                     >
                       ↓
                     </button>
+                    <button
+                      onClick={() => setOrderSelected(prev => {
+                        const next = new Set(prev)
+                        next.has(photo.id) ? next.delete(photo.id) : next.add(photo.id)
+                        return next
+                      })}
+                      style={{
+                        position: 'absolute', bottom: 4, left: 4,
+                        background: orderSelected.has(photo.id) ? brandColor : 'rgba(0,0,0,0.45)',
+                        border: 'none', borderRadius: 6, padding: '4px 8px',
+                        cursor: 'pointer', color: orderSelected.has(photo.id) ? '#1a1225' : '#fff',
+                        fontSize: 11, fontWeight: 700,
+                      }}
+                    >
+                      {orderSelected.has(photo.id) ? '✓ Tisková' : '+ Tisková'}
+                    </button>
                   </div>
                 ))}
               </div>
             )}
           </div>
+          {orderSelected.size > 0 && !orderSent && (
+            <div style={{
+              position: 'fixed', bottom: 0, left: 0, right: 0,
+              background: '#1e1530', borderTop: '1px solid rgba(255,255,255,0.12)',
+              padding: '14px 20px', display: 'flex', alignItems: 'center',
+              justifyContent: 'space-between', zIndex: 50,
+            }}>
+              <div style={{ fontSize: 14, color: 'white' }}>
+                Vybráno: <b>{orderSelected.size}</b> fotek · Cena:{' '}
+                <b>{orderSelected.size} × 250 Kč = {orderSelected.size * 250} Kč</b>
+              </div>
+              <button onClick={submitOrder} disabled={orderSending} style={{
+                background: brandColor, color: '#1a1225', border: 'none',
+                borderRadius: 10, padding: '10px 20px', fontSize: 14,
+                fontWeight: 700, cursor: 'pointer', opacity: orderSending ? 0.6 : 1,
+              }}>
+                {orderSending ? 'Odesílám…' : 'Odeslat objednávku →'}
+              </button>
+            </div>
+          )}
+          {orderSent && (
+            <div style={{
+              position: 'fixed', bottom: 0, left: 0, right: 0,
+              background: '#14532d', borderTop: '1px solid #16a34a',
+              padding: '16px 20px', textAlign: 'center', zIndex: 50,
+              color: 'white', fontSize: 14, fontWeight: 600,
+            }}>
+              ✓ Objednávka odeslána — fotograf vás bude kontaktovat
+              <button onClick={() => setOrderSent(false)}
+                style={{ marginLeft: 16, background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: 13 }}>
+                zavřít
+              </button>
+            </div>
+          )}
         </>
       )}
 
