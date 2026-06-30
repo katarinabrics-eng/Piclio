@@ -35,6 +35,7 @@ export default function PublicGalleryPage() {
   const [modal, setModal] = useState<ModalState>({ type: 'closed' })
   const [claimEmail, setClaimEmail] = useState('')
   const [claimLoading, setClaimLoading] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [claimError, setClaimError] = useState('')
 
   useEffect(() => {
@@ -136,7 +137,8 @@ export default function PublicGalleryPage() {
                 <img
                   src={photo.url}
                   alt={photo.filename}
-                  style={{ width: '100%', aspectRatio: '3/2', objectFit: 'cover', display: 'block' }}
+                  onClick={() => setLightboxIndex(photos.indexOf(photo))}
+                  style={{ width: '100%', aspectRatio: '3/2', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
                 />
                 <div style={{
                   position: 'absolute',
@@ -166,6 +168,45 @@ export default function PublicGalleryPage() {
           </div>
         )}
       </div>
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <div
+          onClick={() => setLightboxIndex(null)}
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 200, padding: 16,
+          }}
+        >
+          {lightboxIndex > 0 && (
+            <button onClick={e => { e.stopPropagation(); setLightboxIndex(lightboxIndex - 1) }}
+              style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.12)', border: 'none', borderRadius: '50%',
+                width: 48, height: 48, fontSize: 22, color: 'white', cursor: 'pointer' }}>‹</button>
+          )}
+          <img
+            src={photos[lightboxIndex].url}
+            onClick={e => e.stopPropagation()}
+            style={{ maxWidth: '100%', maxHeight: '90dvh', objectFit: 'contain',
+              borderRadius: 8, boxShadow: '0 8px 48px rgba(0,0,0,0.6)' }}
+          />
+          {lightboxIndex < photos.length - 1 && (
+            <button onClick={e => { e.stopPropagation(); setLightboxIndex(lightboxIndex + 1) }}
+              style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.12)', border: 'none', borderRadius: '50%',
+                width: 48, height: 48, fontSize: 22, color: 'white', cursor: 'pointer' }}>›</button>
+          )}
+          <button onClick={() => setLightboxIndex(null)}
+            style={{ position: 'absolute', top: 16, right: 16,
+              background: 'rgba(255,255,255,0.12)', border: 'none', borderRadius: '50%',
+              width: 40, height: 40, fontSize: 20, color: 'white', cursor: 'pointer' }}>✕</button>
+          <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)',
+            color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
+            {lightboxIndex + 1} / {photos.length}
+          </div>
+        </div>
+      )}
 
       {/* Modal overlay */}
       {modal.type !== 'closed' && (
