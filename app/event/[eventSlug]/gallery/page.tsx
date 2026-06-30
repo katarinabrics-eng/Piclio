@@ -26,6 +26,8 @@ type ModalState =
   | { type: 'success'; galleryToken: string }
   | { type: 'error'; message: string }
 
+type RegisterState = 'closed' | 'form' | 'loading'
+
 export default function PublicGalleryPage() {
   const { eventSlug } = useParams<{ eventSlug: string }>()
   const [event, setEvent] = useState<EventInfo | null>(null)
@@ -37,6 +39,9 @@ export default function PublicGalleryPage() {
   const [claimLoading, setClaimLoading] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [claimError, setClaimError] = useState('')
+  const [registerModal, setRegisterModal] = useState<RegisterState>('closed')
+  const [registerEmail, setRegisterEmail] = useState('')
+  const [registerError, setRegisterError] = useState('')
   const [favorites, setFavorites] = useState<Set<string>>(() => {
     if (typeof window === 'undefined') return new Set()
     try { return new Set(JSON.parse(localStorage.getItem('piclio_favorites') ?? '[]')) } catch { return new Set() }
@@ -106,6 +111,25 @@ export default function PublicGalleryPage() {
     })
   }
 
+  async function submitRegister() {
+    if (!registerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerEmail)) {
+      setRegisterError('Zadejte platný e-mail'); return
+    }
+    setRegisterModal('loading')
+    try {
+      const res = await fetch(`/api/event/${eventSlug}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: registerEmail }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setRegisterError(data.error ?? 'Chyba'); setRegisterModal('form'); return }
+      window.location.href = `/gallery/${data.galleryToken}`
+    } catch {
+      setRegisterError('Chyba připojení'); setRegisterModal('form')
+    }
+  }
+
   const brandColor = event?.brand_color ?? '#b7e94c'
   const APP_URL = process.env.NEXT_PUBLIC_BASE_URL ?? ''
 
@@ -130,7 +154,7 @@ export default function PublicGalleryPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>{event?.name}</h1>
             <button
-              onClick={() => console.log('TODO: open email modal')}
+              onClick={() => { setRegisterEmail(''); setRegisterError(''); setRegisterModal('form') }}
               style={{ background: brandColor, color: '#1a1225', border: 'none', borderRadius: 10,
                 padding: '10px 20px', fontSize: 15, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
@@ -234,6 +258,50 @@ export default function PublicGalleryPage() {
           <div style={{ position: 'absolute', bottom: 20, left: '50%', transform: 'translateX(-50%)',
             color: 'rgba(255,255,255,0.45)', fontSize: 13 }}>
             {lightboxIndex + 1} / {photos.length}
+          </div>
+        </div>
+      )}
+
+      {/* Register modal */}
+      {registerModal !== 'closed' && (
+        <div onClick={() => setRegisterModal('closed')} style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 20, zIndex: 150,
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: '#1e1530', borderRadius: 20, padding: '32px 28px',
+            width: '100%', maxWidth: 420, border: '1px solid rgba(255,255,255,0.1)',
+          }}>
+            <h2 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 700 }}>Chci své fotky</h2>
+            <p style={{ margin: '0 0 24px', color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.6 }}>
+              Zadejte e-mail a my vám pošleme odkaz na vaši osobní galerii.
+            </p>
+            <input type="email" value={registerEmail}
+              onChange={e => { setRegisterEmail(e.target.value); setRegisterError('') }}
+              onKeyDown={e => e.key === 'Enter' && submitRegister()}
+              placeholder="vas@email.cz" autoFocus
+              style={{ width: '100%', boxSizing: 'border-box',
+                background: 'rgba(255,255,255,0.08)',
+                border: `2px solid ${registerError ? '#ff6b6b' : 'rgba(255,255,255,0.15)'}`,
+                borderRadius: 12, padding: '0 16px', height: 48,
+                fontSize: 16, color: 'white', outline: 'none', marginBottom: 8 }}
+              onFocus={e => { if (!registerError) e.currentTarget.style.borderColor = brandColor }}
+              onBlur={e => { if (!registerError) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)' }}
+            />
+            {registerError && <p style={{ color: '#ff6b6b', fontSize: 13, margin: '0 0 12px' }}>{registerError}</p>}
+            <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+              <button onClick={() => setRegisterModal('closed')} style={{
+                flex: 1, background: 'rgba(255,255,255,0.08)', color: 'white',
+                border: '1px solid rgba(255,255,255,0.15)', borderRadius: 12,
+                height: 46, fontSize: 15, fontWeight: 600, cursor: 'pointer' }}>Zrušit</button>
+              <button onClick={submitRegister} disabled={registerModal === 'loading' || !registerEmail} style={{
+                flex: 2, background: brandColor, color: '#1a1225', border: 'none',
+                borderRadius: 12, height: 46, fontSize: 15, fontWeight: 700, cursor: 'pointer',
+                opacity: (registerModal === 'loading' || !registerEmail) ? 0.6 : 1 }}>
+                {registerModal === 'loading' ? 'Hledám…' : 'Přejít do galerie →'}
+              </button>
+            </div>
           </div>
         </div>
       )}
