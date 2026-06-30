@@ -123,12 +123,13 @@ export default function PublicGalleryPage() {
           </div>
         ) : (
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+            display: 'flex',
+            flexWrap: 'wrap',
             gap: 16,
           }}>
             {photos.map(photo => (
               <div key={photo.id} style={{
+                height: 280,
                 borderRadius: 14, overflow: 'hidden',
                 background: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,255,255,0.08)',
@@ -138,12 +139,11 @@ export default function PublicGalleryPage() {
                   src={photo.url}
                   alt={photo.filename}
                   onClick={() => setLightboxIndex(photos.indexOf(photo))}
-                  style={{ width: '100%', aspectRatio: '3/2', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
+                  style={{ height: '100%', width: 'auto', objectFit: 'cover', display: 'block', cursor: 'zoom-in' }}
                 />
                 <div style={{
                   position: 'absolute',
-                  top: 0, left: 0, right: 0,
-                  aspectRatio: '3/2',
+                  top: 0, left: 0, right: 0, bottom: 0,
                   pointerEvents: 'none',
                   overflow: 'hidden',
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='100'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-size='14' font-weight='700' fill='rgba(255,255,255,0.5)' transform='rotate(-30 80 50)'%3EPICLIO%3C/text%3E%3C/svg%3E")`,
