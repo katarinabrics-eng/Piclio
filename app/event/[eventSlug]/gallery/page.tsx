@@ -42,10 +42,6 @@ export default function PublicGalleryPage() {
   const [registerModal, setRegisterModal] = useState<RegisterState>('closed')
   const [registerEmail, setRegisterEmail] = useState('')
   const [registerError, setRegisterError] = useState('')
-  const [favorites, setFavorites] = useState<Set<string>>(() => {
-    if (typeof window === 'undefined') return new Set()
-    try { return new Set(JSON.parse(localStorage.getItem('piclio_favorites') ?? '[]')) } catch { return new Set() }
-  })
 
   useEffect(() => {
     if (!eventSlug) return
@@ -102,16 +98,7 @@ export default function PublicGalleryPage() {
     setPhotos(prev => prev.filter(p => p.id !== photoId))
   }
 
-  function toggleFavorite(photoId: string) {
-    setFavorites(prev => {
-      const next = new Set(prev)
-      next.has(photoId) ? next.delete(photoId) : next.add(photoId)
-      localStorage.setItem('piclio_favorites', JSON.stringify([...next]))
-      return next
-    })
-  }
-
-  async function submitRegister() {
+async function submitRegister() {
     if (!registerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerEmail)) {
       setRegisterError('Zadejte platný e-mail'); return
     }
@@ -203,13 +190,7 @@ export default function PublicGalleryPage() {
                   backgroundSize: '160px 100px',
                   opacity: 0.12,
                 }} />
-                <div style={{ position: 'absolute', top: 8, right: 8, display: 'flex', gap: 6, zIndex: 2 }}>
-                  <button
-                    onClick={e => { e.stopPropagation(); toggleFavorite(photo.id) }}
-                    style={{ background: favorites.has(photo.id) ? '#e53e3e' : 'rgba(0,0,0,0.5)',
-                      border: 'none', borderRadius: '50%', width: 34, height: 34,
-                      fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  >❤️</button>
+                <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 2 }}>
                   <button
                     onClick={e => { e.stopPropagation(); deletePhoto(photo.id) }}
                     style={{ background: 'rgba(0,0,0,0.5)', border: 'none', borderRadius: '50%',
