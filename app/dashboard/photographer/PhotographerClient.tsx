@@ -985,6 +985,22 @@ export function PhotographerClient() {
                     >
                       Kiosk URL
                     </button>
+                    <button
+                      onClick={e => {
+                        e.stopPropagation()
+                        navigator.clipboard.writeText(`${APP_URL}/event/${event.slug}/gallery`)
+                          .then(() => alert(`Zkopírováno: /event/${event.slug}/gallery`))
+                      }}
+                      title={`${APP_URL}/event/${event.slug}/gallery`}
+                      style={{
+                        background: '#f3f4f6', border: '1px solid #e5e7eb',
+                        borderRadius: 8, padding: '6px 12px', fontSize: 12,
+                        fontWeight: 600, color: '#374151', cursor: 'pointer',
+                        whiteSpace: 'nowrap', flexShrink: 0,
+                      }}
+                    >
+                      Galerie URL
+                    </button>
                     {event.client_email && (
                       <button
                         onClick={e => { e.stopPropagation(); resendInvite(event.id) }}
