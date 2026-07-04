@@ -16,61 +16,64 @@ export default function HomePage() {
     <>
       <div dangerouslySetInnerHTML={{ __html: `
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/lp-styles.css">
 <link rel="stylesheet" href="/lp-sections.css">
-
+<link rel="stylesheet" href="/lp-concept.css">
 <div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
 
-<!-- NAV -->
+<!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
   <ul class="nav-links">
-    <li><a href="#atrakce">Atrakce</a></li>
-    <li><a href="#vystupy">Výstupy</a></li>
+    <li><a href="#moznosti">Možnosti</a></li>
+    <li><a href="#inspirace">Inspirace</a></li>
+    <li><a href="#reference">Reference</a></li>
     <li><a href="#pro-fotografy">Pro fotografy</a></li>
-    <li><a href="#jak-to-funguje">Jak to funguje</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
   </ul>
   <div class="nav-cta">
-    <a class="nav-login" href="/login">Přihlásit se</a>
-    <a class="btn btn-primary" href="#kontakt">Poptat fotografa <span class="arr">→</span></a>
+    <a class="nav-login" href="https://www.piclio.cz/login">Přihlásit se</a>
+    <a class="btn btn-primary" href="#kontakt">Nezávazně poptat <span class="arr">→</span></a>
     <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#atrakce">Atrakce</a>
-  <a href="#vystupy">Výstupy</a>
+  <a href="#moznosti">Možnosti</a>
+  <a href="#inspirace">Inspirace</a>
+  <a href="#reference">Reference</a>
   <a href="#pro-fotografy">Pro fotografy</a>
-  <a href="#jak-to-funguje">Jak to funguje</a>
   <a href="#kontakt">Kontakt</a>
-  <a class="btn btn-primary" href="#kontakt">Poptat fotografa →</a>
+  <a class="btn btn-primary" href="#kontakt">Nezávazně poptat →</a>
 </div>
 
-<!-- 1 · HERO -->
-<header class="hero" id="top">
+<!-- ===================== 1 · HERO ===================== -->
+<header class="hero" id="top" data-screen-label="Hero">
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <span class="hero-badge reveal"><span class="live"></span>Piclio by Lucifera</span>
+        <span class="hero-badge reveal"><span class="live"></span>Fotografie · Technologie · AI · Zážitky</span>
         <h1 class="reveal" data-d="1">
-          <span class="ln">Fotíme vaši akci.</span>
-          <span class="ln grad-text">Hosté mají fotky hned.</span>
+          <span class="ln">Když fotografie nejsou</span>
+          <span class="ln">jen vzpomínkou, ale</span>
+          <span class="ln grad-text">součástí zážitku.</span>
         </h1>
-        <p class="sub reveal" data-d="2">Piclio je fotografická služba pro konference, firemní večírky a galavečery. Fotograf fotí, systém rozpozná každého hosta a pošle mu jeho fotky na e-mail — ještě během večera.</p>
+        <p class="sub reveal" data-d="2">Vaši hosté nečekají na fotografie až po akci — stávají se součástí dění už během ní. Snímky se během okamžiku objeví na obrazovkách a hosté je mají hned ve svých mobilech. Každá fotka se tak stává součástí atmosféry.</p>
         <div class="hero-actions reveal" data-d="3">
-          <a class="btn btn-primary" href="#kontakt">Poptat fotografický servis <span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#pro-fotografy">Jsem fotograf, chci software</a>
+          <a class="btn btn-primary" href="#kontakt">Nezávazně poptat <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#moznosti">Prohlédnout možnosti</a>
         </div>
-        <div class="hero-trust reveal" data-d="4">
-          <div class="avs">
-            <img src="/lp-assets/hero-portrait.jpg" alt="">
-            <img src="/lp-assets/hero-01.png" alt="">
-            <img src="/lp-assets/hero-piclio05.jpg" alt="">
-          </div>
-          <span>300+ hostů na jedné akci. Fotky dostanou všichni — automaticky.</span>
+        <div class="hero-chips reveal" data-d="4">
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní eventy</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festivaly</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3l7 7"/><path d="M6.5 3.5l7 7"/><path d="M6 7l-4 4 2 2 4-4"/><path d="M13 10l7 7-3 3-7-7"/></svg></span>Koncerty</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span>Golfové turnaje</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.6"/><path d="M6 21l3-6 3 2 2-5 4 3"/><path d="M9 15l1.5-4.5L14 9l2 3h3"/></svg></span>Sportovní akce</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M9 21v-6h6v6"/><path d="M3 9h18"/></svg></span>Hotely</span>
+          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatby</span>
         </div>
       </div>
 
@@ -95,7 +98,7 @@ export default function HomePage() {
   </div>
 </header>
 
-<!-- MARQUEE -->
+<!-- ===================== MARQUEE ===================== -->
 <section class="marquee-band" aria-hidden="true">
   <div class="marquee-wrap">
     <div class="marquee row" style="--dur:66s">
@@ -131,8 +134,86 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 1.5 · KOUZLA -->
-<section class="section magic reveal" id="kouzla">
+<!-- ===================== MOŽNOSTI (4 categories) ===================== -->
+<section class="section" id="moznosti" data-screen-label="Možnosti">
+  <div class="wrap">
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Možnosti</span>
+      <h2 class="title">Jaký zážitek <span class="grad-text">chcete vytvořit?</span></h2>
+      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
+    </div>
+
+    <div class="opts">
+      <article class="opt reveal">
+        <a class="opt-stretch" href="event-photography.html" aria-label="Event Photography"></a>
+        <div class="opt-bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em">📸</span>Chci profesionálně zachytit atmosféru akce.</span>
+          <h3>Event Photography</h3>
+          <p class="opt-sub">Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
+          <div class="opt-tags"><span>Reportážní fotografie</span><span>Živé promítání</span><span>Fotky do mobilů</span><span>Online galerie</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt reveal" data-d="1">
+        <a class="opt-stretch" href="interactive-studio.html" aria-label="Interactive Studio"></a>
+        <div class="opt-bg"><img src="uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Interactive Studio"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em">🎭</span>Chci, aby se hosté aktivně bavili.</span>
+          <h3>Interactive Studio</h3>
+          <p class="opt-sub">Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
+          <div class="opt-tags"><span>Tematické scény</span><span>360° fotografie</span><span>Speciální kamery</span><span>Technologie na míru</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt reveal" data-d="1">
+        <a class="opt-stretch" href="ai-experiences.html" aria-label="AI Photo Experiences"></a>
+        <div class="opt-bg"><img src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em">🤖</span>Chci hosty překvapit něčím, co ještě nezažili.</span>
+          <h3>AI Photo Experiences</h3>
+          <p class="opt-sub">Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
+          <div class="opt-tags"><span>AI avatary</span><span>Filmové premiéry</span><span>Koncertní vizuály</span><span>Personalizace</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt custom reveal" data-d="2">
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em">✨</span>Nenašli jste přesně to, co hledáte? To je dobře.</span>
+          <h3>Custom Experiences</h3>
+          <p class="opt-sub">Neomezujeme se katalogem. Máte-li vlastní představu nebo chcete něco, co jste nikde neviděli, propojíme hardware, software, AI i scénografii a navrhneme řešení přesně pro vás.</p>
+          <div class="opt-tags"><span>Vlastní instalace</span><span>Hardware + software</span><span>Kreativní scénografie</span></div>
+          <a class="btn btn-primary" style="margin-top:6px" href="#kontakt">Pojďme něco vytvořit <span class="arr">→</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CO JE JEDINEČNÉ (6 features) ===================== -->
+<section class="section unique" data-screen-label="Jedinečné">
+  <div class="wrap">
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Proč Piclio</span>
+      <h2 class="title">Co je na Picliu <span class="grad-pink">jedinečné?</span></h2>
+      <p class="lead">Piclio není jen fotografický servis. Jsme kreativní a technologický partner pro eventy — propojujeme profesionální fotografii, moderní technologie a originální nápady do zážitků, na které hosté nezapomínají.</p>
+    </div>
+    <div class="uniq-grid">
+      <div class="uniq reveal" data-d="1"><div class="ic">⚡</div><h3>Fotografie během sekund</h3><p>Na obrazovkách do jedné minuty, v mobilu hosta zpravidla do 30 vteřin od pořízení.</p></div>
+      <div class="uniq reveal" data-d="2"><div class="ic">📱</div><h3>Vlastní galerie v mobilu</h3><p>Každý host má svou soukromou galerii — bez hledání, bez aplikace, připravenou ke sdílení.</p></div>
+      <div class="uniq reveal" data-d="3"><div class="ic">🎭</div><h3>Interaktivní zážitky</h3><p>Fotostudia a instalace, které se stávají součástí programu a baví hosty celý večer.</p></div>
+      <div class="uniq reveal" data-d="1"><div class="ic">🤖</div><h3>AI technologie</h3><p>Generativní AI proměny v reálném čase — obálky, filmové plakáty, avatary i firemní branding.</p></div>
+      <div class="uniq reveal" data-d="2"><div class="ic">🛠</div><h3>Vývoj na míru</h3><p>Umíme postavit vlastní hardware i software přesně pro váš koncept a téma akce.</p></div>
+      <div class="uniq reveal" data-d="3"><div class="ic">🎯</div><h3>Jeden partner pro celý projekt</h3><p>Fotografie, technologie, AI i kreativa pod jednou střechou. Bez slepování deseti dodavatelů.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 1.5 · KOUZLA (tablet → 6 outputs) ===================== -->
+<section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Součástí každé galerie</span>
@@ -157,15 +238,16 @@ export default function HomePage() {
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/obalka-casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="uploads/obalka%20c%CC%8Casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="uploads/za%CC%81bavne%CC%81%20postavic%CC%8Cky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 4 · NABÍDKA (atrakce) -->
-<section class="section" id="atrakce">
+
+<!-- ===================== 4 · NABÍDKA A (events) ===================== -->
+<section class="section" id="atrakce" data-screen-label="Atrakce">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Co si objednáte</span>
@@ -196,7 +278,7 @@ export default function HomePage() {
       </article>
 
       <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-assets/realniscena.jpg" alt="Prémiová reálná scéna — Gatsby"></div>
+        <div class="bg"><img src="uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
         <span class="pill alt">Na míru</span>
         <h3>Prémiová reálná scéna</h3>
         <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
@@ -205,7 +287,7 @@ export default function HomePage() {
     </div>
 
     <article class="serv-band reveal">
-      <div class="bg"><img src="/lp-assets/brand02.jpeg" alt="Brand Everywhere — tisk a branding"></div>
+      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
       <div class="serv-band-copy">
         <span class="pill">Brand</span>
         <h3>Brand Everywhere</h3>
@@ -228,8 +310,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 2 · PATTERN INTERRUPT -->
-<section class="section">
+
+<!-- ===================== 2 · PATTERN INTERRUPT ===================== -->
+<section class="section" data-screen-label="Bolest">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Proč záleží na rychlosti</span>
@@ -259,8 +342,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 6 · JAK TO FUNGUJE -->
-<section class="section" id="jak-to-funguje">
+
+<!-- ===================== 6 · JAK TO FUNGUJE ===================== -->
+<section class="section" id="jak-to-funguje" data-screen-label="Jak to funguje">
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Jak to funguje</span>
@@ -271,7 +355,7 @@ export default function HomePage() {
     <div class="flow-wrap reveal">
       <div class="flow">
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01-zachyceni.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-photo"><span class="flow-num">1</span><img src="uploads/01Zachyceni%CC%81%20.jpeg" alt="Zachycení a zpracování"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
           <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
         </article>
@@ -299,6 +383,7 @@ export default function HomePage() {
       <div class="flow-hint"><span class="dots"><i></i><i></i><i></i><i></i><i></i></span>Táhněte pro další</div>
     </div>
 
+    <!-- Compare table -->
     <div class="sec-head reveal" style="margin-top:100px">
       <span class="eyebrow">Proč Piclio?</span>
       <h2 class="title">Vlastnost <span class="grad-text">po vlastnosti.</span></h2>
@@ -333,8 +418,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 4.6 · VÝSTUPY -->
-<section class="section outputs" id="vystupy">
+
+<!-- ===================== 4.6 · VÝSTUPY (gallery) ===================== -->
+<section class="section outputs" id="vystupy" data-screen-label="Výstupy">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Co si host odnese</span>
@@ -430,11 +516,12 @@ export default function HomePage() {
       </div>
     </div>
 
+    <!-- Auto-scroll caption strip -->
     <div class="strip-band reveal">
       <div class="strip-head">
         <span class="eyebrow">Naše ukázky</span>
         <h3 class="strip-title">Každou akci uchopíme <span class="grad-text">tematicky.</span></h3>
-        <p class="strip-sub">Gatsby, Hollywood, Divoký západ, Casino Royale nebo vaše značka — ladíme styl, kulisy i AI proměny přesně k tématu večera.</p>
+        <p class="strip-sub">Gatsby, Hollywood, Divoký západ, Casino Royale nebo vaše značka — ladíme styl, kulisy i AI proměny přesně k tématu večera. Podívejte se na ukázky.</p>
       </div>
       <div class="strip-wrap">
         <div class="strip">
@@ -463,6 +550,7 @@ export default function HomePage() {
           <div class="gphoto"><img src="/lp-assets/ukazka-13.jpg" alt="" loading="lazy"></div>
           <div class="gphoto"><img src="/lp-assets/ukazka-14.jpg" alt="" loading="lazy"></div>
           <div class="gphoto"><img src="/lp-assets/ukazka-15.jpg" alt="" loading="lazy"></div>
+<!-- dup -->
           <div class="gphoto"><video src="/lp-assets/u-video-1.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
           <div class="gphoto"><video src="/lp-assets/u-video-2.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
           <div class="gphoto"><video src="/lp-assets/u-video-3.mp4" autoplay loop muted playsinline preload="metadata"></video></div>
@@ -494,8 +582,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 4.7 · ZÁŽITKY (use-case carousel) -->
-<section class="section showcase" id="zazitky">
+
+<!-- ===================== 4.7 · ZÁŽITKY (use-case carousel) ===================== -->
+<section class="section showcase" id="zazitky" data-screen-label="Zážitky">
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="eyebrow center">Co všechno Piclio umí</span>
@@ -622,8 +711,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 5 · SAAS PRO FOTOGRAFY -->
-<section class="section" id="pro-fotografy">
+
+<!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
+<section class="section" id="pro-fotografy" data-screen-label="Pro fotografy">
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Software pro fotografy</span>
@@ -663,15 +753,132 @@ export default function HomePage() {
           <div><h3>Monetizační modul <span class="soon">Připravujeme</span></h3><p>Přestaňte nechávat peníze na stole. Uzamkněte fotky a nabídněte hostům nákup jednotlivých snímků i celých prémiových galerií.</p></div>
         </div>
         <div style="margin-top:30px">
-          <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Z%C3%A1jem%20o%20beta%20p%C5%99%C3%ADstup%20Piclio%20SaaS">Chci beta přístup pro fotografy <span class="arr">→</span></a>
+          <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Z%C3%A1jem o beta p%C5%99%C3%ADstup Piclio SaaS">Chci beta přístup pro fotografy <span class="arr">→</span></a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 8 · O NÁS / TÝM -->
-<section class="section" id="o-nas">
+
+<!-- ===================== REFERENCE (case study + stats) ===================== -->
+<section class="section proof" id="reference" data-screen-label="Reference">
+  <div class="wrap">
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Reference</span>
+      <h2 class="title">Případová <span class="grad-text">studie.</span></h2>
+      <p class="lead">Jak jsme zatraktivnili vyhlášení golfového turnaje — a proč si hosté fotky stáhli ještě na místě.</p>
+    </div>
+
+    <div class="case-slider reveal">
+      <button class="cs-arrow prev" id="caseprev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="cs-arrow next" id="casenext" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+
+      <div class="case-viewport" id="caseViewport">
+        <article class="case-card active">
+          <div class="case-photo"><img src="/lp-assets/cat-businessgala.png" alt="Česká golfová asociace"><span class="case-tag">⛳ Golf</span></div>
+          <div class="case-body">
+            <h3>Česká golfová asociace</h3>
+            <p class="case-lede">Vyhlášení výsledků turnaje potřebovalo víc energie — hosté odcházeli hned po ceremoniálu.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zatraktivnit vyhlášení a udržet hosty déle v sále.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Živé promítání fotografií, mobilní galerie a fotostudio přímo na místě konání.</span></div>
+            </div>
+            <div class="case-result">95 % hostů si stáhlo fotky ještě během akce</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag">🏢 Firemní večírek</span></div>
+          <div class="case-body">
+            <h3>Vánoční večírek, 250+ zaměstnanců</h3>
+            <p class="case-lede">Firma chtěla obsah pro interní i firemní LinkedIn ještě týž večer, ne fotky o týden později.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zábavný obsah pro sociální sítě bez čekání na zpracování.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">AI Magic Corner s brandovanou galerií a okamžitým sdílením z mobilu.</span></div>
+            </div>
+            <div class="case-result">300+ fotek sdíleno na LinkedIn ještě týž večer</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-festival2.png" alt="Letní hudební festival"><span class="case-tag">🎵 Festival</span></div>
+          <div class="case-body">
+            <h3>Letní hudební festival</h3>
+            <p class="case-lede">Pořadatel chtěl zachytit atmosféru davu a proměnit ji v obsah, který sám žije na sítích.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zachytit atmosféru a rychle ji dostat na web i sítě festivalu.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Živé promítání na LED stěnu + festivalové AI plakáty pro každého návštěvníka.</span></div>
+            </div>
+            <div class="case-result">Dosah na Instagramu rostl ještě v průběhu festivalu</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag">🎤 Konference</span></div>
+          <div class="case-body">
+            <h3>Tech konference, 3 dny</h3>
+            <p class="case-lede">Účastníci chtěli profesionální profilovky na LinkedIn bez fronty na klasické foto studio.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Networking a osobní branding stovek účastníků během tří dnů.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Profi headshoty na místě s AI úpravou a okamžitým doručením do mobilu.</span></div>
+            </div>
+            <div class="case-result">600+ profesionálních headshotů za jediný den</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag">💍 Svatba</span></div>
+          <div class="case-body">
+            <h3>Svatba pro 120 hostů</h3>
+            <p class="case-lede">Snoubenci chtěli, aby se bavili i hosté mimo obřadní fotografii — a rodina viděla fotky hned.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zabavit hosty během hostiny a nenechat rodinu čekat na fotky týdny.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Interaktivní fotostudio na hostině a živá galerie sdílená s celou rodinou.</span></div>
+            </div>
+            <div class="case-result">Rodina měla fotky v mobilu ještě před koncem hostiny</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="case-dots" id="caseDots"></div>
+    </div>
+    <p class="stat-note reveal" style="margin-bottom:56px">Ilustrativní příklady na základě typických realizací — reálné reference a loga klientů doplníme.</p>
+
+    <div class="stat-row reveal">
+      <div class="stat-cell"><div class="big" data-count="500" data-suffix="+">0</div><div class="lbl">realizovaných akcí</div></div>
+      <div class="stat-cell"><div class="big" data-count="150000" data-suffix="+">0</div><div class="lbl">vyfotografovaných hostů</div></div>
+      <div class="stat-cell"><div class="big" data-count="98" data-suffix="%">0</div><div class="lbl">spokojených klientů</div></div>
+      <div class="stat-cell"><div class="big">5 s</div><div class="lbl">nejrychlejší doručení fotky</div></div>
+    </div>
+    <p class="stat-note reveal">Uvádíme pouze reálná čísla z realizovaných akcí.</p>
+  </div>
+</section>
+
+<!-- ===================== INSPIRACE (event-type grid) ===================== -->
+<section class="section" id="inspirace" data-screen-label="Inspirace">
+  <div class="wrap">
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Inspirace</span>
+      <h2 class="title">Pro jaké akce je <span class="grad-pink">Piclio ideální?</span></h2>
+      <p class="lead">Každá akce má jinou atmosféru. Podívejte se, kde Piclio nejvíc září — a představte si svůj vlastní zážitek.</p>
+    </div>
+
+    <div class="inspire-grid reveal">
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-firemni.png" alt="Firemní večírky" loading="lazy"><span class="lab"><span class="em">🏢</span><span class="t">Firemní večírky</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-konference.png" alt="Konference" loading="lazy"><span class="lab"><span class="em">🎤</span><span class="t">Konference</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-festival.png" alt="Festivaly" loading="lazy"><span class="lab"><span class="em">🎵</span><span class="t">Festivaly</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-galavecer.png" alt="Filmové premiéry" loading="lazy"><span class="lab"><span class="em">🎬</span><span class="t">Filmové premiéry</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-businessgala.png" alt="Golfové turnaje" loading="lazy"><span class="lab"><span class="em">🏌️</span><span class="t">Golfové turnaje</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-teambuilding.png" alt="Sportovní akce" loading="lazy"><span class="lab"><span class="em">🏃</span><span class="t">Sportovní akce</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-svatba.jpeg" alt="Svatby" loading="lazy"><span class="lab"><span class="em">💍</span><span class="t">Svatby</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-openair.png" alt="Hotely a resorty" loading="lazy"><span class="lab"><span class="em">🏨</span><span class="t">Hotely a resorty</span></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8 · BONUSY A TÝM ===================== -->
+<section class="section" id="o-nas" data-screen-label="Tým">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Partner pro růst</span>
@@ -707,8 +914,9 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 9 · FAQ -->
-<section class="section" id="faq">
+
+<!-- ===================== 9 · FAQ ===================== -->
+<section class="section" id="faq" data-screen-label="FAQ">
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="eyebrow center">Časté dotazy</span>
@@ -743,41 +951,88 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- 10 · FINAL CTA -->
-<section class="section" id="kontakt">
-  <div class="wrap cta-final">
-    <span class="eyebrow center reveal">Pojďme do toho</span>
-    <h2 class="reveal" data-d="1">Naplánujeme fotografický servis <span class="grad-pink">přesně pro vaši akci.</span></h2>
-    <p class="lead reveal" data-d="2">Napište nám — do 24 hodin dostanete konkrétní nabídku. Praha a celá ČR.</p>
-    <div class="cta-btns reveal" data-d="2">
-      <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Popt%C3%A1vka%20eventu%20Piclio">Odeslat poptávku pro event <span class="arr">→</span></a>
-      <a class="btn btn-ghost" href="mailto:ahoj@piclio.cz?subject=Beta%20p%C5%99%C3%ADstup%20pro%20fotografy">Chci beta přístup pro fotografy</a>
-    </div>
-    <div class="cta-info reveal" data-d="3">
-      <a href="mailto:ahoj@piclio.cz">ahoj@piclio.cz</a>
-      <a href="tel:+420604750776">+420 604 750 776</a>
-      <span>Osobně, bez automatů.</span>
+
+<!-- ===================== 10 · KONTAKT (form) ===================== -->
+<section class="section" id="kontakt" data-screen-label="Kontakt">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-aside reveal">
+        <span class="eyebrow">Kontakt</span>
+        <h2 class="title">Řekněte nám, <span class="grad-pink">co plánujete.</span></h2>
+        <p class="lead">Navrhneme zážitek, který bude odpovídat právě vaší akci. Do 24 hodin dostanete konkrétní nabídku. Praha a celá ČR.</p>
+        <div class="ci-list">
+          <a class="ci" href="mailto:ahoj@piclio.cz"><span class="em">✉</span><div><div class="k">E-mail</div><div class="v">ahoj@piclio.cz</div></div></a>
+          <a class="ci" href="tel:+420604750776"><span class="em">📞</span><div><div class="k">Telefon</div><div class="v">+420 604 750 776</div></div></a>
+          <div class="ci"><span class="em">📍</span><div><div class="k">Kde působíme</div><div class="v">Praha a celá ČR</div></div></div>
+        </div>
+      </div>
+
+      <form class="cform reveal" data-d="1" id="poptForm" novalidate>
+        <div class="form-ok" id="formOk">Děkujeme! Otevřeli jsme vám e-mail s vyplněnou poptávkou — stačí odeslat. Ozveme se do 24 hodin.</div>
+
+        <div class="cfield">
+          <label>Jaký zážitek vás zajímá?</label>
+          <div class="pchips">
+            <label class="pchip"><input type="radio" name="sluzba" value="Event Photography" checked><span class="pc-body"><span class="pc-t">📸 Event Photography</span><span class="pc-p">od 23 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Interactive Studio"><span class="pc-body"><span class="pc-t">🎭 Interactive Studio</span><span class="pc-p">od 19 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="AI Photo Experiences"><span class="pc-body"><span class="pc-t">🤖 AI Experiences</span><span class="pc-p">od 19 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Prémiová reálná scéna"><span class="pc-body"><span class="pc-t">✨ Reálná scéna na míru</span><span class="pc-p">od 29 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Kombinace / nevím"><span class="pc-body"><span class="pc-t">🎯 Kombinace / poradit</span><span class="pc-p">na míru</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Software pro fotografy"><span class="pc-body"><span class="pc-t">📱 Software pro fotografy</span><span class="pc-p">beta</span></span></label>
+          </div>
+        </div>
+
+        <div class="cform-row">
+          <div class="cfield"><label for="jmeno">Jméno a příjmení *</label><input id="jmeno" name="jmeno" type="text" placeholder="Jan Novák" required></div>
+          <div class="cfield"><label for="firma">Firma / akce</label><input id="firma" name="firma" type="text" placeholder="Název firmy nebo akce"></div>
+        </div>
+        <div class="cform-row">
+          <div class="cfield"><label for="email">E-mail *</label><input id="email" name="email" type="email" placeholder="jan@firma.cz" required></div>
+          <div class="cfield"><label for="tel">Telefon</label><input id="tel" name="tel" type="tel" placeholder="+420 …"></div>
+        </div>
+        <div class="cform-row">
+          <div class="cfield"><label for="datum">Termín akce</label><input id="datum" name="datum" type="text" placeholder="např. 14. 9. 2026"></div>
+          <div class="cfield">
+            <label for="hoste">Počet hostů</label>
+            <select id="hoste" name="hoste">
+              <option value="">Vyberte…</option>
+              <option>do 50</option>
+              <option>50–150</option>
+              <option>150–300</option>
+              <option>300–500</option>
+              <option>500+</option>
+            </select>
+          </div>
+        </div>
+        <div class="cfield"><label for="zprava">Co plánujete?</label><textarea id="zprava" name="zprava" placeholder="Krátce popište svou akci a představu…"></textarea></div>
+
+        <button type="submit" class="btn btn-primary">Odeslat nezávaznou poptávku <span class="arr">→</span></button>
+        <p class="cform-note">Odesláním souhlasíte se zpracováním údajů dle <a href="ochrana-osobnich-udaju.html" style="color:var(--muted);text-decoration:underline">zásad ochrany osobních údajů</a>. Nezávazné, bez automatů.</p>
+      </form>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+
+<!-- ===================== FOOTER ===================== -->
 <footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
       <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
       <ul class="f-links">
-        <li><a href="#atrakce">Atrakce</a></li>
-        <li><a href="#vystupy">Výstupy</a></li>
+        <li><a href="#moznosti">Možnosti</a></li>
+        <li><a href="#inspirace">Inspirace</a></li>
+        <li><a href="#reference">Reference</a></li>
         <li><a href="#pro-fotografy">Pro fotografy</a></li>
-        <li><a href="#jak-to-funguje">Jak to funguje</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
     </div>
-    <div class="copy">© 2026 Studio Lucifera · Piclio · Kampa, Praha · <a href="/obchodni-podminky">Obchodní podmínky</a> · <a href="/gdpr">Zásady ochrany osobních údajů</a></div>
+    <div class="copy">© 2026 Studio Lucifera · Piclio · Kampa, Praha · <a href="obchodni-podminky.html">Obchodní podmínky</a> · <a href="ochrana-osobnich-udaju.html">Zásady ochrany osobních údajů</a></div>
   </div>
 </footer>
+
+<script src="/lp-motion.js"></script>
 ` }} />
       <Script src="/lp-motion.js" strategy="afterInteractive" />
     </>

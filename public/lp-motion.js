@@ -71,15 +71,16 @@
   }
 
   /* ---------- Animated counters ---------- */
+  function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0"); }
   function animateCount(el) {
     var target = parseFloat(el.getAttribute("data-count"));
     var suffix = el.getAttribute("data-suffix") || "";
-    if (reduce || target === 0) { el.textContent = target + suffix; return; }
+    if (reduce || target === 0) { el.textContent = fmtNum(target) + suffix; return; }
     var dur = 1500, start = performance.now();
     function tick(now) {
       var p = Math.min((now - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
+      el.textContent = fmtNum(Math.round(target * eased)) + suffix;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -411,5 +412,86 @@
         }
       });
     }, { passive: true });
+  }
+
+  /* ---------- Case slider (Reference): single-card fade + arrows + autoplay ---------- */
+  (function () {
+    var viewport = document.getElementById("caseViewport");
+    var dotsEl = document.getElementById("caseDots");
+    if (!viewport || !dotsEl) return;
+    var cards = Array.prototype.slice.call(viewport.children);
+    cards.forEach(function (_, i) {
+      var b = document.createElement("button");
+      b.setAttribute("aria-label", "Případová studie " + (i + 1));
+      dotsEl.appendChild(b);
+    });
+    var dots = Array.prototype.slice.call(dotsEl.children);
+    var idx = 0, timer = null;
+
+    function goTo(i) {
+      idx = (i + cards.length) % cards.length;
+      cards.forEach(function (c, n) { c.classList.toggle("active", n === idx); });
+      dots.forEach(function (d, n) { d.classList.toggle("active", n === idx); });
+    }
+    function restart() {
+      if (timer) clearInterval(timer);
+      if (!reduce) timer = setInterval(function () { goTo(idx + 1); }, 4200);
+    }
+    dots.forEach(function (d, n) { d.addEventListener("click", function () { goTo(n); restart(); }); });
+    var prevBtn = document.getElementById("caseprev");
+    var nextBtn = document.getElementById("casenext");
+    if (prevBtn) prevBtn.addEventListener("click", function () { goTo(idx - 1); restart(); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { goTo(idx + 1); restart(); });
+
+    goTo(0);
+    restart();
+
+    if ("IntersectionObserver" in window) {
+      var cio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { if (!timer && !reduce) restart(); }
+          else { if (timer) { clearInterval(timer); timer = null; } }
+        });
+      }, { threshold: 0.2 });
+      cio.observe(viewport);
+    }
+  })();
+
+  /* ---------- Contact form → compose mailto + confirmation ---------- */
+  var poptForm = document.getElementById("poptForm");
+  if (poptForm) {
+    poptForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var jmeno = (poptForm.jmeno.value || "").trim();
+      var email = (poptForm.email.value || "").trim();
+      if (!jmeno || !email) {
+        (!jmeno ? poptForm.jmeno : poptForm.email).focus();
+        return;
+      }
+      var sluzba = (poptForm.querySelector('input[name="sluzba"]:checked') || {}).value || "—";
+      var firma = (poptForm.firma.value || "").trim();
+      var tel = (poptForm.tel.value || "").trim();
+      var datum = (poptForm.datum.value || "").trim();
+      var hoste = poptForm.hoste.value || "";
+      var zprava = (poptForm.zprava.value || "").trim();
+
+      var body =
+        "Zájem o: " + sluzba + "\n" +
+        "Jméno: " + jmeno + "\n" +
+        (firma ? "Firma / akce: " + firma + "\n" : "") +
+        "E-mail: " + email + "\n" +
+        (tel ? "Telefon: " + tel + "\n" : "") +
+        (datum ? "Termín: " + datum + "\n" : "") +
+        (hoste ? "Počet hostů: " + hoste + "\n" : "") +
+        (zprava ? "\nZpráva:\n" + zprava + "\n" : "");
+
+      var href = "mailto:ahoj@piclio.cz?subject=" +
+        encodeURIComponent("Poptávka Piclio — " + sluzba) +
+        "&body=" + encodeURIComponent(body);
+
+      var ok = document.getElementById("formOk");
+      if (ok) { ok.classList.add("show"); }
+      window.location.href = href;
+    });
   }
 })();
