@@ -30,7 +30,7 @@ export default function HomePage() {
 
 <!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
-  <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
+  <a class="brand" href="#top"><img loading="lazy" src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
   <ul class="nav-links">
     <li><a href="#moznosti">Možnosti</a></li>
     <li><a href="#inspirace">Inspirace</a></li>
@@ -85,10 +85,10 @@ export default function HomePage() {
         <div class="collage" id="collage">
           <div class="ph p1" data-par="22"><img src="/lp-assets/hero-01.png" alt="Foto z eventu"></div>
           <div class="ph p2" data-par="-30"><img src="/lp-assets/hero-portrait.jpg" alt="Portrét hosta"></div>
-          <div class="ph p3" data-par="14"><img src="/lp-assets/flow-04-tisk.jpeg" alt="Tisk fotek na místě"></div>
+          <div class="ph p3" data-par="14"><img loading="lazy" src="/lp-assets/flow-04-tisk.jpeg" alt="Tisk fotek na místě"></div>
           <div class="ph p4" data-par="-18"><img src="/lp-assets/hero-event01.png" alt="Detail z akce"></div>
           <div class="live-card" data-par="40">
-            <img class="thumb" src="/lp-assets/hero-live-thumb.jpg" alt="">
+            <img loading="lazy" class="thumb" src="/lp-assets/hero-live-thumb.jpg" alt="">
             <div>
               <div class="lc-t"><span class="dot"></span>Nová fotka · právě teď</div>
               <div class="lc-s">Doručeno do galerie · dnes 21:12</div>
@@ -106,34 +106,34 @@ export default function HomePage() {
 <section class="marquee-band" aria-hidden="true">
   <div class="marquee-wrap">
     <div class="marquee row" style="--dur:66s">
-      <div class="mq-item"><img src="/lp-assets/cat-firemni.png" alt=""><span class="tag">Firemní večírek</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-konference.png" alt=""><span class="tag">Konference</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-festival.png" alt=""><span class="tag">Festival</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-galavecer.png" alt=""><span class="tag">Galavečer</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-businessgala.png" alt=""><span class="tag">Business gala</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-firemni.png" alt=""><span class="tag">Firemní večírek</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-konference.png" alt=""><span class="tag">Konference</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-festival.png" alt=""><span class="tag">Festival</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-galavecer.png" alt=""><span class="tag">Galavečer</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-businessgala.png" alt=""><span class="tag">Business gala</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-firemni.jpg" alt=""><span class="tag">Firemní večírek</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-konference.jpg" alt=""><span class="tag">Konference</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-festival.jpg" alt=""><span class="tag">Festival</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-galavecer.jpg" alt=""><span class="tag">Galavečer</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-businessgala.jpg" alt=""><span class="tag">Business gala</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-firemni.jpg" alt=""><span class="tag">Firemní večírek</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-svatba.jpeg" alt=""><span class="tag">Svatba</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-konference.jpg" alt=""><span class="tag">Konference</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-festival.jpg" alt=""><span class="tag">Festival</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-galavecer.jpg" alt=""><span class="tag">Galavečer</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-businessgala.jpg" alt=""><span class="tag">Business gala</span></div>
     </div>
   </div>
   <div class="marquee-wrap">
     <div class="marquee row rev" style="--dur:78s">
-      <div class="mq-item"><img src="/lp-assets/cat-afterparty.png" alt=""><span class="tag">After party</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-openair.png" alt=""><span class="tag">Open air</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-hostvecera.png" alt=""><span class="tag">Host večera</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-raut.png" alt=""><span class="tag">Raut</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-teambuilding.png" alt=""><span class="tag">Teambuilding</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-ples.png" alt=""><span class="tag">Ples</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-afterparty.png" alt=""><span class="tag">After party</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-openair.png" alt=""><span class="tag">Open air</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-hostvecera.png" alt=""><span class="tag">Host večera</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-raut.png" alt=""><span class="tag">Raut</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-teambuilding.png" alt=""><span class="tag">Teambuilding</span></div>
-      <div class="mq-item"><img src="/lp-assets/cat-ples.png" alt=""><span class="tag">Ples</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-afterparty.jpg" alt=""><span class="tag">After party</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-openair.jpg" alt=""><span class="tag">Open air</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-hostvecera.jpg" alt=""><span class="tag">Host večera</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-raut.jpg" alt=""><span class="tag">Raut</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-teambuilding.jpg" alt=""><span class="tag">Teambuilding</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-ples.jpg" alt=""><span class="tag">Ples</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-afterparty.jpg" alt=""><span class="tag">After party</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-openair.jpg" alt=""><span class="tag">Open air</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-hostvecera.jpg" alt=""><span class="tag">Host večera</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-raut.jpg" alt=""><span class="tag">Raut</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-teambuilding.jpg" alt=""><span class="tag">Teambuilding</span></div>
+      <div class="mq-item"><img loading="lazy" src="/lp-assets/cat-ples.jpg" alt=""><span class="tag">Ples</span></div>
     </div>
   </div>
 </section>
@@ -150,7 +150,7 @@ export default function HomePage() {
     <div class="opts">
       <article class="opt reveal">
         <a class="opt-stretch" href="event-photography.html" aria-label="Event Photography"></a>
-        <div class="opt-bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
         <div class="opt-inner">
           <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg></span>Chci profesionálně zachytit atmosféru akce.</span>
           <h3>Event Photography</h3>
@@ -162,7 +162,7 @@ export default function HomePage() {
 
       <article class="opt reveal" data-d="1">
         <a class="opt-stretch" href="interactive-studio.html" aria-label="Interactive Studio"></a>
-        <div class="opt-bg"><img src="/lp-assets/uploads/premiovascena.jpeg" alt="Interactive Studio"></div>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Interactive Studio"></div>
         <div class="opt-inner">
           <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Chci, aby se hosté aktivně bavili.</span>
           <h3>Interactive Studio</h3>
@@ -174,7 +174,7 @@ export default function HomePage() {
 
       <article class="opt reveal" data-d="1">
         <a class="opt-stretch" href="ai-experiences.html" aria-label="AI Photo Experiences"></a>
-        <div class="opt-bg"><img src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
         <div class="opt-inner">
           <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></span>Chci hosty překvapit něčím, co ještě nezažili.</span>
           <h3>AI Photo Experiences</h3>
@@ -228,7 +228,7 @@ export default function HomePage() {
     <div class="magic-layout">
       <div class="magic-source">
         <div class="magic-tablet">
-          <img src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
+          <img loading="lazy" src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
         </div>
         <div class="magic-source-cap"><span class="step-dot">1</span><span><b>Rychlé selfie</b> u kiosku</span></div>
         <div class="magic-arrow">
@@ -238,12 +238,12 @@ export default function HomePage() {
       </div>
 
       <div class="magic-grid">
-        <figure class="magic-out"><span class="badge real">Foto</span><img src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/obalka-casopisu.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
+        <figure class="magic-out"><span class="badge real">Foto</span><img loading="lazy" src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/obalka-casopisu.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
       </div>
     </div>
   </div>
@@ -266,7 +266,7 @@ export default function HomePage() {
 
     <div class="serv-grid">
       <article class="serv feature reveal">
-        <div class="bg"><img src="/lp-assets/atrakce-magic-corner.jpeg" alt="AI Magic Corner — Starfall"></div>
+        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-magic-corner.jpeg" alt="AI Magic Corner — Starfall"></div>
         <span class="pill hot">Bestseller</span>
         <h3>The AI Magic Corner</h3>
         <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
@@ -274,7 +274,7 @@ export default function HomePage() {
       </article>
 
       <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Lovci emocí — fotograf na akci"></div>
+        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Lovci emocí — fotograf na akci"></div>
         <span class="pill alt">Full service</span>
         <h3>Lovci emocí</h3>
         <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
@@ -282,7 +282,7 @@ export default function HomePage() {
       </article>
 
       <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-assets/uploads/premiovascena.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
+        <div class="bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
         <span class="pill alt">Na míru</span>
         <h3>Prémiová reálná scéna</h3>
         <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
@@ -291,7 +291,7 @@ export default function HomePage() {
     </div>
 
     <article class="serv-band reveal">
-      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
+      <div class="bg"><img loading="lazy" src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
       <div class="serv-band-copy">
         <span class="pill">Brand</span>
         <h3>Brand Everywhere</h3>
@@ -359,28 +359,28 @@ export default function HomePage() {
     <div class="flow-wrap reveal">
       <div class="flow">
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-assets/uploads/01zachyceni.jpeg" alt="Zachycení a zpracování"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
+          <div class="flow-photo"><span class="flow-num">1</span><img loading="lazy" src="/lp-assets/uploads/01zachyceni.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-ic"><img loading="lazy" src="/lp-assets/ic-camera.png" alt=""></div>
           <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">2</span><img src="/lp-assets/flow-02.jpeg" alt="Detekce a propojení hosta"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-star.png" alt=""></div>
+          <div class="flow-photo"><span class="flow-num">2</span><img loading="lazy" src="/lp-assets/flow-02.jpeg" alt="Detekce a propojení hosta"></div>
+          <div class="flow-ic"><img loading="lazy" src="/lp-assets/ic-star.png" alt=""></div>
           <div class="flow-body"><h3>Propojení hosta</h3><p>Jedním selfie propojíte hosta přes Face Recognition. Systém ho pak celý večer sám pozná na každé fotce.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">3</span><img src="/lp-assets/flow-03.jpeg" alt="SmartShare doručení"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-share.png" alt=""></div>
+          <div class="flow-photo"><span class="flow-num">3</span><img loading="lazy" src="/lp-assets/flow-03.jpeg" alt="SmartShare doručení"></div>
+          <div class="flow-ic"><img loading="lazy" src="/lp-assets/ic-share.png" alt=""></div>
           <div class="flow-body"><h3>SmartShare</h3><p>Host dostane živě aktualizovanou osobní galerii do telefonu. Bez hledání, bez aplikace — do 30 sekund.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">4</span><img src="/lp-assets/flow-04-tisk.jpeg" alt="Tisky na místě"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-bolt.png" alt=""></div>
+          <div class="flow-photo"><span class="flow-num">4</span><img loading="lazy" src="/lp-assets/flow-04-tisk.jpeg" alt="Tisky na místě"></div>
+          <div class="flow-ic"><img loading="lazy" src="/lp-assets/ic-bolt.png" alt=""></div>
           <div class="flow-body"><h3>Tisky na místě</h3><p>Oblíbené památky okamžitě na ruku. Termosublimační tisk brandovaných fotek přímo během akce.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">5</span><img src="/lp-assets/flow-05.jpeg" alt="Zpeněžení galerie"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-heart.png" alt=""></div>
+          <div class="flow-photo"><span class="flow-num">5</span><img loading="lazy" src="/lp-assets/flow-05.jpeg" alt="Zpeněžení galerie"></div>
+          <div class="flow-ic"><img loading="lazy" src="/lp-assets/ic-heart.png" alt=""></div>
           <div class="flow-body"><h3>Zpeněžení<span class="soon">Již brzy</span></h3><p>Uzamkněte fotky a nabídněte hostům nákup snímků i celých galerií. Nový zdroj příjmů z každé akce.</p></div>
         </article>
       </div>
@@ -436,7 +436,7 @@ export default function HomePage() {
       <div class="bento">
       <article class="bcard big" data-par="10">
         <span class="ping"></span>
-        <img src="/lp-assets/out-obalka.jpg" alt="Host na obálce magazínu">
+        <img loading="lazy" src="/lp-assets/out-obalka.jpg" alt="Host na obálce magazínu">
         <div class="meta">
           <span class="btype pink">AI Magic · obálka</span>
           <h3>Host na obálce magazínu</h3>
@@ -445,7 +445,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard tall" data-par="-14">
-        <img src="/lp-assets/out-film.jpg" alt="Filmový plakát">
+        <img loading="lazy" src="/lp-assets/out-film.jpg" alt="Filmový plakát">
         <div class="meta">
           <span class="btype">Film</span>
           <h3>Filmový plakát</h3>
@@ -464,7 +464,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard tall" data-par="-8">
-        <img src="/lp-assets/out-business.jpg" alt="Profi business portrét">
+        <img loading="lazy" src="/lp-assets/out-business.jpg" alt="Profi business portrét">
         <div class="meta">
           <span class="btype lime">Profi business</span>
           <h3>Business portrét</h3>
@@ -473,7 +473,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard tall" data-par="-11">
-        <img src="/lp-assets/out-brand.jpg" alt="Fotka s vaším logem">
+        <img loading="lazy" src="/lp-assets/out-brand.jpg" alt="Fotka s vaším logem">
         <div class="meta">
           <span class="btype">Brand</span>
           <h3>Fotka s vaším logem</h3>
@@ -482,7 +482,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard tall" data-par="9">
-        <img src="/lp-assets/out-produkt.jpg" alt="Produktová scéna">
+        <img loading="lazy" src="/lp-assets/out-produkt.jpg" alt="Produktová scéna">
         <div class="meta">
           <span class="btype">Produkt</span>
           <h3>Produkt v hlavní roli</h3>
@@ -501,7 +501,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard wide" data-par="11">
-        <img src="/lp-assets/out-skupina.jpg" alt="Skupinové foto">
+        <img loading="lazy" src="/lp-assets/out-skupina.jpg" alt="Skupinové foto">
         <div class="meta">
           <span class="btype">Skupinové foto</span>
           <h3>Celá parta na jedné momentce</h3>
@@ -510,7 +510,7 @@ export default function HomePage() {
       </article>
 
       <article class="bcard wide" data-par="12">
-        <img src="/lp-assets/out-tisk.jpg" alt="Okamžitý tisk">
+        <img loading="lazy" src="/lp-assets/out-tisk.jpg" alt="Okamžitý tisk">
         <div class="meta">
           <span class="btype">Okamžitý tisk</span>
           <h3>Výtisk na ruku</h3>
@@ -606,8 +606,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-svatba-a.png" alt="Obálka svatebního časopisu">
-                <img class="layer" src="/lp-assets/o-svatba-b.png" alt="Svatební bulvár">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-svatba-a.png" alt="Obálka svatebního časopisu">
+                <img loading="lazy" class="layer" src="/lp-assets/o-svatba-b.png" alt="Svatební bulvár">
                 <figcaption class="sc-figcap"><h3>Obálky svatebních časopisů</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -623,8 +623,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-koncert.jpg" alt="Koncertní plakát">
-                <img class="layer" src="/lp-assets/u-koncert.jpg" alt="Koncertní plakát">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-koncert.jpg" alt="Koncertní plakát">
+                <img loading="lazy" class="layer" src="/lp-assets/u-koncert.jpg" alt="Koncertní plakát">
                 <figcaption class="sc-figcap"><h3>Festivaly &amp; události</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -640,8 +640,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-narozeniny-a.png" alt="Narozeninový plakát">
-                <img class="layer" src="/lp-assets/o-narozeniny-b.png" alt="Narozeninový plakát">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-narozeniny-a.png" alt="Narozeninový plakát">
+                <img loading="lazy" class="layer" src="/lp-assets/o-narozeniny-b.png" alt="Narozeninový plakát">
                 <figcaption class="sc-figcap"><h3>Narozeninová oslava</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -657,8 +657,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-portret-a.png" alt="Profesionální portrét">
-                <img class="layer" src="/lp-assets/o-portret-b.png" alt="Umělecký portrét">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-portret-a.png" alt="Profesionální portrét">
+                <img loading="lazy" class="layer" src="/lp-assets/o-portret-b.png" alt="Umělecký portrét">
                 <figcaption class="sc-figcap"><h3>Profesionální portrét</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -674,8 +674,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-produkt-a.jpg" alt="Produktová kampaň">
-                <img class="layer" src="/lp-assets/o-produkt-b.jpg" alt="Produktová kampaň">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-produkt-a.jpg" alt="Produktová kampaň">
+                <img loading="lazy" class="layer" src="/lp-assets/o-produkt-b.jpg" alt="Produktová kampaň">
                 <figcaption class="sc-figcap"><h3>Uvedení produktu na trh</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -691,8 +691,8 @@ export default function HomePage() {
           <article class="sc-slide">
             <div class="sc-card">
               <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-film-a.png" alt="Filmový plakát">
-                <img class="layer" src="/lp-assets/o-film-b.png" alt="Filmový plakát">
+                <img loading="lazy" class="layer active" src="/lp-assets/o-film-a.png" alt="Filmový plakát">
+                <img loading="lazy" class="layer" src="/lp-assets/o-film-b.png" alt="Filmový plakát">
                 <figcaption class="sc-figcap"><h3>Premiéra filmu</h3></figcaption>
               </figure>
               <div class="sc-spec">
@@ -731,7 +731,7 @@ export default function HomePage() {
         <div class="how-phone">
           <div class="screen">
             <div class="notch"></div>
-            <img class="active" src="/lp-assets/ukazka-03.jpg" alt="Ukázka galerie v aplikaci">
+            <img loading="lazy" class="active" src="/lp-assets/ukazka-03.jpg" alt="Ukázka galerie v aplikaci">
             <div class="phone-toast">
               <div class="pt-ic">✦</div>
               <div>
@@ -780,7 +780,7 @@ export default function HomePage() {
 
       <div class="case-viewport" id="caseViewport">
         <article class="case-card active">
-          <div class="case-photo"><img src="/lp-assets/cat-businessgala.png" alt="Česká golfová asociace"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span>Golf</span></div>
+          <div class="case-photo"><img loading="lazy" src="/lp-assets/cat-businessgala.jpg" alt="Česká golfová asociace"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span>Golf</span></div>
           <div class="case-body">
             <h3>Česká golfová asociace</h3>
             <p class="case-lede">Vyhlášení výsledků turnaje potřebovalo víc energie — hosté odcházeli hned po ceremoniálu.</p>
@@ -793,7 +793,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní večírek</span></div>
+          <div class="case-photo"><img loading="lazy" src="/lp-assets/cat-firemni2.jpg" alt="Vánoční večírek"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní večírek</span></div>
           <div class="case-body">
             <h3>Vánoční večírek, 250+ zaměstnanců</h3>
             <p class="case-lede">Firma chtěla obsah pro interní i firemní LinkedIn ještě týž večer, ne fotky o týden později.</p>
@@ -806,7 +806,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-festival2.png" alt="Letní hudební festival"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festival</span></div>
+          <div class="case-photo"><img loading="lazy" src="/lp-assets/cat-festival2.jpg" alt="Letní hudební festival"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festival</span></div>
           <div class="case-body">
             <h3>Letní hudební festival</h3>
             <p class="case-lede">Pořadatel chtěl zachytit atmosféru davu a proměnit ji v obsah, který sám žije na sítích.</p>
@@ -819,7 +819,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span></div>
+          <div class="case-photo"><img loading="lazy" src="/lp-assets/cat-konference2.jpg" alt="Tech konference"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span></div>
           <div class="case-body">
             <h3>Tech konference, 3 dny</h3>
             <p class="case-lede">Účastníci chtěli profesionální profilovky na LinkedIn bez fronty na klasické foto studio.</p>
@@ -832,7 +832,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatba</span></div>
+          <div class="case-photo"><img loading="lazy" src="/lp-assets/cat-svatba2.jpg" alt="Svatba"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatba</span></div>
           <div class="case-body">
             <h3>Svatba pro 120 hostů</h3>
             <p class="case-lede">Snoubenci chtěli, aby se bavili i hosté mimo obřadní fotografii — a rodina viděla fotky hned.</p>
@@ -867,14 +867,14 @@ export default function HomePage() {
     </div>
 
     <div class="inspire-grid reveal">
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-firemni.png" alt="Firemní večírky" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span><span class="t">Firemní večírky</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-konference.png" alt="Konference" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span><span class="t">Konference</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-festival.png" alt="Festivaly" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span><span class="t">Festivaly</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-galavecer.png" alt="Filmové premiéry" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-4h16l1 4H3z"/><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M6 5l2 4M11 5l2 4M16 5l2 4"/></svg></span><span class="t">Filmové premiéry</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-businessgala.png" alt="Golfové turnaje" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span><span class="t">Golfové turnaje</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-teambuilding.png" alt="Sportovní akce" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.6"/><path d="M6 21l3-6 3 2 2-5 4 3"/><path d="M9 15l1.5-4.5L14 9l2 3h3"/></svg></span><span class="t">Sportovní akce</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-firemni.jpg" alt="Firemní večírky" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span><span class="t">Firemní večírky</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-konference.jpg" alt="Konference" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span><span class="t">Konference</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-festival.jpg" alt="Festivaly" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span><span class="t">Festivaly</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-galavecer.jpg" alt="Filmové premiéry" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-4h16l1 4H3z"/><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M6 5l2 4M11 5l2 4M16 5l2 4"/></svg></span><span class="t">Filmové premiéry</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-businessgala.jpg" alt="Golfové turnaje" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span><span class="t">Golfové turnaje</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-teambuilding.jpg" alt="Sportovní akce" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.6"/><path d="M6 21l3-6 3 2 2-5 4 3"/><path d="M9 15l1.5-4.5L14 9l2 3h3"/></svg></span><span class="t">Sportovní akce</span></span></a>
       <a class="insp" href="#kontakt"><img src="/lp-assets/cat-svatba.jpeg" alt="Svatby" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span><span class="t">Svatby</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-openair.png" alt="Hotely a resorty" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M9 21v-6h6v6"/><path d="M3 9h18"/></svg></span><span class="t">Hotely a resorty</span></span></a>
+      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-openair.jpg" alt="Hotely a resorty" loading="lazy"><span class="lab"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M9 21v-6h6v6"/><path d="M3 9h18"/></svg></span><span class="t">Hotely a resorty</span></span></a>
     </div>
   </div>
 </section>
@@ -901,15 +901,15 @@ export default function HomePage() {
     </div>
     <div class="team-grid">
       <article class="member reveal" data-d="1">
-        <div class="photo sketch"><img src="/lp-assets/team-katarina.png" alt="Katarína"></div>
+        <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-katarina.png" alt="Katarína"></div>
         <div class="info"><div class="nm">Katarína</div><div class="rl">Obraz · Strategie · AI</div><p>26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.</p></div>
       </article>
       <article class="member reveal" data-d="2">
-        <div class="photo sketch"><img src="/lp-assets/team-lubos.png" alt="Luboš"></div>
+        <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-lubos.png" alt="Luboš"></div>
         <div class="info"><div class="nm">Luboš</div><div class="rl">Světlo · Kompozice · Technika</div><p>26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup vypadá profesionálně.</p></div>
       </article>
       <article class="member reveal" data-d="3">
-        <div class="photo sketch"><img src="/lp-assets/team-kristina.png" alt="Kristína"></div>
+        <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-kristina.png" alt="Kristína"></div>
         <div class="info"><div class="nm">Kristína</div><div class="rl">Péče o zákazníka · Koordinace</div><p>Vaše hlavní spojka s projektem. Postará se o hladký chod akce a dodržení DNA vaší značky.</p></div>
       </article>
     </div>
@@ -1020,7 +1020,7 @@ export default function HomePage() {
 <footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
-      <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
+      <a class="brand" href="#top"><img loading="lazy" src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
       <ul class="f-links">
         <li><a href="#moznosti">Možnosti</a></li>
         <li><a href="#inspirace">Inspirace</a></li>
