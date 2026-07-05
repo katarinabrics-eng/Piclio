@@ -162,7 +162,7 @@ export default function HomePage() {
 
       <article class="opt reveal" data-d="1">
         <a class="opt-stretch" href="interactive-studio.html" aria-label="Interactive Studio"></a>
-        <div class="opt-bg"><img src="/lp-assets/uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Interactive Studio"></div>
+        <div class="opt-bg"><img src="/lp-assets/uploads/premiovascena.jpeg" alt="Interactive Studio"></div>
         <div class="opt-inner">
           <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Chci, aby se hosté aktivně bavili.</span>
           <h3>Interactive Studio</h3>
@@ -242,8 +242,8 @@ export default function HomePage() {
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
         <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/obalka%20c%CC%8Casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/za%CC%81bavne%CC%81%20postavic%CC%8Cky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/obalka-casopisu.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
       </div>
     </div>
   </div>
@@ -282,7 +282,7 @@ export default function HomePage() {
       </article>
 
       <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-assets/uploads/Pre%CC%81miova%CC%81%20rea%CC%81lna%CC%81%20sce%CC%81na.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
+        <div class="bg"><img src="/lp-assets/uploads/premiovascena.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
         <span class="pill alt">Na míru</span>
         <h3>Prémiová reálná scéna</h3>
         <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
@@ -359,7 +359,7 @@ export default function HomePage() {
     <div class="flow-wrap reveal">
       <div class="flow">
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-assets/uploads/01Zachyceni%CC%81%20.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-assets/uploads/01zachyceni.jpeg" alt="Zachycení a zpracování"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
           <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
         </article>
