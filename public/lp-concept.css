@@ -4,7 +4,7 @@
    ============================================================ */
 
 /* ---------- Hero event chips ---------- */
-.hero-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; max-width: 52ch; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; max-width: 52ch; }
 .hero-chips .chip {
   display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 999px;
   background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; font-weight: 500; color: var(--ink);
@@ -38,7 +38,8 @@
   display: inline-flex; align-items: center; gap: 9px; margin-bottom: 16px;
   font-size: 14px; font-weight: 600; color: var(--lime-2);
 }
-.opt-q .em { font-size: 18px; }
+.opt-q .em { width: 18px; height: 18px; display: inline-flex; }
+.opt-q .em svg { width: 100%; height: 100%; }
 .opt h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -.02em; margin-bottom: 12px; }
 .opt .opt-sub { color: rgba(247,243,255,.82); font-size: 14.5px; margin-bottom: 18px; max-width: 42ch; }
 .opt-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 22px; }
@@ -66,7 +67,8 @@
   transition: transform .35s, border-color .35s, background .35s;
 }
 .uniq:hover { transform: translateY(-5px); border-color: var(--line-2); background: var(--surface-2); }
-.uniq .ic { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 24px; margin-bottom: 18px; background: var(--grad-soft); border: 1px solid var(--line-2); }
+.uniq .ic { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; margin-bottom: 18px; background: var(--grad-soft); border: 1px solid var(--line-2); color: var(--lime-2); }
+.uniq .ic svg { width: 24px; height: 24px; }
 .uniq h3 { font-family: var(--font-text); font-weight: 700; font-size: 18.5px; letter-spacing: -.01em; margin-bottom: 8px; }
 .uniq p { color: var(--muted); font-size: 14.5px; }
 @media (max-width: 860px) { .uniq-grid { grid-template-columns: 1fr 1fr; } }
@@ -109,7 +111,10 @@
 
 .case-photo { position: relative; border-radius: var(--radius-sm); overflow: hidden; min-height: clamp(220px, 24vw, 300px); border: 1px solid var(--line-2); }
 .case-photo img { width: 100%; height: 100%; object-fit: cover; }
-.case-tag { position: absolute; left: 14px; top: 14px; z-index: 2; font-size: 12.5px; font-weight: 700; padding: 6px 13px; border-radius: 999px; background: rgba(6,4,12,.65); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.2); color: #fff; }
+.pchip .pc-t .em { width: 15px; height: 15px; display: inline-flex; vertical-align: -2px; margin-right: 3px; color: var(--lime-2); }
+.pchip .pc-t .em svg { width: 100%; height: 100%; }
+.case-tag .em { width: 13px; height: 13px; display: inline-flex; vertical-align: -2px; margin-right: 3px; }
+.case-tag .em svg { width: 100%; height: 100%; }
 
 .case-body { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
 .case-body h3 { font-family: var(--font-display); font-weight: 700; font-size: clamp(20px, 2.1vw, 26px); letter-spacing: -.015em; margin-bottom: 10px; }
@@ -159,7 +164,8 @@
 .insp:hover img { transform: scale(1.06); }
 .insp::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(6,4,12,.82)); transition: opacity .3s; }
 .insp .lab { position: absolute; left: 16px; right: 16px; bottom: 15px; z-index: 2; display: flex; align-items: center; gap: 9px; }
-.insp .lab .em { font-size: 19px; }
+.insp .lab .em { width: 19px; height: 19px; display: inline-flex; color: #fff; }
+.insp .lab .em svg { width: 100%; height: 100%; }
 .insp .lab .t { font-family: var(--font-text); font-weight: 700; font-size: 17px; color: #fff; letter-spacing: -.01em; }
 .insp:nth-child(3n) { margin-top: 0; }
 @media (max-width: 1080px) { .inspire-grid { columns: 3; } }
@@ -207,7 +213,8 @@
 .contact-aside .ci:hover { border-color: var(--line-2); transform: translateX(4px); }
 .contact-aside .ci .k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-2); }
 .contact-aside .ci .v { font-size: 15px; font-weight: 600; color: var(--ink); }
-.contact-aside .ci .em { font-size: 18px; }
+.contact-aside .ci .em { width: 18px; height: 18px; display: grid; place-items: center; color: var(--lime-2); flex: none; }
+.contact-aside .ci .em svg { width: 100%; height: 100%; }
 
 .cform { padding: clamp(26px, 3vw, 40px); border-radius: var(--radius); border: 1px solid var(--line-2); background: var(--surface); }
 .cfield { margin-bottom: 20px; }

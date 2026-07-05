@@ -53,7 +53,8 @@
 .frow { display: grid; grid-template-columns: 52px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--line); }
 .frow:first-child { padding-top: 0; }
 .frow:last-child { border-bottom: none; }
-.frow .fi { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; font-size: 22px; }
+.frow .fi { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; }
+.frow .fi svg { width: 24px; height: 24px; }
 .frow h3 { font-size: 20px; font-family: var(--font-text); font-weight: 700; letter-spacing: -.01em; margin-bottom: 7px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .frow h3 .soon { font-family: var(--font-text); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--violet); border: 1px solid rgba(154,60,240,.4); padding: 3px 9px; border-radius: 999px; }
 .frow p { color: var(--muted); font-size: 15px; }
@@ -86,7 +87,8 @@
 .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; margin-bottom: 60px; }
 .benefit { padding: 28px 26px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--surface); transition: .35s; }
 .benefit:hover { transform: translateY(-5px); border-color: var(--line-2); background: var(--surface-2); }
-.benefit .bi { font-size: 24px; margin-bottom: 16px; display: block; }
+.benefit .bi { width: 44px; height: 44px; border-radius: 12px; margin-bottom: 16px; display: grid; place-items: center; background: var(--grad-soft); border: 1px solid var(--line-2); color: var(--lime-2); }
+.benefit .bi svg { width: 22px; height: 22px; }
 .benefit .bt { font-family: var(--font-text); font-weight: 700; font-size: 18px; margin-bottom: 9px; letter-spacing: -.01em; }
 .benefit p { color: var(--muted); font-size: 14.5px; }
 
