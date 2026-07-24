@@ -172,8 +172,8 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Jak to funguje</span>
-      <h2 class="title">Vy se bavíte. <span class="grad-pink">Algoritmus doručuje.</span></h2>
-      <p class="lead">Odstranili jsme všechny překážky. Od vstupu po sdílení běží vše hladce a automaticky.</p>
+      <h2 class="title">Vy fotíte. <span class="grad-pink">My doručujeme.</span></h2>
+      <p class="lead">Od příchodu hosta po sdílení na sítích za pár minut. Vše běží spolehlivě a na automat.</p>
     </div>
 
     <div class="flow-wrap reveal">
