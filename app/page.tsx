@@ -410,8 +410,8 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Zážitkové fotoslužby na klíč</span>
-      <h2 class="title">Profesionální produkce <span class="grad-text">pro váš event.</span></h2>
-      <p class="lead">Ohromte klienty funkcemi, které z běžné akce udělají virální senzaci. Technika, obsluha i doručení v ceně.</p>
+      <h2 class="title">Jaký zážitek chcete <span class="grad-text">vytvořit?</span></h2>
+      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
     </div>
 
     <div class="serv-grid">
@@ -419,24 +419,24 @@ export default function HomePage() {
         <div class="bg"><img src="/lp-assets/atrakce-magic-corner.jpeg" alt="Staň se hvězdou"></div>
         <span class="pill hot">Bestseller</span>
         <h3>Staň se hvězdou</h3>
-        <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
-        <div class="price-row"><span class="price">19 000 Kč</span><small>3 hodiny · obsluha v ceně · okamžitý tisk</small></div>
+        <p>Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
+        <div class="price-row"><small>AI avatary · Filmové premiéry · Koncertní vizuály · Personalizace</small></div>
       </article>
 
       <article class="serv reveal" data-d="1">
         <div class="bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Fotoreportáž z akce"></div>
         <span class="pill alt">Full service</span>
         <h3>Fotoreportáž z akce</h3>
-        <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
-        <div class="price-row"><span class="price">23 000 Kč</span><small>4 hodiny · AI doručení v ceně</small></div>
+        <p>Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
+        <div class="price-row"><small>Reportážní fotografie · Živé promítání · Fotky do mobilů · Online galerie</small></div>
       </article>
 
       <article class="serv reveal" data-d="1">
         <div class="bg"><img src="/lp-assets/realniscena.jpg" alt="Párty fotostudio"></div>
         <span class="pill alt">Na míru</span>
         <h3>Párty fotostudio</h3>
-        <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
-        <div class="price-row"><span class="price">od 29 000 Kč</span><small>individuální nabídka</small></div>
+        <p>Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
+        <div class="price-row"><small>Tematické scény · 360° fotografie · Speciální kamery · Technologie na míru</small></div>
       </article>
     </div>
 
@@ -445,8 +445,8 @@ export default function HomePage() {
       <div class="serv-band-copy">
         <span class="pill">Brand</span>
         <h3>Řešení na míru</h3>
-        <p>Každá fotka, tištěná památka i online galerie ponesou vaši firemní identitu — logo, barvy i intro animace.</p>
-        <div class="price-row"><span class="price">v ceně reportáže</span><small>grafika a tisk na míru</small></div>
+        <p>Neomezujeme se katalogem. Máte-li vlastní představu nebo chcete něco, co jste nikde neviděli, propojíme hardware, software, AI i scénografii a navrhneme řešení přesně pro vás.</p>
+        <div class="price-row"><small>Vlastní instalace · Hardware + software · Kreativní scénografie</small></div>
       </div>
     </article>
 
