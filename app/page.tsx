@@ -246,8 +246,8 @@ export default function HomePage() {
 <section class="section outputs alt-bg" id="vystupy" data-screen-label="Výstupy">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Co host dostane</span>
-      <h2 class="title">Každý host dostane <span class="grad-pink">profesionální portrét.</span></h2>
+      <span class="eyebrow">Co si host odnese</span>
+      <h2 class="title">Není to jen fotka. Je to <span class="grad-pink">obsah, který letí světem.</span></h2>
       <p class="lead">Každý host dostane profesionálem zhotovený portrét, a pak se může hrát s filtry ve své galerii. Je možnost výběru různých zhotovení fotek: AI obálka, filmový plakát nebo animace. Sdílet je host může přímo z mobilu ještě při akci. Tady je ochutnávka.</p>
     </div>
 
