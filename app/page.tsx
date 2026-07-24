@@ -409,9 +409,9 @@ export default function HomePage() {
 <section class="section" id="atrakce" data-screen-label="Atrakce">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Zážitkové fotoslužby na klíč</span>
-      <h2 class="title">Jaký zážitek chcete <span class="grad-text">vytvořit?</span></h2>
-      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
+      <span class="eyebrow">Vyberte si fotografický servis na klíč.</span>
+      <h2 class="title">Přijedeme, nastavíme, fotíme <span class="grad-text">a doručíme.</span></h2>
+      <p class="lead">Vy se soustředíte na hosty — o fotky se postaráme my. Systém Piclio je v ceně každého balíčku — včetně fotokoutků. Ať fotograf fotí v koutku, nebo se hosté fotí sami v Magic Corneru, všechny snímky putují automaticky do galerií hostů. Technika, obsluha i doručení v ceně.</p>
     </div>
 
     <div class="serv-grid">
