@@ -431,3 +431,13 @@
   }, { threshold: 0.2 });
   document.querySelectorAll('.alt-bg').forEach(function (el) { io.observe(el); });
 })();
+
+// Global cursor tracking for aura
+document.addEventListener('mousemove', function(e) {
+  var x = (e.clientX / window.innerWidth) * 100;
+  var y = (e.clientY / window.innerHeight) * 100;
+  var spans = document.querySelectorAll('.aura span');
+  if (spans[0]) spans[0].style.transform = 'translate(' + (x - 50) * 0.3 + 'px, ' + (y - 50) * 0.3 + 'px)';
+  if (spans[1]) spans[1].style.transform = 'translate(' + (x - 50) * -0.2 + 'px, ' + (y - 50) * -0.2 + 'px)';
+  if (spans[2]) spans[2].style.transform = 'translate(' + (x - 50) * 0.15 + 'px, ' + (y - 50) * 0.15 + 'px)';
+});
