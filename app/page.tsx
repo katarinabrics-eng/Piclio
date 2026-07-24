@@ -19,6 +19,7 @@ export default function HomePage() {
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/lp-styles.css">
 <link rel="stylesheet" href="/lp-sections.css">
+<style>.alt-bg { background: #221535 !important; }</style>
 </head>
 <body>
 
@@ -136,7 +137,7 @@ export default function HomePage() {
 </section>
 
 <!-- ===================== 2 · PATTERN INTERRUPT ===================== -->
-<section class="section" data-screen-label="Bolest">
+<section class="section alt-bg" data-screen-label="Bolest">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Konec čekání</span>
@@ -242,7 +243,7 @@ export default function HomePage() {
 </section>
 
 <!-- ===================== 4.6 · VÝSTUPY (gallery) ===================== -->
-<section class="section outputs" id="vystupy" data-screen-label="Výstupy">
+<section class="section outputs alt-bg" id="vystupy" data-screen-label="Výstupy">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Co si host odnese</span>
@@ -625,7 +626,7 @@ export default function HomePage() {
 </section>
 
 <!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
-<section class="section" id="pro-fotografy" data-screen-label="Pro fotografy">
+<section class="section alt-bg" id="pro-fotografy" data-screen-label="Pro fotografy">
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Software pro fotografy</span>
@@ -812,7 +813,7 @@ export default function HomePage() {
 </section>
 
 <!-- ===================== 9 · FAQ ===================== -->
-<section class="section" id="faq" data-screen-label="FAQ">
+<section class="section alt-bg" id="faq" data-screen-label="FAQ">
   <div class="wrap">
     <div class="sec-head center reveal">
       <span class="eyebrow center">Časté dotazy</span>
