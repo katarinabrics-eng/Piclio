@@ -64,10 +64,10 @@ export default function HomePage() {
           <span class="ln">není jen vzpomínkou,</span>
           <span class="ln grad-text">ale součástí zážitku.</span>
         </h1>
-        <p class="sub reveal" data-d="2">Zahoďte flashdisky. Spojili jsme profesionální oko živého fotografa s neviditelnou AI asistencí — roztříděné fotky doručíme přímo do telefonů hostů.</p>
+        <p class="sub reveal" data-d="2">Fotky se hostům objeví v mobilu ještě během večera — ne až týden po akci.</p>
         <div class="hero-actions reveal" data-d="3">
-          <a class="btn btn-primary" href="#kontakt">Poptat event na klíč <span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#pro-fotografy">Vyzkoušet software (Beta)</a>
+          <a class="btn btn-primary" href="#kontakt">Nezávazně poptat →</a>
+          <a class="btn btn-ghost" href="#atrakce">Prohlédnout možnosti</a>
         </div>
         <div class="hero-trust reveal" data-d="4">
           <div class="avs">
@@ -75,7 +75,7 @@ export default function HomePage() {
             <img src="/lp-assets/hero-01.png" alt="">
             <img src="/lp-assets/04tisky.jpeg" alt="">
           </div>
-          <span>300+ hostů na akci sdílí své fotky ještě ze sálu — ve chvíli největší euforie.</span>
+          <span>Firemní eventy · Konference · Festivaly · Golfové turnaje · Hotely · Svatby</span>
         </div>
       </div>
 
