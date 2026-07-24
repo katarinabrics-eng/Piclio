@@ -60,9 +60,9 @@ export default function HomePage() {
       <div class="hero-copy">
         <span class="hero-badge reveal"><span class="live"></span>Piclio by Lucifera</span>
         <h1 class="reveal" data-d="1">
-          <span class="ln">Člověk tvoří</span>
-          <span class="ln">emoce.</span>
-          <span class="ln grad-text">Piclio je doručí.</span>
+          <span class="ln">Když fotografie</span>
+          <span class="ln">není jen vzpomínkou,</span>
+          <span class="ln grad-text">ale součástí zážitku.</span>
         </h1>
         <p class="sub reveal" data-d="2">Zahoďte flashdisky. Spojili jsme profesionální oko živého fotografa s neviditelnou AI asistencí — roztříděné fotky doručíme přímo do telefonů hostů.</p>
         <div class="hero-actions reveal" data-d="3">
