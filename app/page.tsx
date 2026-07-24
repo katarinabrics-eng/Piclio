@@ -139,183 +139,6 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- ===================== MOŽNOSTI (4 categories) ===================== -->
-<section class="section" id="moznosti" data-screen-label="Možnosti">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Možnosti</span>
-      <h2 class="title">Jaký zážitek <span class="grad-text">chcete vytvořit?</span></h2>
-      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
-    </div>
-
-    <div class="opts">
-      <article class="opt reveal">
-        <a class="opt-stretch" href="event-photography.html" aria-label="Event Photography"></a>
-        <div class="opt-bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg></span>Chci profesionálně zachytit atmosféru akce.</span>
-          <h3>Event Photography</h3>
-          <p class="opt-sub">Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
-          <div class="opt-tags"><span>Reportážní fotografie</span><span>Živé promítání</span><span>Fotky do mobilů</span><span>Online galerie</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt reveal" data-d="1">
-        <a class="opt-stretch" href="interactive-studio.html" aria-label="Interactive Studio"></a>
-        <div class="opt-bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Interactive Studio"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Chci, aby se hosté aktivně bavili.</span>
-          <h3>Interactive Studio</h3>
-          <p class="opt-sub">Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
-          <div class="opt-tags"><span>Tematické scény</span><span>360° fotografie</span><span>Speciální kamery</span><span>Technologie na míru</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt reveal" data-d="1">
-        <a class="opt-stretch" href="ai-experiences.html" aria-label="AI Photo Experiences"></a>
-        <div class="opt-bg"><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></span>Chci hosty překvapit něčím, co ještě nezažili.</span>
-          <h3>AI Photo Experiences</h3>
-          <p class="opt-sub">Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
-          <div class="opt-tags"><span>AI avatary</span><span>Filmové premiéry</span><span>Koncertní vizuály</span><span>Personalizace</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt custom reveal" data-d="2">
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></span>Nenašli jste přesně to, co hledáte? To je dobře.</span>
-          <h3>Custom Experiences</h3>
-          <p class="opt-sub">Neomezujeme se katalogem. Máte-li vlastní představu nebo chcete něco, co jste nikde neviděli, propojíme hardware, software, AI i scénografii a navrhneme řešení přesně pro vás.</p>
-          <div class="opt-tags"><span>Vlastní instalace</span><span>Hardware + software</span><span>Kreativní scénografie</span></div>
-          <a class="btn btn-primary" style="margin-top:6px" href="#kontakt">Pojďme něco vytvořit <span class="arr">→</span></a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CO JE JEDINEČNÉ (6 features) ===================== -->
-<section class="section unique" data-screen-label="Jedinečné">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Proč Piclio</span>
-      <h2 class="title">Co je na Picliu <span class="grad-pink">jedinečné?</span></h2>
-      <p class="lead">Piclio není jen fotografický servis. Jsme kreativní a technologický partner pro eventy — propojujeme profesionální fotografii, moderní technologie a originální nápady do zážitků, na které hosté nezapomínají.</p>
-    </div>
-    <div class="uniq-grid">
-      <div class="uniq reveal" data-d="1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div><h3>Fotografie během sekund</h3><p>Na obrazovkách do jedné minuty, v mobilu hosta zpravidla do 30 vteřin od pořízení.</p></div>
-      <div class="uniq reveal" data-d="2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>Vlastní galerie v mobilu</h3><p>Každý host má svou soukromou galerii — bez hledání, bez aplikace, připravenou ke sdílení.</p></div>
-      <div class="uniq reveal" data-d="3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></div><h3>Interaktivní zážitky</h3><p>Fotostudia a instalace, které se stávají součástí programu a baví hosty celý večer.</p></div>
-      <div class="uniq reveal" data-d="1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></div><h3>AI technologie</h3><p>Generativní AI proměny v reálném čase — obálky, filmové plakáty, avatary i firemní branding.</p></div>
-      <div class="uniq reveal" data-d="2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.6-2.6 2.1-2.1z"/></svg></div><h3>Vývoj na míru</h3><p>Umíme postavit vlastní hardware i software přesně pro váš koncept a téma akce.</p></div>
-      <div class="uniq reveal" data-d="3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div><h3>Jeden partner pro celý projekt</h3><p>Fotografie, technologie, AI i kreativa pod jednou střechou. Bez slepování deseti dodavatelů.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 1.5 · KOUZLA (tablet → 6 outputs) ===================== -->
-<section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Součástí každé galerie</span>
-      <h2 class="title">Profesionální fotky. A navíc <span class="grad-text">hrátky s AI.</span></h2>
-      <p class="lead">Host má ve své galerii krásné portréty s opravdovou atmosférou večera. Piclio ale jde ještě dál — propojili jsme fotokoutek s prací fotografa, takže host dostane nejen profi snímky, ale i zábavné AI proměny. Pozor: zobrazí se jen to, co fotograf schválí a dá k dispozici.</p>
-    </div>
-
-    <div class="magic-layout">
-      <div class="magic-source">
-        <div class="magic-tablet">
-          <img loading="lazy" src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
-        </div>
-        <div class="magic-source-cap"><span class="step-dot">1</span><span><b>Rychlé selfie</b> u kiosku</span></div>
-        <div class="magic-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          <span>a vzniknou kouzla</span>
-        </div>
-      </div>
-
-      <div class="magic-grid">
-        <figure class="magic-out"><span class="badge real">Foto</span><img loading="lazy" src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/obalka-casopisu.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ===================== 4 · NABÍDKA A (events) ===================== -->
-<section class="section" id="atrakce" data-screen-label="Atrakce">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Co si objednáte</span>
-      <h2 class="title">Vyberte si <span class="grad-text">fotografický servis na klíč.</span></h2>
-      <p class="lead">Přijedeme, nastavíme, fotíme a doručíme každému hostu jeho galerii. Vy se soustředíte na hosty — o fotky se postaráme my.</p>
-    </div>
-
-    <div class="incl-band reveal">
-      <div class="incl-ic">✓</div>
-      <div class="incl-tx"><b>Systém Piclio je v ceně každého balíčku</b> — včetně fotokoutků. Ať fotograf fotí v koutku, nebo se hosté fotí sami v Magic Corneru, všechny snímky putují automaticky do galerií hostů. Technika, obsluha i doručení v ceně.</div>
-    </div>
-
-    <div class="serv-grid">
-      <article class="serv feature reveal">
-        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-magic-corner.jpeg" alt="Staň se hvězdou"></div>
-        <span class="pill hot">Bestseller</span>
-        <h3>Staň se hvězdou</h3>
-        <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
-        <div class="price-row"><span class="price">19 000 Kč</span><small>3 hodiny · obsluha v ceně · okamžitý tisk</small></div>
-      </article>
-
-      <article class="serv reveal" data-d="1">
-        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Fotoreportáž z akce"></div>
-        <span class="pill alt">Full service</span>
-        <h3>Fotoreportáž z akce</h3>
-        <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
-        <div class="price-row"><span class="price">23 000 Kč</span><small>4 hodiny · AI doručení v ceně</small></div>
-      </article>
-
-      <article class="serv reveal" data-d="1">
-        <div class="bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Párty fotostudio"></div>
-        <span class="pill alt">Na míru</span>
-        <h3>Párty fotostudio</h3>
-        <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
-        <div class="price-row"><span class="price">od 29 000 Kč</span><small>individuální nabídka</small></div>
-      </article>
-    </div>
-
-    <article class="serv-band reveal">
-      <div class="bg"><img loading="lazy" src="/lp-assets/brand-band.png" alt="Řešení na míru"></div>
-      <div class="serv-band-copy">
-        <span class="pill">Brand</span>
-        <h3>Řešení na míru</h3>
-        <p>Každá fotka, tištěná památka i online galerie ponesou vaši firemní identitu — logo, barvy i intro animace.</p>
-        <div class="price-row"><span class="price">v ceně služby</span><small>grafika na míru · tisk ve 3 velikostech, magnetky, odznáčky…</small></div>
-      </div>
-    </article>
-
-    <div class="print-band reveal">
-      <div class="print-head">
-        <div class="pt">Balíčky okamžitého tisku</div>
-        <div class="ps">Termosublimační tisk přímo na místě</div>
-      </div>
-      <div class="print-grid">
-        <div class="print-card"><div class="sz">S</div><div class="meta"><div class="q">do 200 ks fotek</div><div class="pr">3 000 Kč</div></div></div>
-        <div class="print-card"><div class="sz">M</div><div class="meta"><div class="q">do 500 ks fotek</div><div class="pr">6 500 Kč</div></div></div>
-        <div class="print-card"><div class="sz">L</div><div class="meta"><div class="q">do 1 000 ks fotek</div><div class="pr">11 000 Kč</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ===================== 2 · PATTERN INTERRUPT ===================== -->
 <section class="section alt-bg" data-screen-label="Bolest">
   <div class="wrap">
@@ -418,6 +241,71 @@ export default function HomePage() {
         <div class="feat">AI magie</div>
         <div class="old"><span class="ic no">✕</span>Statický green screen</div>
         <div class="pic"><span class="ic yes">✓</span>Generativní AI v reálném čase</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== 4 · NABÍDKA A (events) ===================== -->
+<section class="section" id="atrakce" data-screen-label="Atrakce">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Co si objednáte</span>
+      <h2 class="title">Vyberte si <span class="grad-text">fotografický servis na klíč.</span></h2>
+      <p class="lead">Přijedeme, nastavíme, fotíme a doručíme každému hostu jeho galerii. Vy se soustředíte na hosty — o fotky se postaráme my.</p>
+    </div>
+
+    <div class="incl-band reveal">
+      <div class="incl-ic">✓</div>
+      <div class="incl-tx"><b>Systém Piclio je v ceně každého balíčku</b> — včetně fotokoutků. Ať fotograf fotí v koutku, nebo se hosté fotí sami v Magic Corneru, všechny snímky putují automaticky do galerií hostů. Technika, obsluha i doručení v ceně.</div>
+    </div>
+
+    <div class="serv-grid">
+      <article class="serv feature reveal">
+        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-magic-corner.jpeg" alt="Staň se hvězdou"></div>
+        <span class="pill hot">Bestseller</span>
+        <h3>Staň se hvězdou</h3>
+        <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
+        <div class="price-row"><span class="price">19 000 Kč</span><small>3 hodiny · obsluha v ceně · okamžitý tisk</small></div>
+      </article>
+
+      <article class="serv reveal" data-d="1">
+        <div class="bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Fotoreportáž z akce"></div>
+        <span class="pill alt">Full service</span>
+        <h3>Fotoreportáž z akce</h3>
+        <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
+        <div class="price-row"><span class="price">23 000 Kč</span><small>4 hodiny · AI doručení v ceně</small></div>
+      </article>
+
+      <article class="serv reveal" data-d="1">
+        <div class="bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Párty fotostudio"></div>
+        <span class="pill alt">Na míru</span>
+        <h3>Párty fotostudio</h3>
+        <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
+        <div class="price-row"><span class="price">od 29 000 Kč</span><small>individuální nabídka</small></div>
+      </article>
+    </div>
+
+    <article class="serv-band reveal">
+      <div class="bg"><img loading="lazy" src="/lp-assets/brand-band.png" alt="Řešení na míru"></div>
+      <div class="serv-band-copy">
+        <span class="pill">Brand</span>
+        <h3>Řešení na míru</h3>
+        <p>Každá fotka, tištěná památka i online galerie ponesou vaši firemní identitu — logo, barvy i intro animace.</p>
+        <div class="price-row"><span class="price">v ceně služby</span><small>grafika na míru · tisk ve 3 velikostech, magnetky, odznáčky…</small></div>
+      </div>
+    </article>
+
+    <div class="print-band reveal">
+      <div class="print-head">
+        <div class="pt">Balíčky okamžitého tisku</div>
+        <div class="ps">Termosublimační tisk přímo na místě</div>
+      </div>
+      <div class="print-grid">
+        <div class="print-card"><div class="sz">S</div><div class="meta"><div class="q">do 200 ks fotek</div><div class="pr">3 000 Kč</div></div></div>
+        <div class="print-card"><div class="sz">M</div><div class="meta"><div class="q">do 500 ks fotek</div><div class="pr">6 500 Kč</div></div></div>
+        <div class="print-card"><div class="sz">L</div><div class="meta"><div class="q">do 1 000 ks fotek</div><div class="pr">11 000 Kč</div></div></div>
       </div>
     </div>
   </div>
@@ -717,49 +605,112 @@ export default function HomePage() {
 </section>
 
 
-<!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
-<section class="section alt-bg" id="pro-fotografy" data-screen-label="Pro fotografy">
+<!-- ===================== MOŽNOSTI (4 categories) ===================== -->
+<section class="section" id="moznosti" data-screen-label="Možnosti">
   <div class="wrap">
-    <div class="sec-head reveal" style="margin-bottom:56px">
-      <span class="eyebrow">Software pro fotografy</span>
-      <h2 class="title">Fotografujete sami? <span class="grad-text">Piclio ušetří hodiny ruční práce.</span></h2>
-      <p class="lead">Nahrajte fotky — systém je roztřídí a doručí každému klientovi do osobní galerie. Konec WeTransferu a Úschovny. Klient komentuje přímo u fotek, vy reagujete přehledně na jednom místě.</p>
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Možnosti</span>
+      <h2 class="title">Jaký zážitek <span class="grad-text">chcete vytvořit?</span></h2>
+      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
     </div>
 
-    <div class="saas-grid">
-      <div class="saas-visual reveal">
-        <span class="glow-bg"></span>
-        <div class="how-phone">
-          <div class="screen">
-            <div class="notch"></div>
-            <img loading="lazy" class="active" src="/lp-assets/ukazka-03.jpg" alt="Ukázka galerie v aplikaci">
-            <div class="phone-toast">
-              <div class="pt-ic">✦</div>
-              <div>
-                <div class="pt-t">Galerie aktualizována</div>
-                <div class="pt-s">+3 nové fotky · sdíleno automaticky</div>
-              </div>
-            </div>
-          </div>
+    <div class="opts">
+      <article class="opt reveal">
+        <a class="opt-stretch" href="event-photography.html" aria-label="Event Photography"></a>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg></span>Chci profesionálně zachytit atmosféru akce.</span>
+          <h3>Event Photography</h3>
+          <p class="opt-sub">Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
+          <div class="opt-tags"><span>Reportážní fotografie</span><span>Živé promítání</span><span>Fotky do mobilů</span><span>Online galerie</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt reveal" data-d="1">
+        <a class="opt-stretch" href="interactive-studio.html" aria-label="Interactive Studio"></a>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/uploads/premiovascena.jpeg" alt="Interactive Studio"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Chci, aby se hosté aktivně bavili.</span>
+          <h3>Interactive Studio</h3>
+          <p class="opt-sub">Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
+          <div class="opt-tags"><span>Tematické scény</span><span>360° fotografie</span><span>Speciální kamery</span><span>Technologie na míru</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt reveal" data-d="1">
+        <a class="opt-stretch" href="ai-experiences.html" aria-label="AI Photo Experiences"></a>
+        <div class="opt-bg"><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></span>Chci hosty překvapit něčím, co ještě nezažili.</span>
+          <h3>AI Photo Experiences</h3>
+          <p class="opt-sub">Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
+          <div class="opt-tags"><span>AI avatary</span><span>Filmové premiéry</span><span>Koncertní vizuály</span><span>Personalizace</span></div>
+          <span class="opt-more">Více <span class="arr">→</span></span>
+        </div>
+      </article>
+
+      <article class="opt custom reveal" data-d="2">
+        <div class="opt-inner">
+          <span class="opt-q"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></span>Nenašli jste přesně to, co hledáte? To je dobře.</span>
+          <h3>Custom Experiences</h3>
+          <p class="opt-sub">Neomezujeme se katalogem. Máte-li vlastní představu nebo chcete něco, co jste nikde neviděli, propojíme hardware, software, AI i scénografii a navrhneme řešení přesně pro vás.</p>
+          <div class="opt-tags"><span>Vlastní instalace</span><span>Hardware + software</span><span>Kreativní scénografie</span></div>
+          <a class="btn btn-primary" style="margin-top:6px" href="#kontakt">Pojďme něco vytvořit <span class="arr">→</span></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CO JE JEDINEČNÉ (6 features) ===================== -->
+<section class="section unique" data-screen-label="Jedinečné">
+  <div class="wrap">
+    <div class="intro-center reveal">
+      <span class="eyebrow center">Proč Piclio</span>
+      <h2 class="title">Co je na Picliu <span class="grad-pink">jedinečné?</span></h2>
+      <p class="lead">Piclio není jen fotografický servis. Jsme kreativní a technologický partner pro eventy — propojujeme profesionální fotografii, moderní technologie a originální nápady do zážitků, na které hosté nezapomínají.</p>
+    </div>
+    <div class="uniq-grid">
+      <div class="uniq reveal" data-d="1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div><h3>Fotografie během sekund</h3><p>Na obrazovkách do jedné minuty, v mobilu hosta zpravidla do 30 vteřin od pořízení.</p></div>
+      <div class="uniq reveal" data-d="2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>Vlastní galerie v mobilu</h3><p>Každý host má svou soukromou galerii — bez hledání, bez aplikace, připravenou ke sdílení.</p></div>
+      <div class="uniq reveal" data-d="3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></div><h3>Interaktivní zážitky</h3><p>Fotostudia a instalace, které se stávají součástí programu a baví hosty celý večer.</p></div>
+      <div class="uniq reveal" data-d="1"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></div><h3>AI technologie</h3><p>Generativní AI proměny v reálném čase — obálky, filmové plakáty, avatary i firemní branding.</p></div>
+      <div class="uniq reveal" data-d="2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2.6-2.6 2.1-2.1z"/></svg></div><h3>Vývoj na míru</h3><p>Umíme postavit vlastní hardware i software přesně pro váš koncept a téma akce.</p></div>
+      <div class="uniq reveal" data-d="3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></svg></div><h3>Jeden partner pro celý projekt</h3><p>Fotografie, technologie, AI i kreativa pod jednou střechou. Bez slepování deseti dodavatelů.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 1.5 · KOUZLA (tablet → 6 outputs) ===================== -->
+<section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Součástí každé galerie</span>
+      <h2 class="title">Profesionální fotky. A navíc <span class="grad-text">hrátky s AI.</span></h2>
+      <p class="lead">Host má ve své galerii krásné portréty s opravdovou atmosférou večera. Piclio ale jde ještě dál — propojili jsme fotokoutek s prací fotografa, takže host dostane nejen profi snímky, ale i zábavné AI proměny. Pozor: zobrazí se jen to, co fotograf schválí a dá k dispozici.</p>
+    </div>
+
+    <div class="magic-layout">
+      <div class="magic-source">
+        <div class="magic-tablet">
+          <img loading="lazy" src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
+        </div>
+        <div class="magic-source-cap"><span class="step-dot">1</span><span><b>Rychlé selfie</b> u kiosku</span></div>
+        <div class="magic-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <span>a vzniknou kouzla</span>
         </div>
       </div>
 
-      <div class="feature-rows reveal" data-d="1">
-        <div class="frow">
-          <div class="fi g-cool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
-          <div><h3>SmartLink &amp; Face Recognition</h3><p>Jednou se dotknete displeje a propojíte obličej hosta se systémem. AI ho pak sama celý večer sleduje a páruje.</p></div>
-        </div>
-        <div class="frow">
-          <div class="fi g-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="10" height="18" rx="2"/><path d="M3 8l3 3-3 3"/><path d="M6 11h6"/></svg></div>
-          <div><h3>SmartShare doručení</h3><p>Host zadá e-mail jen jednou. Piclio mu automaticky posílá živě aktualizovanou osobní galerii — ať ho vyfotíte kolikrát chcete.</p></div>
-        </div>
-        <div class="frow">
-          <div class="fi g-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 0 1 2.5-1.5c1.4 0 2.5.9 2.5 2s-1 1.7-2.5 2-2.5.9-2.5 2 1.1 2 2.5 2a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
-          <div><h3>Monetizační modul <span class="soon">Připravujeme</span></h3><p>Přestaňte nechávat peníze na stole. Uzamkněte fotky a nabídněte hostům nákup jednotlivých snímků i celých prémiových galerií.</p></div>
-        </div>
-        <div style="margin-top:30px">
-          <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Z%C3%A1jem o beta p%C5%99%C3%ADstup Piclio SaaS">Chci beta přístup pro fotografy <span class="arr">→</span></a>
-        </div>
+      <div class="magic-grid">
+        <figure class="magic-out"><span class="badge real">Foto</span><img loading="lazy" src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/obalka-casopisu.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
+        <figure class="magic-out"><span class="badge ai">AI</span><img loading="lazy" src="/lp-assets/uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
       </div>
     </div>
   </div>
@@ -879,6 +830,55 @@ export default function HomePage() {
     </div>
   </div>
 </section>
+
+<!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
+<section class="section alt-bg" id="pro-fotografy" data-screen-label="Pro fotografy">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-bottom:56px">
+      <span class="eyebrow">Software pro fotografy</span>
+      <h2 class="title">Fotografujete sami? <span class="grad-text">Piclio ušetří hodiny ruční práce.</span></h2>
+      <p class="lead">Nahrajte fotky — systém je roztřídí a doručí každému klientovi do osobní galerie. Konec WeTransferu a Úschovny. Klient komentuje přímo u fotek, vy reagujete přehledně na jednom místě.</p>
+    </div>
+
+    <div class="saas-grid">
+      <div class="saas-visual reveal">
+        <span class="glow-bg"></span>
+        <div class="how-phone">
+          <div class="screen">
+            <div class="notch"></div>
+            <img loading="lazy" class="active" src="/lp-assets/ukazka-03.jpg" alt="Ukázka galerie v aplikaci">
+            <div class="phone-toast">
+              <div class="pt-ic">✦</div>
+              <div>
+                <div class="pt-t">Galerie aktualizována</div>
+                <div class="pt-s">+3 nové fotky · sdíleno automaticky</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-rows reveal" data-d="1">
+        <div class="frow">
+          <div class="fi g-cool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
+          <div><h3>SmartLink &amp; Face Recognition</h3><p>Jednou se dotknete displeje a propojíte obličej hosta se systémem. AI ho pak sama celý večer sleduje a páruje.</p></div>
+        </div>
+        <div class="frow">
+          <div class="fi g-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="10" height="18" rx="2"/><path d="M3 8l3 3-3 3"/><path d="M6 11h6"/></svg></div>
+          <div><h3>SmartShare doručení</h3><p>Host zadá e-mail jen jednou. Piclio mu automaticky posílá živě aktualizovanou osobní galerii — ať ho vyfotíte kolikrát chcete.</p></div>
+        </div>
+        <div class="frow">
+          <div class="fi g-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 0 1 2.5-1.5c1.4 0 2.5.9 2.5 2s-1 1.7-2.5 2-2.5.9-2.5 2 1.1 2 2.5 2a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
+          <div><h3>Monetizační modul <span class="soon">Připravujeme</span></h3><p>Přestaňte nechávat peníze na stole. Uzamkněte fotky a nabídněte hostům nákup jednotlivých snímků i celých prémiových galerií.</p></div>
+        </div>
+        <div style="margin-top:30px">
+          <a class="btn btn-primary" href="mailto:ahoj@piclio.cz?subject=Z%C3%A1jem o beta p%C5%99%C3%ADstup Piclio SaaS">Chci beta přístup pro fotografy <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <!-- ===================== 8 · BONUSY A TÝM ===================== -->
 <section class="section" id="o-nas" data-screen-label="Tým">
