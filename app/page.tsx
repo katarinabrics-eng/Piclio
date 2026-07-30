@@ -623,7 +623,6 @@ export default function HomePage() {
           <h3>Event Photography</h3>
           <p class="opt-sub">Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
           <div class="opt-tags"><span>Reportážní fotografie</span><span>Živé promítání</span><span>Fotky do mobilů</span><span>Online galerie</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
         </div>
       </article>
 
@@ -635,7 +634,6 @@ export default function HomePage() {
           <h3>Interactive Studio</h3>
           <p class="opt-sub">Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
           <div class="opt-tags"><span>Tematické scény</span><span>360° fotografie</span><span>Speciální kamery</span><span>Technologie na míru</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
         </div>
       </article>
 
@@ -647,7 +645,6 @@ export default function HomePage() {
           <h3>AI Photo Experiences</h3>
           <p class="opt-sub">Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
           <div class="opt-tags"><span>AI avatary</span><span>Filmové premiéry</span><span>Koncertní vizuály</span><span>Personalizace</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
         </div>
       </article>
 
@@ -723,7 +720,6 @@ export default function HomePage() {
     <div class="intro-center reveal">
       <span class="eyebrow center">Reference</span>
       <h2 class="title">Případová <span class="grad-text">studie.</span></h2>
-      <p class="lead">Jak jsme zatraktivnili vyhlášení golfového turnaje — a proč si hosté fotky stáhli ještě na místě.</p>
     </div>
 
     <div class="case-slider reveal">
@@ -800,10 +796,10 @@ export default function HomePage() {
       <div class="case-dots" id="caseDots"></div>
     </div>
     <div class="stat-row reveal" style="margin-top:56px">
-      <div class="stat-cell"><div class="big" data-count="500" data-suffix="+">0</div><div class="lbl">realizovaných akcí</div></div>
-      <div class="stat-cell"><div class="big" data-count="150000" data-suffix="+">0</div><div class="lbl">vyfotografovaných hostů</div></div>
+      <div class="stat-cell"><div class="big" data-count="100" data-suffix="+">0</div><div class="lbl">realizovaných akcí</div></div>
+      <div class="stat-cell"><div class="big" data-count="15000" data-suffix="+">0</div><div class="lbl">vyfotografovaných hostů</div></div>
       <div class="stat-cell"><div class="big" data-count="98" data-suffix="%">0</div><div class="lbl">spokojených klientů</div></div>
-      <div class="stat-cell"><div class="big">5 s</div><div class="lbl">nejrychlejší doručení fotky</div></div>
+      <div class="stat-cell"><div class="big">20 s</div><div class="lbl">nejrychlejší doručení fotky</div></div>
     </div>
     <p class="stat-note reveal">Uvádíme pouze reálná čísla z realizovaných akcí.</p>
   </div>
