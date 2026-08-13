@@ -896,7 +896,7 @@ export default function HomePage() {
       <h2 class="title">Nejsme agentura. <span class="grad-pink">Jsme studio.</span></h2>
       <p class="lead">Za projektem stojí duo z ateliéru na Kampě. Propojujeme vizuální tvorbu a práci se světlem s moderními AI technologiemi — a ručíme za vždy profesionální výsledek.</p>
     </div>
-    <div class="team-grid">
+    <div class="team-grid" style="justify-content: center">
       <article class="member reveal" data-d="1">
         <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-katarina.png" alt="Katarína"></div>
         <div class="info"><div class="nm">Katarína</div><div class="rl">Obraz · Strategie · AI</div><p>26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.</p></div>
@@ -904,10 +904,6 @@ export default function HomePage() {
       <article class="member reveal" data-d="2">
         <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-lubos.png" alt="Luboš"></div>
         <div class="info"><div class="nm">Luboš</div><div class="rl">Světlo · Kompozice · Technika</div><p>26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup vypadá profesionálně.</p></div>
-      </article>
-      <article class="member reveal" data-d="3">
-        <div class="photo sketch"><img loading="lazy" src="/lp-assets/team-kristina.png" alt="Kristína"></div>
-        <div class="info"><div class="nm">Kristína</div><div class="rl">Péče o zákazníka · Koordinace</div><p>Vaše hlavní spojka s projektem. Postará se o hladký chod akce a dodržení DNA vaší značky.</p></div>
       </article>
     </div>
   </div>
