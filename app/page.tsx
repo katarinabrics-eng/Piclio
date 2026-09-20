@@ -176,7 +176,7 @@ export default function HomePage() {
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
       <span class="eyebrow">Jak to funguje</span>
-      <h2 class="title">Vy fotíte. <span class="grad-pink">My doručujeme.</span></h2>
+      <h2 class="title">Fotograf fotí. <span class="grad-pink">Piclio doručuje.</span></h2>
       <p class="lead">Od příchodu hosta po sdílení na sítích — vše běží automaticky.</p>
     </div>
 
