@@ -435,7 +435,7 @@ export default function HomePage() {
 
       <div class="case-viewport" id="caseViewport">
         <article class="case-card active">
-          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Vánoční večírek</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag">Vánoční večírek</span></div>
           <div class="case-body">
             <h3>Vánoční večírek, 250+ lidí</h3>
             <p class="case-lede">Firma chtěla obsah na LinkedIn ještě týž večer, ne za týden.</p>
@@ -448,7 +448,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-firemni.png" alt="Firemní akce"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní akce</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-firemni.png" alt="Firemní akce"><span class="case-tag">Firemní akce</span></div>
           <div class="case-body">
             <h3>Letní firemní párty</h3>
             <p class="case-lede">Firma chtěla, aby se večer neomezil na pár fotek z mobilu.</p>
@@ -461,7 +461,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag">Konference</span></div>
           <div class="case-body">
             <h3>Tech konference</h3>
             <p class="case-lede">Účastníci chtěli profilovku na LinkedIn bez fronty do ateliéru.</p>
@@ -474,7 +474,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/magic-karik-2-mv2dcf8b-r8mx.jpg" alt="Letní hudební festival"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festival</span></div>
+          <div class="case-photo"><img src="/lp-assets/magic-karik-2-mv2dcf8b-r8mx.jpg" alt="Letní hudební festival"><span class="case-tag">Festival</span></div>
           <div class="case-body">
             <h3>Letní hudební festival</h3>
             <p class="case-lede">Pořadatel chtěl, aby atmosféra žila na sítích už během festivalu.</p>
@@ -487,7 +487,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatba</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag">Svatba</span></div>
           <div class="case-body">
             <h3>Svatba, 120 hostů</h3>
             <p class="case-lede">Snoubenci chtěli zabavit hosty a ukázat rodině fotky hned.</p>
@@ -500,7 +500,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-galavecer.png" alt="Filmová premiéra"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-4h16l1 4H3z"/><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M6 5l2 4M11 5l2 4M16 5l2 4"/></svg></span>Premiéra</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-galavecer.png" alt="Filmová premiéra"><span class="case-tag">Premiéra</span></div>
           <div class="case-body">
             <h3>Filmová premiéra</h3>
             <p class="case-lede">Distributor chtěl, aby si hosté odnesli víc než lístek.</p>
@@ -513,7 +513,7 @@ export default function HomePage() {
         </article>
 
         <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-ples.png" alt="Ples"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></span>Ples</span></div>
+          <div class="case-photo"><img src="/lp-assets/cat-ples.png" alt="Ples"><span class="case-tag">Ples</span></div>
           <div class="case-body">
             <h3>Reprezentační ples</h3>
             <p class="case-lede">Pořadatel chtěl hostům dát památku z večera v plesovém stylu.</p>
