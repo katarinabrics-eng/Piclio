@@ -476,3 +476,21 @@
 @media (prefers-reduced-motion: reduce) {
   .sc-slide { transition: none; }
 }
+/* ===== restructure additions ===== */
+@media (min-width: 1101px) { .flow.four { grid-template-columns: repeat(4, 1fr); } }
+.checks { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 30px; margin-top: 40px; }
+.checks span { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15.5px; color: var(--ink); }
+.checks span::before { content: "✓"; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; background: var(--grad-cool); color: #0c1407; flex: none; }
+.prob-kicker { margin-top: clamp(40px, 6vw, 64px); text-align: center; font-family: var(--font-display); font-weight: 700; font-size: clamp(34px, 4.4vw, 60px); letter-spacing: -.02em; line-height: 1.08; }
+.serv-link { margin-left: auto; color: var(--lime-2); font-weight: 600; font-size: 14.5px; display: inline-flex; align-items: center; gap: 6px; position: relative; z-index: 2; }
+.serv-link:hover { color: #fff; }
+
+.prob-sub { font-family: var(--font-display); font-weight: 700; font-size: clamp(20px, 2vw, 28px); line-height: 1.22; letter-spacing: -.015em; margin-top: 14px; max-width: 34ch; text-wrap: balance; }
+
+/* Znáte to? — muted, desaturated band */
+#problem { background: linear-gradient(180deg, #17151d 0%, #1b1922 100%); border-block: 1px solid rgba(255,255,255,.06); }
+#problem .prob-card { background: rgba(255,255,255,.035); border-color: rgba(255,255,255,.08); }
+#problem .prob-card:hover { background: rgba(255,255,255,.055); }
+#problem .lead, #problem .prob-card p { color: #a9a6b3; }
+.prob-sub.center { margin-inline: auto; }
+.contact-aside .prob-sub { max-width: 22ch; }

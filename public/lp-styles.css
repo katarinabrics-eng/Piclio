@@ -93,8 +93,8 @@ body::after { /* fine grain */
 .eyebrow.center { justify-content: center; }
 
 h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.04; letter-spacing: -.02em; }
-h2.title { font-size: clamp(34px, 5.4vw, 68px); text-wrap: balance; }
-.lead { font-size: clamp(17px, 2vw, 21px); line-height: 1.6; color: var(--muted); max-width: 56ch; text-wrap: pretty; }
+h2.title { font-size: clamp(30px, 3.3vw, 46px); line-height: 1.08; text-wrap: balance; }
+.lead { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.6; color: var(--muted); max-width: 56ch; text-wrap: pretty; }
 
 .grad-text {
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -154,10 +154,11 @@ h2.title { font-size: clamp(34px, 5.4vw, 68px); text-wrap: balance; }
 .mobile-menu.open { transform: translateY(0); opacity: 1; }
 .mobile-menu a { font-family: var(--font-display); font-size: clamp(28px, 8vw, 44px); font-weight: 700; padding: 8px 0; }
 .mobile-menu .btn { margin-top: 24px; align-self: flex-start; }
+[hidden] { display: none !important; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; padding-top: clamp(92px, 11vh, 132px); padding-bottom: clamp(44px, 5vw, 72px); overflow: hidden; }
-.hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+.hero { position: relative; padding-top: clamp(124px, 16vh, 176px); padding-bottom: clamp(44px, 5vw, 72px); overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(28px, 4vw, 56px); align-items: center; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px;
   background: var(--surface); border: 1px solid var(--line); font-size: 12.5px; letter-spacing: .14em;
@@ -165,7 +166,7 @@ h2.title { font-size: clamp(34px, 5.4vw, 68px); text-wrap: balance; }
 }
 .hero-badge .live { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 0 rgba(198,255,58,.7); animation: livePulse 1.8s infinite; }
 .hero h1 { font-size: clamp(40px, 5.4vw, 66px); line-height: 1.0; letter-spacing: -.03em; }
-.hero h1 .ln { display: block; overflow: hidden; }
+.hero h1 .ln { display: block; overflow: hidden; padding-bottom: .1em; }
 .hero p.sub { margin-top: 20px; font-size: clamp(17px, 2vw, 21px); color: var(--muted); max-width: 46ch; text-wrap: pretty; }
 .hero-actions { display: flex; flex-wrap: nowrap; gap: 14px; margin-top: 26px; }
 .hero-trust { margin-top: 30px; display: flex; align-items: center; gap: 14px; color: var(--muted-2); font-size: 13.5px; }
@@ -359,11 +360,11 @@ h2.title { font-size: clamp(34px, 5.4vw, 68px); text-wrap: balance; }
 .crow .ic.yes { background: var(--grad-cool); color: #0c1407; font-weight: 800; }
 
 /* ---------- Team ---------- */
-.team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 56px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.team-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 56px; max-width: 760px; margin-inline: auto; }
 .member { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 14px 22px 30px; transition: transform .4s; }
 .member:hover { transform: translateY(-6px); }
 .member .photo {
-  width: clamp(180px, 18vw, 240px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  width: clamp(150px, 16vw, 196px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
   position: relative; background: linear-gradient(160deg, #2a2140, #14101f);
   box-shadow: 0 18px 50px -18px rgba(0,0,0,.7), 0 0 0 1px var(--line);
   transition: box-shadow .4s;
@@ -465,3 +466,15 @@ h2.title { font-size: clamp(34px, 5.4vw, 68px); text-wrap: balance; }
   .reveal { opacity: 1 !important; transform: none !important; }
   html { scroll-behavior: auto; }
 }
+.hero-copy { container-type: inline-size; min-width: 0; }
+.hero h1 { font-size: clamp(36px, 10.2cqi, 72px); line-height: 1.04; }
+.hero h1 .ln { white-space: nowrap; }
+@media (max-width: 560px) { .hero h1 .ln { white-space: normal; } }
+
+@media (min-width: 981px) { .hero-visual { margin-top: 64px; } }
+
+/* type balance pass */
+.flow-body h3 { font-size: 20px; }
+.bcard h3 { font-size: 19px; }
+.serv h3 { font-size: clamp(22px, 2.2vw, 28px); }
+.sec-head .lead, .intro-center .lead { margin-top: 18px; }
