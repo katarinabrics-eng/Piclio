@@ -32,12 +32,12 @@ export default function HomePage() {
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
   <ul class="nav-links">
-    <li><a href="#moznosti">Možnosti</a>
-  <a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
-    <li><a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
-    <li><a href="#inspirace">Inspirace</a></li>
+    <li><a href="#jak-to-funguje">Jak to funguje</a></li>
+    <li><a href="#vystupy">Ukázky</a></li>
+    <li><a href="#sluzby">Služby a ceny</a></li>
     <li><a href="#reference">Reference</a></li>
-    <li><a href="#pro-fotografy">Pro fotografy</a></li>
+    <li hidden><a href="#pro-fotografy">Pro fotografy</a></li>
+    <li><a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
   </ul>
   <div class="nav-cta">
@@ -48,11 +48,12 @@ export default function HomePage() {
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#moznosti">Možnosti</a>
-  <a href="/vanocni-vecirky">Vánoce &amp; plesy</a>
-  <a href="#inspirace">Inspirace</a>
+  <a href="#jak-to-funguje">Jak to funguje</a>
+  <a href="#vystupy">Ukázky</a>
+  <a href="#sluzby">Služby a ceny</a>
   <a href="#reference">Reference</a>
-  <a href="#pro-fotografy">Pro fotografy</a>
+  <a href="#pro-fotografy" hidden>Pro fotografy</a>
+  <a href="/vanocni-vecirky">Vánoce &amp; plesy</a>
   <a href="#kontakt">Kontakt</a>
   <a class="btn btn-primary" href="#kontakt">Nezávazně poptat →</a>
 </div>
@@ -62,31 +63,21 @@ export default function HomePage() {
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <span class="hero-badge reveal"><span class="live"></span>Fotografie · Technologie · AI · Zážitky</span>
+        <span class="hero-badge reveal"><span class="live"></span>Fotograf · Fotostudio · AI · Tisk — vše v jednom</span>
         <h1 class="reveal" data-d="1">
-          <span class="ln">Když fotografie nejsou</span>
-          <span class="ln">jen vzpomínkou, ale</span>
-          <span class="ln grad-text">součástí zážitku.</span>
+          <span class="ln">Fotky z akce</span>
+          <span class="ln">v mobilu hostů.</span>
+          <span class="ln grad-text">Ještě ten večer.</span>
         </h1>
-        <p class="sub reveal" data-d="2">Vaši hosté nečekají na fotografie až po akci — stávají se součástí dění už během ní. Snímky se během okamžiku objeví na obrazovkách a hosté je mají hned ve svých mobilech. Každá fotka se tak stává součástí atmosféry.</p>
+        <p class="sub reveal" data-d="2">Fotograf, interaktivní fotostudio, AI proměny i tisk na místě od jednoho týmu. Všechny fotografie v jedné galerii přístupné všem hostům. Bez aplikace a bez registrace.</p>
         <div class="hero-actions reveal" data-d="3">
           <a class="btn btn-primary" href="#kontakt">Nezávazně poptat <span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#moznosti">Prohlédnout možnosti</a>
-        </div>
-        <div class="hero-chips reveal" data-d="4">
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní eventy</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festivaly</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3l7 7"/><path d="M6.5 3.5l7 7"/><path d="M6 7l-4 4 2 2 4-4"/><path d="M13 10l7 7-3 3-7-7"/></svg></span>Koncerty</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v13"/><path d="M7 4l9 3-9 4"/><circle cx="7" cy="20" r="1.6"/><path d="M13 21c2-1 4-1 6 0"/></svg></span>Golfové turnaje</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.6"/><path d="M6 21l3-6 3 2 2-5 4 3"/><path d="M9 15l1.5-4.5L14 9l2 3h3"/></svg></span>Sportovní akce</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-5 9 5v12"/><path d="M9 21v-6h6v6"/><path d="M3 9h18"/></svg></span>Hotely</span>
-          <span class="chip"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatby</span>
+          <a class="btn btn-ghost" href="#jak-to-funguje">Jak to funguje</a>
         </div>
       </div>
 
       <div class="hero-visual reveal" data-d="2">
-        <div class="collage" id="collage">
+        <div class="collage" id="collage" style="max-width:564px">
           <div class="ph p1" data-par="22"><img src="/lp-assets/hero-01.png" alt="Foto z eventu"></div>
           <div class="ph p2" data-par="-30"><img src="/lp-assets/hero-portrait.jpg" alt="Portrét hosta"></div>
           <div class="ph p3" data-par="14"><img src="/lp-assets/flow-04-tisk.jpeg" alt="Tisk fotek na místě"></div>
@@ -95,14 +86,13 @@ export default function HomePage() {
             <img class="thumb" src="/lp-assets/hero-live-thumb.jpg" alt="">
             <div>
               <div class="lc-t"><span class="dot"></span>Nová fotka · právě teď</div>
-              <div class="lc-s">Doručeno do galerie · dnes 21:12</div>
+              <div class="lc-s">Přidáno do galerie večera · 21:12</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="scroll-hint reveal"><span class="mouse"></span>Scroll</div>
   </div>
 </header>
 
@@ -142,318 +132,103 @@ export default function HomePage() {
   </div>
 </section>
 
-<!-- ===================== MOŽNOSTI (4 categories) ===================== -->
-<section class="section" id="moznosti" data-screen-label="Možnosti">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Možnosti</span>
-      <h2 class="title">Jaký zážitek <span class="grad-text">chcete vytvořit?</span></h2>
-      <p class="lead">Každá akce je jedinečná. Proto nevěříme na univerzální produkty. Navrhujeme fotografické zážitky, které odpovídají právě vaší akci — od reportážní fotografie přes interaktivní fotostudia až po AI zážitky a originální projekty na míru.</p>
-    </div>
-
-    <div class="opts">
-      <article class="opt reveal">
-        <a class="opt-stretch" href="/event-photography" aria-label="Event Photography"></a>
-        <div class="opt-bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Event Photography"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em">📸</span>Chci profesionálně zachytit atmosféru akce.</span>
-          <h3>Event Photography</h3>
-          <p class="opt-sub">Profesionální fotografický servis pro všechny typy akcí — od prvního přípitku po závěrečný potlesk.</p>
-          <div class="opt-tags"><span>Reportážní fotografie</span><span>Živé promítání</span><span>Fotky do mobilů</span><span>Online galerie</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt reveal" data-d="1">
-        <a class="opt-stretch" href="/interactive-studio" aria-label="Interactive Studio"></a>
-        <div class="opt-bg"><img src="/lp-uploads/premiova-realna-scena.jpeg" alt="Interactive Studio"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em">🎭</span>Chci, aby se hosté aktivně bavili.</span>
-          <h3>Interactive Studio</h3>
-          <p class="opt-sub">Fotostudia nové generace, která se stávají součástí programu a přitahují pozornost hostů. Není to klasický fotokoutek.</p>
-          <div class="opt-tags"><span>Tematické scény</span><span>360° fotografie</span><span>Speciální kamery</span><span>Technologie na míru</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt reveal" data-d="1">
-        <a class="opt-stretch" href="/ai-experiences" aria-label="AI Photo Experiences"></a>
-        <div class="opt-bg"><img src="/lp-assets/kz-film.jpg" alt="AI Photo Experiences"></div>
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em">🤖</span>Chci hosty překvapit něčím, co ještě nezažili.</span>
-          <h3>AI Photo Experiences</h3>
-          <p class="opt-sub">Fotografie, které překračují realitu. Umělou inteligenci využíváme k tvorbě originálních zážitků během několika vteřin.</p>
-          <div class="opt-tags"><span>AI avatary</span><span>Filmové premiéry</span><span>Koncertní vizuály</span><span>Personalizace</span></div>
-          <span class="opt-more">Více <span class="arr">→</span></span>
-        </div>
-      </article>
-
-      <article class="opt custom reveal" data-d="2">
-        <div class="opt-inner">
-          <span class="opt-q"><span class="em">✨</span>Nenašli jste přesně to, co hledáte? To je dobře.</span>
-          <h3>Custom Experiences</h3>
-          <p class="opt-sub">Neomezujeme se katalogem. Máte-li vlastní představu nebo chcete něco, co jste nikde neviděli, propojíme hardware, software, AI i scénografii a navrhneme řešení přesně pro vás.</p>
-          <div class="opt-tags"><span>Vlastní instalace</span><span>Hardware + software</span><span>Kreativní scénografie</span></div>
-          <a class="btn btn-primary" style="margin-top:6px" href="#kontakt">Pojďme něco vytvořit <span class="arr">→</span></a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CO JE JEDINEČNÉ (6 features) ===================== -->
-<section class="section unique" data-screen-label="Jedinečné">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Proč Piclio</span>
-      <h2 class="title">Co je na Picliu <span class="grad-pink">jedinečné?</span></h2>
-      <p class="lead">Piclio není jen fotografický servis. Jsme kreativní a technologický partner pro eventy — propojujeme profesionální fotografii, moderní technologie a originální nápady do zážitků, na které hosté nezapomínají.</p>
-    </div>
-    <div class="uniq-grid">
-      <div class="uniq reveal" data-d="1"><div class="ic">⚡</div><h3>Fotografie během sekund</h3><p>Na obrazovkách do jedné minuty, v mobilu hosta zpravidla do 30 vteřin od pořízení.</p></div>
-      <div class="uniq reveal" data-d="2"><div class="ic">📱</div><h3>Vlastní galerie v mobilu</h3><p>Každý host má svou soukromou galerii — bez hledání, bez aplikace, připravenou ke sdílení.</p></div>
-      <div class="uniq reveal" data-d="3"><div class="ic">🎭</div><h3>Interaktivní zážitky</h3><p>Fotostudia a instalace, které se stávají součástí programu a baví hosty celý večer.</p></div>
-      <div class="uniq reveal" data-d="1"><div class="ic">🤖</div><h3>AI technologie</h3><p>Generativní AI proměny v reálném čase — obálky, filmové plakáty, avatary i firemní branding.</p></div>
-      <div class="uniq reveal" data-d="2"><div class="ic">🛠</div><h3>Vývoj na míru</h3><p>Umíme postavit vlastní hardware i software přesně pro váš koncept a téma akce.</p></div>
-      <div class="uniq reveal" data-d="3"><div class="ic">🎯</div><h3>Jeden partner pro celý projekt</h3><p>Fotografie, technologie, AI i kreativa pod jednou střechou. Bez slepování deseti dodavatelů.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 1.5 · KOUZLA (tablet → 6 outputs) ===================== -->
-<section class="section magic reveal" id="kouzla" data-screen-label="Kouzla">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Součástí každé galerie</span>
-      <h2 class="title">Profesionální fotky. A navíc <span class="grad-text">hrátky s AI.</span></h2>
-      <p class="lead">Host má ve své galerii krásné portréty s opravdovou atmosférou večera. Piclio ale jde ještě dál — propojili jsme fotokoutek s prací fotografa, takže host dostane nejen profi snímky, ale i zábavné AI proměny. Pozor: zobrazí se jen to, co fotograf schválí a dá k dispozici.</p>
-    </div>
-
-    <div class="magic-layout">
-      <div class="magic-source">
-        <div class="magic-tablet">
-          <img src="/lp-assets/magic-tablet.png" alt="Host se fotí na tabletu Piclio">
-        </div>
-        <div class="magic-source-cap"><span class="step-dot">1</span><span><b>Rychlé selfie</b> u kiosku</span></div>
-        <div class="magic-arrow">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          <span>a vzniknou kouzla</span>
-        </div>
-      </div>
-
-      <div class="magic-grid">
-        <figure class="magic-out"><span class="badge real">Foto</span><img src="/lp-assets/kz-portret.jpg" alt="Portrét z akce"><figcaption class="lab">Portrét z akce</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-film.jpg" alt="Ve světě filmu"><figcaption class="lab">Ve světě filmu</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-koncert.jpg" alt="Na fesťáku"><figcaption class="lab">Na fesťáku</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-assets/kz-trofeje.jpg" alt="Trofej"><figcaption class="lab">Trofej</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/obalka-casopisu-48f726bf.jpg" alt="Obálka"><figcaption class="lab">Obálka</figcaption></figure>
-        <figure class="magic-out"><span class="badge ai">AI</span><img src="/lp-uploads/zabavne-postavicky.jpg" alt="Karikatura"><figcaption class="lab">Karikatura</figcaption></figure>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ===================== 4 · NABÍDKA A (events) ===================== -->
-<section class="section" id="atrakce" data-screen-label="Atrakce">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Co si objednáte</span>
-      <h2 class="title">Vyberte si <span class="grad-text">fotografický servis na klíč.</span></h2>
-      <p class="lead">Přijedeme, nastavíme, fotíme a doručíme každému hostu jeho galerii. Vy se soustředíte na hosty — o fotky se postaráme my.</p>
-    </div>
-
-    <div class="incl-band reveal">
-      <div class="incl-ic">✓</div>
-      <div class="incl-tx"><b>Systém Piclio je v ceně každého balíčku</b> — včetně fotokoutků. Ať fotograf fotí v koutku, nebo se hosté fotí sami v Magic Corneru, všechny snímky putují automaticky do galerií hostů. Technika, obsluha i doručení v ceně.</div>
-    </div>
-
-    <div class="serv-grid">
-      <article class="serv feature reveal">
-        <div class="bg"><img src="/lp-assets/atrakce-magic-corner.jpeg" alt="AI Magic Corner — Starfall"></div>
-        <span class="pill hot">Bestseller</span>
-        <h3>The AI Magic Corner</h3>
-        <p>Řízený zážitek s profesionální obsluhou a technikou. Generativní AI v reálném čase přenese hosty na obálku magazínu nebo přímo do filmových světů.</p>
-        <div class="price-row"><span class="price">19 000 Kč</span><small>3 hodiny · obsluha v ceně · okamžitý tisk</small></div>
-      </article>
-
-      <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Lovci emocí — fotograf na akci"></div>
-        <span class="pill alt">Full service</span>
-        <h3>Lovci emocí</h3>
-        <p>Živý fotograf zachycuje autentické momenty přímo v davu. Hybridní identifikace (Face Recognition + ID jmenovka) pro 100% spolehlivé doručení.</p>
-        <div class="price-row"><span class="price">23 000 Kč</span><small>4 hodiny · AI doručení v ceně</small></div>
-      </article>
-
-      <article class="serv reveal" data-d="1">
-        <div class="bg"><img src="/lp-uploads/premiova-realna-scena.jpeg" alt="Prémiová reálná scéna — Gatsby"></div>
-        <span class="pill alt">Na míru</span>
-        <h3>Prémiová reálná scéna</h3>
-        <p>Mobilní studio s fyzicky postavenou scénou a profesionálním nasvícením na míru vašemu tématu — Gatsby, džungle, brand.</p>
-        <div class="price-row"><span class="price">od 29 000 Kč</span><small>individuální nabídka</small></div>
-      </article>
-    </div>
-
-    <article class="serv-band reveal">
-      <div class="bg"><img src="/lp-assets/brand-band.png" alt="Brand Everywhere — tisk a branding"></div>
-      <div class="serv-band-copy">
-        <span class="pill">Brand</span>
-        <h3>Brand Everywhere</h3>
-        <p>Každá fotka, tištěná památka i online galerie ponesou vaši firemní identitu — logo, barvy i intro animace.</p>
-        <div class="price-row"><span class="price">v ceně služby</span><small>grafika na míru · tisk ve 3 velikostech, magnetky, odznáčky…</small></div>
-      </div>
-    </article>
-
-    <div class="print-band reveal">
-      <div class="print-head">
-        <div class="pt">Balíčky okamžitého tisku</div>
-        <div class="ps">Termosublimační tisk přímo na místě</div>
-      </div>
-      <div class="print-grid">
-        <div class="print-card"><div class="sz">S</div><div class="meta"><div class="q">do 200 ks fotek</div><div class="pr">3 000 Kč</div></div></div>
-        <div class="print-card"><div class="sz">M</div><div class="meta"><div class="q">do 500 ks fotek</div><div class="pr">6 500 Kč</div></div></div>
-        <div class="print-card"><div class="sz">L</div><div class="meta"><div class="q">do 1 000 ks fotek</div><div class="pr">11 000 Kč</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ===================== 2 · PATTERN INTERRUPT ===================== -->
-<section class="section" data-screen-label="Bolest">
+<section class="section" id="problem" data-screen-label="Problém">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Proč záleží na rychlosti</span>
-      <h2 class="title">Fotky až za týden? <span class="grad-pink">Hosté je nesdílí.</span></h2>
-      <p class="lead">Sdílení se děje v momentě největší euforie — ne týden po akci. Piclio doručí galerii každému hostu ještě během večera, dokud jsou emoce čerstvé.</p>
+      <h2 class="title">Znáte to?</h2>
+      <p class="prob-sub">Akce za statisíce. <span class="grad-pink">Fotky za dva týdny v odkazu, který nikdo neotevře.</span></p>
+      <p class="lead">Hosté se baví teď. Fotky ale dorazí, až je po všem, a pak už je nikdo nesdílí.</p>
     </div>
     <div class="prob-grid">
       <article class="prob-card reveal" data-d="1">
         <span class="blob"></span>
         <div class="n">01</div>
-        <h3>Pozdní doručení = mrtvé emoce</h3>
-        <p>Odkaz na Úschovnu nebo WeTransfer přichází týden po akci. Hosté ho většinou ani nerozkliknou.</p>
+        <h3>Čtyři dodavatelé místo jednoho</h3>
+        <p>Fotograf, fotokoutek, tisk, galerie. Čtyři domluvy, čtyři faktury a nikdo neručí za celek.</p>
       </article>
       <article class="prob-card reveal" data-d="2">
         <span class="blob"></span>
         <div class="n">02</div>
-        <h3>Hledání sebe v 500 fotkách</h3>
-        <p>Úmorné scrollování stovkami cizích snímků. Host to vzdá dřív, než najde sám sebe.</p>
+        <h3>Fotky přijdou pozdě</h3>
+        <p>Za týden už nikdo nehledá sám sebe mezi 500 cizími fotkami.</p>
       </article>
       <article class="prob-card reveal" data-d="3">
         <span class="blob"></span>
         <div class="n">03</div>
-        <h3>Nesdílení = nulový dosah</h3>
-        <p>Když se nesdílí v reálném čase, vaše značka přichází o organický zásah na sociálních sítích.</p>
+        <h3>Akce zmizí ze sítí</h3>
+        <p>Co se nesdílí během večera, nesdílí se vůbec. Vaše značka přijde o dosah zdarma.</p>
       </article>
     </div>
+    <p class="prob-kicker reveal">Proto jsme vytvořili <span class="grad-text">Piclio.</span></p>
   </div>
 </section>
 
 
-<!-- ===================== 6 · JAK TO FUNGUJE ===================== -->
+<!-- ===================== JAK TO FUNGUJE ===================== -->
 <section class="section" id="jak-to-funguje" data-screen-label="Jak to funguje">
   <div class="wrap">
-    <div class="sec-head reveal" style="margin-bottom:56px">
-      <span class="eyebrow">Jak to funguje</span>
-      <h2 class="title">Vy fotíte. <span class="grad-pink">My doručujeme.</span></h2>
-      <p class="lead">Od příchodu hosta po sdílení na sítích — vše běží automaticky.</p>
+    <div class="sec-head reveal" style="margin-bottom:40px">
+      <h2 class="title">Jak to funguje</h2>
+      <p class="prob-sub">Jeden tým. Jedna galerie. <span class="grad-pink">Fotky hned.</span></p>
+      <p class="lead">Vy se staráte o hosty. My o všechno kolem fotek.</p>
     </div>
-
     <div class="flow-wrap reveal">
-      <div class="flow">
+      <div class="flow four">
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01zachyceni.jpeg" alt="Zachycení a zpracování"></div>
+          <div class="flow-photo"><span class="flow-num">1</span><img src="/lp-uploads/01zachyceni.jpeg" alt="Fotíme"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-camera.png" alt=""></div>
-          <div class="flow-body"><h3>Zachycení a zpracování</h3><p>Fotograf fotí volně v centru dění. AI snímky během sekund zpracuje a vylepší do profesionální kvality.</p></div>
+          <div class="flow-body"><h3>Fotíme</h3><p>Fotograf v centru dění, fotostudio nebo AI koutek. Klidně všechno najednou.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">2</span><img src="/lp-assets/flow-02.jpeg" alt="Detekce a propojení hosta"></div>
+          <div class="flow-photo"><span class="flow-num">2</span><img src="/lp-assets/flow-02.jpeg" alt="Poznáme hosta"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-star.png" alt=""></div>
-          <div class="flow-body"><h3>Propojení hosta</h3><p>Jedním selfie propojíte hosta přes Face Recognition. Systém ho pak celý večer sám pozná na každé fotce.</p></div>
+          <div class="flow-body"><h3>Poznáme hosta</h3><p>Kdo chce, udělá při příchodu jedno selfie a uvidí rovnou jen své fotky. Ostatní mají celou galerii večera.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">3</span><img src="/lp-assets/flow-03.jpeg" alt="SmartShare doručení"></div>
+          <div class="flow-photo"><span class="flow-num">3</span><img src="/lp-assets/flow-03.jpeg" alt="Doručíme"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-share.png" alt=""></div>
-          <div class="flow-body"><h3>SmartShare</h3><p>Host dostane živě aktualizovanou osobní galerii do telefonu. Bez hledání, bez aplikace — do 30 sekund.</p></div>
+          <div class="flow-body"><h3>Doručíme</h3><p>Nová fotka je v online galerii večera do minuty. Bez aplikace, bez registrace.</p></div>
         </article>
         <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">4</span><img src="/lp-assets/flow-04-tisk.jpeg" alt="Tisky na místě"></div>
+          <div class="flow-photo"><span class="flow-num">4</span><img src="/lp-assets/flow-04-tisk.jpeg" alt="Vytiskneme"></div>
           <div class="flow-ic"><img src="/lp-assets/ic-bolt.png" alt=""></div>
-          <div class="flow-body"><h3>Tisky na místě</h3><p>Oblíbené památky okamžitě na ruku. Termosublimační tisk brandovaných fotek přímo během akce.</p></div>
-        </article>
-        <article class="flow-card">
-          <div class="flow-photo"><span class="flow-num">5</span><img src="/lp-assets/flow-05.jpeg" alt="Zpeněžení galerie"></div>
-          <div class="flow-ic"><img src="/lp-assets/ic-heart.png" alt=""></div>
-          <div class="flow-body"><h3>Zpeněžení<span class="soon">Již brzy</span></h3><p>Uzamkněte fotky a nabídněte hostům nákup snímků i celých galerií. Nový zdroj příjmů z každé akce.</p></div>
+          <div class="flow-body"><h3>Vytiskneme</h3><p>Fotka s vaším logem na památku, přímo na místě.</p></div>
         </article>
       </div>
-      <div class="flow-hint"><span class="dots"><i></i><i></i><i></i><i></i><i></i></span>Táhněte pro další</div>
+      <div class="flow-hint"><span class="dots"><i></i><i></i><i></i><i></i></span>Táhněte pro další</div>
     </div>
-
-    <!-- Compare table -->
-    <div class="sec-head reveal" style="margin-top:100px">
-      <span class="eyebrow">Proč Piclio?</span>
-      <h2 class="title">Vlastnost <span class="grad-text">po vlastnosti.</span></h2>
-    </div>
-    <div class="compare reveal">
-      <div class="crow head">
-        <div class="feat">Vlastnost</div>
-        <div class="old">Běžný fotokoutek</div>
-        <div class="pic">Piclio by Lucifera</div>
-      </div>
-      <div class="crow">
-        <div class="feat">Doručení fotek</div>
-        <div class="old"><span class="ic no">✕</span>USB po akci, hledání v galerii</div>
-        <div class="pic"><span class="ic yes">✓</span>Okamžitě do telefonu</div>
-      </div>
-      <div class="crow">
-        <div class="feat">Identifikace hostů</div>
-        <div class="old"><span class="ic no">✕</span>Ruční zadávání nebo žádná</div>
-        <div class="pic"><span class="ic yes">✓</span>Face Recognition + Hybrid ID</div>
-      </div>
-      <div class="crow">
-        <div class="feat">Způsob fotografování</div>
-        <div class="old"><span class="ic no">✕</span>Statické místo v rohu</div>
-        <div class="pic"><span class="ic yes">✓</span>Mobilní studio v centru dění</div>
-      </div>
-      <div class="crow">
-        <div class="feat">AI magie</div>
-        <div class="old"><span class="ic no">✕</span>Statický green screen</div>
-        <div class="pic"><span class="ic yes">✓</span>Generativní AI v reálném čase</div>
-      </div>
-    </div>
+    <div class="checks reveal"><span>Bez aplikace</span><span>Fotky do minuty</span><span>S vaším logem</span><span>V souladu s GDPR</span></div>
   </div>
 </section>
-
 
 <!-- ===================== 4.6 · VÝSTUPY (gallery) ===================== -->
 <section class="section outputs" id="vystupy" data-screen-label="Výstupy">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Co si host odnese</span>
-      <h2 class="title">Z jednoho večera <span class="grad-pink">celá sbírka formátů.</span></h2>
-      <p class="lead">Každý host dostane profi portrét, AI obálku, filmový plakát nebo animaci — sdílitelné přímo z mobilu ještě při akci. Tady je ochutnávka toho, co se objeví v jeho galerii.</p>
+      <h2 class="title">Co si hosté odnesou</h2>
+      <p class="prob-sub">Profi fotky z večera. <span class="grad-pink">A k tomu kouzla s AI.</span></p>
+      <p class="lead">V galerii večera najdou hosté své portréty<br>i AI proměny. Zobrazí se jen to, co schválí fotograf.</p>
     </div>
 
     <div class="bento-cq reveal">
       <div class="bento">
       <article class="bcard big" data-par="10">
         <span class="ping"></span>
-        <img src="/lp-assets/out-obalka.jpg" alt="Host na obálce magazínu">
+        <img src="/lp-assets/out-obalka.jpg" alt="Obálka magazínu">
         <div class="meta">
-          <span class="btype pink">AI Magic · obálka</span>
-          <h3>Host na obálce magazínu</h3>
-          <p>Generativní AI promění hosta v hvězdu titulní strany — v plné kvalitě k tisku.</p>
+          <span class="btype pink">AI · obálka</span>
+          <h3>Obálka magazínu</h3>
+          <p>Host jako hvězda titulní strany.</p>
         </div>
       </article>
 
       <article class="bcard tall" data-par="-14">
-        <img src="/lp-assets/out-film.jpg" alt="Filmový plakát">
+        <img src="/lp-assets/kz-portret.jpg" alt="Portrét z akce">
         <div class="meta">
-          <span class="btype">Film</span>
-          <h3>Filmový plakát</h3>
-          <p>Hosté jako hrdinové vlastního blockbusteru — na míru tématu večera.</p>
+          <span class="btype">Foto</span>
+          <h3>Portrét z akce</h3>
+          <p>Skutečná atmosféra večera, profesionálně nasvícená.</p>
         </div>
       </article>
 
@@ -462,45 +237,44 @@ export default function HomePage() {
         <video src="/lp-assets/anim-01.mp4" autoplay loop muted playsinline preload="metadata"></video>
         <div class="meta">
           <span class="btype lime">Animace</span>
-          <h3>Živá AI animace</h3>
-          <p>Statická fotka rozhýbaná umělou inteligencí — ideální na stories.</p>
+          <h3>Živá animace</h3>
+          <p>Rozpohybovaná fotka, hotová na stories.</p>
         </div>
       </article>
 
       <article class="bcard tall" data-par="-8">
-        <img src="/lp-assets/out-business.jpg" alt="Profi business portrét">
+        <img src="/lp-assets/out-film.jpg" alt="Filmový plakát">
         <div class="meta">
-          <span class="btype lime">Profi business</span>
-          <h3>Business portrét</h3>
-          <p>Studiový headshot rovnou na konferenci — bez ateliéru a čekání.</p>
+          <span class="btype">AI · film</span>
+          <h3>Filmový plakát</h3>
+          <p>Hlavní role ve vlastním blockbusteru.</p>
         </div>
       </article>
 
       <article class="bcard tall" data-par="-11">
-        <img src="/lp-assets/out-brand.jpg" alt="Fotka s vaším logem">
+        <img src="/lp-assets/kz-koncert.jpg" alt="Koncertní plakát">
         <div class="meta">
-          <span class="btype">Brand</span>
-          <h3>Fotka s vaším logem</h3>
-          <p>Každý snímek nese vaše barvy, logo i claim značky.</p>
+          <span class="btype">AI · koncert</span>
+          <h3>Koncertní plakát</h3>
+          <p>Headliner festivalu na jednu noc.</p>
         </div>
       </article>
 
       <article class="bcard tall" data-par="9">
-        <img src="/lp-assets/out-produkt.jpg" alt="Produktová scéna">
+        <img src="/lp-assets/out-business.jpg" alt="Business portrét">
         <div class="meta">
-          <span class="btype">Produkt</span>
-          <h3>Produkt v hlavní roli</h3>
-          <p>Hosté a váš produkt v jednom reklamně vyhlížejícím záběru.</p>
+          <span class="btype lime">Business</span>
+          <h3>Business portrét</h3>
+          <p>Profilovka na LinkedIn bez ateliéru.</p>
         </div>
       </article>
 
       <article class="bcard tall" data-par="-9">
-        <span class="ping"></span>
-        <video src="/lp-assets/anim-02.mp4" autoplay loop muted playsinline preload="metadata"></video>
+        <img src="/lp-assets/out-brand.jpg" alt="Fotka s vaším logem">
         <div class="meta">
-          <span class="btype lime">Video</span>
-          <h3>Video FX smyčka</h3>
-          <p>Krátké pohyblivé video, které okamžitě letí na sítě.</p>
+          <span class="btype">Brand</span>
+          <h3>Fotka s vaším logem</h3>
+          <p>Každá fotka nese vaši značku.</p>
         </div>
       </article>
 
@@ -508,17 +282,17 @@ export default function HomePage() {
         <img src="/lp-assets/out-skupina.jpg" alt="Skupinové foto">
         <div class="meta">
           <span class="btype">Skupinové foto</span>
-          <h3>Celá parta na jedné momentce</h3>
-          <p>Ostré, dobře nasvícené a doručené dřív, než parta opustí parket.</p>
+          <h3>Celá parta na jedné fotce</h3>
+          <p>Ostré, dobře nasvícené a v galerii dřív, než parta opustí parket.</p>
         </div>
       </article>
 
       <article class="bcard wide" data-par="12">
-        <img src="/lp-assets/out-tisk.jpg" alt="Okamžitý tisk">
+        <img src="/lp-assets/out-tisk.jpg" alt="Tisk na místě">
         <div class="meta">
-          <span class="btype">Okamžitý tisk</span>
-          <h3>Výtisk na ruku</h3>
-          <p>Termosublimační tisk brandované fotky přímo na místě — během chvilky.</p>
+          <span class="btype">Tisk</span>
+          <h3>Tisk na místě</h3>
+          <p>Památka do ruky během minuty.</p>
         </div>
       </article>
       </div>
@@ -528,8 +302,8 @@ export default function HomePage() {
     <div class="strip-band reveal">
       <div class="strip-head">
         <span class="eyebrow">Naše ukázky</span>
-        <h3 class="strip-title">Každou akci uchopíme <span class="grad-text">tematicky.</span></h3>
-        <p class="strip-sub">Gatsby, Hollywood, Divoký západ, Casino Royale nebo vaše značka — ladíme styl, kulisy i AI proměny přesně k tématu večera. Podívejte se na ukázky.</p>
+        <h3 class="strip-title">Každou akci ladíme <span class="grad-text">k tématu.</span></h3>
+        <p class="strip-sub">Gatsby, Hollywood, Casino Royale nebo vaše značka.</p>
       </div>
       <div class="strip-wrap">
         <div class="strip">
@@ -591,141 +365,184 @@ export default function HomePage() {
 </section>
 
 
-<!-- ===================== 4.7 · ZÁŽITKY (use-case carousel) ===================== -->
-<section class="section showcase" id="zazitky" data-screen-label="Zážitky">
+<!-- ===================== SLUŽBY A CENY ===================== -->
+<section class="section" id="sluzby" data-screen-label="Služby a ceny">
   <div class="wrap">
-    <div class="sec-head center reveal">
-      <span class="eyebrow center">Co všechno Piclio umí</span>
-      <h2 class="title">6 zážitků <span class="grad-pink">připravených k akci</span></h2>
-      <p class="lead">Objednejte si Piclio jako službu na klíč — nebo využijte náš software a nabízejte tato kouzla sami. Z fotek pořízených na akci vznikne celá řada produktů, které se prodávají.</p>
+    <div class="sec-head reveal">
+      <h2 class="title">Služby a ceny</h2>
+      <p class="prob-sub">Vyberte si, co se hodí <span class="grad-text">na vaši akci.</span></p>
+      <p class="lead">Technika, obsluha i doručení fotek do mobilů jsou vždy v ceně.</p>
     </div>
-
-    <div class="sc-carousel reveal">
-      <button class="sc-arrow prev" id="scPrev" aria-label="Předchozí">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      </button>
-      <div class="sc-viewport">
-        <div class="sc-track" id="scTrack">
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-svatba-a.png" alt="Obálka svatebního časopisu">
-                <img class="layer" src="/lp-assets/o-svatba-b.png" alt="Svatební bulvár">
-                <figcaption class="sc-figcap"><h3>Obálky svatebních časopisů</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Real (zadání jména hosta + výzva)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Každý host se stane hvězdou na obálce. Luxusní suvenýr, který je elegantní a zároveň snadno sdílitelný.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Personalizovaný obrázek na obálku časopisu + živá galerie + tištěné suvenýry</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-koncert.jpg" alt="Koncertní plakát">
-                <img class="layer" src="/lp-assets/u-koncert.jpg" alt="Koncertní plakát">
-                <figcaption class="sc-figcap"><h3>Festivaly &amp; události</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (nahrání reference plakátu + zadání jména hosta + výzva)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Hosté se stávají hlavní hvězdou. Silný moment sdílení na sítích, který vzbuzuje nadšení a zvyšuje dosah.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Značkové plakáty festivalu s AI (digitální + volitelný tisk) + živá galerie + okamžité sdílení</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-narozeniny-a.png" alt="Narozeninový plakát">
-                <img class="layer" src="/lp-assets/o-narozeniny-b.png" alt="Narozeninový plakát">
-                <figcaption class="sc-figcap"><h3>Narozeninová oslava</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX (logo + zadání jména hosta + výzva)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Unikátní, personalizované narozeninové aktivace, které odpovídají tématu oslavy.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Digitální fotografie připravené pro sociální sítě + živá galerie + tištěné suvenýry</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-portret-a.png" alt="Profesionální portrét">
-                <img class="layer" src="/lp-assets/o-portret-b.png" alt="Umělecký portrét">
-                <figcaption class="sc-figcap"><h3>Profesionální portrét</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (profesionální kulisa + vylepšení osvětlení + nápověda)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Okamžité profesionální portréty pro firemní akce, konference a networking. Není potřeba fotograf.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Profesionální portréty ve vysokém rozlišení + okamžité dodání + více pozadí + formáty pro LinkedIn.</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-produkt-a.jpg" alt="Produktová kampaň">
-                <img class="layer" src="/lp-assets/o-produkt-b.jpg" alt="Produktová kampaň">
-                <figcaption class="sc-figcap"><h3>Uvedení produktu na trh</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (logo + integrace produktu + výzva)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Působí jako skutečné natáčení reklamy; okamžité sdílení s viditelností pro sponzory.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Značkové obrázky pro sociální sítě + živá galerie + shrnutí analytických dat.</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-          <article class="sc-slide">
-            <div class="sc-card">
-              <figure class="sc-figure">
-                <img class="layer active" src="/lp-assets/o-film-a.png" alt="Filmový plakát">
-                <img class="layer" src="/lp-assets/o-film-b.png" alt="Filmový plakát">
-                <figcaption class="sc-figcap"><h3>Premiéra filmu</h3></figcaption>
-              </figure>
-              <div class="sc-spec">
-                <dl class="sc-list">
-                  <div class="sc-li"><dt>Režim</dt><dd>Persona FX Pro (reference k filmovému plakátu + zadání jména hosta + výzva)</dd></div>
-                  <div class="sc-li"><dt>Proč se to prodává</dt><dd>Hosté se stávají filmovými hvězdami. Vytváří rozruch kolem premiér díky snadno sdílitelnému obsahu.</dd></div>
-                  <div class="sc-li"><dt>Výsledky</dt><dd>Obrázky ve stylu filmových plakátů + galerie z červeného koberce + integrace sítí + analytika</dd></div>
-                </dl>
-              </div>
-            </div>
-          </article>
-
-        </div>
+    <div class="serv-grid">
+      <article class="serv reveal">
+        <div class="bg"><img src="/lp-assets/atrakce-magic-corner.jpeg" alt="Staň se hvězdou — AI fotostudio"></div>
+        <span class="pill hot">Bestseller</span>
+        <h3>Staň se hvězdou</h3>
+        <p>AI fotostudio: hosté na obálce časopisu nebo ve filmu, s tiskem na místě.</p>
+        <div class="price-row"><span class="price">od 19 000 Kč</span><small>3 hodiny</small><a class="serv-link" href="/ai-experiences">Více <span class="arr">→</span></a></div>
+      </article>
+      <article class="serv reveal">
+        <div class="bg"><img src="/lp-assets/atrakce-lovci.jpeg" alt="Fotoreportáž — fotograf na akci"></div>
+        <span class="pill alt">Fotograf</span>
+        <h3>Fotoreportáž</h3>
+        <p>Fotograf zachytí celou akci, hosté mají fotky v mobilu i na plátně.</p>
+        <div class="price-row"><span class="price">od 23 000 Kč</span><small>4 hodiny</small><a class="serv-link" href="/event-photography">Více <span class="arr">→</span></a></div>
+      </article>
+      <article class="serv reveal">
+        <div class="bg"><img src="/lp-uploads/premiova-realna-scena.jpeg" alt="Párty fotostudio — postavená scéna"></div>
+        <span class="pill alt">Fotostudio</span>
+        <h3>Párty fotostudio</h3>
+        <p>Postavená scéna ve stylu vaší akce: Gatsby, džungle, vaše značka.</p>
+        <div class="price-row"><span class="price">od 29 000 Kč</span><small>scéna na míru</small><a class="serv-link" href="/interactive-studio">Více <span class="arr">→</span></a></div>
+      </article>
+      <article class="serv reveal">
+        <div class="bg"><img src="/lp-assets/brand-band.png" alt="Řešení na míru"></div>
+        <span class="pill alt">Na míru</span>
+        <h3>Na míru</h3>
+        <p>Máte vlastní nápad? Postavíme ho i s technikou a scénou.</p>
+        <div class="price-row"><span class="price">individuálně</span><small>podle zadání</small><a class="serv-link" href="#kontakt">Více <span class="arr">→</span></a></div>
+      </article>
+    </div>
+    <div class="incl-band reveal">
+      <div class="incl-ic">✓</div>
+      <div class="incl-tx"><b>Vaše logo a barvy</b> na fotkách, tiscích i v galerii jsou v ceně.</div>
+    </div>
+    <div class="print-band reveal">
+      <div class="print-head">
+        <div class="pt">Balíčky okamžitého tisku</div>
+        <div class="ps">Termosublimační tisk přímo na místě</div>
       </div>
-      <button class="sc-arrow next" id="scNext" aria-label="Další">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-      </button>
+      <div class="print-grid">
+        <div class="print-card"><div class="sz">S</div><div class="meta"><div class="q">do 200 ks fotek</div><div class="pr">3 000 Kč</div></div></div>
+        <div class="print-card"><div class="sz">M</div><div class="meta"><div class="q">do 500 ks fotek</div><div class="pr">6 500 Kč</div></div></div>
+        <div class="print-card"><div class="sz">L</div><div class="meta"><div class="q">do 1 000 ks fotek</div><div class="pr">11 000 Kč</div></div></div>
+      </div>
     </div>
-    <div class="sc-dots" id="scDots"></div>
   </div>
 </section>
 
+<!-- ===================== REFERENCE (case study + stats) ===================== -->
+<section class="section proof" id="reference" data-screen-label="Reference">
+  <div class="wrap">
+    <div class="intro-center reveal" style="margin-bottom:48px">
+      <h2 class="title">Reference</h2>
+      <p class="prob-sub center">Už si nás pozvali <span class="grad-text">na různé akce.</span></p>
+    </div>
+
+    <div class="case-slider reveal">
+      <button class="cs-arrow prev" id="caseprev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="cs-arrow next" id="casenext" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+
+      <div class="case-viewport" id="caseViewport">
+        <article class="case-card active">
+          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Vánoční večírek</span></div>
+          <div class="case-body">
+            <h3>Vánoční večírek, 250+ lidí</h3>
+            <p class="case-lede">Firma chtěla obsah na LinkedIn ještě týž večer, ne za týden.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zábavný obsah pro sociální sítě bez čekání na zpracování.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">AI fotostudio s galerií v barvách firmy a sdílením přímo z mobilu.</span></div>
+            </div>
+            <div class="case-result">300+ fotek sdíleno na LinkedIn týž večer</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-firemni.png" alt="Firemní akce"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v15M15 21v-9a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v9M8 8h1M8 12h1M8 16h1M18 13h1M18 17h1"/></svg></span>Firemní akce</span></div>
+          <div class="case-body">
+            <h3>Letní firemní párty</h3>
+            <p class="case-lede">Firma chtěla, aby se večer neomezil na pár fotek z mobilu.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zachytit celý večer a dát lidem fotky bez čekání.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Fotoreportáž, párty fotostudio a online galerie v barvách firmy.</span></div>
+            </div>
+            <div class="case-result">Fotky v galerii ještě během párty</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/><path d="M2 10.5c1-1.2 2.4-2 3.5-2M22 10.5c-1-1.2-2.4-2-3.5-2"/></svg></span>Konference</span></div>
+          <div class="case-body">
+            <h3>Tech konference</h3>
+            <p class="case-lede">Účastníci chtěli profilovku na LinkedIn bez fronty do ateliéru.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Networking a osobní branding stovek účastníků během tří dnů.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Profi portréty na místě s AI úpravou, rovnou v online galerii.</span></div>
+            </div>
+            <div class="case-result">600+ portrétů za jediný den</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/magic-karik-2-mv2dcf8b-r8mx.jpg" alt="Letní hudební festival"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span>Festival</span></div>
+          <div class="case-body">
+            <h3>Letní hudební festival</h3>
+            <p class="case-lede">Pořadatel chtěl, aby atmosféra žila na sítích už během festivalu.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zachytit atmosféru a rychle ji dostat na web i sítě festivalu.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Živé promítání na LED stěnu a AI plakát pro každého návštěvníka.</span></div>
+            </div>
+            <div class="case-result">Dosah na Instagramu rostl už během festivalu</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M9.5 12A5 5 0 0 1 12 4a5 5 0 0 1 2.5 8"/></svg></span>Svatba</span></div>
+          <div class="case-body">
+            <h3>Svatba, 120 hostů</h3>
+            <p class="case-lede">Snoubenci chtěli zabavit hosty a ukázat rodině fotky hned.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zabavit hosty během hostiny a nenechat rodinu čekat na fotky týdny.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Interaktivní fotostudio na hostině a živá galerie sdílená s celou rodinou.</span></div>
+            </div>
+            <div class="case-result">Fotky v mobilu ještě před koncem hostiny</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-galavecer.png" alt="Filmová premiéra"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1-4h16l1 4H3z"/><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M6 5l2 4M11 5l2 4M16 5l2 4"/></svg></span>Premiéra</span></div>
+          <div class="case-body">
+            <h3>Filmová premiéra</h3>
+            <p class="case-lede">Distributor chtěl, aby si hosté odnesli víc než lístek.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Udělat z premiéry zážitek, o kterém se bude psát na sítích.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">AI fotostudio s filmovým plakátem pro každého hosta a tisk na místě.</span></div>
+            </div>
+            <div class="case-result">Hosté sdíleli vlastní plakát ještě před projekcí</div>
+          </div>
+        </article>
+
+        <article class="case-card">
+          <div class="case-photo"><img src="/lp-assets/cat-ples.png" alt="Ples"><span class="case-tag"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></span>Ples</span></div>
+          <div class="case-body">
+            <h3>Reprezentační ples</h3>
+            <p class="case-lede">Pořadatel chtěl hostům dát památku z večera v plesovém stylu.</p>
+            <div class="case-rows">
+              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Fotit stovky hostů v sále bez front u fotografa.</span></div>
+              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Fotograf v sále, fotokoutek s plesovou scénou a tisk na místě.</span></div>
+            </div>
+            <div class="case-result">Výtisky na památku během celého večera</div>
+          </div>
+        </article>
+      </div>
+
+      <div class="case-dots" id="caseDots"></div>
+    </div>
+    <div class="stat-row reveal" style="margin-top:56px">
+      <div class="stat-cell"><div class="big" data-count="250" data-suffix="+">0</div><div class="lbl">realizovaných akcí</div></div>
+      <div class="stat-cell"><div class="big" data-count="150000" data-suffix="+">0</div><div class="lbl">vyfotografovaných úsměvů</div></div>
+      <div class="stat-cell"><div class="big" data-count="98" data-suffix="%">0</div><div class="lbl">spokojených klientů</div></div>
+      <div class="stat-cell"><div class="big">28 let</div><div class="lbl">zkušeností s fotografií</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- ===================== 5 · SAAS PRO FOTOGRAFY ===================== -->
-<section class="section" id="pro-fotografy" data-screen-label="Pro fotografy">
+<section class="section" id="pro-fotografy" data-screen-label="Pro fotografy" hidden>
   <div class="wrap">
     <div class="sec-head reveal" style="margin-bottom:56px">
-      <span class="eyebrow">Software pro fotografy</span>
-      <h2 class="title">Fotografujete sami? <span class="grad-text">Piclio ušetří hodiny ruční práce.</span></h2>
+      <h2 class="title">Software pro fotografy</h2>
+      <p class="prob-sub">Fotografujete sami? <span class="grad-text">Piclio ušetří hodiny ruční práce.</span></p>
       <p class="lead">Nahrajte fotky — systém je roztřídí a doručí každému klientovi do osobní galerie. Konec WeTransferu a Úschovny. Klient komentuje přímo u fotek, vy reagujete přehledně na jednom místě.</p>
     </div>
 
@@ -749,15 +566,15 @@ export default function HomePage() {
 
       <div class="feature-rows reveal" data-d="1">
         <div class="frow">
-          <div class="fi g-cool">⚡</div>
+          <div class="fi g-cool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></div>
           <div><h3>SmartLink &amp; Face Recognition</h3><p>Jednou se dotknete displeje a propojíte obličej hosta se systémem. AI ho pak sama celý večer sleduje a páruje.</p></div>
         </div>
         <div class="frow">
-          <div class="fi g-hot">📲</div>
-          <div><h3>SmartShare doručení</h3><p>Host zadá e-mail jen jednou. Piclio mu automaticky posílá živě aktualizovanou osobní galerii — ať ho vyfotíte kolikrát chcete.</p></div>
+          <div class="fi g-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="10" height="18" rx="2"/><path d="M3 8l3 3-3 3"/><path d="M6 11h6"/></svg></div>
+          <div><h3>Online galerie akce</h3><p>Jedna živě aktualizovaná galerie celé akce, nové fotky do minuty. Když klient chce, zapnete osobní galerie s registrací — host pak vidí jen své fotky.</p></div>
         </div>
         <div class="frow">
-          <div class="fi g-violet">💰</div>
+          <div class="fi g-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5a2.5 2.5 0 0 1 2.5-1.5c1.4 0 2.5.9 2.5 2s-1 1.7-2.5 2-2.5.9-2.5 2 1.1 2 2.5 2a2.5 2.5 0 0 0 2.5-1.5"/></svg></div>
           <div><h3>Monetizační modul <span class="soon">Připravujeme</span></h3><p>Přestaňte nechávat peníze na stole. Uzamkněte fotky a nabídněte hostům nákup jednotlivých snímků i celých prémiových galerií.</p></div>
         </div>
         <div style="margin-top:30px">
@@ -769,209 +586,67 @@ export default function HomePage() {
 </section>
 
 
-<!-- ===================== REFERENCE (case study + stats) ===================== -->
-<section class="section proof" id="reference" data-screen-label="Reference">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Reference</span>
-      <h2 class="title">Případová <span class="grad-text">studie.</span></h2>
-      <p class="lead">Jak jsme zatraktivnili vyhlášení golfového turnaje — a proč si hosté fotky stáhli ještě na místě.</p>
-    </div>
-
-    <div class="case-slider reveal">
-      <button class="cs-arrow prev" id="caseprev" aria-label="Předchozí"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <button class="cs-arrow next" id="casenext" aria-label="Další"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
-
-      <div class="case-viewport" id="caseViewport">
-        <article class="case-card active">
-          <div class="case-photo"><img src="/lp-assets/cat-businessgala.png" alt="Česká golfová asociace"><span class="case-tag">⛳ Golf</span></div>
-          <div class="case-body">
-            <h3>Česká golfová asociace</h3>
-            <p class="case-lede">Vyhlášení výsledků turnaje potřebovalo víc energie — hosté odcházeli hned po ceremoniálu.</p>
-            <div class="case-rows">
-              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zatraktivnit vyhlášení a udržet hosty déle v sále.</span></div>
-              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Živé promítání fotografií, mobilní galerie a fotostudio přímo na místě konání.</span></div>
-            </div>
-            <div class="case-result">95 % hostů si stáhlo fotky ještě během akce</div>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-firemni2.png" alt="Vánoční večírek"><span class="case-tag">🏢 Firemní večírek</span></div>
-          <div class="case-body">
-            <h3>Vánoční večírek, 250+ zaměstnanců</h3>
-            <p class="case-lede">Firma chtěla obsah pro interní i firemní LinkedIn ještě týž večer, ne fotky o týden později.</p>
-            <div class="case-rows">
-              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zábavný obsah pro sociální sítě bez čekání na zpracování.</span></div>
-              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">AI Magic Corner s brandovanou galerií a okamžitým sdílením z mobilu.</span></div>
-            </div>
-            <div class="case-result">300+ fotek sdíleno na LinkedIn ještě týž večer</div>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-festival2.png" alt="Letní hudební festival"><span class="case-tag">🎵 Festival</span></div>
-          <div class="case-body">
-            <h3>Letní hudební festival</h3>
-            <p class="case-lede">Pořadatel chtěl zachytit atmosféru davu a proměnit ji v obsah, který sám žije na sítích.</p>
-            <div class="case-rows">
-              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zachytit atmosféru a rychle ji dostat na web i sítě festivalu.</span></div>
-              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Živé promítání na LED stěnu + festivalové AI plakáty pro každého návštěvníka.</span></div>
-            </div>
-            <div class="case-result">Dosah na Instagramu rostl ještě v průběhu festivalu</div>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-konference2.png" alt="Tech konference"><span class="case-tag">🎤 Konference</span></div>
-          <div class="case-body">
-            <h3>Tech konference, 3 dny</h3>
-            <p class="case-lede">Účastníci chtěli profesionální profilovky na LinkedIn bez fronty na klasické foto studio.</p>
-            <div class="case-rows">
-              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Networking a osobní branding stovek účastníků během tří dnů.</span></div>
-              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Profi headshoty na místě s AI úpravou a okamžitým doručením do mobilu.</span></div>
-            </div>
-            <div class="case-result">600+ profesionálních headshotů za jediný den</div>
-          </div>
-        </article>
-
-        <article class="case-card">
-          <div class="case-photo"><img src="/lp-assets/cat-svatba2.png" alt="Svatba"><span class="case-tag">💍 Svatba</span></div>
-          <div class="case-body">
-            <h3>Svatba pro 120 hostů</h3>
-            <p class="case-lede">Snoubenci chtěli, aby se bavili i hosté mimo obřadní fotografii — a rodina viděla fotky hned.</p>
-            <div class="case-rows">
-              <div class="case-row"><span class="cr-k">Výzva</span><span class="cr-v">Zabavit hosty během hostiny a nenechat rodinu čekat na fotky týdny.</span></div>
-              <div class="case-row"><span class="cr-k">Řešení</span><span class="cr-v">Interaktivní fotostudio na hostině a živá galerie sdílená s celou rodinou.</span></div>
-            </div>
-            <div class="case-result">Rodina měla fotky v mobilu ještě před koncem hostiny</div>
-          </div>
-        </article>
-      </div>
-
-      <div class="case-dots" id="caseDots"></div>
-    </div>
-    <p class="stat-note reveal" style="margin-bottom:56px">Ilustrativní příklady na základě typických realizací — reálné reference a loga klientů doplníme.</p>
-
-    <div class="stat-row reveal">
-      <div class="stat-cell"><div class="big" data-count="500" data-suffix="+">0</div><div class="lbl">realizovaných akcí</div></div>
-      <div class="stat-cell"><div class="big" data-count="150000" data-suffix="+">0</div><div class="lbl">vyfotografovaných hostů</div></div>
-      <div class="stat-cell"><div class="big" data-count="98" data-suffix="%">0</div><div class="lbl">spokojených klientů</div></div>
-      <div class="stat-cell"><div class="big">5 s</div><div class="lbl">nejrychlejší doručení fotky</div></div>
-    </div>
-    <p class="stat-note reveal">Uvádíme pouze reálná čísla z realizovaných akcí.</p>
-  </div>
-</section>
-
-<!-- ===================== INSPIRACE (event-type grid) ===================== -->
-<section class="section" id="inspirace" data-screen-label="Inspirace">
-  <div class="wrap">
-    <div class="intro-center reveal">
-      <span class="eyebrow center">Inspirace</span>
-      <h2 class="title">Pro jaké akce je <span class="grad-pink">Piclio ideální?</span></h2>
-      <p class="lead">Každá akce má jinou atmosféru. Podívejte se, kde Piclio nejvíc září — a představte si svůj vlastní zážitek.</p>
-    </div>
-
-    <div class="inspire-grid reveal">
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-firemni.png" alt="Firemní večírky" loading="lazy"><span class="lab"><span class="em">🏢</span><span class="t">Firemní večírky</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-konference.png" alt="Konference" loading="lazy"><span class="lab"><span class="em">🎤</span><span class="t">Konference</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-festival.png" alt="Festivaly" loading="lazy"><span class="lab"><span class="em">🎵</span><span class="t">Festivaly</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-galavecer.png" alt="Filmové premiéry" loading="lazy"><span class="lab"><span class="em">🎬</span><span class="t">Filmové premiéry</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-businessgala.png" alt="Golfové turnaje" loading="lazy"><span class="lab"><span class="em">🏌️</span><span class="t">Golfové turnaje</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-teambuilding.png" alt="Sportovní akce" loading="lazy"><span class="lab"><span class="em">🏃</span><span class="t">Sportovní akce</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-svatba.jpeg" alt="Svatby" loading="lazy"><span class="lab"><span class="em">💍</span><span class="t">Svatby</span></span></a>
-      <a class="insp" href="#kontakt"><img src="/lp-assets/cat-openair.png" alt="Hotely a resorty" loading="lazy"><span class="lab"><span class="em">🏨</span><span class="t">Hotely a resorty</span></span></a>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== 8 · BONUSY A TÝM ===================== -->
+<!-- ===================== KDO ZA TÍM STOJÍ ===================== -->
 <section class="section" id="o-nas" data-screen-label="Tým">
   <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="eyebrow">Partner pro růst</span>
-      <h2 class="title">S Picliem <span class="grad-text">nejste na akci sami.</span></h2>
-      <p class="lead">Eventy se dějí v pátek večer a v neděli ráno. My jsme s vámi — od přípravy po doručení každého snímku.</p>
-    </div>
-
-    <div class="benefits" style="margin-top:48px">
-      <div class="benefit reveal" data-d="1"><span class="bi">🛟</span><div class="bt">Nepřetržitá 24/7 podpora</div><p>Jsme s vámi i v pátek večer a v neděli ráno — přesně tehdy, kdy se akce dějí.</p></div>
-      <div class="benefit reveal" data-d="2"><span class="bi">🧩</span><div class="bt">All-in-One platforma</div><p>Vlastní microsites a sdílecí stanice na jednom místě. Bez slepování deseti nástrojů.</p></div>
-      <div class="benefit reveal" data-d="3"><span class="bi">⭐</span><div class="bt">Osobní VIP onboarding</div><p>Provedeme vás softwarem krok za krokem, aby první akce klapla na jedničku.</p></div>
-    </div>
-
-    <div class="sec-head reveal">
-      <span class="eyebrow">Studio z Kampy</span>
-      <h2 class="title">Nejsme agentura. <span class="grad-pink">Jsme studio.</span></h2>
-      <p class="lead">Za projektem stojí duo z ateliéru na Kampě. Propojujeme vizuální tvorbu a práci se světlem s moderními AI technologiemi — a ručíme za vždy profesionální výsledek.</p>
+    <div class="sec-head center reveal" style="max-width:671px">
+      <h2 class="title">Kdo za tím stojí</h2>
+      <p class="prob-sub center">Studio z Kampy.<br><span class="grad-pink">Ne agentura.</span></p>
+      <p class="lead">Za Picliem stojí Katarína a Luboš: 26 let ve fotografii a filmu. Spojujeme práci se světlem s možnostmi AI.</p>
     </div>
     <div class="team-grid">
       <article class="member reveal" data-d="1">
         <div class="photo sketch"><img src="/lp-assets/team-katarina.png" alt="Katarína"></div>
-        <div class="info"><div class="nm">Katarína</div><div class="rl">Obraz · Strategie · AI</div><p>26 let vizuální tvorby. Propojuje fotografii s AI technologiemi, aby klientům šetřila čas při tvorbě obsahu.</p></div>
+        <div class="info"><div class="nm">Katarína</div><div class="rl">Obraz · Strategie · AI</div><p>26 let vizuální tvorby. Propojuje fotografii s AI, aby klienti měli obsah rychleji.</p></div>
       </article>
       <article class="member reveal" data-d="2">
         <div class="photo sketch"><img src="/lp-assets/team-lubos.png" alt="Luboš"></div>
         <div class="info"><div class="nm">Luboš</div><div class="rl">Světlo · Kompozice · Technika</div><p>26 let ve fotografii a filmu. Technický expert, který ručí za to, že každý výstup vypadá profesionálně.</p></div>
       </article>
-      <article class="member reveal" data-d="3">
-        <div class="photo sketch"><img src="/lp-assets/team-kristina.png" alt="Kristína"></div>
-        <div class="info"><div class="nm">Kristína</div><div class="rl">Péče o zákazníka · Koordinace</div><p>Vaše hlavní spojka s projektem. Postará se o hladký chod akce a dodržení DNA vaší značky.</p></div>
-      </article>
     </div>
   </div>
 </section>
 
-
-<!-- ===================== 9 · FAQ ===================== -->
+<!-- ===================== FAQ ===================== -->
 <section class="section" id="faq" data-screen-label="FAQ">
   <div class="wrap">
     <div class="sec-head center reveal">
-      <span class="eyebrow center">Časté dotazy</span>
-      <h2 class="title">Všechno, co potřebujete <span class="grad-text">vědět.</span></h2>
+      <h2 class="title">Časté dotazy</h2>
+      <p class="prob-sub center">Na co se nás <span class="grad-text">ptáte.</span></p>
     </div>
     <div class="faq reveal" id="faqList">
       <div class="faq-item open">
-        <button class="faq-q">Potřebují si hosté stahovat aplikaci?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Ne. Vše probíhá elegantně přes webový prohlížeč. Host zadá e-mail, vyfotí se a hned může sdílet — žádné stahování, žádné zdržování.</p></div>
+        <button class="faq-q">Musí si hosté stahovat aplikaci?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Ne. Všechno běží v prohlížeči v mobilu. Hosté jen načtou QR kód nebo otevřou odkaz.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Jak zaručíte, že každý dostane jen své fotky?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Využíváme přesný hybridní systém. Špičková Face Recognition AI se stará o rychlost a chytrý číslovaný odznáček hosta slouží jako absolutní pojistka pro 100% přesnost a soukromí.</p></div>
+        <button class="faq-q">Uvidí každý jen své fotky?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Standardně mají hosté jednu online galerii celého večera, bez registrace. Pokud chcete, za příplatek zapneme osobní galerie: host udělá při příchodu selfie a uvidí jen své fotky. V celkové galerii však zůstanou.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">A co bezpečnost a GDPR?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Fotky ukládáme šifrovaně a zpřístupníme je výhradně danému hostovi přes jeho soukromý odkaz. Data zpracováváme v souladu s GDPR, na základě souhlasu uděleného při registraci. Galerie i snímky na vyžádání kdykoliv smažeme a po dohodnuté době je automaticky archivujeme či mažeme.</p></div>
+        <button class="faq-q">A co GDPR?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Galerie je dostupná jen přes odkaz nebo QR kód z vaší akce. Fotky jsou šifrované a na vyžádání je kdykoli smažeme.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Můžeme kombinovat živého fotografa a stálou fotostanici na jedné akci?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Ano, a doporučujeme to. Všechny formáty pohání stejný motor, takže fotky z reportáže, AI koutku i sdílecího kiosku přistávají hostům do jediné společné galerie.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">Co když na místě vypadne internet?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Systém fotí a páruje i offline — snímky se ukládají lokálně a jakmile se připojení obnoví, automaticky doručí celou frontu. Na klíčové akce vozíme vlastní záložní konektivitu.</p></div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q">Jak je to s cenami a balíčky?<span class="pm">+</span></button>
-        <div class="faq-a"><p>Základní balíčky atrakcí i tisku najdete v sekci Atrakce. Finální nabídku ale vždy ladíme na míru typu akce, počtu hostů a formátů — napište nám a připravíme rozpočet přesně pro vás.</p></div>
+        <button class="faq-q">Co když vypadne internet?<span class="pm">+</span></button>
+        <div class="faq-a"><p>Fotky se uloží a odešlou, jakmile je signál zpět. Na velké akce vozíme vlastní připojení.</p></div>
       </div>
     </div>
   </div>
 </section>
-
 
 <!-- ===================== 10 · KONTAKT (form) ===================== -->
 <section class="section" id="kontakt" data-screen-label="Kontakt">
   <div class="wrap">
     <div class="contact-grid">
       <div class="contact-aside reveal">
-        <span class="eyebrow">Kontakt</span>
-        <h2 class="title">Řekněte nám, <span class="grad-pink">co plánujete.</span></h2>
-        <p class="lead">Navrhneme zážitek, který bude odpovídat právě vaší akci. Do 24 hodin dostanete konkrétní nabídku. Praha a celá ČR.</p>
+        <h2 class="title">Kontakt</h2>
+      <p class="prob-sub">Řekněte nám, <span class="grad-pink">co plánujete.</span></p>
+        <p class="lead">Do 24 hodin vám pošleme konkrétní nabídku. Praha a celá ČR.</p>
         <div class="ci-list">
-          <a class="ci" href="mailto:ahoj@piclio.cz"><span class="em">✉</span><div><div class="k">E-mail</div><div class="v">ahoj@piclio.cz</div></div></a>
-          <a class="ci" href="tel:+420604750776"><span class="em">📞</span><div><div class="k">Telefon</div><div class="v">+420 604 750 776</div></div></a>
-          <div class="ci"><span class="em">📍</span><div><div class="k">Kde působíme</div><div class="v">Praha a celá ČR</div></div></div>
+          <a class="ci" href="mailto:ahoj@piclio.cz"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><div><div class="k">E-mail</div><div class="v">ahoj@piclio.cz</div></div></a>
+          <a class="ci" href="tel:+420604750776"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span><div><div class="k">Telefon</div><div class="v">+420 604 750 776</div></div></a>
+          <div class="ci"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div><div class="k">Kde působíme</div><div class="v">Praha a celá ČR</div></div></div>
         </div>
       </div>
 
@@ -979,14 +654,14 @@ export default function HomePage() {
         <div class="form-ok" id="formOk">Děkujeme! Otevřeli jsme vám e-mail s vyplněnou poptávkou — stačí odeslat. Ozveme se do 24 hodin.</div>
 
         <div class="cfield">
-          <label>Jaký zážitek vás zajímá?</label>
+          <label>Co vás zajímá?</label>
           <div class="pchips">
-            <label class="pchip"><input type="radio" name="sluzba" value="Event Photography" checked><span class="pc-body"><span class="pc-t">📸 Event Photography</span><span class="pc-p">od 23 000 Kč</span></span></label>
-            <label class="pchip"><input type="radio" name="sluzba" value="Interactive Studio"><span class="pc-body"><span class="pc-t">🎭 Interactive Studio</span><span class="pc-p">od 19 000 Kč</span></span></label>
-            <label class="pchip"><input type="radio" name="sluzba" value="AI Photo Experiences"><span class="pc-body"><span class="pc-t">🤖 AI Experiences</span><span class="pc-p">od 19 000 Kč</span></span></label>
-            <label class="pchip"><input type="radio" name="sluzba" value="Prémiová reálná scéna"><span class="pc-body"><span class="pc-t">✨ Reálná scéna na míru</span><span class="pc-p">od 29 000 Kč</span></span></label>
-            <label class="pchip"><input type="radio" name="sluzba" value="Kombinace / nevím"><span class="pc-body"><span class="pc-t">🎯 Kombinace / poradit</span><span class="pc-p">na míru</span></span></label>
-            <label class="pchip"><input type="radio" name="sluzba" value="Software pro fotografy"><span class="pc-body"><span class="pc-t">📱 Software pro fotografy</span><span class="pc-p">beta</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Fotoreportáž" checked><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></svg></span>Fotoreportáž</span><span class="pc-p">od 23 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Staň se hvězdou"><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M12 5v4M9 13h.01M15 13h.01"/><path d="M3 13h2M19 13h2"/></svg></span>Staň se hvězdou</span><span class="pc-p">od 19 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Párty fotostudio"><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>Párty fotostudio</span><span class="pc-p">od 29 000 Kč</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Na míru"><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></span>Na míru</span><span class="pc-p">individuálně</span></span></label>
+            <label class="pchip"><input type="radio" name="sluzba" value="Nevím, poraďte"><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14"/><path d="M12 17h.01"/></svg></span>Nevím, poraďte</span><span class="pc-p">zdarma</span></span></label>
+            <label class="pchip" hidden><input type="radio" name="sluzba" value="Software pro fotografy"><span class="pc-body"><span class="pc-t"><span class="em"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span>Software pro fotografy</span><span class="pc-p">beta</span></span></label>
           </div>
         </div>
 
@@ -1028,13 +703,13 @@ export default function HomePage() {
     <div class="footer-grid">
       <a class="brand" href="#top"><img src="/lp-assets/piclio-logo.png" alt="Piclio"></a>
       <ul class="f-links">
-        <li><a href="#moznosti">Možnosti</a>
-  <a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
-    <li><a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
-        <li><a href="#inspirace">Inspirace</a></li>
+        <li><a href="#jak-to-funguje">Jak to funguje</a></li>
+        <li><a href="#vystupy">Ukázky</a></li>
+        <li><a href="#sluzby">Služby a ceny</a></li>
         <li><a href="#reference">Reference</a></li>
-        <li><a href="#pro-fotografy">Pro fotografy</a></li>
+        <li hidden><a href="#pro-fotografy">Pro fotografy</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li><a href="/vanocni-vecirky">Vánoce &amp; plesy</a></li>
         <li><a href="#kontakt">Kontakt</a></li>
       </ul>
     </div>
