@@ -13,7 +13,7 @@ export default function VanocniVecirkyPage() {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vánoční večírky a plesy — fotografický servis Piclio</title>
-<meta name="description" content="Fotograf, AI Magic Corner a okamžitý tisk na vánoční večírek, ples nebo novoroční setkání. Zvýhodněné balíčky na sezónu 2026/2027. Jedna online galerie celého večera, nové fotky v ní do minuty.">
+<meta name="description" content="Profesionální fotografie, online galerie, tisk a AI zážitky na vánoční večírek, ples nebo galavečer. Vše propojené do jednoho fotografického servisu.">
 <meta property="og:title" content="Vánoční večírky a plesy s Piclio">
 <meta property="og:description" content="Zvýhodněné balíčky na vánoční večírky a plesy. Jedna online galerie celého večera, nové fotky v ní do minuty.">
 <meta property="og:type" content="website">
@@ -58,12 +58,13 @@ export default function VanocniVecirkyPage() {
   <div class="wrap">
     <div class="xhero-grid">
       <div>
-        <span class="eyebrow reveal">Sezóna 2026 / 2027</span>
-        <h1 class="reveal" data-d="1">Vánoční večírek, <span class="grad-text">o kterém se bude mluvit</span> až do jara.</h1>
-        <p class="sub reveal" data-d="2">Fotograf, AI fotokoutek a tisk na místě v jednom balíčku. Celý večer v jedné online galerii, kterou hosté otevřou v mobilu. Nová fotka se v ní objeví do minuty od cvaknutí — a sdílí se, dokud je atmosféra na vrcholu.</p>
+        <span class="eyebrow reveal">Piclio · Vánoční večírky</span>
+        <h1 class="reveal" data-d="1">Vánoční večírek, na kterém jsou fotky <span class="grad-text">součástí zábavy.</span></h1>
+        <p class="sub reveal" data-d="2"><b>Profesionální fotografie, online galerie, tisk a AI zážitky.</b> Vše propojené do jednoho fotografického servisu pro váš firemní večírek.</p>
+        <p class="sub sub-2 reveal" data-d="2">Nové snímky průběžně zpřístupňujeme v online galerii. Vybrané mohou ožít na projekci, skončit v rukou hostů jako výtisk nebo se proměnit v AI portréty. Vy si užíváte večer se svým týmem, o fotky se postaráme my.</p>
         <div class="hero-actions reveal" data-d="3">
-          <a class="btn btn-primary" href="#balicky">Zobrazit balíčky <span class="arr">→</span></a>
-          <a class="btn btn-ghost" href="#rezervace">Ověřit volný termín</a>
+          <a class="btn btn-primary" href="#balicky">Vybrat vánoční balíček <span class="arr">→</span></a>
+          <a class="btn btn-ghost" href="#rezervace">Ověřit termín</a>
         </div>
         <div class="season-pills reveal" data-d="4">
           <span><b>Lis–Pro</b> vánoční večírky</span>
@@ -117,14 +118,15 @@ export default function VanocniVecirkyPage() {
 <section class="section" data-screen-label="Proč">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="eyebrow">Proč fotky na večírku</span>
-      <h2 class="title">Jeden večer za rok, kdy je <span class="grad-pink">celá firma spolu.</span></h2>
+      <span class="eyebrow">Proč Piclio</span>
+      <h2 class="title">Fotky, které vznikají <span class="grad-pink">přímo během večírku.</span></h2>
       <p class="lead">Vánoční večírek je nejsilnější moment firemní kultury. S Piclio z něj nezůstane jen vzpomínka, ale obsah, který tým sdílí a HR i marketing použijí celý rok.</p>
     </div>
-    <div class="why-grid">
-      <article class="why reveal" data-d="1"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><h3>Fotky ještě ten večer</h3><p>Jedna online galerie celého večera, bez registrace. Poslední fotka je v ní do minuty od vyfocení — žádné čekání týden po akci.</p></article>
-      <article class="why reveal" data-d="2"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg></div><h3>Employer branding zdarma</h3><p>Zaměstnanci sdílí fotky na LinkedIn a Instagram. Vaše firma ukazuje kulturu, kterou si lidé přejí zažít.</p></article>
-      <article class="why reveal" data-d="3"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></div><h3>Zábava, která drží lidi</h3><p>AI fotokoutek s vánočními motivy je magnet. Hosté se vracejí, smějí se a večer nekončí po večeři.</p></article>
+    <div class="why-grid four">
+      <article class="why reveal" data-d="1"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Hosté nemusí čekat do příštího týdne</h3><p>Nové snímky se v galerii objevují průběžně, zpravidla do jedné minuty. Hosté je otevřou přes QR kód v mobilu a mohou je sdílet.</p></article>
+      <article class="why reveal" data-d="2"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg></div><h3>Zábava, do které se zapojí celý tým</h3><p>AI proměny a tematické portréty. Z kolegů se stanou filmové hvězdy, hrdinové vánočního příběhu nebo tváře magazínu.</p></article>
+      <article class="why reveal" data-d="3"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg></div><h3>Vzpomínka, kterou si odnesou domů</h3><p>Vybrané fotky vytiskneme přímo na místě. Během večera se mohou objevit i na projekci v grafice vaší firmy.</p></article>
+      <article class="why reveal" data-d="4"><div class="wi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4L12 2z"/><path d="M19 15l.8 2.4L22 18l-2.2.6L19 21l-.8-2.4L16 18l2.2-.6L19 15z"/></svg></div><h3>Employer branding zdarma</h3><p>Zaměstnanci sdílí fotky na LinkedIn a Instagram. Vaše firma ukazuje kulturu, kterou si lidé přejí zažít.</p></article>
     </div>
   </div>
 </section>
@@ -134,7 +136,7 @@ export default function VanocniVecirkyPage() {
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Sezónní balíčky</span>
-      <h2 class="title">Vyberte si balíček. <span class="grad-text">O zbytek se postaráme.</span></h2>
+      <h2 class="title">Vyberte si balíček <span class="grad-text">pro svůj večírek.</span></h2>
       <p class="lead">Přijedeme, postavíme, fotíme a doručíme fotky každému hostu. Systém Piclio, obsluha i doprava po Praze jsou v ceně.</p>
     </div>
     <div class="pk-grid">
@@ -142,17 +144,18 @@ export default function VanocniVecirkyPage() {
         <div class="pk-ph"><img src="/lp-assets/xmas-pripitek.png?v=2" alt="Fotokoutek na vánočním večírku" style="object-position:center 30%"><span class="pk-flag alt">Pro menší týmy</span></div>
         <div class="pk-body">
           <div class="pk-name">Přípitek</div>
-          <div class="pk-for">Do 80 hostů · 3 hodiny</div>
-          <div class="pk-price"><b>16 900 Kč</b><s>19 000 Kč</s></div>
+          <div class="pk-for">Až 80 hostů · 3 hodiny</div>
+          <div class="pk-tag">Pro menší týmy a komornější večírky</div>
+          <div class="pk-price"><b>16 900 Kč</b></div>
           <span class="pk-save">Tisk S zdarma při rezervaci do 31. 10.</span>
           <ul class="pk-list">
             <li>Fotoreport — 1 fotograf</li>
             <li>AI Magic Corner bez obsluhy (fotograf pomůže, když je potřeba)</li>
             <li>Vánoční AI motivy na míru tématu</li>
-            <li>Online galerie celého večera, fotky do minuty</li>
+            <li>Online galerie celého večera, fotky zpravidla do minuty</li>
             <li>Galerie dostupná 30 dní</li>
           </ul>
-          <a class="btn btn-ghost pick" href="#rezervace" data-pk="Přípitek">Chci tento balíček <span class="arr">→</span></a>
+          <a class="btn btn-ghost pick" href="#rezervace" data-pk="Přípitek">Poptat balíček Přípitek <span class="arr">→</span></a>
         </div>
       </article>
 
@@ -161,17 +164,17 @@ export default function VanocniVecirkyPage() {
         <div class="pk-body">
           <div class="pk-name">Vánoční večírek</div>
           <div class="pk-for">80–250 hostů · 4 hodiny</div>
-          <div class="pk-price"><b>29 900 Kč</b><s>45 000 Kč</s></div>
-          <span class="pk-save">Ušetříte 15 100 Kč</span>
+          <div class="pk-tag">Pro větší firemní party, kde se pořád něco děje</div>
+          <div class="pk-price"><b>29 900 Kč</b></div>
           <ul class="pk-list">
             <li>Fotoreport — 1 fotograf v centru dění</li>
             <li>AI Magic Corner s vlastní obsluhou</li>
-            <li>Vánoční AI motivy na míru tématu</li>
+            <li>Tematické vánoční AI proměny</li>
             <li>Okamžitý tisk — balíček S (200 fotek)</li>
-            <li>Brandovaná galerie s vaším logem</li>
-            <li>Online galerie celého večera, fotky do minuty</li>
+            <li>Online galerie s logem vaší firmy</li>
+            <li>Fotky v galerii zpravidla do minuty</li>
           </ul>
-          <a class="btn btn-primary pick" href="#rezervace" data-pk="Vánoční večírek">Chci tento balíček <span class="arr">→</span></a>
+          <a class="btn btn-primary pick" href="#rezervace" data-pk="Vánoční večírek">Poptat balíček Vánoční večírek <span class="arr">→</span></a>
         </div>
       </article>
 
@@ -180,21 +183,21 @@ export default function VanocniVecirkyPage() {
         <div class="pk-body">
           <div class="pk-name">Plesová noc</div>
           <div class="pk-for">250+ hostů · celý večer</div>
-          <div class="pk-price"><b>44 900 Kč</b><s>63 400 Kč</s></div>
-          <span class="pk-save">Ušetříte 18 500 Kč</span>
+          <div class="pk-tag">Pro velké plesy, galavečery a slavnostní akce</div>
+          <div class="pk-price"><b>44 900 Kč</b></div>
           <ul class="pk-list">
             <li>1 fotograf po celý večer</li>
             <li>Fotograf v reálném fotokoutku s prémiovou scénou na míru</li>
             <li>Okamžitý tisk — balíček M (500 fotek)</li>
             <li>Živé promítání fotek na plátno</li>
-            <li class="plus">Plesové AI portréty a obálky</li>
+            <li class="plus">Plesové AI portréty a tematické výstupy</li>
             <li class="plus">Volitelně osobní galerie s registrací</li>
           </ul>
-          <a class="btn btn-ghost pick" href="#rezervace" data-pk="Plesová noc">Chci tento balíček <span class="arr">→</span></a>
+          <a class="btn btn-ghost pick" href="#rezervace" data-pk="Plesová noc">Poptat balíček Plesová noc <span class="arr">→</span></a>
         </div>
       </article>
     </div>
-    <p class="pk-note reveal">Ceny jsou včetně DPH. Akce mimo Prahu (celá ČR i SR), delší provoz nebo vlastní kombinace připravíme na míru.</p>
+    <p class="pk-note reveal">Ceny jsou včetně DPH. Akce mimo Prahu (celá ČR i SR), delší provoz nebo vlastní kombinace připravíme na míru. Zahrnuté služby potvrdíme v konkrétní nabídce.</p>
     <div class="eb-bar reveal" style="margin-top:28px">
       <div class="eb-l">
         <div class="eb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
@@ -276,19 +279,18 @@ export default function VanocniVecirkyPage() {
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="section" id="faq" data-screen-label="FAQ" style="padding-top:0">
+<!-- STEPS -->
+<section class="section" id="prubeh" data-screen-label="Průběh" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-head center reveal">
-      <span class="eyebrow center">Časté dotazy</span>
-      <h2 class="title">Než si <span class="grad-text">rezervujete.</span></h2>
+    <div class="sec-head reveal">
+      <span class="eyebrow">Průběh</span>
+      <h2 class="title">Jak to celé <span class="grad-text">probíhá?</span></h2>
     </div>
-    <div class="faq reveal" id="faqList">
-      <div class="faq-item open"><button class="faq-q">Jak dlouho dopředu je potřeba rezervovat?<span class="pm">+</span></button><div class="faq-a"><p>Na prosincové pátky a soboty doporučujeme rezervovat nejpozději v říjnu — tyto termíny se plní jako první. Na plesy v lednu a únoru stačí obvykle 4–6 týdnů předem.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Potřebují hosté nějakou aplikaci?<span class="pm">+</span></button><div class="faq-a"><p>Ne a ani se nemusí registrovat. Hosté načtou QR kód a otevřou online galerii celého večera v prohlížeči. Nová fotka se v ní objeví do minuty od vyfocení. Pokud chcete, můžeme zapnout i osobní galerie s registrací, kde každý host uvidí jen své fotky.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Můžeme balíček upravit?<span class="pm">+</span></button><div class="faq-a"><p>Ano. Prodloužíme provoz, přidáme větší tisk, živé promítání nebo druhého fotografa. Napište nám, co plánujete, a připravíme nabídku na míru.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Jezdíte i mimo Prahu?<span class="pm">+</span></button><div class="faq-a"><p>Ano, po celé ČR i na Slovensku. Doprava mimo Prahu se účtuje podle vzdálenosti a uvidíte ji v nabídce předem.</p></div></div>
-      <div class="faq-item"><button class="faq-q">Jak je to s ochranou fotek a GDPR?<span class="pm">+</span></button><div class="faq-a"><p>Galerie je dostupná jen přes odkaz nebo QR kód z vaší akce a hosté nemusí zadávat žádné osobní údaje. Po dohodnuté době ji automaticky mažeme. Volitelně lze zapnout osobní galerie s registrací.</p></div></div>
+    <div class="xsteps">
+      <div class="xstep reveal"><span class="xn">1</span><h3>Napíšete nám základní informace</h3><p>Datum, místo, počet hostů a představu o večírku.</p></div>
+      <div class="xstep reveal"><span class="xn">2</span><h3>Společně vybereme řešení</h3><p>Doporučíme balíček a domluvíme grafiku, technické podmínky i rozsah služeb.</p></div>
+      <div class="xstep reveal"><span class="xn">3</span><h3>Přijedeme a postaráme se o realizaci</h3><p>Fotíme, provozujeme sjednané zážitky a průběžně zpřístupňujeme fotky.</p></div>
+      <div class="xstep reveal"><span class="xn">4</span><h3>Hosté si odnášejí vlastní vzpomínky</h3><p>Fotky v mobilu, výtisky a zážitky, o kterých se mluví i po večírku.</p></div>
     </div>
   </div>
 </section>
@@ -297,15 +299,16 @@ export default function VanocniVecirkyPage() {
 <section class="section" id="rezervace" data-screen-label="Rezervace">
   <div class="wrap xform-wrap">
     <div class="xform-side reveal">
-      <span class="eyebrow">Rezervace termínu</span>
-      <h2 class="title">Ověřte si volný termín <span class="grad-pink">ještě dnes.</span></h2>
-      <p class="lead">Ozveme se do 24 hodin s potvrzením termínu a konkrétní nabídkou.</p>
+      <span class="eyebrow">Rezervace</span>
+      <h2 class="title">Rezervujte si <span class="grad-pink">termín.</span></h2>
+      <p class="lead">Vánoční období bývá pro firemní akce vytížené. Napište nám, kdy a kde se váš večírek koná, a ověříme dostupnost.</p>
       <ul class="pts">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Nezávazně, bez zálohy při poptávce</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Tisk S zdarma při rezervaci do 31. 10.</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Garance vrácení peněz při nespokojenosti</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Praha, celá ČR i SR</li>
       </ul>
+      <p class="pts-t">Stačí uvést datum, místo, počet hostů a představu o večírku. Ozveme se do 24 hodin s návrhem řešení.</p>
     </div>
     <form class="xform reveal" id="xform" data-d="1">
       <label>Jméno<input name="jmeno" required placeholder="Jana Nováková"></label>
@@ -316,9 +319,30 @@ export default function VanocniVecirkyPage() {
       <label>Počet hostů<select name="hoste"><option>do 80</option><option selected>80–250</option><option>250+</option></select></label>
       <label class="full">Balíček<select name="balicek" id="pkSelect"><option>Přípitek</option><option selected>Vánoční večírek</option><option>Plesová noc</option><option>Nevím, poraďte mi</option></select></label>
       <label class="full">Poznámka<textarea name="pozn" placeholder="Místo konání, téma večera, cokoliv dalšího…"></textarea></label>
-      <button class="btn btn-primary" type="submit">Odeslat poptávku <span class="arr">→</span></button>
+      <button class="btn btn-primary" type="submit">Ověřit termín a získat nabídku <span class="arr">→</span></button>
       <p class="fine">Nebo rovnou: <a href="mailto:ahoj@piclio.cz">ahoj@piclio.cz</a> · <a href="tel:+420604750776">+420 604 750 776</a></p>
     </form>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq" data-screen-label="FAQ" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow center">Časté otázky</span>
+      <h2 class="title">Než si <span class="grad-text">rezervujete.</span></h2>
+    </div>
+    <div class="faq reveal" id="faqList">
+      <div class="faq-item open"><button class="faq-q">Musí si hosté něco instalovat?<span class="pm">+</span></button><div class="faq-a"><p>Ne. Online galerii otevřou v mobilu přes QR kód nebo odkaz.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Jak rychle budou fotky dostupné?<span class="pm">+</span></button><div class="faq-a"><p>Nové fotografie se v galerii objevují průběžně, zpravidla do jedné minuty od pořízení.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Můžeme mít vlastní grafiku a logo?<span class="pm">+</span></button><div class="faq-a"><p>Ano. Rozsah přizpůsobení se odvíjí od balíčku a domluveného řešení.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Můžeme balíček upravit nebo objednat jen část?<span class="pm">+</span></button><div class="faq-a"><p>Ano. Prodloužíme provoz, přidáme větší tisk, živé promítání nebo druhého fotografa. Prověříme i samostatné služby. Napište nám, co plánujete.</p></div></div>
+            <div class="faq-item"><button class="faq-q">Jak dlouho dopředu je potřeba rezervovat?<span class="pm">+</span></button><div class="faq-a"><p>Na prosincové pátky a soboty doporučujeme rezervovat nejpozději v říjnu — tyto termíny se plní jako první. Na plesy v lednu a únoru stačí obvykle 4–6 týdnů předem.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Jezdíte i mimo Prahu?<span class="pm">+</span></button><div class="faq-a"><p>Ano, po celé ČR i na Slovensku. Doprava mimo Prahu se účtuje podle vzdálenosti a uvidíte ji v nabídce předem.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Jak je to s ochranou fotek a GDPR?<span class="pm">+</span></button><div class="faq-a"><p>Galerie je dostupná jen přes odkaz nebo QR kód z vaší akce a hosté nemusí zadávat žádné osobní údaje. Po dohodnuté době ji automaticky mažeme. Volitelně lze zapnout osobní galerie s registrací.</p></div></div>
+      <div class="faq-item"><button class="faq-q">Můžeme vidět ukázky realizací?<span class="pm">+</span></button><div class="faq-a"><p>Ano. Některé akce nemůžeme veřejně prezentovat, proto na vyžádání poskytneme soukromé ukázky v rozsahu, který můžeme sdílet.</p></div></div>
+    </div>
+    <div class="faq-cta reveal"><a class="btn btn-primary" href="#rezervace">Chci vánoční nabídku Piclio <span class="arr">→</span></a></div>
   </div>
 </section>
 

@@ -467,7 +467,7 @@ h2.title { font-size: clamp(30px, 3.3vw, 46px); line-height: 1.08; text-wrap: ba
   html { scroll-behavior: auto; }
 }
 .hero-copy { container-type: inline-size; min-width: 0; }
-.hero h1 { font-size: clamp(36px, 10.2cqi, 72px); line-height: 1.04; }
+.hero h1 { font-size: clamp(32px, 8.4cqi, 62px); line-height: 1.05; }
 .hero h1 .ln { white-space: nowrap; }
 @media (max-width: 560px) { .hero h1 .ln { white-space: normal; } }
 
